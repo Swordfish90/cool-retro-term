@@ -1,0 +1,3 @@
+[submodule "yat"]
+	path = yat
+	url = https://github.com/jorgen/yat
