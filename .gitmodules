@@ -1,4 +1,0 @@
-[submodule "yat"]
-	path = yat
-	url = https://github.com/Swordifish90/yat
-	branch = stable
