@@ -11,7 +11,8 @@ TerminalScreen {
 
     property var lineComponent : Qt.createComponent("TerminalLine.qml")
 
-    font.family: "courier"
+    font.family: "monospace"
+    font.pointSize: 14
 
     Text {
         id: fontMetricText
