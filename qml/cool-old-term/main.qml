@@ -33,6 +33,8 @@ ApplicationWindow{
     width: 1024
     height: 768
 
+    title: terminal.screen.title ? terminal.screen.title : qsTr("Terminal")
+
     visible: true
 
     ShaderSettings{
@@ -42,7 +44,7 @@ ApplicationWindow{
     ShaderEffectSource{
         id: theSource
         sourceItem: terminal
-        sourceRect: Qt.rect(-20, -20, kterm.width + 40, kterm.height + 40)
+        sourceRect: Qt.rect(-20, -20, terminal.width + 40, terminal.height + 40)
     }
 
     ShaderEffect {
@@ -64,6 +66,7 @@ ApplicationWindow{
             from: -1
             to: 100
             duration: 5000
+
             loops: Animation.Infinite
         }
 

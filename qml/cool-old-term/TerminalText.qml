@@ -48,7 +48,7 @@ ObjectDestructItem {
         id: textElement
         anchors.fill: parent
         text: objectHandle.text
-        color: objectHandle.foregroundColor
+        color: "white" //objectHandle.foregroundColor
         font: textItem.font
         textFormat: Text.PlainText
     }

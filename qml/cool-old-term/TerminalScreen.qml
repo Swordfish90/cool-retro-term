@@ -12,7 +12,7 @@ TerminalScreen {
     property var lineComponent : Qt.createComponent("TerminalLine.qml")
 
     font.family: "monospace"
-    font.pointSize: 14
+    font.pointSize: 17
 
     Text {
         id: fontMetricText
@@ -116,6 +116,11 @@ TerminalScreen {
         x: 0
         y: 0
         color: "white"
+        SequentialAnimation on opacity{
+            NumberAnimation{from: 0; to: 1; duration: 500}
+            NumberAnimation{from: 1; to: 0; duration: 500}
+            loops: Animation.Infinite
+        }
     }
 
     Rectangle {
