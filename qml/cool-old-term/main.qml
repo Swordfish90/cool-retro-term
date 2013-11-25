@@ -25,7 +25,7 @@
  ***************************************************************************/
 
 import QtQuick 2.1
-import QtQuick.Window 2.1
+import QtQuick.Window 2.0
 import QtQuick.Controls 1.0
 import QtGraphicalEffects 1.0
 
@@ -35,6 +35,15 @@ ApplicationWindow{
     height: 768
 
     title: qsTr("Terminal")
+
+    menuBar: MenuBar {
+        Menu {
+            title: "File"
+            MenuItem { text: "Open..." }
+            MenuItem { text: "Close" }
+        }
+
+    }
 
     visible: true
 
@@ -50,7 +59,7 @@ ApplicationWindow{
 
     ShaderEffect {
         id: shadercontainer
-        anchors.fill: parent
+        anchors.fill: terminal
         blending: true
         z: 2
         property color font_color: shadersettings.font_color
@@ -99,7 +108,7 @@ ApplicationWindow{
                         }
 
                         float getScanlineIntensity(vec2 pos){
-                            return 0.5 + abs(sin(pos.y * txt_Size.y * 0.6)) * 0.5;
+                            return 0.5 + abs(sin(pos.y * txt_Size.y)) * 0.5;
                         }
 
                         vec2 distortCoordinates(vec2 coords){
@@ -151,24 +160,36 @@ ApplicationWindow{
         color: "black"
     }
 
+    Image{
+        id: frame
+        source: "/home/swordfish/Pictures/frame.png"
+        anchors.centerIn: parent
+        width: parent.width * 1.05
+        height: parent.height * 1.05
+        z: 10
+        visible: true
+        opacity: shadersettings.ambient_light
+    }
+
     TerminalScreen {
         id: terminal
-        width: mainwindow.width
-        height: mainwindow.height
+        anchors.centerIn: parent
+        width: mainwindow.width * 0.95
+        height: mainwindow.height * 0.93
         visible: false
 
         //FIXME: Ugly forced clear terminal at the beginning
         Component.onCompleted: terminal.screen.sendKey("l", 76, 67108864);
     }
 
-//    RadialGradient{
-//        z: 4
-//        anchors.fill: terminal
-//        cached: true
-//        opacity: 0.3
-//        gradient: Gradient{
-//            GradientStop{position: 0.0; color: shadersettings.font_color}
-//            GradientStop{position: 0.7; color: shadersettings.background_color}
-//        }
-//    }
+    RadialGradient{
+        z: 4
+        anchors.fill: parent
+        cached: true
+        opacity: 0.25
+        gradient: Gradient{
+            GradientStop{position: 0.0; color: shadersettings.font_color}
+            GradientStop{position: 1.0; color: shadersettings.background_color}
+        }
+    }
 }
