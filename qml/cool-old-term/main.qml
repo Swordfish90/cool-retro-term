@@ -38,10 +38,21 @@ ApplicationWindow{
 
     menuBar: MenuBar {
         Menu {
-            title: "File"
-            MenuItem { text: "Open..." }
-            MenuItem { text: "Close" }
+            title: qsTr("File")
+            MenuItem { text: "Close"; onTriggered: mainwindow.close()}
         }
+        Menu {
+            title: qsTr("Edit")
+            MenuItem {
+                text: qsTr("Settings")
+                onTriggered: {
+                    var component = Qt.createComponent("SettingsWindow.qml");
+                    component.createObject(mainwindow);
+                    component.show();
+                }
+            }
+        }
+
 
     }
 
@@ -71,6 +82,8 @@ ApplicationWindow{
         property real noise_strength: shadersettings.noise_strength
         property real screen_distorsion: shadersettings.screen_distortion
         property real glowing_line_strength: shadersettings.glowing_line_strength
+        property real brightness: 1.0
+
         property real deltay: 1.0 / terminal.height
         property real deltax: 1.0 / terminal.width
         //property real faulty_screen_prob: shadersettings.faulty_screen_prob
@@ -92,9 +105,11 @@ ApplicationWindow{
 
                         uniform highp vec4 font_color;
                         uniform highp vec4 background_color;
+
                         uniform highp float noise_strength;
                         uniform highp float screen_distorsion;
                         uniform highp float glowing_line_strength;
+
                         uniform highp float deltax;
                         uniform highp float deltay;
 
@@ -162,7 +177,7 @@ ApplicationWindow{
 
     Image{
         id: frame
-        source: "/home/swordfish/Pictures/frame.png"
+        source: "../images/frame.png"
         anchors.centerIn: parent
         width: parent.width * 1.05
         height: parent.height * 1.05

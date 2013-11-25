@@ -19,4 +19,6 @@ OTHER_FILES += \
     $$PWD/qml/cool-old-term/TerminalScreen.qml \
     $$PWD/qml/cool-old-term/TerminalText.qml \
     $$PWD/qml/cool-old-term/HighlightArea.qml \
-    qml/cool-old-term/ShaderSettings.qml
+    $$PWD/qml/cool-old-term/ShaderSettings.qml \
+    $$PWD/qml/images/frame.png \
+    qml/cool-old-term/SettingsWindow.qml
