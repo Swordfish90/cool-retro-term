@@ -11,8 +11,9 @@ TerminalScreen {
 
     property var lineComponent : Qt.createComponent("TerminalLine.qml")
 
-    font.family: "monospace"
-    font.pointSize: 17
+    font.family: "Pet Me"
+    font.pointSize: 14
+    //font.bold: true
 
     Text {
         id: fontMetricText
@@ -25,7 +26,7 @@ TerminalScreen {
     Rectangle {
         id: background
         anchors.fill: parent
-        color: "black"
+        color: shadersettings.background_color
     }
 
     Connections {
@@ -115,18 +116,18 @@ TerminalScreen {
         height: fontHeight
         x: 0
         y: 0
-        color: "white"
-        SequentialAnimation on opacity{
-            NumberAnimation{from: 0; to: 1; duration: 500}
-            NumberAnimation{from: 1; to: 0; duration: 500}
-            loops: Animation.Infinite
-        }
+        color: shadersettings.font_color
+//        SequentialAnimation on opacity{
+//            NumberAnimation{from: 0; to: 1; duration: 500}
+//            NumberAnimation{from: 1; to: 0; duration: 500}
+//            loops: Animation.Infinite
+//        }
     }
 
     Rectangle {
         id: flash
         anchors.fill: parent
-        color: "grey"
+        color: shadersettings.font_color
         opacity: 0
         SequentialAnimation {
             id: flashAnimation
