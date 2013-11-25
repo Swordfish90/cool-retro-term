@@ -45,13 +45,13 @@ ApplicationWindow{
     ShaderEffectSource{
         id: theSource
         sourceItem: terminal
-        sourceRect: Qt.rect(-20, -20, terminal.width + 40, terminal.height + 40)
+        //sourceRect: Qt.rect(-20, -20, terminal.width + 40, terminal.height + 40)
     }
 
     ShaderEffect {
         id: shadercontainer
         anchors.fill: parent
-        blending: false
+        blending: true
         z: 2
         property color font_color: shadersettings.font_color
         property color background_color: shadersettings.background_color
@@ -134,15 +134,21 @@ ApplicationWindow{
 
                             //vec4 color = texture2D(source, coords);
                             vec4 color = blurredColor(source, coords);
-                            float alpha = getScanlineIntensity(coords) * step(0.0, coords.x) * step(-1.0, -coords.x) * step(0.0, coords.y) * step(-1.0, -coords.y);
-                            //float alpha = 1.0;
+                            float scanline_alpha = getScanlineIntensity(coords);
+                            float inside = step(0.0, coords.x) * step(-1.0, -coords.x) * step(0.0, coords.y) * step(-1.0, -coords.y);
                             float noise = stepNoise(coords) * noise_strength;
                             float randomPass = randomPass(coords) * glowing_line_strength;
                             vec4 added_color = (noise + randomPass) * font_color;
                             vec4 finalColor = color + added_color;
-
-                            gl_FragColor = mix(finalColor, background_color, 1.0 - alpha);
+                            finalColor = mix(finalColor, background_color, 1.0 - scanline_alpha);
+                            gl_FragColor = vec4(finalColor.rgb * inside, inside);
                         }"
+    }
+
+    Rectangle{
+        z: 1
+        anchors.fill: parent
+        color: "black"
     }
 
     TerminalScreen {
@@ -155,14 +161,14 @@ ApplicationWindow{
         Component.onCompleted: terminal.screen.sendKey("l", 76, 67108864);
     }
 
-    RadialGradient{
-        z: 4
-        anchors.fill: terminal
-        cached: true
-        opacity: 0.3
-        gradient: Gradient{
-            GradientStop{position: 0.0; color: shadersettings.font_color}
-            GradientStop{position: 0.7; color: shadersettings.background_color}
-        }
-    }
+//    RadialGradient{
+//        z: 4
+//        anchors.fill: terminal
+//        cached: true
+//        opacity: 0.3
+//        gradient: Gradient{
+//            GradientStop{position: 0.0; color: shadersettings.font_color}
+//            GradientStop{position: 0.7; color: shadersettings.background_color}
+//        }
+//    }
 }
