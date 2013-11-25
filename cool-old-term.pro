@@ -1,4 +1,4 @@
-QT += gui quick
+QT += widgets quick
 
 include(yat/yat_declarative/yat_declarative.pro)
 
