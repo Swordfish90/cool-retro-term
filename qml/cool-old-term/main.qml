@@ -84,6 +84,13 @@ ApplicationWindow{
         property real glowing_line_strength: shadersettings.glowing_line_strength
         property real brightness: 1.0
 
+        NumberAnimation on brightness{
+            to: 1.0
+            duration: 300
+            onStopped: {to = 1 - Math.random() * shadersettings.brightness_flickering; start();}
+            running: true
+        }
+
         property real deltay: 1.0 / terminal.height
         property real deltax: 1.0 / terminal.width
         //property real faulty_screen_prob: shadersettings.faulty_screen_prob
@@ -109,6 +116,7 @@ ApplicationWindow{
                         uniform highp float noise_strength;
                         uniform highp float screen_distorsion;
                         uniform highp float glowing_line_strength;
+                        uniform highp float brightness;
 
                         uniform highp float deltax;
                         uniform highp float deltay;
@@ -157,7 +165,7 @@ ApplicationWindow{
                             //coords.x = coords.x + sin(coords.y * 5.0) * 0.05 * step(faulty_screen_prob, rand(txt_Size, floor(time)));
 
                             //vec4 color = texture2D(source, coords);
-                            vec4 color = blurredColor(source, coords);
+                            vec4 color = blurredColor(source, coords) * brightness;
                             float scanline_alpha = getScanlineIntensity(coords);
                             float inside = step(0.0, coords.x) * step(-1.0, -coords.x) * step(0.0, coords.y) * step(-1.0, -coords.y);
                             float noise = stepNoise(coords) * noise_strength;
