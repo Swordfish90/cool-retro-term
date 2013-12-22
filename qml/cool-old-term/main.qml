@@ -48,7 +48,6 @@ ApplicationWindow{
                 onTriggered: {
                     var component = Qt.createComponent("SettingsWindow.qml");
                     component.createObject(mainwindow);
-                    component.show();
                 }
             }
         }

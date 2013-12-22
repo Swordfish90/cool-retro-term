@@ -21,4 +21,5 @@ OTHER_FILES += \
     $$PWD/qml/cool-old-term/HighlightArea.qml \
     $$PWD/qml/cool-old-term/ShaderSettings.qml \
     $$PWD/qml/images/frame.png \
-    qml/cool-old-term/SettingsWindow.qml
+    qml/cool-old-term/SettingsWindow.qml \
+    qml/cool-old-term/MyColorDialog.qml
