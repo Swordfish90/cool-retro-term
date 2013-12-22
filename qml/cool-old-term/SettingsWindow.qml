@@ -23,40 +23,31 @@ ApplicationWindow {
 
             ColumnLayout{
                 anchors.fill: parent
-                GridLayout{
-                    width: parent.width
-                    columns: 2
-                    Text{text: "Font color"}
-                    Text{
-                        text: "         ";
-                        Rectangle{
-                            anchors.fill: parent;
-                            color: shadersettings.font_color
-                        }
-                        MouseArea{
-                            anchors.fill: parent;
-                            onClicked: {
-                                var component = Qt.createComponent("MyColorDialog.qml");
-                                component.createObject(settings_window, {"color_to_change": "font_color"});
-                            }
+                RowLayout{
+                    ColumnLayout{
+                        Text{text: qsTr("Font color")}
+                        ColorButton{
+                            height: 200
+                            width: 200
+
+                            onButton_colorChanged: shadersettings.font_color = button_color
+                            Component.onCompleted: button_color = shadersettings.font_color;
                         }
                     }
-                    Text{text: "Backgroud color"}
-                    Text{text: "         ";
-                        Rectangle{
-                            anchors.fill: parent;
-                            color: shadersettings.background_color
-                        }
-                        MouseArea{
-                            anchors.fill: parent
-                            onClicked: {
-                                var component = Qt.createComponent("MyColorDialog.qml");
-                                component.createObject(settings_window, {"color_to_change": "background_color"});
-                            }
+                    Item{
+                        Layout.fillWidth: true
+                    }
+                    ColumnLayout{
+                        Text{text: qsTr("Backgroud color")}
+                        ColorButton{
+                            height: 200
+                            width: 200
+
+                            onButton_colorChanged: shadersettings.background_color= button_color
+                            Component.onCompleted: button_color = shadersettings.background_color;
                         }
                     }
                 }
-
                 ColumnLayout{
                     anchors.left: parent.left
                     anchors.right: parent.right

@@ -22,5 +22,5 @@ OTHER_FILES += \
     $$PWD/qml/cool-old-term/ShaderSettings.qml \
     $$PWD/qml/images/frame.png \
     qml/cool-old-term/SettingsWindow.qml \
-    qml/cool-old-term/MyColorDialog.qml \
-    qml/cool-old-term/SettingComponent.qml
+    qml/cool-old-term/SettingComponent.qml \
+    qml/cool-old-term/ColorButton.qml
