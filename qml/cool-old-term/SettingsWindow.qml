@@ -57,103 +57,26 @@ ApplicationWindow {
                     }
                 }
 
-                GridLayout{
-                    columns: 4
-                    CheckBox{
-                        id: noisecheck
-                        onCheckedChanged:
-                            if(checked) shadersettings.noise_strength = noiseslider.value;
-                            else shadersettings.noise_strength = 0;
-                        Component.onCompleted: checked = shadersettings.noise_strength !== 0;
-                    }
-                    Text{
-                        text: qsTr("Noise")
-                    }
-                    Slider{
-                        id: noiseslider
-                        stepSize: 0.01
-                        minimumValue: 0.0
-                        maximumValue: 1.0
-                        onValueChanged: shadersettings.noise_strength = value;
-                        Component.onCompleted: value = shadersettings.noise_strength;
-                    }
-                    TextArea{
-                        text: noiseslider.value.toFixed(2);
-                        enabled: false
-                    }
+                ColumnLayout{
+                    anchors.left: parent.left
+                    anchors.right: parent.right
 
-
-                    CheckBox{
-                        id: glowcheck
-                        onCheckedChanged:
-                            if(checked) shadersettings.glowing_line_strength = glowslider.value;
-                            else shadersettings.glowing_line_strength = 0;
-                        Component.onCompleted: checked = shadersettings.glowing_line_strength !== 0;
+                    SettingComponent{
+                        name: "Noise"
+                        onValueChanged: shadersettings.noise_strength = value
+                        Component.onCompleted: value = shadersettings.noise_strength
                     }
-                    Text{
-                        text: qsTr("Glow")
-                    }
-                    Slider{
-                        id: glowslider
-                        stepSize: 0.01
-                        minimumValue: 0.0
-                        maximumValue: 1.0
+                    SettingComponent{
+                        name: "Glow"
                         onValueChanged: shadersettings.glowing_line_strength = value;
-                        Component.onCompleted: value = shadersettings.glowing_line_strength;
+                        Component.onCompleted: value = shadersettings.glowing_line_strength
                     }
-                    TextArea{
-                        text: glowslider.value.toFixed(2);
-                        enabled: false
-                    }
-
-
-                    CheckBox{
-                        id: ambientcheck
-                        onCheckedChanged:
-                            if(checked) shadersettings.ambient_light = ambientslider.value;
-                            else shadersettings.ambient_light = 0;
-                        Component.onCompleted: checked = shadersettings.ambient_light !== 0;
-                    }
-                    Text{
-                        text: qsTr("Ambient light")
-                    }
-                    Slider{
-                        id: ambientslider
-                        stepSize: 0.01
-                        minimumValue: 0.1
-                        maximumValue: 0.5
+                    SettingComponent{
+                        name: "Ambient light"
                         onValueChanged: shadersettings.ambient_light = value;
-                        Component.onCompleted: value = shadersettings.ambient_light;
+                        Component.onCompleted: value = shadersettings.ambient_light
                     }
-                    TextArea{
-                        text: ambientslider.value.toFixed(2);
-                        enabled: false
-                    }
-
-                    //                CheckBox{
-                    //                    id: distortioncheck
-                    //                    onCheckedChanged:
-                    //                        if(checked) shadersettings.screen_distortion = distortionslider.value;
-                    //                        else shadersettings.screen_distortion = 0;
-                    //                    Component.onCompleted: checked = shadersettings.screen_distortion !== 0;
-                    //                }
-                    //                Text{
-                    //                    text: qsTr("Distortion")
-                    //                }
-                    //                Slider{
-                    //                    id: distortionslider
-                    //                    stepSize: 0.01
-                    //                    minimumValue: 0.0
-                    //                    maximumValue: 1.0
-                    //                    onValueChanged: shadersettings.screen_distortion = value;
-                    //                    Component.onCompleted: value = shadersettings.screen_distortion;
-                    //                }
-                    //                TextArea{
-                    //                    text: distortionslider.value.toFixed(2);
-                    //                    enabled: false
-                    //                }
                 }
-
             }
         }
     }
