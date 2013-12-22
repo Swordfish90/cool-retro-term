@@ -1,11 +1,11 @@
-import QtQuick 2.0
+import QtQuick 2.1
 import QtQuick.Controls 1.1
 import QtQuick.Layouts 1.1
 
 RowLayout {
     property string name
-    property double value
-    property double prev_value: 0.0
+    property double value: (check.checked) ? _value : 0.0
+    property double _value: 0.0
     property double min_value: 0.0
     property double max_value: 1.0
 
@@ -19,32 +19,21 @@ RowLayout {
         implicitWidth: 150
 
         text: name
-        onCheckedChanged:{
-            if(checked) value = prev_value;
-            else {
-                prev_value = value;
-                value = 0;
-            }
-        }
-        Component.onCompleted: checked = (value !== 0);
+        Component.onCompleted: checked = (_value !== 0);
     }
     Slider{
         id: slider
         stepSize: 0.01
         minimumValue: min_value
         maximumValue: max_value
-        onValueChanged: setting_component.value = value;
+        onValueChanged: setting_component._value = slider.value;
         Layout.fillWidth: true
+        enabled: check.checked
 
-        Component.onCompleted: slider.value = setting_component.value
+        Component.onCompleted: slider.value = setting_component._value
     }
-    TextField{
+    Text{
         id: textfield
-
-        text: value.toFixed(2)
-        implicitWidth: 50
-        enabled: false
-
-        Component.onCompleted: text = value.toFixed(2)
+        text: Math.round(((_value - min_value) / (max_value - min_value)) * 100) + "%"
     }
 }

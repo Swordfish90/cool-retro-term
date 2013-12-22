@@ -30,7 +30,7 @@ ApplicationWindow {
                             height: 200
                             width: 200
 
-                            onButton_colorChanged: shadersettings.font_color = button_color
+                            onButton_colorChanged: shadersettings.font_color = button_color;
                             Component.onCompleted: button_color = shadersettings.font_color;
                         }
                     }
@@ -55,17 +55,17 @@ ApplicationWindow {
                     SettingComponent{
                         name: "Noise"
                         onValueChanged: shadersettings.noise_strength = value
-                        Component.onCompleted: value = shadersettings.noise_strength
+                        Component.onCompleted: _value = shadersettings.noise_strength
                     }
                     SettingComponent{
                         name: "Glow"
                         onValueChanged: shadersettings.glowing_line_strength = value;
-                        Component.onCompleted: value = shadersettings.glowing_line_strength
+                        Component.onCompleted: _value = shadersettings.glowing_line_strength
                     }
                     SettingComponent{
                         name: "Ambient light"
                         onValueChanged: shadersettings.ambient_light = value;
-                        Component.onCompleted: value = shadersettings.ambient_light
+                        Component.onCompleted: _value = shadersettings.ambient_light
                     }
                 }
             }
