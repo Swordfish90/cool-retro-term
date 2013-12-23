@@ -67,6 +67,11 @@ ApplicationWindow {
                         onValueChanged: shadersettings.ambient_light = value;
                         Component.onCompleted: _value = shadersettings.ambient_light
                     }
+                    SettingComponent{
+                        name: "Screen distortion"
+                        onValueChanged: shadersettings.screen_distortion = value;
+                        Component.onCompleted:  _value = shadersettings.screen_distortion;
+                    }
                 }
             }
         }

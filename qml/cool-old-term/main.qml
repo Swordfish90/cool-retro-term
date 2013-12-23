@@ -37,6 +37,7 @@ ApplicationWindow{
     title: qsTr("Terminal")
 
     menuBar: MenuBar {
+        id: menubar
         Menu {
             title: qsTr("File")
             MenuItem { text: "Close"; onTriggered: mainwindow.close()}
@@ -57,52 +58,59 @@ ApplicationWindow{
 
     visible: true
 
-    ShaderSettings{
-        id: shadersettings
-    }
-
-    ShaderEffectSource{
-        id: theSource
-        sourceItem: terminal
-        //sourceRect: Qt.rect(-20, -20, terminal.width + 40, terminal.height + 40)
-    }
-
-    ShaderEffect {
-        id: shadercontainer
-        anchors.fill: terminal
-        blending: true
-        z: 2
-        property color font_color: shadersettings.font_color
-        property color background_color: shadersettings.background_color
-        property variant source: theSource
-        property size txt_Size: Qt.size(terminal.width, terminal.height)
-        property real time: 0
-
-        property real noise_strength: shadersettings.noise_strength
-        property real screen_distorsion: shadersettings.screen_distortion
-        property real glowing_line_strength: shadersettings.glowing_line_strength
-        property real brightness: 1.0
-
-        NumberAnimation on brightness{
-            to: 1.0
-            duration: 300
-            onStopped: {to = 1 - Math.random() * shadersettings.brightness_flickering; start();}
-            running: true
+    Item{
+        anchors.fill: parent
+        anchors.topMargin: 30 //Fix the constant
+        ShaderSettings{
+            id: shadersettings
         }
 
-        property real deltay: 1.0 / terminal.height
-        property real deltax: 1.0 / terminal.width
-        //property real faulty_screen_prob: shadersettings.faulty_screen_prob
-
-        NumberAnimation on time{
-            from: -1
-            to: 100
-            duration: 5000
-
-            loops: Animation.Infinite
+        ShaderEffectSource{
+            property double offset_top: 0.03
+            property double offset_bottom: 0.04
+            id: theSource
+            sourceItem: terminal
+            sourceRect: Qt.rect(-offset_top * terminal.width, -offset_top * terminal.height, terminal.width + offset_bottom * terminal.width, terminal.height + offset_bottom * terminal.height)
         }
 
-        fragmentShader: "
+        ShaderEffect {
+            id: shadercontainer
+            width: parent.width
+            height: parent.height
+            anchors.centerIn: parent
+            blending: true
+            z: 2
+            property color font_color: shadersettings.font_color
+            property color background_color: shadersettings.background_color
+            property variant source: theSource
+            property size txt_Size: Qt.size(terminal.width, terminal.height)
+            property real time: 0
+
+            property real noise_strength: shadersettings.noise_strength
+            property real screen_distorsion: shadersettings.screen_distortion
+            property real glowing_line_strength: shadersettings.glowing_line_strength
+            property real brightness: 1.0
+
+            NumberAnimation on brightness{
+                to: 1.0
+                duration: 300
+                onStopped: {to = 1 - Math.random() * shadersettings.brightness_flickering; start();}
+                running: true
+            }
+
+            property real deltay: 1.0 / terminal.height
+            property real deltax: 1.0 / terminal.width
+            //property real faulty_screen_prob: shadersettings.faulty_screen_prob
+
+            NumberAnimation on time{
+                from: -1
+                to: 100
+                duration: 5000
+
+                loops: Animation.Infinite
+            }
+
+            fragmentShader: "
                         uniform sampler2D source;
                         uniform highp float qt_Opacity;
                         uniform highp float time;
@@ -172,46 +180,76 @@ ApplicationWindow{
                             vec4 added_color = (noise + randomPass) * font_color;
                             vec4 finalColor = color + added_color;
                             finalColor = mix(finalColor, background_color, 1.0 - scanline_alpha);
-                            gl_FragColor = vec4(finalColor.rgb * inside, inside);
+                            gl_FragColor = vec4(finalColor.rgb, 1.0);
                         }"
-    }
+        }
 
-    Rectangle{
-        z: 1
-        anchors.fill: parent
-        color: "black"
-    }
+        ShaderEffect{
+            z: 2.1
+            width: parent.width * 1.05
+            height: parent.height * 1.05
+            anchors.centerIn: parent
 
-    Image{
-        id: frame
-        source: "../images/frame.png"
-        anchors.centerIn: parent
-        width: parent.width * 1.05
-        height: parent.height * 1.05
-        z: 10
-        visible: true
-        opacity: shadersettings.ambient_light
-    }
+            property variant source: framesource
+            property real screen_distorsion: shadersettings.screen_distortion - 0.22
+            property real ambient_light: shadersettings.ambient_light
 
-    TerminalScreen {
-        id: terminal
-        anchors.centerIn: parent
-        width: mainwindow.width * 0.95
-        height: mainwindow.height * 0.93
-        visible: false
+            fragmentShader: "
+            uniform sampler2D source;
+            uniform highp float screen_distorsion;
+            uniform highp float ambient_light;
 
-        //FIXME: Ugly forced clear terminal at the beginning
-        Component.onCompleted: terminal.screen.sendKey("l", 76, 67108864);
-    }
+            varying highp vec2 qt_TexCoord0;
 
-    RadialGradient{
-        z: 4
-        anchors.fill: parent
-        cached: true
-        opacity: 0.25
-        gradient: Gradient{
-            GradientStop{position: 0.0; color: shadersettings.font_color}
-            GradientStop{position: 1.0; color: shadersettings.background_color}
+            vec2 distortCoordinates(vec2 coords){
+                vec2 cc = coords - vec2(0.5);
+                float dist = dot(cc, cc) * screen_distorsion;
+                return (coords + cc * (1.0 + dist) * dist);
+            }
+
+            void main(){
+                vec2 coords = distortCoordinates(qt_TexCoord0);
+                vec4 txt_color = texture2D(source, coords);
+                vec4 final_color = mix(txt_color, vec4(vec3(0.0), 1.0), 1.0 - ambient_light);
+                gl_FragColor = vec4(final_color.rgb, txt_color.a);
+            }"
+        }
+
+        ShaderEffectSource{
+            id: framesource
+            sourceItem: frame
+            hideSource: true
+            live: false
+        }
+
+        Image{
+            id: frame
+            source: "../images/squared_frame.png"
+            anchors.centerIn: parent
+            visible: true
+            opacity: shadersettings.ambient_light
+        }
+
+        TerminalScreen {
+            id: terminal
+            anchors.centerIn: parent
+            width: mainwindow.width
+            height: mainwindow.height
+            visible: false
+
+            //FIXME: Ugly forced clear terminal at the beginning
+            Component.onCompleted: terminal.screen.sendKey("l", 76, 67108864);
+        }
+
+        RadialGradient{
+            z: 4
+            anchors.fill: parent
+            cached: true
+            opacity: 0.2
+            gradient: Gradient{
+                GradientStop{position: 0.0; color: shadersettings.font_color}
+                GradientStop{position: 1.0; color: shadersettings.background_color}
+            }
         }
     }
 }
