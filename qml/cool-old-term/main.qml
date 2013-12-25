@@ -59,25 +59,23 @@ ApplicationWindow{
     visible: true
 
     Item{
+        id: maincontainer
         anchors.fill: parent
-        anchors.topMargin: 30 //Fix the constant
+        anchors.top: menuBar.bottom
+        clip: true
         ShaderSettings{
             id: shadersettings
         }
 
         ShaderEffectSource{
-            property double offset_top: 0.03
-            property double offset_bottom: 0.04
             id: theSource
             sourceItem: terminal
-            sourceRect: Qt.rect(-offset_top * terminal.width, -offset_top * terminal.height, terminal.width + offset_bottom * terminal.width, terminal.height + offset_bottom * terminal.height)
+            sourceRect: Qt.rect(-65, -75, terminal.width + 130, terminal.height + 150)
         }
 
         ShaderEffect {
             id: shadercontainer
-            width: parent.width
-            height: parent.height
-            anchors.centerIn: parent
+            anchors.fill: terminal
             blending: true
             z: 2
             property color font_color: shadersettings.font_color
@@ -91,15 +89,21 @@ ApplicationWindow{
             property real glowing_line_strength: shadersettings.glowing_line_strength
             property real brightness: 1.0
 
+            property real scanlines: shadersettings.scanlines ? 1.0 : 0.0
+
             NumberAnimation on brightness{
+                property real randval: 0
                 to: 1.0
                 duration: 300
-                onStopped: {to = 1 - Math.random() * shadersettings.brightness_flickering; start();}
-                running: true
+                onStopped: {
+                    to = 1 - Math.random() * shadersettings.brightness_flickering;
+                    start();
+                }
+                running: false
             }
 
-            property real deltay: 1.0 / terminal.height
-            property real deltax: 1.0 / terminal.width
+            property real deltay: 3 / terminal.height
+            property real deltax: 3 / terminal.width
             //property real faulty_screen_prob: shadersettings.faulty_screen_prob
 
             NumberAnimation on time{
@@ -128,6 +132,8 @@ ApplicationWindow{
                         uniform highp float deltax;
                         uniform highp float deltay;
 
+                        uniform highp float scanlines;
+
                         float rand(vec2 co, float time){
                             return fract(sin(dot(co.xy ,vec2(0.37898 * time ,0.78233))) * 437.5875453);
                         }
@@ -138,12 +144,12 @@ ApplicationWindow{
                         }
 
                         float getScanlineIntensity(vec2 pos){
-                            return 0.5 + abs(sin(pos.y * txt_Size.y)) * 0.5;
+                            return abs(sin(pos.y * txt_Size.y)) * 0.5;
                         }
 
                         vec2 distortCoordinates(vec2 coords){
                             vec2 cc = coords - vec2(0.5);
-                            float dist = dot(cc, cc) * screen_distorsion;
+                            float dist = dot(cc, cc) * screen_distorsion ;
                             return (coords + cc * (1.0 + dist) * dist);
                         }
 
@@ -172,32 +178,42 @@ ApplicationWindow{
                             //coords.x = coords.x + sin(coords.y * 5.0) * 0.05 * step(faulty_screen_prob, rand(txt_Size, floor(time)));
 
                             //vec4 color = texture2D(source, coords);
-                            vec4 color = blurredColor(source, coords) * brightness;
-                            float scanline_alpha = getScanlineIntensity(coords);
-                            float inside = step(0.0, coords.x) * step(-1.0, -coords.x) * step(0.0, coords.y) * step(-1.0, -coords.y);
+                            float color = (blurredColor(source, coords).r + texture2D(source, coords).r) * 0.5;
+                            float scanline_alpha = getScanlineIntensity(coords) * scanlines;
+                            //float inside = step(0.0, coords.x) * step(-1.0, -coords.x) * step(0.0, coords.y) * step(-1.0, -coords.y);
                             float noise = stepNoise(coords) * noise_strength;
                             float randomPass = randomPass(coords) * glowing_line_strength;
-                            vec4 added_color = (noise + randomPass) * font_color;
-                            vec4 finalColor = color + added_color;
-                            finalColor = mix(finalColor, background_color, 1.0 - scanline_alpha);
-                            gl_FragColor = vec4(finalColor.rgb, 1.0);
+                            color += noise + randomPass;
+                            vec3 finalColor = mix(background_color, font_color, color).rgb;
+                            finalColor = mix(finalColor, vec3(0.0), scanline_alpha);
+                            gl_FragColor = vec4(finalColor * brightness, 1.0);
                         }"
         }
 
         ShaderEffect{
             z: 2.1
-            width: parent.width * 1.05
-            height: parent.height * 1.05
             anchors.centerIn: parent
+            anchors.fill: frame
+            clip: true
+            blending: true
 
             property variant source: framesource
-            property real screen_distorsion: shadersettings.screen_distortion - 0.22
+            property variant normals: framesourcenormals
+            property real screen_distorsion: shadersettings.screen_distortion
             property real ambient_light: shadersettings.ambient_light
+            property color font_color: shadersettings.font_color
+            property color background_color: shadersettings.background_color
+            property real brightness: shadercontainer.brightness
 
             fragmentShader: "
             uniform sampler2D source;
+            uniform sampler2D normals;
             uniform highp float screen_distorsion;
             uniform highp float ambient_light;
+
+            uniform highp vec4 font_color;
+            uniform highp vec4 background_color;
+            uniform highp float brightness;
 
             varying highp vec2 qt_TexCoord0;
 
@@ -210,8 +226,12 @@ ApplicationWindow{
             void main(){
                 vec2 coords = distortCoordinates(qt_TexCoord0);
                 vec4 txt_color = texture2D(source, coords);
-                vec4 final_color = mix(txt_color, vec4(vec3(0.0), 1.0), 1.0 - ambient_light);
-                gl_FragColor = vec4(final_color.rgb, txt_color.a);
+                vec4 normala = texture2D(normals, coords);
+                vec3 normal = normalize(normala.rgb) * txt_color.a;
+                float reflection = dot(normal, vec3(1.0, 1.0, 0.0)) * 0.3 * brightness;
+                vec3 reflection_color = mix(font_color, background_color, 0.7).rgb * reflection;
+                vec3 final_color = mix(txt_color.rgb, reflection_color, 1.0 - ambient_light);
+                gl_FragColor = vec4(final_color, txt_color.a);
             }"
         }
 
@@ -219,15 +239,37 @@ ApplicationWindow{
             id: framesource
             sourceItem: frame
             hideSource: true
-            live: false
         }
 
-        Image{
+        ShaderEffectSource{
+            id: framesourcenormals
+            sourceItem: framenormals
+            hideSource: true
+        }
+
+        BorderImage{
             id: frame
-            source: "../images/squared_frame.png"
+            width: parent.width + 140
+            height: parent.height + 140
             anchors.centerIn: parent
-            visible: true
-            opacity: shadersettings.ambient_light
+            source: "../images/screen-frame.png"
+            border {left: 116; right: 116; top: 116; bottom: 116}
+            horizontalTileMode: BorderImage.Stretch
+            verticalTileMode: BorderImage.Stretch
+            visible: false
+        }
+
+        BorderImage{
+            id: framenormals
+            anchors.fill: frame
+            source: "../images/screen-frame-normals.png"
+            border.bottom: frame.border.bottom
+            border.top: frame.border.top
+            border.left: frame.border.left
+            border.right: frame.border.right
+            horizontalTileMode: BorderImage.Stretch
+            verticalTileMode: BorderImage.Stretch
+            visible: false
         }
 
         TerminalScreen {
@@ -245,10 +287,10 @@ ApplicationWindow{
             z: 4
             anchors.fill: parent
             cached: true
-            opacity: 0.2
+            opacity: 0.1
             gradient: Gradient{
                 GradientStop{position: 0.0; color: shadersettings.font_color}
-                GradientStop{position: 1.0; color: shadersettings.background_color}
+                GradientStop{position: 1.0; color: "#00000000"}
             }
         }
     }
