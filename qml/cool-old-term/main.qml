@@ -196,7 +196,7 @@ ApplicationWindow{
             id: frame
             anchors.fill: parent
             z: 2.1
-            source: "./frames/NoFrame.qml"
+            source: "./frames/WhiteSimpleFrame.qml"
         }
 
         TerminalScreen {

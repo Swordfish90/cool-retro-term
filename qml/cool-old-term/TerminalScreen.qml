@@ -134,7 +134,7 @@ TerminalScreen {
             NumberAnimation {
                 target: flash
                 property: "opacity"
-                to: 1
+                to: 0.5
                 duration: 75
             }
             NumberAnimation {
