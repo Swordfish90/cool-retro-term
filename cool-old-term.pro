@@ -23,4 +23,7 @@ OTHER_FILES += \
     $$PWD/qml/images/frame.png \
     qml/cool-old-term/SettingsWindow.qml \
     qml/cool-old-term/SettingComponent.qml \
-    qml/cool-old-term/ColorButton.qml
+    qml/cool-old-term/ColorButton.qml \
+    qml/cool-old-term/TerminalFrame.qml \
+    qml/cool-old-term/WhiteFrameShader.qml \
+    qml/cool-old-term/NoFrameShader.qml
