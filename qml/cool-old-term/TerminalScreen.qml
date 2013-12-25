@@ -26,7 +26,7 @@ TerminalScreen {
     Rectangle {
         id: background
         anchors.fill: parent
-        color: shadersettings.background_color
+        color: "black"
     }
 
     Connections {
@@ -116,7 +116,7 @@ TerminalScreen {
         height: fontHeight
         x: 0
         y: 0
-        color: shadersettings.font_color
+        color: "white"
 //        SequentialAnimation on opacity{
 //            NumberAnimation{from: 0; to: 1; duration: 500}
 //            NumberAnimation{from: 1; to: 0; duration: 500}
@@ -127,7 +127,7 @@ TerminalScreen {
     Rectangle {
         id: flash
         anchors.fill: parent
-        color: shadersettings.font_color
+        color: "white"
         opacity: 0
         SequentialAnimation {
             id: flashAnimation
