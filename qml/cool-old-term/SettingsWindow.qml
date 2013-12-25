@@ -74,8 +74,8 @@ ApplicationWindow {
                     }
                     SettingComponent{
                         name: "Screen flickering"
-                        onValueChanged: shadersettings.brightness_flickering = value;
-                        Component.onCompleted:  _value = shadersettings.brightness_flickering;
+                        onValueChanged: shadersettings.screen_flickering = value;
+                        Component.onCompleted:  _value = shadersettings.screen_flickering;
                     }
                 }
             }

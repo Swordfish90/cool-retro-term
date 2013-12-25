@@ -6,7 +6,7 @@ Item{
     property color background_color: "#002200"
     property color font_color: "#00ff00"
 
-    property real brightness_flickering: 0.2
+    property real screen_flickering: 0.1
     property real noise_strength: 0.1
     property real screen_distortion: 0.15
     property real glowing_line_strength: 0.4

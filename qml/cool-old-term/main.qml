@@ -99,18 +99,30 @@ ApplicationWindow{
                 }
             }
 
+            Behavior on horizontal_distortion {
+                NumberAnimation{
+                    duration: 150
+                    onRunningChanged:
+                        if(!running) shadercontainer.horizontal_distortion = 0.0;
+                }
+            }
+
             Loader{
-                active: shadersettings.brightness_flickering != 0
+                active: shadersettings.screen_flickering != 0
                 sourceComponent: Timer{
                     property real randval
                     id: flickertimer
                     interval: 500
                     onTriggered: {
-                        console.log("Timer triggered")
                         randval = Math.random();
-                        if(randval < shadersettings.brightness_flickering)
-                            shadercontainer.brightness = Math.random() * 0.5 + 0.5;
+                        if(randval < shadersettings.screen_flickering){
+                            shadercontainer.horizontal_distortion = Math.random() * shadersettings.screen_flickering;
+                        }
+                        randval = Math.random();
+                        if(randval < shadersettings.screen_flickering)
+                        shadercontainer.brightness = Math.random() * 0.5 + 0.5;
                     }
+
                     repeat: true
                     running: true
                 }
@@ -118,6 +130,7 @@ ApplicationWindow{
 
             property real deltay: 3 / terminal.height
             property real deltax: 3 / terminal.width
+            property real horizontal_distortion: 0.0
             //property real faulty_screen_prob: shadersettings.faulty_screen_prob
 
             NumberAnimation on time{
@@ -147,6 +160,8 @@ ApplicationWindow{
                         uniform highp float deltay;
 
                         uniform highp float scanlines;
+
+                        uniform highp float horizontal_distortion;
 
                         float rand(vec2 co, float time){
                             return fract(sin(dot(co.xy ,vec2(0.37898 * time ,0.78233))) * 437.5875453);
@@ -188,13 +203,12 @@ ApplicationWindow{
                         void main() {
                             vec2 coords = distortCoordinates(qt_TexCoord0);
 
-                            //Emulate faulty screen
-                            //coords.x = coords.x + sin(coords.y * 5.0) * 0.05 * step(faulty_screen_prob, rand(txt_Size, floor(time)));
+                            //TODO This formula could be improved
+                            float distortion = (sin(coords.y * 20.0 * fract(time * 0.1) + sin(fract(time * 0.2))) + sin(time * 0.05));
+                            coords.x = coords.x + distortion * 0.3 * horizontal_distortion;
 
-                            //vec4 color = texture2D(source, coords);
                             float color = (blurredColor(source, coords).r + texture2D(source, coords).r) * 0.5;
                             float scanline_alpha = getScanlineIntensity(coords) * scanlines;
-                            //float inside = step(0.0, coords.x) * step(-1.0, -coords.x)  * step(0.0, coords.y) * step(-1.0, -coords.y);
                             float noise = stepNoise(coords) * noise_strength;
                             float randomPass = randomPass(coords) * glowing_line_strength;
                             color += noise + randomPass;
