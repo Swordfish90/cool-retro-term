@@ -99,17 +99,21 @@ ApplicationWindow{
                 }
             }
 
-            Timer{
-                property real randval
-                id: flickertimer
-                interval: 500
-                onTriggered: {
-                    randval = Math.random();
-                    if(randval < shadersettings.brightness_flickering)
-                        shadercontainer.brightness = Math.random() * 0.5 + 0.5;
+            Loader{
+                active: shadersettings.brightness_flickering != 0
+                sourceComponent: Timer{
+                    property real randval
+                    id: flickertimer
+                    interval: 500
+                    onTriggered: {
+                        console.log("Timer triggered")
+                        randval = Math.random();
+                        if(randval < shadersettings.brightness_flickering)
+                            shadercontainer.brightness = Math.random() * 0.5 + 0.5;
+                    }
+                    repeat: true
+                    running: true
                 }
-                running: true
-                repeat: true
             }
 
             property real deltay: 3 / terminal.height
