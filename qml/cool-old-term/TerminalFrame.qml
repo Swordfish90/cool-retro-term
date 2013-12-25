@@ -10,7 +10,7 @@ Item{
     property int borderBottom
     property string imageSource
     property string normalsSource
-    property Component shader
+    property rect sourceRect
     property string shaderString
 
     BorderImage{

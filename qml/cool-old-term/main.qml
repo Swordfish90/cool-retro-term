@@ -70,7 +70,7 @@ ApplicationWindow{
         ShaderEffectSource{
             id: theSource
             sourceItem: terminal
-            sourceRect: Qt.rect(-65, -75, terminal.width + 130, terminal.height + 150)
+            sourceRect: frame.sourceRect
         }
 
         ShaderEffect {
@@ -190,18 +190,36 @@ ApplicationWindow{
                         }"
         }
 
+//        TerminalFrame{
+//            id: frame
+//            z: 2.1
+//            anchors.fill: parent
+//            addedWidth: 140
+//            addedHeight: 140
+//            borderLeft: 116
+//            borderRight: 116
+//            borderTop: 116
+//            borderBottom: 116
+//            imageSource: "../images/screen-frame.png"
+//            normalsSource: "../images/screen-frame-normals.png"
+//            sourceRect: Qt.rect(-65, -75, terminal.width + 130, terminal.height + 150)
+
+//            shaderString: "WhiteFrameShader.qml"
+//        }
+
         TerminalFrame{
             id: frame
             z: 2.1
             anchors.fill: parent
-            addedWidth: 140
-            addedHeight: 140
-            borderLeft: 116
-            borderRight: 116
-            borderTop: 116
-            borderBottom: 116
-            imageSource: "../images/screen-frame.png"
-            normalsSource: "../images/screen-frame-normals.png"
+            addedWidth: 200
+            addedHeight: 370
+            borderLeft: 148
+            borderRight: 148
+            borderTop: 232
+            borderBottom: 232
+            imageSource: "../images/black-frame.png"
+            normalsSource: "../images/black-frame-normals.png"
+            sourceRect: Qt.rect(-80, -90, terminal.width + 160, terminal.height + 180 )
 
             shaderString: "WhiteFrameShader.qml"
         }
