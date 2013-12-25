@@ -72,6 +72,11 @@ ApplicationWindow {
                         onValueChanged: shadersettings.screen_distortion = value;
                         Component.onCompleted:  _value = shadersettings.screen_distortion;
                     }
+                    SettingComponent{
+                        name: "Screen flickering"
+                        onValueChanged: shadersettings.brightness_flickering = value;
+                        Component.onCompleted:  _value = shadersettings.brightness_flickering;
+                    }
                 }
             }
         }

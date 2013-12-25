@@ -91,15 +91,25 @@ ApplicationWindow{
 
             property real scanlines: shadersettings.scanlines ? 1.0 : 0.0
 
-            NumberAnimation on brightness{
-                property real randval: 0
-                to: 1.0
-                duration: 300
-                onStopped: {
-                    to = 1 - Math.random() * shadersettings.brightness_flickering;
-                    start();
+            Behavior on brightness {
+                NumberAnimation{
+                    duration: 250
+                    onRunningChanged:
+                        if(!running) shadercontainer.brightness = 1.0;
                 }
-                running: false
+            }
+
+            Timer{
+                property real randval
+                id: flickertimer
+                interval: 500
+                onTriggered: {
+                    randval = Math.random();
+                    if(randval < shadersettings.brightness_flickering)
+                        shadercontainer.brightness = Math.random() * 0.5 + 0.5;
+                }
+                running: true
+                repeat: true
             }
 
             property real deltay: 3 / terminal.height
