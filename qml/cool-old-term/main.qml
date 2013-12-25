@@ -77,7 +77,7 @@ ApplicationWindow{
             id: shadercontainer
             anchors.fill: terminal
             blending: true
-            z: 2
+            z: 1.9
             property color font_color: shadersettings.font_color
             property color background_color: shadersettings.background_color
             property variant source: theSource
@@ -239,13 +239,14 @@ ApplicationWindow{
         }
 
         RadialGradient{
-            z: 4
+            id: ambientreflection
+            z: 2.0
             anchors.fill: parent
             cached: true
-            opacity: 0.1
+            opacity: shadersettings.ambient_light * 0.66
             gradient: Gradient{
-                GradientStop{position: 0.0; color: shadersettings.font_color}
-                GradientStop{position: 1.0; color: "#00000000"}
+                GradientStop{position: 0.0; color: "white"}
+                GradientStop{position: 0.7; color: "#00000000"}
             }
         }
     }

@@ -1,5 +1,6 @@
 import QtQuick 2.1
 import "utils"
+import QtGraphicalEffects 1.0
 
 TerminalFrame{
     id: frame
@@ -13,7 +14,7 @@ TerminalFrame{
     borderBottom: 232
     imageSource: "../images/black-frame.png"
     normalsSource: "../images/black-frame-normals.png"
-    sourceRect: Qt.rect(-80, -90, terminal.width + 160, terminal.height + 180 )
+    sourceRect: Qt.rect(-80, -90, terminal.width + 160, terminal.height + 180)
 
     shaderString: "WhiteFrameShader.qml"
 }
