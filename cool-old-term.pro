@@ -45,4 +45,5 @@ OTHER_FILES += \
     qml/cool-old-term/frames/images/screen-frame.png \
     qml/cool-old-term/frames/images/screen-frame-normals.png \
     qml/cool-old-term/frames/images/black-frame.png \
-    qml/cool-old-term/frames/images/black-frame-normals.png
+    qml/cool-old-term/frames/images/black-frame-normals.png \
+    qml/cool-old-term/frames/NoFrame.qml

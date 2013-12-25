@@ -191,13 +191,12 @@ ApplicationWindow{
         }
 
         Loader{
-            property rect sourceRect
+            property rect sourceRect: item.sourceRect
 
             id: frame
             anchors.fill: parent
             z: 2.1
-            source: "./frames/WhiteSimpleFrame.qml"
-            onLoaded: sourceRect = item.sourceRect;
+            source: "./frames/NoFrame.qml"
         }
 
         TerminalScreen {
