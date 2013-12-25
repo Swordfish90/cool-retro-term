@@ -21,9 +21,28 @@ OTHER_FILES += \
     $$PWD/qml/cool-old-term/HighlightArea.qml \
     $$PWD/qml/cool-old-term/ShaderSettings.qml \
     $$PWD/qml/images/frame.png \
-    qml/cool-old-term/SettingsWindow.qml \
-    qml/cool-old-term/SettingComponent.qml \
-    qml/cool-old-term/ColorButton.qml \
-    qml/cool-old-term/TerminalFrame.qml \
-    qml/cool-old-term/WhiteFrameShader.qml \
-    qml/cool-old-term/NoFrameShader.qml
+    $$PWD/qml/cool-old-term/SettingsWindow.qml \
+    $$PWD/qml/cool-old-term/SettingComponent.qml \
+    $$PWD/qml/cool-old-term/ColorButton.qml \
+    $$PWD/qml/cool-old-term/TerminalFrame.qml \
+    $$PWD/qml/cool-old-term/WhiteFrameShader.qml \
+    $$PWD/qml/cool-old-term/NoFrameShader.qml \
+    $$PWD/qml/cool-old-term/WhiteSimpleFrame.qml \
+    qml/cool-old-term/BlackRoughFrame.qml \
+    qml/cool-old-term/Frames/BlackRoughFrame.qml \
+    qml/cool-old-term/Frames/NoFrameShader.qml \
+    qml/cool-old-term/Frames/WhiteFrameShader.qml \
+    qml/cool-old-term/Frames/WhiteSimpleFrame.qml \
+    qml/cool-old-term/Frames/TerminalFrame.qml \
+    qml/cool-old-term/Frames/utils/NoFrameShader.qml \
+    qml/cool-old-term/Frames/utils/TerminalFrame.qml \
+    qml/cool-old-term/Frames/utils/WhiteFrameShader.qml \
+    qml/cool-old-term/frames/WhiteSimpleFrame.qml \
+    qml/cool-old-term/frames/BlackRoughFrame.qml \
+    qml/cool-old-term/frames/utils/NoFrameShader.qml \
+    qml/cool-old-term/frames/utils/TerminalFrame.qml \
+    qml/cool-old-term/frames/utils/WhiteFrameShader.qml \
+    qml/cool-old-term/frames/images/screen-frame.png \
+    qml/cool-old-term/frames/images/screen-frame-normals.png \
+    qml/cool-old-term/frames/images/black-frame.png \
+    qml/cool-old-term/frames/images/black-frame-normals.png

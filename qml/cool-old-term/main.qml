@@ -180,7 +180,7 @@ ApplicationWindow{
                             //vec4 color = texture2D(source, coords);
                             float color = (blurredColor(source, coords).r + texture2D(source, coords).r) * 0.5;
                             float scanline_alpha = getScanlineIntensity(coords) * scanlines;
-                            //float inside = step(0.0, coords.x) * step(-1.0, -coords.x) * step(0.0, coords.y) * step(-1.0, -coords.y);
+                            //float inside = step(0.0, coords.x) * step(-1.0, -coords.x)  * step(0.0, coords.y) * step(-1.0, -coords.y);
                             float noise = stepNoise(coords) * noise_strength;
                             float randomPass = randomPass(coords) * glowing_line_strength;
                             color += noise + randomPass;
@@ -190,38 +190,14 @@ ApplicationWindow{
                         }"
         }
 
-//        TerminalFrame{
-//            id: frame
-//            z: 2.1
-//            anchors.fill: parent
-//            addedWidth: 140
-//            addedHeight: 140
-//            borderLeft: 116
-//            borderRight: 116
-//            borderTop: 116
-//            borderBottom: 116
-//            imageSource: "../images/screen-frame.png"
-//            normalsSource: "../images/screen-frame-normals.png"
-//            sourceRect: Qt.rect(-65, -75, terminal.width + 130, terminal.height + 150)
+        Loader{
+            property rect sourceRect
 
-//            shaderString: "WhiteFrameShader.qml"
-//        }
-
-        TerminalFrame{
             id: frame
-            z: 2.1
             anchors.fill: parent
-            addedWidth: 200
-            addedHeight: 370
-            borderLeft: 148
-            borderRight: 148
-            borderTop: 232
-            borderBottom: 232
-            imageSource: "../images/black-frame.png"
-            normalsSource: "../images/black-frame-normals.png"
-            sourceRect: Qt.rect(-80, -90, terminal.width + 160, terminal.height + 180 )
-
-            shaderString: "WhiteFrameShader.qml"
+            z: 2.1
+            source: "./frames/WhiteSimpleFrame.qml"
+            onLoaded: sourceRect = item.sourceRect;
         }
 
         TerminalScreen {
