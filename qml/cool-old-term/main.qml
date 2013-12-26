@@ -229,13 +229,12 @@ ApplicationWindow{
 
         TerminalScreen {
             id: terminal
-            anchors.centerIn: parent
-            width: mainwindow.width
-            height: mainwindow.height
-            visible: false
+            anchors.fill: parent
 
             //FIXME: Ugly forced clear terminal at the beginning
-            Component.onCompleted: terminal.screen.sendKey("l", 76, 67108864);
+            Component.onCompleted: {
+                terminal.screen.sendKey("l", 76, 67108864);
+            }
         }
 
         RadialGradient{
