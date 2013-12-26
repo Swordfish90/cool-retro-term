@@ -1,0 +1,4841 @@
+<!-- Creator     : groff version 1.19.2 -->
+<!-- CreationDate: Thu May 10 09:31:49 2012 -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta name="generator" content="groff -Thtml, see www.gnu.org">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="Content-Style" content="text/css">
+<style type="text/css">
+       p     { margin-top: 0; margin-bottom: 0; }
+       pre   { margin-top: 0; margin-bottom: 0; }
+       table { margin-top: 0; margin-bottom: 0; }
+</style>
+<title>Xterm Control Sequences</title>
+
+</head>
+<body>
+
+<h1 align=center>Xterm Control Sequences</h1>
+
+<a href="#Definitions">Definitions</a><br>
+<a href="#C1 (8-Bit) Control Characters">C1 (8-Bit) Control Characters</a><br>
+<a href="#VT100 Mode">VT100 Mode</a><br>
+<a href="#Alt and Meta Keys">Alt and Meta Keys</a><br>
+<a href="#PC-Style Function Keys">PC-Style Function Keys</a><br>
+<a href="#VT220-Style Function Keys">VT220-Style Function Keys</a><br>
+<a href="#VT52-Style Function Keys">VT52-Style Function Keys</a><br>
+<a href="#Sun-Style Function Keys">Sun-Style Function Keys</a><br>
+<a href="#HP-Style Function Keys">HP-Style Function Keys</a><br>
+<a href="#The Alternate Screen Buffer">The Alternate Screen Buffer</a><br>
+<a href="#Bracketed Paste Mode">Bracketed Paste Mode</a><br>
+<a href="#Title Modes">Title Modes</a><br>
+<a href="#Mouse Tracking">Mouse Tracking</a><br>
+<a href="#Tektronix 4014 Mode">Tektronix 4014 Mode</a><br>
+<a href="#VT52 Mode">VT52 Mode</a><br>
+
+<hr>
+
+
+<p align=center valign="top"><i>Edward Moy</i> <br>
+University of California, Berkeley</p>
+
+
+<p align=center style="margin-top: 1em" valign="top">Revised
+by <i><br>
+Stephen Gildea</i> <br>
+X Consortium (1994) <i><br>
+Thomas Dickey</i> <br>
+XFree86 Project (1996-2006) <br>
+invisible-island.net (2006-2012)</p>
+
+<a name="Definitions"></a>
+<h2>Definitions</h2>
+
+
+<table width="100%" border=0 rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="3%">
+
+
+<p style="margin-top: 1em" valign="top"><i>c</i></p></td>
+<td width="5%"></td>
+<td width="92%">
+
+
+<p style="margin-top: 1em" valign="top">The literal
+character <i>c</i>.</p></td>
+<tr valign="top" align="left">
+<td width="3%">
+
+
+<p style="margin-top: 1em" valign="top"><i>C</i></p></td>
+<td width="5%"></td>
+<td width="92%">
+
+
+<p style="margin-top: 1em" valign="top">A single (required)
+character.</p> </td>
+<tr valign="top" align="left">
+<td width="3%">
+
+
+<p style="margin-top: 1em" valign="top"><i>P
+<small>s</small></i></p> </td>
+<td width="5%"></td>
+<td width="92%">
+
+
+<p style="margin-top: 1em" valign="top">A single (usually
+optional) numeric parameter, composed of one of more
+digits.</p> </td>
+<tr valign="top" align="left">
+<td width="3%">
+
+
+<p style="margin-top: 1em" valign="top"><i>P
+<small>m</small></i></p> </td>
+<td width="5%"></td>
+<td width="92%">
+
+
+<p style="margin-top: 1em" valign="top">A multiple numeric
+parameter composed of any number of single numeric
+parameters, separated by ; character(s). Individual values
+for the parameters are listed with <i>P <small>s</small></i>
+.</p> </td>
+<tr valign="top" align="left">
+<td width="3%">
+
+
+<p style="margin-top: 1em" valign="top"><i>P
+<small>t</small></i></p> </td>
+<td width="5%"></td>
+<td width="92%">
+
+
+<p style="margin-top: 1em" valign="top">A text parameter
+composed of printable characters.</p></td>
+</table>
+
+<a name="C1 (8-Bit) Control Characters"></a>
+<h2>C1 (8-Bit) Control Characters</h2>
+
+
+<p style="margin-top: 1em" valign="top">The <i>xterm</i>
+program recognizes both 8-bit and 7-bit control characters.
+It generates 7-bit controls (by default) or 8-bit if S8C1T
+is enabled. The following pairs of 7-bit and 8-bit control
+characters are equivalent:</p>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="8%">
+
+
+
+<p style="margin-top: 1em" valign="top"><small><small>ESC</small></small>
+D</p> </td>
+<td width="92%">
+
+
+<p style="margin-top: 1em" valign="top">Index (
+<small><small>IND</small></small> is 0x84).</p></td>
+<tr valign="top" align="left">
+<td width="8%">
+
+
+<p valign="top"><small><small>ESC</small></small> E</p></td>
+<td width="92%">
+
+
+<p valign="top">Next Line (
+<small><small>NEL</small></small> is 0x85).</p></td>
+<tr valign="top" align="left">
+<td width="8%">
+
+
+<p valign="top"><small><small>ESC</small></small> H</p></td>
+<td width="92%">
+
+
+<p valign="top">Tab Set ( <small><small>HTS</small></small>
+is 0x88).</p></td>
+<tr valign="top" align="left">
+<td width="8%">
+
+
+<p valign="top"><small><small>ESC</small></small> M</p></td>
+<td width="92%">
+
+
+<p valign="top">Reverse Index (
+<small><small>RI</small></small> is 0x8d).</p></td>
+<tr valign="top" align="left">
+<td width="8%">
+
+
+<p valign="top"><small><small>ESC</small></small> N</p></td>
+<td width="92%">
+
+
+<p valign="top">Single Shift Select of G2 Character Set (
+<small><small>SS2</small></small> is 0x8e). This affects
+next character only.</p></td>
+<tr valign="top" align="left">
+<td width="8%">
+
+
+<p valign="top"><small><small>ESC</small></small> O</p></td>
+<td width="92%">
+
+
+<p valign="top">Single Shift Select of G3 Character Set (
+<small><small>SS3</small></small> is 0x8f). This affects
+next character only.</p></td>
+<tr valign="top" align="left">
+<td width="8%">
+
+
+<p valign="top"><small><small>ESC</small></small> P</p></td>
+<td width="92%">
+
+
+<p valign="top">Device Control String (
+<small><small>DCS</small></small> is 0x90).</p></td>
+<tr valign="top" align="left">
+<td width="8%">
+
+
+<p valign="top"><small><small>ESC</small></small> V</p></td>
+<td width="92%">
+
+
+<p valign="top">Start of Guarded Area (
+<small><small>SPA</small></small> is 0x96).</p></td>
+<tr valign="top" align="left">
+<td width="8%">
+
+
+<p valign="top"><small><small>ESC</small></small> W</p></td>
+<td width="92%">
+
+
+<p valign="top">End of Guarded Area (
+<small><small>EPA</small></small> is 0x97).</p></td>
+<tr valign="top" align="left">
+<td width="8%">
+
+
+<p valign="top"><small><small>ESC</small></small> X</p></td>
+<td width="92%">
+
+
+<p valign="top">Start of String (
+<small><small>SOS</small></small> is 0x98).</p></td>
+<tr valign="top" align="left">
+<td width="8%">
+
+
+<p valign="top"><small><small>ESC</small></small> Z</p></td>
+<td width="92%">
+
+
+<p valign="top">Return Terminal ID (DECID is 0x9a).
+Obsolete form of <small><small>CSI</small></small> c
+(DA).</p> </td>
+<tr valign="top" align="left">
+<td width="8%">
+
+
+<p valign="top"><small><small>ESC</small></small> [</p></td>
+<td width="92%">
+
+
+<p valign="top">Control Sequence Introducer (
+<small><small>CSI</small></small> is 0x9b).</p></td>
+<tr valign="top" align="left">
+<td width="8%">
+
+
+<p valign="top"><small><small>ESC</small></small> \</p></td>
+<td width="92%">
+
+
+<p valign="top">String Terminator (
+<small><small>ST</small></small> is 0x9c).</p></td>
+<tr valign="top" align="left">
+<td width="8%">
+
+
+<p valign="top"><small><small>ESC</small></small> ]</p></td>
+<td width="92%">
+
+
+<p valign="top">Operating System Command (
+<small><small>OSC</small></small> is 0x9d).</p></td>
+<tr valign="top" align="left">
+<td width="8%">
+
+
+<p valign="top"><small><small>ESC</small></small> ^</p></td>
+<td width="92%">
+
+
+<p valign="top">Privacy Message (
+<small><small>PM</small></small> is 0x9e).</p></td>
+<tr valign="top" align="left">
+<td width="8%">
+
+
+<p valign="top"><small><small>ESC</small></small> _</p></td>
+<td width="92%">
+
+
+<p valign="top">Application Program Command (
+<small><small>APC</small></small> is 0x9f).</p></td>
+</table>
+
+<p style="margin-top: 1em" valign="top">These control
+characters are used in the vtXXX emulation.</p>
+
+<a name="VT100 Mode"></a>
+<h2>VT100 Mode</h2>
+
+
+<p style="margin-top: 1em" valign="top">Most of these
+control sequences are standard VT102 control sequences, but
+there is support for later DEC VT terminals (i.e., VT220,
+VT320, VT420, VT510), as well as ISO 6429 and <i>aixterm</i>
+color controls. The only VT102 feature not supported is
+auto-repeat, since the only way X provides for this will
+affect all windows. There are additional control sequences
+to provide <i>xterm-</i>dependent functions, such as the
+scrollbar or window size. Where the function is specified by
+DEC or ISO 6429, the code assigned to it is given in
+parentheses. The escape codes to designate and invoke
+character sets are specified by ISO 2022; see that document
+for a discussion of character sets.</p>
+
+
+<p style="margin-top: 1em" valign="top"><b>Single-character
+functions</b></p>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="5%">
+
+
+<p valign="top"><small><small>BEL</small></small></p></td>
+<td width="12%"></td>
+<td width="83%">
+
+
+<p valign="top">Bell (Ctrl-G).</p></td>
+<tr valign="top" align="left">
+<td width="5%">
+
+
+<p valign="top"><small><small>BS</small></small></p></td>
+<td width="12%"></td>
+<td width="83%">
+
+
+<p valign="top">Backspace (Ctrl-H).</p></td>
+<tr valign="top" align="left">
+<td width="5%">
+
+
+<p valign="top"><small><small>CR</small></small></p></td>
+<td width="12%"></td>
+<td width="83%">
+
+
+<p valign="top">Carriage Return (Ctrl-M).</p></td>
+<tr valign="top" align="left">
+<td width="5%">
+
+
+<p valign="top"><small><small>ENQ</small></small></p></td>
+<td width="12%"></td>
+<td width="83%">
+
+
+<p valign="top">Return Terminal Status (Ctrl-E). Default
+response is an empty string, but may be overridden by a
+resource <b>answerbackString</b>.</p></td>
+<tr valign="top" align="left">
+<td width="5%">
+
+
+<p valign="top"><small><small>FF</small></small></p></td>
+<td width="12%"></td>
+<td width="83%">
+
+
+<p valign="top">Form Feed or New Page (NP). Ctrl-L is
+treated the same as LF.</p></td>
+<tr valign="top" align="left">
+<td width="5%">
+
+
+<p valign="top"><small><small>LF</small></small></p></td>
+<td width="12%"></td>
+<td width="83%">
+
+
+<p valign="top">Line Feed or New Line (NL). (LF is
+Ctrl-J).</p> </td>
+<tr valign="top" align="left">
+<td width="5%">
+
+
+<p valign="top"><small><small>SI</small></small></p></td>
+<td width="12%"></td>
+<td width="83%">
+
+
+<p valign="top">Shift In (Ctrl-O) &rarr; Switch to Standard
+Character Set. This invokes the G0 character set (the
+default).</p> </td>
+<tr valign="top" align="left">
+<td width="5%">
+
+
+<p valign="top"><small><small>SO</small></small></p></td>
+<td width="12%"></td>
+<td width="83%">
+
+
+<p valign="top">Shift Out (Ctrl-N) &rarr; Switch to
+Alternate Character Set. This invokes the G1 character
+set.</p> </td>
+<tr valign="top" align="left">
+<td width="5%">
+
+
+<p valign="top"><small><small>SP</small></small></p></td>
+<td width="12%"></td>
+<td width="83%">
+
+
+<p valign="top">Space.</p></td>
+<tr valign="top" align="left">
+<td width="5%">
+
+
+<p valign="top"><small><small>TAB</small></small></p></td>
+<td width="12%"></td>
+<td width="83%">
+
+
+<p valign="top">Horizontal Tab (HT) (Ctrl-I).</p></td>
+<tr valign="top" align="left">
+<td width="5%">
+
+
+<p valign="top"><small><small>VT</small></small></p></td>
+<td width="12%"></td>
+<td width="83%">
+
+
+<p valign="top">Vertical Tab (Ctrl-K). This is treated the
+same as LF.</p></td>
+</table>
+
+<p style="margin-top: 1em" valign="top"><b>Controls
+beginning with <small><small>ESC</small></small></b> <br>
+This excludes controls where
+<small><small>ESC</small></small> is part of a 7-bit
+equivalent to 8-bit C1 controls, ordered by the final
+character(s).</p>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="13%">
+
+
+<p valign="top"><small><small>ESC SP</small></small> F</p></td>
+<td width="4%"></td>
+<td width="83%">
+
+
+<p valign="top">7-bit controls (S7C1T).</p></td>
+<tr valign="top" align="left">
+<td width="13%">
+
+
+<p valign="top"><small><small>ESC SP</small></small> G</p></td>
+<td width="4%"></td>
+<td width="83%">
+
+
+<p valign="top">8-bit controls (S8C1T).</p></td>
+<tr valign="top" align="left">
+<td width="13%">
+
+
+<p valign="top"><small><small>ESC SP</small></small> L</p></td>
+<td width="4%"></td>
+<td width="83%">
+
+
+<p valign="top">Set ANSI conformance level 1 (dpANS
+X3.134.1).</p> </td>
+<tr valign="top" align="left">
+<td width="13%">
+
+
+<p valign="top"><small><small>ESC SP</small></small> M</p></td>
+<td width="4%"></td>
+<td width="83%">
+
+
+<p valign="top">Set ANSI conformance level 2 (dpANS
+X3.134.1).</p> </td>
+<tr valign="top" align="left">
+<td width="13%">
+
+
+<p valign="top"><small><small>ESC SP</small></small> N</p></td>
+<td width="4%"></td>
+<td width="83%">
+
+
+<p valign="top">Set ANSI conformance level 3 (dpANS
+X3.134.1).</p> </td>
+<tr valign="top" align="left">
+<td width="13%">
+
+
+<p valign="top"><small><small>ESC</small></small> # 3</p></td>
+<td width="4%"></td>
+<td width="83%">
+
+
+<p valign="top">DEC double-height line, top half
+(DECDHL).</p> </td>
+<tr valign="top" align="left">
+<td width="13%">
+
+
+<p valign="top"><small><small>ESC</small></small> # 4</p></td>
+<td width="4%"></td>
+<td width="83%">
+
+
+<p valign="top">DEC double-height line, bottom half
+(DECDHL).</p> </td>
+<tr valign="top" align="left">
+<td width="13%">
+
+
+<p valign="top"><small><small>ESC</small></small> # 5</p></td>
+<td width="4%"></td>
+<td width="83%">
+
+
+<p valign="top">DEC single-width line (DECSWL).</p></td>
+<tr valign="top" align="left">
+<td width="13%">
+
+
+<p valign="top"><small><small>ESC</small></small> # 6</p></td>
+<td width="4%"></td>
+<td width="83%">
+
+
+<p valign="top">DEC double-width line (DECDWL).</p></td>
+<tr valign="top" align="left">
+<td width="13%">
+
+
+<p valign="top"><small><small>ESC</small></small> # 8</p></td>
+<td width="4%"></td>
+<td width="83%">
+
+
+<p valign="top">DEC Screen Alignment Test (DECALN).</p></td>
+<tr valign="top" align="left">
+<td width="13%">
+
+
+<p valign="top"><small><small>ESC</small></small> % @</p></td>
+<td width="4%"></td>
+<td width="83%">
+
+
+<p valign="top">Select default character set. That is ISO
+8859-1 (ISO 2022).</p></td>
+<tr valign="top" align="left">
+<td width="13%">
+
+
+<p valign="top"><small><small>ESC</small></small> % G</p></td>
+<td width="4%"></td>
+<td width="83%">
+
+
+<p valign="top">Select UTF-8 character set (ISO 2022).</p></td>
+<tr valign="top" align="left">
+<td width="13%">
+
+
+<p valign="top"><small><small>ESC</small></small> (
+<i>C</i></p> </td>
+<td width="4%"></td>
+<td width="83%">
+
+
+<p valign="top">Designate G0 Character Set (ISO 2022,
+VT100).</p> </td>
+</table>
+
+<p style="margin-left:17%;">Final character <i>C</i> for
+designating 94-character sets. In this list, 0 , A and B
+apply to VT100 and up, the remainder to VT220 and up:
+<i><br>
+C</i> = 0 &rarr; DEC Special Character and Line Drawing Set.
+<i><br>
+C</i> = A &rarr; United Kingdom (UK). <i><br>
+C</i> = B &rarr; United States (USASCII). <i><br>
+C</i> = 4 &rarr; Dutch. <i><br>
+C</i> = C or 5 &rarr; Finnish. <i><br>
+C</i> = R &rarr; French. <i><br>
+C</i> = Q &rarr; French Canadian. <i><br>
+C</i> = K &rarr; German. <i><br>
+C</i> = Y &rarr; Italian. <i><br>
+C</i> = E or 6 &rarr; Norwegian/Danish. <i><br>
+C</i> = Z &rarr; Spanish. <i><br>
+C</i> = H or 7 &rarr; Swedish. <i><br>
+C</i> = = &rarr; Swiss.</p>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="12%">
+
+
+<p valign="top"><small><small>ESC</small></small> )
+<i>C</i></p> </td>
+<td width="5%"></td>
+<td width="75%">
+
+
+<p valign="top">Designate G1 Character Set (ISO 2022,
+VT100).</p> </td>
+<td width="8%">
+</td>
+</table>
+
+<p style="margin-left:17%;">The same character sets apply
+as for <small><small>ESC</small></small> ( <i>C</i>.</p>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="12%">
+
+
+<p valign="top"><small><small>ESC</small></small> *
+<i>C</i></p> </td>
+<td width="5%"></td>
+<td width="75%">
+
+
+<p valign="top">Designate G2 Character Set (ISO 2022,
+VT220).</p> </td>
+<td width="8%">
+</td>
+</table>
+
+<p style="margin-left:17%;">The same character sets apply
+as for <small><small>ESC</small></small> ( <i>C</i>.</p>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="12%">
+
+
+<p valign="top"><small><small>ESC</small></small> +
+<i>C</i></p> </td>
+<td width="5%"></td>
+<td width="75%">
+
+
+<p valign="top">Designate G3 Character Set (ISO 2022,
+VT220).</p> </td>
+<td width="8%">
+</td>
+</table>
+
+<p style="margin-left:17%;">The same character sets apply
+as for <small><small>ESC</small></small> ( <i>C</i>.</p>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="12%">
+
+
+<p valign="top"><small><small>ESC</small></small> -
+<i>C</i></p> </td>
+<td width="5%"></td>
+<td width="58%">
+
+
+<p valign="top">Designate G1 Character Set (VT300).</p></td>
+<td width="25%">
+</td>
+</table>
+
+<p style="margin-left:17%;">The same character sets apply
+as for <small><small>ESC</small></small> ( <i>C</i>.</p>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="12%">
+
+
+<p valign="top"><small><small>ESC</small></small> .
+<i>C</i></p> </td>
+<td width="5%"></td>
+<td width="58%">
+
+
+<p valign="top">Designate G2 Character Set (VT300).</p></td>
+<td width="25%">
+</td>
+</table>
+
+<p style="margin-left:17%;">The same character sets apply
+as for <small><small>ESC</small></small> ( <i>C</i>.</p>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="12%">
+
+
+<p valign="top"><small><small>ESC</small></small> /
+<i>C</i></p> </td>
+<td width="5%"></td>
+<td width="58%">
+
+
+<p valign="top">Designate G3 Character Set (VT300).</p></td>
+<td width="25%">
+</td>
+</table>
+
+<p style="margin-left:17%;">These work for 96-character
+sets only. <i><br>
+C</i> = A &rarr; ISO Latin-1 Supplemental.</p>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="8%">
+
+
+<p valign="top"><small><small>ESC</small></small> 6</p></td>
+<td width="9%"></td>
+<td width="83%">
+
+
+<p valign="top">Back Index (DECBI), VT420 and up.</p></td>
+<tr valign="top" align="left">
+<td width="8%">
+
+
+<p valign="top"><small><small>ESC</small></small> 7</p></td>
+<td width="9%"></td>
+<td width="83%">
+
+
+<p valign="top">Save Cursor (DECSC).</p></td>
+<tr valign="top" align="left">
+<td width="8%">
+
+
+<p valign="top"><small><small>ESC</small></small> 8</p></td>
+<td width="9%"></td>
+<td width="83%">
+
+
+<p valign="top">Restore Cursor (DECRC).</p></td>
+<tr valign="top" align="left">
+<td width="8%">
+
+
+<p valign="top"><small><small>ESC</small></small> 9</p></td>
+<td width="9%"></td>
+<td width="83%">
+
+
+<p valign="top">Forward Index (DECFI), VT420 and up.</p></td>
+<tr valign="top" align="left">
+<td width="8%">
+
+
+<p valign="top"><small><small>ESC</small></small> =</p></td>
+<td width="9%"></td>
+<td width="83%">
+
+
+<p valign="top">Application Keypad (DECPAM).</p></td>
+<tr valign="top" align="left">
+<td width="8%">
+
+
+<p valign="top"><small><small>ESC</small></small> &gt;</p></td>
+<td width="9%"></td>
+<td width="83%">
+
+
+<p valign="top">Normal Keypad (DECPNM).</p></td>
+<tr valign="top" align="left">
+<td width="8%">
+
+
+<p valign="top"><small><small>ESC</small></small> F</p></td>
+<td width="9%"></td>
+<td width="83%">
+
+
+<p valign="top">Cursor to lower left corner of screen. This
+is enabled by the <b>hpLowerleftBugCompat</b> resource.</p></td>
+<tr valign="top" align="left">
+<td width="8%">
+
+
+<p valign="top"><small><small>ESC</small></small> c</p></td>
+<td width="9%"></td>
+<td width="83%">
+
+
+<p valign="top">Full Reset (RIS).</p></td>
+<tr valign="top" align="left">
+<td width="8%">
+
+
+<p valign="top"><small><small>ESC</small></small> l</p></td>
+<td width="9%"></td>
+<td width="83%">
+
+
+<p valign="top">Memory Lock (per HP terminals). Locks
+memory above the cursor.</p></td>
+<tr valign="top" align="left">
+<td width="8%">
+
+
+<p valign="top"><small><small>ESC</small></small> m</p></td>
+<td width="9%"></td>
+<td width="83%">
+
+
+<p valign="top">Memory Unlock (per HP terminals).</p></td>
+<tr valign="top" align="left">
+<td width="8%">
+
+
+<p valign="top"><small><small>ESC</small></small> n</p></td>
+<td width="9%"></td>
+<td width="83%">
+
+
+<p valign="top">Invoke the G2 Character Set as GL
+(LS2).</p> </td>
+<tr valign="top" align="left">
+<td width="8%">
+
+
+<p valign="top"><small><small>ESC</small></small> o</p></td>
+<td width="9%"></td>
+<td width="83%">
+
+
+<p valign="top">Invoke the G3 Character Set as GL
+(LS3).</p> </td>
+<tr valign="top" align="left">
+<td width="8%">
+
+
+<p valign="top"><small><small>ESC</small></small> |</p></td>
+<td width="9%"></td>
+<td width="83%">
+
+
+<p valign="top">Invoke the G3 Character Set as GR
+(LS3R).</p> </td>
+<tr valign="top" align="left">
+<td width="8%">
+
+
+<p valign="top"><small><small>ESC</small></small> }</p></td>
+<td width="9%"></td>
+<td width="83%">
+
+
+<p valign="top">Invoke the G2 Character Set as GR
+(LS2R).</p> </td>
+<tr valign="top" align="left">
+<td width="8%">
+
+
+<p valign="top"><small><small>ESC</small></small> ~</p></td>
+<td width="9%"></td>
+<td width="83%">
+
+
+<p valign="top">Invoke the G1 Character Set as GR
+(LS1R).</p> </td>
+</table>
+
+<p style="margin-top: 1em" valign="top"><b>Application
+Program-Control functions</b></p>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="15%">
+
+
+<p valign="top"><small><small>APC</small></small> <i>P
+<small>t</small></i> <small><small>ST</small></small></p></td>
+<td width="2%"></td>
+<td width="83%">
+
+
+<p valign="top">None. <i>xterm</i> implements no
+<small><small>APC</small></small> functions; <i>P
+<small>t</small></i> is ignored. <i>P <small>t</small></i>
+need not be printable characters.</p></td>
+</table>
+
+<p style="margin-top: 1em" valign="top"><b>Device-Control
+functions</b></p>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="28%">
+
+
+<p valign="top"><small><small>DCS</small></small> <i>P
+<small>s</small></i> ; <i>P <small>s</small></i> | <i>P
+<small>t</small></i> <small><small>ST</small></small></p></td>
+<td width="72%">
+</td>
+</table>
+
+<p style="margin-left:17%;">User-Defined Keys (DECUDK). The
+first parameter: <i><br>
+P <small>s</small></i> = 0 &rarr; Clear all UDK definitions
+before starting (default). <i><br>
+P <small>s</small></i> = 1 &rarr; Erase Below (default).
+<br>
+The second parameter: <i><br>
+P <small>s</small></i> = 0 &larr; Lock the keys (default).
+<i><br>
+P <small>s</small></i> = 1 &larr; Do not lock. <br>
+The third parameter is a &rsquo;;&rsquo;-separated list of
+strings denoting the key-code separated by a &rsquo;/&rsquo;
+from the hex-encoded key value. The key codes correspond to
+the DEC function-key codes (e.g., F6=17).</p>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="22%">
+
+
+<p valign="top"><small><small>DCS</small></small> $ q <i>P
+<small>t</small></i> <small><small>ST</small></small></p></td>
+<td width="78%">
+</td>
+</table>
+
+<p style="margin-left:17%;">Request Status String
+(DECRQSS). The string following the &quot;q&quot; is one of
+the following:</p>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+
+
+<p valign="top">&ldquo; q</p><td width="20%"></td>
+<td width="-12%"></td>
+<td width="9%"></td>
+<td width="8%"></td>
+<td width="75%">
+
+
+<p valign="top">&rarr; DECSCA <br>
+&ldquo; p</p></td>
+<tr valign="top" align="left">
+<td width="20%"></td>
+<td width="-12%"></td>
+<td width="9%"></td>
+<td width="8%"></td>
+<td width="75%">
+
+
+<p valign="top">&rarr; DECSCL <br>
+r</p></td>
+<tr valign="top" align="left">
+<td width="20%"></td>
+<td width="-12%"></td>
+<td width="9%"></td>
+<td width="8%"></td>
+<td width="75%">
+</td>
+<tr valign="top" align="left">
+<td width="20%"></td>
+<td width="-12%"></td>
+<td width="9%"></td>
+<td width="8%"></td>
+<td width="75%">
+
+
+<p valign="top">&rarr; DECSTBM <br>
+m</p></td>
+<tr valign="top" align="left">
+<td width="20%"></td>
+<td width="-12%"></td>
+<td width="9%"></td>
+<td width="8%"></td>
+<td width="75%">
+</td>
+<tr valign="top" align="left">
+<td width="20%"></td>
+<td width="-12%"></td>
+<td width="9%"></td>
+<td width="8%"></td>
+<td width="75%">
+
+
+<p valign="top">&rarr; SGR <small><small><br>
+SP</small></small> q</p></td>
+<tr valign="top" align="left">
+<td width="20%"></td>
+<td width="-12%"></td>
+<td width="9%"></td>
+<td width="8%"></td>
+<td width="75%">
+
+
+<p valign="top">&rarr; DECSCUSR</p></td>
+</table>
+
+<p style="margin-left:17%;"><i>xterm</i> responds with
+<small><small>DCS</small></small> 1 $ r <i>P
+<small>t</small></i> <small><small>ST</small></small> for
+valid requests, replacing the <i>P <small>t</small></i> with
+the corresponding <small><small>CSI</small></small> string,
+or <small><small>DCS</small></small> 0 $ r <i>P
+<small>t</small></i> <small><small>ST</small></small> for
+invalid requests.</p>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="22%">
+
+
+<p valign="top"><small><small>DCS</small></small> + p <i>P
+<small>t</small></i> <small><small>ST</small></small></p></td>
+<td width="78%">
+</td>
+</table>
+
+<p style="margin-left:17%;">Set Termcap/Terminfo Data
+(xterm, experimental). The string following the
+&quot;p&quot; is a name to use for retrieving data from the
+terminal database. The data will be used for the
+&quot;tcap&quot; keyboard configuration&rsquo;s function-
+and special-keys, as well as by the Request Termcap/Terminfo
+String control.</p>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="22%">
+
+
+<p valign="top"><small><small>DCS</small></small> + q <i>P
+<small>t</small></i> <small><small>ST</small></small></p></td>
+<td width="78%">
+</td>
+</table>
+
+<p style="margin-left:17%;">Request Termcap/Terminfo String
+(xterm, experimental). The string following the
+&quot;q&quot; is a list of names encoded in hexadecimal (2
+digits per character) separated by ; which correspond to
+termcap or terminfo key names. <br>
+Two special features are also recognized, which are not key
+names: <i>Co</i> for termcap colors (or <i>colors</i> for
+terminfo colors), and <i>TN</i> for termcap name (or
+<i>name</i> for terminfo name). <i><br>
+xterm</i> responds with <small><small>DCS</small></small> 1
++ r <i>P <small>t</small></i>
+<small><small>ST</small></small> for valid requests, adding
+to <i>P <small>t</small></i> an = , and the value of the
+corresponding string that xterm would send, or
+<small><small>DCS</small></small> 0 + r <i>P
+<small>t</small></i> <small><small>ST</small></small> for
+invalid requests. The strings are encoded in hexadecimal (2
+digits per character).</p>
+
+<p style="margin-top: 1em" valign="top"><b>Functions using
+<small><small>CSI</small></small> , ordered by the final
+character(s)</b></p>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="17%">
+
+
+<p valign="top"><small><small>CSI</small></small> <i>P
+<small>s</small></i> @</p></td>
+<td width="83%">
+
+
+<p valign="top">Insert <i>P <small>s</small></i> (Blank)
+Character(s) (default = 1) (ICH).</p></td>
+<tr valign="top" align="left">
+<td width="17%">
+
+
+<p valign="top"><small><small>CSI</small></small> <i>P
+<small>s</small></i> A</p></td>
+<td width="83%">
+
+
+<p valign="top">Cursor Up <i>P <small>s</small></i> Times
+(default = 1) (CUU).</p></td>
+<tr valign="top" align="left">
+<td width="17%">
+
+
+<p valign="top"><small><small>CSI</small></small> <i>P
+<small>s</small></i> B</p></td>
+<td width="83%">
+
+
+<p valign="top">Cursor Down <i>P <small>s</small></i> Times
+(default = 1) (CUD).</p></td>
+<tr valign="top" align="left">
+<td width="17%">
+
+
+<p valign="top"><small><small>CSI</small></small> <i>P
+<small>s</small></i> C</p></td>
+<td width="83%">
+
+
+<p valign="top">Cursor Forward <i>P <small>s</small></i>
+Times (default = 1) (CUF).</p></td>
+<tr valign="top" align="left">
+<td width="17%">
+
+
+<p valign="top"><small><small>CSI</small></small> <i>P
+<small>s</small></i> D</p></td>
+<td width="83%">
+
+
+<p valign="top">Cursor Backward <i>P <small>s</small></i>
+Times (default = 1) (CUB).</p></td>
+<tr valign="top" align="left">
+<td width="17%">
+
+
+<p valign="top"><small><small>CSI</small></small> <i>P
+<small>s</small></i> E</p></td>
+<td width="83%">
+
+
+<p valign="top">Cursor Next Line <i>P <small>s</small></i>
+Times (default = 1) (CNL).</p></td>
+<tr valign="top" align="left">
+<td width="17%">
+
+
+<p valign="top"><small><small>CSI</small></small> <i>P
+<small>s</small></i> F</p></td>
+<td width="83%">
+
+
+<p valign="top">Cursor Preceding Line <i>P
+<small>s</small></i> Times (default = 1) (CPL).</p></td>
+<tr valign="top" align="left">
+<td width="17%">
+
+
+<p valign="top"><small><small>CSI</small></small> <i>P
+<small>s</small></i> G</p></td>
+<td width="83%">
+
+
+<p valign="top">Cursor Character Absolute [column] (default
+= [row,1]) (CHA).</p></td>
+<tr valign="top" align="left">
+<td width="17%">
+
+
+<p valign="top"><small><small>CSI</small></small> <i>P
+<small>s</small></i> ; <i>P</i></p></td>
+<td width="83%">
+</td>
+</table>
+
+<p valign="top"><i><small>s</small></i> H</p>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="13%"></td>
+<td width="4%"></td>
+<td width="83%">
+
+
+<p valign="top">Cursor Position [row;column] (default =
+[1,1]) (CUP).</p></td>
+<tr valign="top" align="left">
+<td width="13%">
+
+
+<p valign="top"><small><small>CSI</small></small> <i>P
+<small>s</small></i> I</p></td>
+<td width="4%"></td>
+<td width="83%">
+
+
+<p valign="top">Cursor Forward Tabulation <i>P
+<small>s</small></i> tab stops (default = 1) (CHT).</p></td>
+<tr valign="top" align="left">
+<td width="13%">
+
+
+<p valign="top"><small><small>CSI</small></small> <i>P
+<small>s</small></i> J</p></td>
+<td width="4%"></td>
+<td width="83%">
+
+
+<p valign="top">Erase in Display (ED).</p></td>
+</table>
+
+<p style="margin-left:17%;"><i>P <small>s</small></i> = 0
+&rarr; Erase Below (default). <i><br>
+P <small>s</small></i> = 1 &rarr; Erase Above. <i><br>
+P <small>s</small></i> = 2 &rarr; Erase All. <i><br>
+P <small>s</small></i> = 3 &rarr; Erase Saved Lines
+(xterm).</p>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="17%">
+
+
+<p valign="top"><small><small>CSI</small></small> ? <i>P
+<small>s</small></i> J</p></td>
+<td width="43%">
+
+
+<p valign="top">Erase in Display (DECSED).</p></td>
+<td width="40%">
+</td>
+</table>
+
+<p style="margin-left:17%;"><i>P <small>s</small></i> = 0
+&rarr; Selective Erase Below (default). <i><br>
+P <small>s</small></i> = 1 &rarr; Selective Erase Above.
+<i><br>
+P <small>s</small></i> = 2 &rarr; Selective Erase All.</p>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="13%">
+
+
+<p valign="top"><small><small>CSI</small></small> <i>P
+<small>s</small></i> K</p></td>
+<td width="4%"></td>
+<td width="31%">
+
+
+<p valign="top">Erase in Line (EL).</p></td>
+<td width="52%">
+</td>
+</table>
+
+<p style="margin-left:17%;"><i>P <small>s</small></i> = 0
+&rarr; Erase to Right (default). <i><br>
+P <small>s</small></i> = 1 &rarr; Erase to Left. <i><br>
+P <small>s</small></i> = 2 &rarr; Erase All.</p>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="17%">
+
+
+<p valign="top"><small><small>CSI</small></small> ? <i>P
+<small>s</small></i> K</p></td>
+<td width="38%">
+
+
+<p valign="top">Erase in Line (DECSEL).</p></td>
+<td width="45%">
+</td>
+</table>
+
+<p style="margin-left:17%;"><i>P <small>s</small></i> = 0
+&rarr; Selective Erase to Right (default). <i><br>
+P <small>s</small></i> = 1 &rarr; Selective Erase to Left.
+<i><br>
+P <small>s</small></i> = 2 &rarr; Selective Erase All.</p>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="17%">
+
+
+<p valign="top"><small><small>CSI</small></small> <i>P
+<small>s</small></i> L</p></td>
+<td width="71%">
+
+
+<p valign="top">Insert <i>P <small>s</small></i> Line(s)
+(default = 1) (IL).</p></td>
+<td width="12%">
+</td>
+<tr valign="top" align="left">
+<td width="17%">
+
+
+<p valign="top"><small><small>CSI</small></small> <i>P
+<small>s</small></i> M</p></td>
+<td width="71%">
+
+
+<p valign="top">Delete <i>P <small>s</small></i> Line(s)
+(default = 1) (DL).</p></td>
+<td width="12%">
+</td>
+<tr valign="top" align="left">
+<td width="17%">
+
+
+<p valign="top"><small><small>CSI</small></small> <i>P
+<small>s</small></i> P</p></td>
+<td width="71%">
+
+
+<p valign="top">Delete <i>P <small>s</small></i>
+Character(s) (default = 1) (DCH).</p></td>
+<td width="12%">
+</td>
+<tr valign="top" align="left">
+<td width="17%">
+
+
+<p valign="top"><small><small>CSI</small></small> <i>P
+<small>s</small></i> S</p></td>
+<td width="71%">
+
+
+<p valign="top">Scroll up <i>P <small>s</small></i> lines
+(default = 1) (SU).</p></td>
+<td width="12%">
+</td>
+<tr valign="top" align="left">
+<td width="17%">
+
+
+<p valign="top"><small><small>CSI</small></small> <i>P
+<small>s</small></i> T</p></td>
+<td width="71%">
+
+
+<p valign="top">Scroll down <i>P <small>s</small></i> lines
+(default = 1) (SD).</p></td>
+<td width="12%">
+</td>
+<tr valign="top" align="left">
+<td width="17%">
+
+
+<p valign="top"><small><small>CSI</small></small> <i>P
+<small>s</small></i> ; <i>P</i></p></td>
+<td width="71%"></td>
+<td width="12%">
+</td>
+</table>
+
+<p valign="top"><i><small>s</small></i> ; <i>P
+<small>s</small></i> ; <i>P <small>s</small></i> ; <i>P
+<small>s</small></i> T</p>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="15%"></td>
+<td width="2%"></td>
+<td width="83%">
+
+
+<p valign="top">Initiate highlight mouse tracking.
+Parameters are [func;startx;starty;firstrow;lastrow]. See
+the section <b>Mouse Tracking</b>.</p></td>
+<tr valign="top" align="left">
+<td width="15%">
+
+
+<p valign="top"><small><small>CSI</small></small> &gt; <i>P
+<small>s</small></i> ;</p></td>
+<td width="2%"></td>
+<td width="83%">
+</td>
+</table>
+
+<p valign="top"><i>P <small>s</small></i> T</p>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="17%"></td>
+<td width="83%">
+
+
+<p valign="top">Reset one or more features of the title
+modes to the default value. Normally, &quot;reset&quot;
+disables the feature. It is possible to disable the ability
+to reset features by compiling a different default for the
+title modes into <i>xterm</i>.</p></td>
+</table>
+
+<p style="margin-left:17%;"><i>P <small>s</small></i> = 0
+&rarr; Do not set window/icon labels using hexadecimal.
+<i><br>
+P <small>s</small></i> = 1 &rarr; Do not query window/icon
+labels using hexadecimal. <i><br>
+P <small>s</small></i> = 2 &rarr; Do not set window/icon
+labels using UTF-8. <i><br>
+P <small>s</small></i> = 3 &rarr; Do not query window/icon
+labels using UTF-8. (See discussion of &quot;Title
+Modes&quot;).</p>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="13%">
+
+
+<p valign="top"><small><small>CSI</small></small> <i>P
+<small>s</small></i> X</p></td>
+<td width="4%"></td>
+<td width="83%">
+
+
+<p valign="top">Erase <i>P <small>s</small></i>
+Character(s) (default = 1) (ECH).</p></td>
+<tr valign="top" align="left">
+<td width="13%">
+
+
+<p valign="top"><small><small>CSI</small></small> <i>P
+<small>s</small></i> Z</p></td>
+<td width="4%"></td>
+<td width="83%">
+
+
+<p valign="top">Cursor Backward Tabulation <i>P
+<small>s</small></i> tab stops (default = 1) (CBT).</p></td>
+<tr valign="top" align="left">
+<td width="13%">
+
+
+<p valign="top"><small><small>CSI</small></small> <i>P
+<small>m</small></i> `</p></td>
+<td width="4%"></td>
+<td width="83%">
+
+
+<p valign="top">Character Position Absolute [column]
+(default = [row,1]) (HPA).</p></td>
+<tr valign="top" align="left">
+<td width="13%">
+
+
+<p valign="top"><small><small>CSI</small></small> <i>P
+<small>m</small></i> a</p></td>
+<td width="4%"></td>
+<td width="83%">
+
+
+<p valign="top">Character Position Relative [columns]
+(default = [row,col+1]) (HPR).</p></td>
+<tr valign="top" align="left">
+<td width="13%">
+
+
+<p valign="top"><small><small>CSI</small></small> <i>P
+<small>s</small></i> b</p></td>
+<td width="4%"></td>
+<td width="83%">
+
+
+<p valign="top">Repeat the preceding graphic character <i>P
+<small>s</small></i> times (REP).</p></td>
+<tr valign="top" align="left">
+<td width="13%">
+
+
+<p valign="top"><small><small>CSI</small></small> <i>P
+<small>s</small></i> c</p></td>
+<td width="4%"></td>
+<td width="83%">
+
+
+<p valign="top">Send Device Attributes (Primary DA).</p></td>
+</table>
+
+<p style="margin-left:17%;"><i>P <small>s</small></i> = 0
+or omitted &rarr; request attributes from terminal. The
+response depends on the <b>decTerminalID</b> resource
+setting. <br>
+&rarr; <small><small>CSI</small></small> ? 1 ; 2 c
+(&lsquo;&lsquo;VT100 with Advanced Video
+Option&rsquo;&rsquo;) <br>
+&rarr; <small><small>CSI</small></small> ? 1 ; 0 c
+(&lsquo;&lsquo;VT101 with No Options&rsquo;&rsquo;) <br>
+&rarr; <small><small>CSI</small></small> ? 6 c
+(&lsquo;&lsquo;VT102&rsquo;&rsquo;) <br>
+&rarr; <small><small>CSI</small></small> ? 6 0 ; 1 ; 2 ; 6 ;
+8 ; 9 ; 1 5 ; c (&lsquo;&lsquo;VT220&rsquo;&rsquo;) <br>
+The VT100-style response parameters do not mean anything by
+themselves. VT220 parameters do, telling the host what
+features the terminal supports: <i><br>
+P <small>s</small></i> = 1 &rarr; 132-columns. <i><br>
+P <small>s</small></i> = 2 &rarr; Printer. <i><br>
+P <small>s</small></i> = 6 &rarr; Selective erase. <i><br>
+P <small>s</small></i> = 8 &rarr; User-defined keys. <i><br>
+P <small>s</small></i> = 9 &rarr; National replacement
+character sets. <i><br>
+P <small>s</small></i> = 1 5 &rarr; Technical characters.
+<i><br>
+P <small>s</small></i> = 2 2 &rarr; ANSI color, e.g., VT525.
+<i><br>
+P <small>s</small></i> = 2 9 &rarr; ANSI text locator (i.e.,
+DEC Locator mode).</p>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="17%">
+
+
+<p valign="top"><small><small>CSI</small></small> &gt; <i>P
+<small>s</small></i> c</p></td>
+<td width="63%">
+
+
+<p valign="top">Send Device Attributes (Secondary DA).</p></td>
+<td width="20%">
+</td>
+</table>
+
+<p style="margin-left:17%;"><i>P <small>s</small></i> = 0
+or omitted &rarr; request the terminal&rsquo;s
+identification code. The response depends on the
+<b>decTerminalID</b> resource setting. It should apply only
+to VT220 and up, but <i>xterm</i> extends this to VT100.
+<br>
+&rarr; <small><small>CSI</small></small> &gt; <i>P
+<small>p</small></i> ; <i>P <small>v</small></i> ; <i>P
+<small>c</small></i> c <br>
+where <i>P <small>p</small></i> denotes the terminal type
+<i><br>
+P <small>p</small></i> = 0 &rarr;
+&lsquo;&lsquo;VT100&rsquo;&rsquo;. <i><br>
+P <small>p</small></i> = 1 &rarr;
+&lsquo;&lsquo;VT220&rsquo;&rsquo;. <br>
+and <i>P <small>v</small></i> is the firmware version (for
+<i>xterm</i>, this was originally the XFree86 patch number,
+starting with 95). In a DEC terminal, <i>P
+<small>c</small></i> indicates the ROM cartridge
+registration number and is always zero.</p>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="17%">
+
+
+<p valign="top"><small><small>CSI</small></small> <i>P
+<small>m</small></i> d</p></td>
+<td width="83%">
+
+
+<p valign="top">Line Position Absolute [row] (default =
+[1,column]) (VPA).</p></td>
+<tr valign="top" align="left">
+<td width="17%">
+
+
+<p valign="top"><small><small>CSI</small></small> <i>P
+<small>m</small></i> e</p></td>
+<td width="83%">
+
+
+<p valign="top">Line Position Relative [rows] (default =
+[row+1,column]) (VPR).</p></td>
+<tr valign="top" align="left">
+<td width="17%">
+
+
+<p valign="top"><small><small>CSI</small></small> <i>P
+<small>s</small></i> ; <i>P</i></p></td>
+<td width="83%">
+</td>
+</table>
+
+<p valign="top"><i><small>s</small></i> f</p>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="13%"></td>
+<td width="4%"></td>
+<td width="83%">
+
+
+<p valign="top">Horizontal and Vertical Position
+[row;column] (default = [1,1]) (HVP).</p></td>
+<tr valign="top" align="left">
+<td width="13%">
+
+
+<p valign="top"><small><small>CSI</small></small> <i>P
+<small>s</small></i> g</p></td>
+<td width="4%"></td>
+<td width="83%">
+
+
+<p valign="top">Tab Clear (TBC).</p></td>
+</table>
+
+<p style="margin-left:17%;"><i>P <small>s</small></i> = 0
+&rarr; Clear Current Column (default). <i><br>
+P <small>s</small></i> = 3 &rarr; Clear All.</p>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="13%">
+
+
+<p valign="top"><small><small>CSI</small></small> <i>P
+<small>m</small></i> h</p></td>
+<td width="4%"></td>
+<td width="23%">
+
+
+<p valign="top">Set Mode (SM).</p></td>
+<td width="60%">
+</td>
+</table>
+
+<p style="margin-left:17%;"><i>P <small>s</small></i> = 2
+&rarr; Keyboard Action Mode (AM). <i><br>
+P <small>s</small></i> = 4 &rarr; Insert Mode (IRM). <i><br>
+P <small>s</small></i> = 1 2 &rarr; Send/receive (SRM).
+<i><br>
+P <small>s</small></i> = 2 0 &rarr; Automatic Newline
+(LNM).</p>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="17%">
+
+
+<p valign="top"><small><small>CSI</small></small> ? <i>P
+<small>m</small></i> h</p></td>
+<td width="50%">
+
+
+<p valign="top">DEC Private Mode Set (DECSET).</p></td>
+<td width="33%">
+</td>
+</table>
+
+<p style="margin-left:17%;"><i>P <small>s</small></i> = 1
+&rarr; Application Cursor Keys (DECCKM). <i><br>
+P <small>s</small></i> = 2 &rarr; Designate USASCII for
+character sets G0-G3 (DECANM), and set VT100 mode. <i><br>
+P <small>s</small></i> = 3 &rarr; 132 Column Mode (DECCOLM).
+<i><br>
+P <small>s</small></i> = 4 &rarr; Smooth (Slow) Scroll
+(DECSCLM). <i><br>
+P <small>s</small></i> = 5 &rarr; Reverse Video (DECSCNM).
+<i><br>
+P <small>s</small></i> = 6 &rarr; Origin Mode (DECOM).
+<i><br>
+P <small>s</small></i> = 7 &rarr; Wraparound Mode (DECAWM).
+<i><br>
+P <small>s</small></i> = 8 &rarr; Auto-repeat Keys (DECARM).
+<i><br>
+P <small>s</small></i> = 9 &rarr; Send Mouse X &amp; Y on
+button press. See the section <b>Mouse Tracking</b>. <i><br>
+P <small>s</small></i> = 1 0 &rarr; Show toolbar (rxvt).
+<i><br>
+P <small>s</small></i> = 1 2 &rarr; Start Blinking Cursor
+(att610). <i><br>
+P <small>s</small></i> = 1 8 &rarr; Print form feed
+(DECPFF). <i><br>
+P <small>s</small></i> = 1 9 &rarr; Set print extent to full
+screen (DECPEX). <i><br>
+P <small>s</small></i> = 2 5 &rarr; Show Cursor (DECTCEM).
+<i><br>
+P <small>s</small></i> = 3 0 &rarr; Show scrollbar (rxvt).
+<i><br>
+P <small>s</small></i> = 3 5 &rarr; Enable font-shifting
+functions (rxvt). <i><br>
+P <small>s</small></i> = 3 8 &rarr; Enter Tektronix Mode
+(DECTEK). <i><br>
+P <small>s</small></i> = 4 0 &rarr; Allow 80 &rarr; 132
+Mode. <i><br>
+P <small>s</small></i> = 4 1 &rarr; <i>more</i>(1) fix (see
+<b>curses</b> resource). <i><br>
+P <small>s</small></i> = 4 2 &rarr; Enable Nation
+Replacement Character sets (DECNRCM). <i><br>
+P <small>s</small></i> = 4 4 &rarr; Turn On Margin Bell.
+<i><br>
+P <small>s</small></i> = 4 5 &rarr; Reverse-wraparound Mode.
+<i><br>
+P <small>s</small></i> = 4 6 &rarr; Start Logging. This is
+normally disabled by a compile-time option. <i><br>
+P <small>s</small></i> = 4 7 &rarr; Use Alternate Screen
+Buffer. (This may be disabled by the <b>titeInhibit</b>
+resource). <i><br>
+P <small>s</small></i> = 6 6 &rarr; Application keypad
+(DECNKM). <i><br>
+P <small>s</small></i> = 6 7 &rarr; Backarrow key sends
+backspace (DECBKM). <i><br>
+P <small>s</small></i> = 6 9 &rarr; Enable left and right
+margin mode (DECLRMM), VT420 and up. <i><br>
+P <small>s</small></i> = 9 5 &rarr; Do not clear screen when
+DECCOLM is set/reset (DECNCSM), VT510 and up. <i><br>
+P <small>s</small></i> = 1 0 0 0 &rarr; Send Mouse X &amp; Y
+on button press and release. See the section <b>Mouse
+Tracking</b>. <i><br>
+P <small>s</small></i> = 1 0 0 1 &rarr; Use Hilite Mouse
+Tracking. <i><br>
+P <small>s</small></i> = 1 0 0 2 &rarr; Use Cell Motion
+Mouse Tracking. <i><br>
+P <small>s</small></i> = 1 0 0 3 &rarr; Use All Motion Mouse
+Tracking. <i><br>
+P <small>s</small></i> = 1 0 0 4 &rarr; Send
+FocusIn/FocusOut events. <i><br>
+P <small>s</small></i> = 1 0 0 5 &rarr; Enable UTF-8 Mouse
+Mode. <i><br>
+P <small>s</small></i> = 1 0 0 6 &rarr; Enable SGR Mouse
+Mode. <i><br>
+P <small>s</small></i> = 1 0 1 0 &rarr; Scroll to bottom on
+tty output (rxvt). <i><br>
+P <small>s</small></i> = 1 0 1 5 &rarr; Enable urxvt Mouse
+Mode. <i><br>
+P <small>s</small></i> = 1 0 1 1 &rarr; Scroll to bottom on
+key press (rxvt). <i><br>
+P <small>s</small></i> = 1 0 3 4 &rarr; Interpret
+&quot;meta&quot; key, sets eighth bit. (enables the
+<b>eightBitInput</b> resource). <i><br>
+P <small>s</small></i> = 1 0 3 5 &rarr; Enable special
+modifiers for Alt and NumLock keys. (This enables the
+<b>numLock</b> resource). <i><br>
+P <small>s</small></i> = 1 0 3 6 &rarr; Send
+<small><small>ESC</small></small> when Meta modifies a key.
+(This enables the <b>metaSendsEscape</b> resource). <i><br>
+P <small>s</small></i> = 1 0 3 7 &rarr; Send DEL from the
+editing-keypad Delete key. <i><br>
+P <small>s</small></i> = 1 0 3 9 &rarr; Send
+<small><small>ESC</small></small> when Alt modifies a key.
+(This enables the <b>altSendsEscape</b> resource). <i><br>
+P <small>s</small></i> = 1 0 4 0 &rarr; Keep selection even
+if not highlighted. (This enables the <b>keepSelection</b>
+resource). <i><br>
+P <small>s</small></i> = 1 0 4 1 &rarr; Use the CLIPBOARD
+selection. (This enables the <b>selectToClipboard</b>
+resource). <i><br>
+P <small>s</small></i> = 1 0 4 2 &rarr; Enable Urgency
+window manager hint when Control-G is received. (This
+enables the <b>bellIsUrgent</b> resource). <i><br>
+P <small>s</small></i> = 1 0 4 3 &rarr; Enable raising of
+the window when Control-G is received. (enables the
+<b>popOnBell</b> resource). <i><br>
+P <small>s</small></i> = 1 0 4 7 &rarr; Use Alternate Screen
+Buffer. (This may be disabled by the <b>titeInhibit</b>
+resource). <i><br>
+P <small>s</small></i> = 1 0 4 8 &rarr; Save cursor as in
+DECSC. (This may be disabled by the <b>titeInhibit</b>
+resource). <i><br>
+P <small>s</small></i> = 1 0 4 9 &rarr; Save cursor as in
+DECSC and use Alternate Screen Buffer, clearing it first.
+(This may be disabled by the <b>titeInhibit</b> resource).
+This combines the effects of the 1 0 4 7 and 1 0 4 8 modes.
+Use this with terminfo-based applications rather than the 4
+7 mode. <i><br>
+P <small>s</small></i> = 1 0 5 0 &rarr; Set terminfo/termcap
+function-key mode. <i><br>
+P <small>s</small></i> = 1 0 5 1 &rarr; Set Sun function-key
+mode. <i><br>
+P <small>s</small></i> = 1 0 5 2 &rarr; Set HP function-key
+mode. <i><br>
+P <small>s</small></i> = 1 0 5 3 &rarr; Set SCO function-key
+mode. <i><br>
+P <small>s</small></i> = 1 0 6 0 &rarr; Set legacy keyboard
+emulation (X11R6). <i><br>
+P <small>s</small></i> = 1 0 6 1 &rarr; Set VT220 keyboard
+emulation. <i><br>
+P <small>s</small></i> = 2 0 0 4 &rarr; Set bracketed paste
+mode.</p>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="13%">
+
+
+<p valign="top"><small><small>CSI</small></small> <i>P
+<small>m</small></i> i</p></td>
+<td width="4%"></td>
+<td width="26%">
+
+
+<p valign="top">Media Copy (MC).</p></td>
+<td width="57%">
+</td>
+</table>
+
+<p style="margin-left:17%;"><i>P <small>s</small></i> = 0
+&rarr; Print screen (default). <i><br>
+P <small>s</small></i> = 4 &rarr; Turn off printer
+controller mode. <i><br>
+P <small>s</small></i> = 5 &rarr; Turn on printer controller
+mode.</p>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="17%">
+
+
+<p valign="top"><small><small>CSI</small></small> ? <i>P
+<small>m</small></i> i</p></td>
+<td width="50%">
+
+
+<p valign="top">Media Copy (MC, DEC-specific).</p></td>
+<td width="33%">
+</td>
+</table>
+
+<p style="margin-left:17%;"><i>P <small>s</small></i> = 1
+&rarr; Print line containing cursor. <i><br>
+P <small>s</small></i> = 4 &rarr; Turn off autoprint mode.
+<i><br>
+P <small>s</small></i> = 5 &rarr; Turn on autoprint mode.
+<i><br>
+P <small>s</small></i> = 1 0 &rarr; Print composed display,
+ignores DECPEX. <i><br>
+P <small>s</small></i> = 1 1 &rarr; Print all pages.</p>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="13%">
+
+
+<p valign="top"><small><small>CSI</small></small> <i>P
+<small>m</small></i> l</p></td>
+<td width="4%"></td>
+<td width="26%">
+
+
+<p valign="top">Reset Mode (RM).</p></td>
+<td width="57%">
+</td>
+</table>
+
+<p style="margin-left:17%;"><i>P <small>s</small></i> = 2
+&rarr; Keyboard Action Mode (AM). <i><br>
+P <small>s</small></i> = 4 &rarr; Replace Mode (IRM).
+<i><br>
+P <small>s</small></i> = 1 2 &rarr; Send/receive (SRM).
+<i><br>
+P <small>s</small></i> = 2 0 &rarr; Normal Linefeed
+(LNM).</p>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="17%">
+
+
+<p valign="top"><small><small>CSI</small></small> ? <i>P
+<small>m</small></i> l</p></td>
+<td width="53%">
+
+
+<p valign="top">DEC Private Mode Reset (DECRST).</p></td>
+<td width="30%">
+</td>
+</table>
+
+<p style="margin-left:17%;"><i>P <small>s</small></i> = 1
+&rarr; Normal Cursor Keys (DECCKM). <i><br>
+P <small>s</small></i> = 2 &rarr; Designate VT52 mode
+(DECANM). <i><br>
+P <small>s</small></i> = 3 &rarr; 80 Column Mode (DECCOLM).
+<i><br>
+P <small>s</small></i> = 4 &rarr; Jump (Fast) Scroll
+(DECSCLM). <i><br>
+P <small>s</small></i> = 5 &rarr; Normal Video (DECSCNM).
+<i><br>
+P <small>s</small></i> = 6 &rarr; Normal Cursor Mode
+(DECOM). <i><br>
+P <small>s</small></i> = 7 &rarr; No Wraparound Mode
+(DECAWM). <i><br>
+P <small>s</small></i> = 8 &rarr; No Auto-repeat Keys
+(DECARM). <i><br>
+P <small>s</small></i> = 9 &rarr; Don&rsquo;t send Mouse X
+&amp; Y on button press. <i><br>
+P <small>s</small></i> = 1 0 &rarr; Hide toolbar (rxvt).
+<i><br>
+P <small>s</small></i> = 1 2 &rarr; Stop Blinking Cursor
+(att610). <i><br>
+P <small>s</small></i> = 1 8 &rarr; Don&rsquo;t print form
+feed (DECPFF). <i><br>
+P <small>s</small></i> = 1 9 &rarr; Limit print to scrolling
+region (DECPEX). <i><br>
+P <small>s</small></i> = 2 5 &rarr; Hide Cursor (DECTCEM).
+<i><br>
+P <small>s</small></i> = 3 0 &rarr; Don&rsquo;t show
+scrollbar (rxvt). <i><br>
+P <small>s</small></i> = 3 5 &rarr; Disable font-shifting
+functions (rxvt). <i><br>
+P <small>s</small></i> = 4 0 &rarr; Disallow 80 &rarr; 132
+Mode. <i><br>
+P <small>s</small></i> = 4 1 &rarr; No <i>more</i>(1) fix
+(see <b>curses</b> resource). <i><br>
+P <small>s</small></i> = 4 2 &rarr; Disable Nation
+Replacement Character sets (DECNRCM). <i><br>
+P <small>s</small></i> = 4 4 &rarr; Turn Off Margin Bell.
+<i><br>
+P <small>s</small></i> = 4 5 &rarr; No Reverse-wraparound
+Mode. <i><br>
+P <small>s</small></i> = 4 6 &rarr; Stop Logging. (This is
+normally disabled by a compile-time option). <i><br>
+P <small>s</small></i> = 4 7 &rarr; Use Normal Screen
+Buffer. <i><br>
+P <small>s</small></i> = 6 6 &rarr; Numeric keypad (DECNKM).
+<i><br>
+P <small>s</small></i> = 6 7 &rarr; Backarrow key sends
+delete (DECBKM). <i><br>
+P <small>s</small></i> = 6 9 &rarr; Disable left and right
+margin mode (DECLRMM), VT420 and up. <i><br>
+P <small>s</small></i> = 9 5 &rarr; Clear screen when
+DECCOLM is set/reset (DECNCSM), VT510 and up. <i><br>
+P <small>s</small></i> = 1 0 0 0 &rarr; Don&rsquo;t send
+Mouse X &amp; Y on button press and release. See the section
+<b>Mouse Tracking</b>. <i><br>
+P <small>s</small></i> = 1 0 0 1 &rarr; Don&rsquo;t use
+Hilite Mouse Tracking. <i><br>
+P <small>s</small></i> = 1 0 0 2 &rarr; Don&rsquo;t use Cell
+Motion Mouse Tracking. <i><br>
+P <small>s</small></i> = 1 0 0 3 &rarr; Don&rsquo;t use All
+Motion Mouse Tracking. <i><br>
+P <small>s</small></i> = 1 0 0 4 &rarr; Don&rsquo;t send
+FocusIn/FocusOut events. <i><br>
+P <small>s</small></i> = 1 0 0 5 &rarr; Disable UTF-8 Mouse
+Mode. <i><br>
+P <small>s</small></i> = 1 0 0 6 &rarr; Disable SGR Mouse
+Mode. <i><br>
+P <small>s</small></i> = 1 0 1 0 &rarr; Don&rsquo;t scroll
+to bottom on tty output (rxvt). <i><br>
+P <small>s</small></i> = 1 0 1 5 &rarr; Disable urxvt Mouse
+Mode. <i><br>
+P <small>s</small></i> = 1 0 1 1 &rarr; Don&rsquo;t scroll
+to bottom on key press (rxvt). <i><br>
+P <small>s</small></i> = 1 0 3 4 &rarr; Don&rsquo;t
+interpret &quot;meta&quot; key. (This disables the
+<b>eightBitInput</b> resource). <i><br>
+P <small>s</small></i> = 1 0 3 5 &rarr; Disable special
+modifiers for Alt and NumLock keys. (This disables the
+<b>numLock</b> resource). <i><br>
+P <small>s</small></i> = 1 0 3 6 &rarr; Don&rsquo;t send
+<small><small>ESC</small></small> when Meta modifies a key.
+(This disables the <b>metaSendsEscape</b> resource). <i><br>
+P <small>s</small></i> = 1 0 3 7 &rarr; Send VT220 Remove
+from the editing-keypad Delete key. <i><br>
+P <small>s</small></i> = 1 0 3 9 &rarr; Don&rsquo;t send
+<small><small>ESC</small></small> when Alt modifies a key.
+(This disables the <b>altSendsEscape</b> resource). <i><br>
+P <small>s</small></i> = 1 0 4 0 &rarr; Do not keep
+selection when not highlighted. (This disables the
+<b>keepSelection</b> resource). <i><br>
+P <small>s</small></i> = 1 0 4 1 &rarr; Use the PRIMARY
+selection. (This disables the <b>selectToClipboard</b>
+resource). <i><br>
+P <small>s</small></i> = 1 0 4 2 &rarr; Disable Urgency
+window manager hint when Control-G is received. (This
+disables the <b>bellIsUrgent</b> resource). <i><br>
+P <small>s</small></i> = 1 0 4 3 &rarr; Disable raising of
+the window when Control-G is received. (This disables the
+<b>popOnBell</b> resource). <i><br>
+P <small>s</small></i> = 1 0 4 7 &rarr; Use Normal Screen
+Buffer, clearing screen first if in the Alternate Screen.
+(This may be disabled by the <b>titeInhibit</b> resource).
+<i><br>
+P <small>s</small></i> = 1 0 4 8 &rarr; Restore cursor as in
+DECRC. (This may be disabled by the <b>titeInhibit</b>
+resource). <i><br>
+P <small>s</small></i> = 1 0 4 9 &rarr; Use Normal Screen
+Buffer and restore cursor as in DECRC. (This may be disabled
+by the <b>titeInhibit</b> resource). This combines the
+effects of the 1 0 4 7 and 1 0 4 8 modes. Use this with
+terminfo-based applications rather than the 4 7 mode.
+<i><br>
+P <small>s</small></i> = 1 0 5 0 &rarr; Reset
+terminfo/termcap function-key mode. <i><br>
+P <small>s</small></i> = 1 0 5 1 &rarr; Reset Sun
+function-key mode. <i><br>
+P <small>s</small></i> = 1 0 5 2 &rarr; Reset HP
+function-key mode. <i><br>
+P <small>s</small></i> = 1 0 5 3 &rarr; Reset SCO
+function-key mode. <i><br>
+P <small>s</small></i> = 1 0 6 0 &rarr; Reset legacy
+keyboard emulation (X11R6). <i><br>
+P <small>s</small></i> = 1 0 6 1 &rarr; Reset keyboard
+emulation to Sun/PC style. <i><br>
+P <small>s</small></i> = 2 0 0 4 &rarr; Reset bracketed
+paste mode.</p>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="13%">
+
+
+<p valign="top"><small><small>CSI</small></small> <i>P
+<small>m</small></i> m</p></td>
+<td width="4%"></td>
+<td width="45%">
+
+
+<p valign="top">Character Attributes (SGR).</p></td>
+<td width="38%">
+</td>
+</table>
+
+<p style="margin-left:17%;"><i>P <small>s</small></i> = 0
+&rarr; Normal (default). <i><br>
+P <small>s</small></i> = 1 &rarr; Bold. <i><br>
+P <small>s</small></i> = 4 &rarr; Underlined. <i><br>
+P <small>s</small></i> = 5 &rarr; Blink (appears as Bold).
+<i><br>
+P <small>s</small></i> = 7 &rarr; Inverse. <i><br>
+P <small>s</small></i> = 8 &rarr; Invisible, i.e., hidden
+(VT300). <i><br>
+P <small>s</small></i> = 2 2 &rarr; Normal (neither bold nor
+faint). <i><br>
+P <small>s</small></i> = 2 4 &rarr; Not underlined. <i><br>
+P <small>s</small></i> = 2 5 &rarr; Steady (not blinking).
+<i><br>
+P <small>s</small></i> = 2 7 &rarr; Positive (not inverse).
+<i><br>
+P <small>s</small></i> = 2 8 &rarr; Visible, i.e., not
+hidden (VT300). <i><br>
+P <small>s</small></i> = 3 0 &rarr; Set foreground color to
+Black. <i><br>
+P <small>s</small></i> = 3 1 &rarr; Set foreground color to
+Red. <i><br>
+P <small>s</small></i> = 3 2 &rarr; Set foreground color to
+Green. <i><br>
+P <small>s</small></i> = 3 3 &rarr; Set foreground color to
+Yellow. <i><br>
+P <small>s</small></i> = 3 4 &rarr; Set foreground color to
+Blue. <i><br>
+P <small>s</small></i> = 3 5 &rarr; Set foreground color to
+Magenta. <i><br>
+P <small>s</small></i> = 3 6 &rarr; Set foreground color to
+Cyan. <i><br>
+P <small>s</small></i> = 3 7 &rarr; Set foreground color to
+White. <i><br>
+P <small>s</small></i> = 3 9 &rarr; Set foreground color to
+default (original). <i><br>
+P <small>s</small></i> = 4 0 &rarr; Set background color to
+Black. <i><br>
+P <small>s</small></i> = 4 1 &rarr; Set background color to
+Red. <i><br>
+P <small>s</small></i> = 4 2 &rarr; Set background color to
+Green. <i><br>
+P <small>s</small></i> = 4 3 &rarr; Set background color to
+Yellow. <i><br>
+P <small>s</small></i> = 4 4 &rarr; Set background color to
+Blue. <i><br>
+P <small>s</small></i> = 4 5 &rarr; Set background color to
+Magenta. <i><br>
+P <small>s</small></i> = 4 6 &rarr; Set background color to
+Cyan. <i><br>
+P <small>s</small></i> = 4 7 &rarr; Set background color to
+White. <i><br>
+P <small>s</small></i> = 4 9 &rarr; Set background color to
+default (original).</p>
+
+<p style="margin-left:17%; margin-top: 1em">If 16-color
+support is compiled, the following apply. Assume that
+<i>xterm</i>&rsquo;s resources are set so that the ISO color
+codes are the first 8 of a set of 16. Then the
+<i>aixterm</i> colors are the bright versions of the ISO
+colors: <i><br>
+P <small>s</small></i> = 9 0 &rarr; Set foreground color to
+Black. <i><br>
+P <small>s</small></i> = 9 1 &rarr; Set foreground color to
+Red. <i><br>
+P <small>s</small></i> = 9 2 &rarr; Set foreground color to
+Green. <i><br>
+P <small>s</small></i> = 9 3 &rarr; Set foreground color to
+Yellow. <i><br>
+P <small>s</small></i> = 9 4 &rarr; Set foreground color to
+Blue. <i><br>
+P <small>s</small></i> = 9 5 &rarr; Set foreground color to
+Magenta. <i><br>
+P <small>s</small></i> = 9 6 &rarr; Set foreground color to
+Cyan. <i><br>
+P <small>s</small></i> = 9 7 &rarr; Set foreground color to
+White. <i><br>
+P <small>s</small></i> = 1 0 0 &rarr; Set background color
+to Black. <i><br>
+P <small>s</small></i> = 1 0 1 &rarr; Set background color
+to Red. <i><br>
+P <small>s</small></i> = 1 0 2 &rarr; Set background color
+to Green. <i><br>
+P <small>s</small></i> = 1 0 3 &rarr; Set background color
+to Yellow. <i><br>
+P <small>s</small></i> = 1 0 4 &rarr; Set background color
+to Blue. <i><br>
+P <small>s</small></i> = 1 0 5 &rarr; Set background color
+to Magenta. <i><br>
+P <small>s</small></i> = 1 0 6 &rarr; Set background color
+to Cyan. <i><br>
+P <small>s</small></i> = 1 0 7 &rarr; Set background color
+to White.</p>
+
+<p style="margin-left:17%; margin-top: 1em">If <i>xterm</i>
+is compiled with the 16-color support disabled, it supports
+the following, from <i>rxvt</i>: <i><br>
+P <small>s</small></i> = 1 0 0 &rarr; Set foreground and
+background color to default.</p>
+
+<p style="margin-left:17%; margin-top: 1em">If 88- or
+256-color support is compiled, the following apply. <i><br>
+P <small>s</small></i> = 3 8 ; 5 ; <i>P <small>s</small></i>
+&rarr; Set foreground color to the second <i>P
+<small>s</small></i> . <i><br>
+P <small>s</small></i> = 4 8 ; 5 ; <i>P <small>s</small></i>
+&rarr; Set background color to the second <i>P
+<small>s</small></i> .</p>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="23%">
+
+
+
+<p style="margin-top: 1em" valign="top"><small><small>CSI</small></small>
+&gt; <i>P <small>s</small></i> ; <i>P <small>s</small></i>
+m</p> </td>
+<td width="77%">
+</td>
+</table>
+
+<p style="margin-left:17%;">Set or reset resource-values
+used by <i>xterm</i> to decide whether to construct escape
+sequences holding information about the modifiers pressed
+with a given key. The first parameter identifies the
+resource to set/reset. The second parameter is the value to
+assign to the resource. If the second parameter is omitted,
+the resource is reset to its initial value. <i><br>
+P <small>s</small></i> = 1 &rarr; modifyCursorKeys. <i><br>
+P <small>s</small></i> = 2 &rarr; modifyFunctionKeys.
+<i><br>
+P <small>s</small></i> = 4 &rarr; modifyOtherKeys. <br>
+If no parameters are given, all resources are reset to their
+initial values.</p>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="13%">
+
+
+<p valign="top"><small><small>CSI</small></small> <i>P
+<small>s</small></i> n</p></td>
+<td width="4%"></td>
+<td width="45%">
+
+
+<p valign="top">Device Status Report (DSR).</p></td>
+<td width="38%">
+</td>
+</table>
+
+<p style="margin-left:17%;"><i>P <small>s</small></i> = 5
+&rarr; Status Report. Result
+(&lsquo;&lsquo;OK&rsquo;&rsquo;) is <small><small><br>
+CSI</small></small> 0 n <i><br>
+P <small>s</small></i> = 6 &rarr; Report Cursor Position
+(CPR) [row;column]. Result is <small><small><br>
+CSI</small></small> <i>r</i> ; <i>c</i> R</p>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="17%">
+
+
+<p valign="top"><small><small>CSI</small></small> &gt; <i>P
+<small>s</small></i> n</p></td>
+<td width="83%">
+
+
+<p valign="top">Disable modifiers which may be enabled via
+the <small><small>CSI</small></small> &gt; <i>P
+<small>s</small></i> ; <i>P <small>s</small></i> m sequence.
+This corresponds to a resource value of &quot;-1&quot;,
+which cannot be set with the other sequence. The parameter
+identifies the resource to be disabled:</p></td>
+</table>
+
+<p style="margin-left:17%;"><i>P <small>s</small></i> = 1
+&rarr; modifyCursorKeys. <i><br>
+P <small>s</small></i> = 2 &rarr; modifyFunctionKeys.
+<i><br>
+P <small>s</small></i> = 4 &rarr; modifyOtherKeys. <br>
+If the parameter is omitted, <b>modifyFunctionKeys</b> is
+disabled. When <b>modifyFunctionKeys</b> is disabled,
+<i>xterm</i> uses the modifier keys to make an extended
+sequence of functions rather than adding a parameter to each
+function key to denote the modifiers.</p>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="17%">
+
+
+<p valign="top"><small><small>CSI</small></small> ? <i>P
+<small>s</small></i> n</p></td>
+<td width="68%">
+
+
+<p valign="top">Device Status Report (DSR,
+DEC-specific).</p> </td>
+<td width="15%">
+</td>
+</table>
+
+<p style="margin-left:17%;"><i>P <small>s</small></i> = 6
+&rarr; Report Cursor Position (DECXCPR) [row;column] as
+<small><small>CSI</small></small> ? <i>r</i> ; <i>c</i> R
+(assumes the default page, i.e., &quot;1&quot;). <i><br>
+P <small>s</small></i> = 1 5 &rarr; Report Printer status as
+<small><small>CSI</small></small> ? 1 0 n (ready). or
+<small><small>CSI</small></small> ? 1 1 n (not ready).
+<i><br>
+P <small>s</small></i> = 2 5 &rarr; Report UDK status as
+<small><small>CSI</small></small> ? 2 0 n (unlocked) or
+<small><small>CSI</small></small> ? 2 1 n (locked). <i><br>
+P <small>s</small></i> = 2 6 &rarr; Report Keyboard status
+as <small><small><br>
+CSI</small></small> ? 2 7 ; 1 ; 0 ; 0 n (North American).
+<br>
+The last two parameters apply to VT400 &amp; up, and denote
+keyboard ready and LK01 respectively. <i><br>
+P <small>s</small></i> = 5 3 &rarr; Report Locator status as
+<small><small>CSI</small></small> ? 5 3 n Locator available,
+if compiled-in, or <small><small>CSI</small></small> ? 5 0 n
+No Locator, if not. <i><br>
+P <small>s</small></i> = 6 2 &rarr; Report macro space
+(DECMSR) as <small><small>CSI</small></small> <i>P
+<small>n</small></i> \* { <i><br>
+P <small>s</small></i> = 6 3 &rarr; Report memory checksum
+(DECCKSR) as <small><small>DCS</small></small> <i>P
+<small>t</small></i> ! x x x x
+<small><small>ST</small></small> <i><br>
+P <small>t</small></i> is the request id (from an optional
+parameter to the request). <br>
+The x&rsquo;s are hexadecimal digits 0-9 and A-F. <i><br>
+P <small>s</small></i> = 7 5 &rarr; Report data integrity as
+<small><small>CSI</small></small> ? 7 0 n (ready, no errors)
+<i><br>
+P <small>s</small></i> = 8 5 &rarr; Report multi-session
+configuration as <small><small>CSI</small></small> ? 8 3 n
+(not configured for multiple-session operation).</p>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="17%">
+
+
+<p valign="top"><small><small>CSI</small></small> &gt; <i>P
+<small>s</small></i> p</p></td>
+<td width="83%">
+
+
+<p valign="top">Set resource value <i>pointerMode</i>. This
+is used by <i>xterm</i> to decide whether to hide the
+pointer cursor as the user types. Valid values for the
+parameter:</p> </td>
+</table>
+
+<p style="margin-left:17%;"><i>P <small>s</small></i> = 0
+&rarr; never hide the pointer. <i><br>
+P <small>s</small></i> = 1 &rarr; hide if the mouse tracking
+mode is not enabled. <i><br>
+P <small>s</small></i> = 2 &rarr; always hide the pointer.
+If no parameter is given, <i>xterm</i> uses the default,
+which is 1 .</p>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="17%">
+
+
+<p valign="top"><small><small>CSI</small></small> ! p</p></td>
+<td width="83%">
+
+
+<p valign="top">Soft terminal reset (DECSTR).</p></td>
+<tr valign="top" align="left">
+<td width="17%">
+
+
+<p valign="top"><small><small>CSI</small></small> <i>P
+<small>s</small></i> $ p</p></td>
+<td width="83%">
+
+
+<p valign="top">Request ANSI mode (DECRQM). For VT300 and
+up, reply is</p></td>
+</table>
+
+
+<p style="margin-left:17%;"><small><small>CSI</small></small>
+<i>P <small>s</small></i> ; <i>P <small>m</small></i> $ y
+<br>
+where <i>P <small>s</small></i> is the mode number as in RM,
+and <i>P <small>m</small></i> is the mode value: <br>
+0 - not recognized <br>
+1 - set <br>
+2 - reset <br>
+3 - permanently set <br>
+4 - permanently reset</p>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="18%">
+
+
+<p valign="top"><small><small>CSI</small></small> ? <i>P
+<small>s</small></i> $ p</p></td>
+<td width="82%">
+</td>
+</table>
+
+<p style="margin-left:17%;">Request DEC private mode
+(DECRQM). For VT300 and up, reply is <small><small><br>
+CSI</small></small> ? <i>P <small>s</small></i> ; <i>P
+<small>m</small></i> $ p <br>
+where <i>P <small>s</small></i> is the mode number as in
+DECSET, <i>P <small>m</small></i> is the mode value as in
+the ANSI DECRQM.</p>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="25%">
+
+
+<p valign="top"><small><small>CSI</small></small> <i>P
+<small>s</small></i> ; <i>P <small>s</small></i> &ldquo;
+p</p> </td>
+<td width="75%">
+</td>
+</table>
+
+<p style="margin-left:17%;">Set conformance level (DECSCL).
+Valid values for the first parameter: <i><br>
+P <small>s</small></i> = 6 1 &rarr; VT100. <i><br>
+P <small>s</small></i> = 6 2 &rarr; VT200. <i><br>
+P <small>s</small></i> = 6 3 &rarr; VT300. <br>
+Valid values for the second parameter: <i><br>
+P <small>s</small></i> = 0 &rarr; 8-bit controls. <i><br>
+P <small>s</small></i> = 1 &rarr; 7-bit controls (always set
+for VT100). <i><br>
+P <small>s</small></i> = 2 &rarr; 8-bit controls.</p>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="13%">
+
+
+<p valign="top"><small><small>CSI</small></small> <i>P
+<small>s</small></i> q</p></td>
+<td width="4%"></td>
+<td width="30%">
+
+
+<p valign="top">Load LEDs (DECLL).</p></td>
+<td width="53%">
+</td>
+</table>
+
+<p style="margin-left:17%;"><i>P <small>s</small></i> = 0
+&rarr; Clear all LEDS (default). <i><br>
+P <small>s</small></i> = 1 &rarr; Light Num Lock. <i><br>
+P <small>s</small></i> = 2 &rarr; Light Caps Lock. <i><br>
+P <small>s</small></i> = 3 &rarr; Light Scroll Lock. <i><br>
+P <small>s</small></i> = 2 1 &rarr; Extinguish Num Lock.
+<i><br>
+P <small>s</small></i> = 2 2 &rarr; Extinguish Caps Lock.
+<i><br>
+P <small>s</small></i> = 2 3 &rarr; Extinguish Scroll
+Lock.</p>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="18%">
+
+
+<p valign="top"><small><small>CSI</small></small> <i>P
+<small>s</small></i> <small><small>SP</small></small> q</p></td>
+<td width="82%">
+</td>
+</table>
+
+<p style="margin-left:17%;">Set cursor style (DECSCUSR,
+VT520). <i><br>
+P <small>s</small></i> = 0 &rarr; blinking block. <i><br>
+P <small>s</small></i> = 1 &rarr; blinking block (default).
+<i><br>
+P <small>s</small></i> = 2 &rarr;&nbsp;steady block. <i><br>
+P <small>s</small></i> = 3 &rarr;&nbsp;blinking underline.
+<i><br>
+P <small>s</small></i> = 4 &rarr;&nbsp;steady underline.</p>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="17%">
+
+
+<p valign="top"><small><small>CSI</small></small> <i>P
+<small>s</small></i> &ldquo; q</p></td>
+<td width="83%">
+
+
+<p valign="top">Select character protection attribute
+(DECSCA). Valid values for the parameter:</p></td>
+</table>
+
+<p style="margin-left:17%;"><i>P <small>s</small></i> = 0
+&rarr; DECSED and DECSEL can erase (default). <i><br>
+P <small>s</small></i> = 1 &rarr; DECSED and DECSEL cannot
+erase. <i><br>
+P <small>s</small></i> = 2 &rarr; DECSED and DECSEL can
+erase.</p>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="22%">
+
+
+<p valign="top"><small><small>CSI</small></small> <i>P
+<small>s</small></i> ; <i>P <small>s</small></i> r</p></td>
+<td width="78%">
+</td>
+</table>
+
+<p style="margin-left:17%;">Set Scrolling Region
+[top;bottom] (default = full size of window) (DECSTBM).</p>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="17%">
+
+
+<p valign="top"><small><small>CSI</small></small> ? <i>P
+<small>m</small></i> r</p></td>
+<td width="83%">
+
+
+<p valign="top">Restore DEC Private Mode Values. The value
+of <i>P <small>s</small></i> previously saved is restored.
+<i>P <small>s</small></i> values are the same as for
+DECSET.</p> </td>
+<tr valign="top" align="left">
+<td width="17%">
+
+
+<p valign="top"><small><small>CSI</small></small> <i>P
+<small>t</small></i> ; <i>P <small>l</small></i></p></td>
+<td width="83%">
+</td>
+</table>
+
+<p valign="top">; <i>P <small>b</small></i> ; <i>P
+<small>r</small></i> ; <i>P <small>s</small></i> $ r</p>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="17%"></td>
+<td width="83%">
+
+
+<p valign="top">Change Attributes in Rectangular Area
+(DECCARA), VT400 and up.</p></td>
+</table>
+
+<p style="margin-left:17%;"><i>P <small>t</small></i> ;
+<i>P <small>l</small></i> ; <i>P <small>b</small></i> ; <i>P
+<small>r</small></i> denotes the rectangle. <i><br>
+P <small>s</small></i> denotes the SGR attributes to change:
+0, 1, 4, 5, 7.</p>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="23%">
+
+
+<p valign="top"><small><small>CSI</small></small> <i>P
+<small>l</small></i> ; <i>P <small>r</small></i> s</p></td>
+<td width="77%">
+</td>
+</table>
+
+<p style="margin-left:17%;">Set left and right margins
+(DECSLRM), available only when DECLRMM is enabled (VT420 and
+up).</p>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="17%">
+
+
+<p valign="top"><small><small>CSI</small></small> s</p></td>
+<td width="83%">
+
+
+<p valign="top">Save cursor (ANSI.SYS), available only when
+DECLRMM is disabled.</p></td>
+<tr valign="top" align="left">
+<td width="17%">
+
+
+<p valign="top"><small><small>CSI</small></small> ? <i>P
+<small>m</small></i> s</p></td>
+<td width="83%">
+
+
+<p valign="top">Save DEC Private Mode Values. <i>P
+<small>s</small></i> values are the same as for DECSET.</p></td>
+<tr valign="top" align="left">
+<td width="17%">
+
+
+<p valign="top"><small><small>CSI</small></small> <i>P
+<small>s</small></i> ; <i>P</i></p></td>
+<td width="83%">
+</td>
+</table>
+
+<p valign="top"><i><small>s</small></i> ; <i>P
+<small>s</small></i> t</p>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="17%"></td>
+<td width="83%">
+
+
+<p valign="top">Window manipulation (from <i>dtterm</i>, as
+well as extensions). These controls may be disabled using
+the <i>allowWindowOps</i> resource. Valid values for the
+first (and any additional parameters) are:</p></td>
+</table>
+
+<p style="margin-left:17%;"><i>P <small>s</small></i> = 1
+&rarr; De-iconify window. <i><br>
+P <small>s</small></i> = 2 &rarr; Iconify window. <i><br>
+P <small>s</small></i> = 3 ; <i>x ; y</i> &rarr; Move window
+to [x, y]. <i><br>
+P <small>s</small></i> = 4 ; <i>height ; width</i> &rarr;
+Resize the <i>xterm</i> window to given height and width in
+pixels. Omitted parameters reuse the current height or
+width. Zero parameters use the display&rsquo;s height or
+width. <i><br>
+P <small>s</small></i> = 5 &rarr; Raise the <i>xterm</i>
+window to the front of the stacking order. <i><br>
+P <small>s</small></i> = 6 &rarr; Lower the <i>xterm</i>
+window to the bottom of the stacking order. <i><br>
+P <small>s</small></i> = 7 &rarr; Refresh the <i>xterm</i>
+window. <i><br>
+P <small>s</small></i> = 8 ; <i>height ; width</i> &rarr;
+Resize the text area to given height and width in
+characters. Omitted parameters reuse the current height or
+width. Zero parameters use the display&rsquo;s height or
+width. <i><br>
+P <small>s</small></i> = 9 ; 0 &rarr; Restore maximized
+window. <i><br>
+P <small>s</small></i> = 9 ; 1 &rarr; Maximize window (i.e.,
+resize to screen size). <i><br>
+P <small>s</small></i> = 1 0 ; 0 &rarr; Undo full-screen
+mode. <i><br>
+P <small>s</small></i> = 1 0 ; 1 &rarr; Change to
+full-screen. <i><br>
+P <small>s</small></i> = 1 1 &rarr; Report <i>xterm</i>
+window state. If the <i>xterm</i> window is open
+(non-iconified), it returns
+<small><small>CSI</small></small> 1 t . If the <i>xterm</i>
+window is iconified, it returns
+<small><small>CSI</small></small> 2 t . <i><br>
+P <small>s</small></i> = 1 3 &rarr; Report <i>xterm</i>
+window position. Result is <small><small>CSI</small></small>
+3 ; <i>x</i> ; <i>y</i> t <i><br>
+P <small>s</small></i> = 1 4 &rarr; Report <i>xterm</i>
+window in pixels. Result is
+<small><small>CSI</small></small> 4 ; <i>height</i> ;
+<i>width</i> t <i><br>
+P <small>s</small></i> = 1 8 &rarr; Report the size of the
+text area in characters. Result is
+<small><small>CSI</small></small> 8 ; <i>height</i> ;
+<i>width</i> t <i><br>
+P <small>s</small></i> = 1 9 &rarr; Report the size of the
+screen in characters. Result is
+<small><small>CSI</small></small> 9 ; <i>height</i> ;
+<i>width</i> t <i><br>
+P <small>s</small></i> = 2 0 &rarr; Report <i>xterm</i>
+window&rsquo;s icon label. Result is
+<small><small>OSC</small></small> L <i>label</i>
+<small><small>ST</small></small> <i><br>
+P <small>s</small></i> = 2 1 &rarr; Report <i>xterm</i>
+window&rsquo;s title. Result is
+<small><small>OSC</small></small> l <i>label</i>
+<small><small>ST</small></small> <i><br>
+P <small>s</small></i> = 2 2 ; 0 &rarr; Save <i>xterm</i>
+icon and window title on stack. <i><br>
+P <small>s</small></i> = 2 2 ; 1 &rarr; Save <i>xterm</i>
+icon title on stack. <i><br>
+P <small>s</small></i> = 2 2 ; 2 &rarr; Save <i>xterm</i>
+window title on stack. <i><br>
+P <small>s</small></i> = 2 3 ; 0 &rarr; Restore <i>xterm</i>
+icon and window title from stack. <i><br>
+P <small>s</small></i> = 2 3 ; 1 &rarr; Restore <i>xterm</i>
+icon title from stack. <i><br>
+P <small>s</small></i> = 2 3 ; 2 &rarr; Restore <i>xterm</i>
+window title from stack. <i><br>
+P <small>s</small></i> &gt;= 2 4 &rarr; Resize to <i>P
+<small>s</small></i> lines (DECSLPP).</p>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="42%">
+
+
+<p valign="top"><small><small>CSI</small></small> <i>P
+<small>t</small></i> ; <i>P <small>l</small></i> ; <i>P
+<small>b</small></i> ; <i>P <small>r</small></i> ; <i>P
+<small>s</small></i> $ t</p></td>
+<td width="58%">
+</td>
+</table>
+
+<p style="margin-left:17%;">Reverse Attributes in
+Rectangular Area (DECRARA), VT400 and up. <i><br>
+P <small>t</small></i> ; <i>P <small>l</small></i> ; <i>P
+<small>b</small></i> ; <i>P <small>r</small></i> denotes the
+rectangle. <i><br>
+P <small>s</small></i> denotes the attributes to reverse,
+i.e., 1, 4, 5, 7.</p>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="23%">
+
+
+<p valign="top"><small><small>CSI</small></small> &gt; <i>P
+<small>s</small></i> ; <i>P <small>s</small></i> t</p></td>
+<td width="77%">
+</td>
+</table>
+
+<p style="margin-left:17%;">Set one or more features of the
+title modes. Each parameter enables a single feature.
+<i><br>
+P <small>s</small></i> = 0 &rarr; Set window/icon labels
+using hexadecimal. <i><br>
+P <small>s</small></i> = 1 &rarr; Query window/icon labels
+using hexadecimal. <i><br>
+P <small>s</small></i> = 2 &rarr; Set window/icon labels
+using UTF-8. <i><br>
+P <small>s</small></i> = 3 &rarr; Query window/icon labels
+using UTF-8. (See discussion of &quot;Title Modes&quot;)</p>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="18%">
+
+
+<p valign="top"><small><small>CSI</small></small> <i>P
+<small>s</small></i> <small><small>SP</small></small> t</p></td>
+<td width="82%">
+</td>
+</table>
+
+<p style="margin-left:17%;">Set warning-bell volume
+(DECSWBV, VT520). <i><br>
+P <small>s</small></i> = 0 or 1 &rarr; off. <i><br>
+P <small>s</small></i> = 2 , 3 or 4 &rarr; low. <i><br>
+P <small>s</small></i> = 5 , 6 , 7 , or 8 &rarr; high.</p>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="15%">
+
+
+<p valign="top"><small><small>CSI</small></small> u</p></td>
+<td width="2%"></td>
+<td width="43%">
+
+
+<p valign="top">Restore cursor (ANSI.SYS).</p></td>
+<td width="40%">
+</td>
+<tr valign="top" align="left">
+<td width="15%">
+
+
+<p valign="top"><small><small>CSI</small></small> <i>P
+<small>s</small></i> <small><small>SP</small></small></p></td>
+<td width="2%"></td>
+<td width="43%"></td>
+<td width="40%">
+</td>
+</table>
+
+<p valign="top">u</p>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="17%"></td>
+<td width="66%">
+
+
+<p valign="top">Set margin-bell volume (DECSMBV,
+VT520).</p> </td>
+<td width="17%">
+</td>
+</table>
+
+<p style="margin-left:17%;"><i>P <small>s</small></i> = 1
+&rarr; off. <i><br>
+P <small>s</small></i> = 2 , 3 or 4 &rarr; low. <i><br>
+P <small>s</small></i> = 0 , 5 , 6 , 7 , or 8 &rarr;
+high.</p>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="62%">
+
+
+<p valign="top"><small><small>CSI</small></small> <i>P
+<small>t</small></i> ; <i>P <small>l</small></i> ; <i>P
+<small>b</small></i> ; <i>P <small>r</small></i> ; <i>P
+<small>p</small></i> ; <i>P <small>t</small></i> ; <i>P
+<small>l</small></i> ; <i>P <small>p</small></i> $ v</p></td>
+<td width="38%">
+</td>
+</table>
+
+<p style="margin-left:17%;">Copy Rectangular Area (DECCRA,
+VT400 and up). <i><br>
+P <small>t</small></i> ; <i>P <small>l</small></i> ; <i>P
+<small>b</small></i> ; <i>P <small>r</small></i> denotes the
+rectangle. <i><br>
+P <small>p</small></i> denotes the source page. <i><br>
+P <small>t</small></i> ; <i>P <small>l</small></i> denotes
+the target location. <i><br>
+P <small>p</small></i> denotes the target page.</p>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="42%">
+
+
+<p valign="top"><small><small>CSI</small></small> <i>P
+<small>t</small></i> ; <i>P <small>l</small></i> ; <i>P
+<small>b</small></i> ; <i>P <small>r</small></i> &rsquo;
+w</p> </td>
+<td width="58%">
+</td>
+</table>
+
+<p style="margin-left:17%;">Enable Filter Rectangle
+(DECEFR), VT420 and up. <br>
+Parameters are [top;left;bottom;right]. <br>
+Defines the coordinates of a filter rectangle and activates
+it. Anytime the locator is detected outside of the filter
+rectangle, an outside rectangle event is generated and the
+rectangle is disabled. Filter rectangles are always treated
+as &quot;one-shot&quot; events. Any parameters that are
+omitted default to the current locator position. If all
+parameters are omitted, any locator motion will be reported.
+DECELR always cancels any prevous rectangle definition.</p>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="13%">
+
+
+<p valign="top"><small><small>CSI</small></small> <i>P
+<small>s</small></i> x</p></td>
+<td width="4%"></td>
+<td width="70%">
+
+
+<p valign="top">Request Terminal Parameters
+(DECREQTPARM).</p> </td>
+<td width="13%">
+</td>
+</table>
+
+<p style="margin-left:17%;">if <i>P <small>s</small></i> is
+a &quot;0&quot; (default) or &quot;1&quot;, and <i>xterm</i>
+is emulating VT100, the control sequence elicits a response
+of the same form whose parameters describe the terminal:
+<i><br>
+P <small>s</small></i> &rarr; the given <i>P
+<small>s</small></i> incremented by 2. <i><br>
+P <small>n</small></i> = 1 &larr; no parity. <i><br>
+P <small>n</small></i> = 1 &larr; eight bits. <i><br>
+P <small>n</small></i> = 1 &larr; 2 8 transmit 38.4k baud.
+<i><br>
+P <small>n</small></i> = 1 &larr; 2 8 receive 38.4k baud.
+<i><br>
+P <small>n</small></i> = 1 &larr; clock multiplier. <i><br>
+P <small>n</small></i> = 0 &larr; STP flags.</p>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="17%">
+
+
+<p valign="top"><small><small>CSI</small></small> <i>P
+<small>s</small></i> * x</p></td>
+<td width="68%">
+
+
+<p valign="top">Select Attribute Change Extent
+(DECSACE).</p> </td>
+<td width="15%">
+</td>
+</table>
+
+<p style="margin-left:17%;"><i>P <small>s</small></i> = 0
+&rarr; from start to end position, wrapped. <i><br>
+P <small>s</small></i> = 1 &rarr; from start to end
+position, wrapped. <i><br>
+P <small>s</small></i> = 2 &rarr; rectangle (exact).</p>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="53%">
+
+
+<p valign="top"><small><small>CSI</small></small> <i>P
+<small>i</small></i> ; <i>P <small>g</small></i> ; <i>P
+<small>t</small></i> ; <i>P <small>l</small></i> ; <i>P
+<small>b</small></i> ; <i>P <small>r</small></i> * y</p></td>
+<td width="47%">
+</td>
+</table>
+
+<p style="margin-left:17%;">Request Checksum of Rectangular
+Area (DECRQCRA), VT420 and up. Response is
+<small><small><br>
+DCS</small></small> <i>P <small>t</small></i> ! x x x x
+<small><small>ST</small></small> <i><br>
+P <small>i</small></i> is the request id. <i><br>
+P <small>g</small></i> is the page number. <i><br>
+P <small>t</small></i> ; <i>P <small>l</small></i> ; <i>P
+<small>b</small></i> ; <i>P <small>r</small></i> denotes the
+rectangle. <br>
+The x&rsquo;s are hexadecimal digits 0-9 and A-F.</p>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="50%">
+
+
+<p valign="top"><small><small>CSI</small></small> <i>P
+<small>c</small></i> ; <i>P <small>t</small></i> ; <i>P
+<small>l</small></i> ; <i>P <small>b</small></i> ; <i>P
+<small>r</small></i> $ x</p></td>
+<td width="50%">
+</td>
+</table>
+
+<p style="margin-left:17%;">Fill Rectangular Area (DECFRA),
+VT420 and up. <i><br>
+P <small>c</small></i> is the character to use. <i><br>
+P <small>t</small></i> ; <i>P <small>l</small></i> ; <i>P
+<small>b</small></i> ; <i>P <small>r</small></i> denotes the
+rectangle.</p>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="25%">
+
+
+<p valign="top"><small><small>CSI</small></small> <i>P
+<small>s</small></i> ; <i>P <small>u</small></i> &rsquo;
+z</p> </td>
+<td width="75%">
+</td>
+</table>
+
+<p style="margin-left:17%;">Enable Locator Reporting
+(DECELR). <br>
+Valid values for the first parameter: <i><br>
+P <small>s</small></i> = 0 &rarr; Locator disabled
+(default). <i><br>
+P <small>s</small></i> = 1 &rarr; Locator enabled. <i><br>
+P <small>s</small></i> = 2 &rarr; Locator enabled for one
+report, then disabled. <br>
+The second parameter specifies the coordinate unit for
+locator reports. <br>
+Valid values for the second parameter: <i><br>
+P <small>u</small></i> = 0 &larr; or omitted &rarr; default
+to character cells. <i><br>
+P <small>u</small></i> = 1 &larr; device physical pixels.
+<i><br>
+P <small>u</small></i> = 2 &larr; character cells.</p>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="35%">
+
+
+<p valign="top"><small><small>CSI</small></small> <i>P
+<small>t</small></i> ; <i>P <small>l</small></i> ; <i>P
+<small>b</small></i> ; <i>P <small>r</small></i> $ z</p></td>
+<td width="65%">
+</td>
+</table>
+
+<p style="margin-left:17%;">Erase Rectangular Area
+(DECERA), VT400 and up. <i><br>
+P <small>t</small></i> ; <i>P <small>l</small></i> ; <i>P
+<small>b</small></i> ; <i>P <small>r</small></i> denotes the
+rectangle.</p>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="17%">
+
+
+<p valign="top"><small><small>CSI</small></small> <i>P
+<small>m</small></i> &rsquo; {</p></td>
+<td width="51%">
+
+
+<p valign="top">Select Locator Events (DECSLE).</p></td>
+<td width="32%">
+</td>
+</table>
+
+<p style="margin-left:17%;">Valid values for the first (and
+any additional parameters) are: <i><br>
+P <small>s</small></i> = 0 &rarr; only respond to explicit
+host requests (DECRQLP). <br>
+(This is default). It also cancels any filter <br>
+rectangle. <i><br>
+P <small>s</small></i> = 1 &rarr; report button down
+transitions. <i><br>
+P <small>s</small></i> = 2 &rarr; do not report button down
+transitions. <i><br>
+P <small>s</small></i> = 3 &rarr; report button up
+transitions. <i><br>
+P <small>s</small></i> = 4 &rarr; do not report button up
+transitions.</p>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="37%">
+
+
+<p valign="top"><small><small>CSI</small></small> <i>P
+<small>t</small></i> ; <i>P <small>l</small></i> ; <i>P
+<small>b</small></i> ; <i>P <small>r</small></i> $ {</p></td>
+<td width="63%">
+</td>
+</table>
+
+<p style="margin-left:17%;">Selective Erase Rectangular
+Area (DECSERA), VT400 and up. <i><br>
+P <small>t</small></i> ; <i>P <small>l</small></i> ; <i>P
+<small>b</small></i> ; <i>P <small>r</small></i> denotes the
+rectangle.</p>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="17%">
+
+
+<p valign="top"><small><small>CSI</small></small> <i>P
+<small>s</small></i> &rsquo; |</p></td>
+<td width="58%">
+
+
+<p valign="top">Request Locator Position (DECRQLP).</p></td>
+<td width="25%">
+</td>
+</table>
+
+<p style="margin-left:17%;">Valid values for the parameter
+are: <i><br>
+P <small>s</small></i> = 0 , 1 or omitted &rarr; transmit a
+single DECLRP locator report.</p>
+
+<p style="margin-left:17%; margin-top: 1em">If Locator
+Reporting has been enabled by a DECELR, xterm will respond
+with a DECLRP Locator Report. This report is also generated
+on button up and down events if they have been enabled with
+a DECSLE, or when the locator is detected outside of a
+filter rectangle, if filter rectangles have been enabled
+with a DECEFR.</p>
+
+<p style="margin-left:17%; margin-top: 1em">&rarr;
+<small><small>CSI</small></small> <i>P <small>e</small></i>
+; <i>P <small>b</small></i> ; <i>P <small>r</small></i> ;
+<i>P <small>c</small></i> ; <i>P <small>p</small></i> &amp;
+w</p>
+
+<p style="margin-left:17%; margin-top: 1em">Parameters are
+[event;button;row;column;page]. <br>
+Valid values for the event: <i><br>
+P <small>e</small></i> = 0 &rarr; locator unavailable - no
+other parameters sent. <i><br>
+P <small>e</small></i> = 1 &rarr; request - xterm received a
+DECRQLP. <i><br>
+P <small>e</small></i> = 2 &rarr; left button down. <i><br>
+P <small>e</small></i> = 3 &rarr; left button up. <i><br>
+P <small>e</small></i> = 4 &rarr; middle button down.
+<i><br>
+P <small>e</small></i> = 5 &rarr; middle button up. <i><br>
+P <small>e</small></i> = 6 &rarr; right button down. <i><br>
+P <small>e</small></i> = 7 &rarr; right button up. <i><br>
+P <small>e</small></i> = 8 &rarr; M4 button down. <i><br>
+P <small>e</small></i> = 9 &rarr; M4 button up. <i><br>
+P <small>e</small></i> = 1 0 &rarr; locator outside filter
+rectangle. <br>
+&lsquo;&lsquo;button&rsquo;&rsquo; parameter is a bitmask
+indicating which buttons are pressed: <i><br>
+P <small>b</small></i> = 0 &larr; no buttons down. <i><br>
+P <small>b</small></i> &amp; 1 &larr; right button down.
+<i><br>
+P <small>b</small></i> &amp; 2 &larr; middle button down.
+<i><br>
+P <small>b</small></i> &amp; 4 &larr; left button down.
+<i><br>
+P <small>b</small></i> &amp; 8 &larr; M4 button down. <br>
+&lsquo;&lsquo;row&rsquo;&rsquo; and
+&lsquo;&lsquo;column&rsquo;&rsquo; parameters are the
+coordinates of the locator position in the xterm window,
+encoded as ASCII decimal. <br>
+The &lsquo;&lsquo;page&rsquo;&rsquo; parameter is not used
+by xterm, and will be omitted.</p>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="18%">
+
+
+<p valign="top"><small><small>CSI</small></small> <i>P
+<small>m</small></i> <small><small>SP</small></small> }</p></td>
+<td width="82%">
+</td>
+</table>
+
+<p style="margin-left:17%;">Insert <i>P
+<small>s</small></i> Column(s) (default = 1) (DECIC), VT420
+and up.</p>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="18%">
+
+
+<p valign="top"><small><small>CSI</small></small> <i>P
+<small>m</small></i> <small><small>SP</small></small> ~</p></td>
+<td width="82%">
+</td>
+</table>
+
+<p style="margin-left:17%;">Delete <i>P
+<small>s</small></i> Column(s) (default = 1) (DECDC), VT420
+and up.</p>
+
+<p style="margin-top: 1em" valign="top"><b>Operating System
+Controls</b></p>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="25%">
+
+
+<p valign="top"><small><small>OSC</small></small> <i>P
+<small>s</small></i> ; <i>P <small>t</small></i>
+<small><small>ST</small></small></p> </td>
+<td width="75%">
+</td>
+<tr valign="top" align="left">
+<td width="25%">
+
+
+<p valign="top"><small><small>OSC</small></small> <i>P
+<small>s</small></i> ; <i>P <small>t</small></i>
+<small><small>BEL</small></small></p> </td>
+<td width="75%">
+</td>
+</table>
+
+<p style="margin-left:17%;">Set Text Parameters. For colors
+and font, if <i>P <small>t</small></i> is a &quot;?&quot;,
+the control sequence elicits a response which consists of
+the control sequence which would set the corresponding
+value. The <i>dtterm</i> control sequences allow you to
+determine the icon name and window title. <i><br>
+P <small>s</small></i> = 0 &rarr; Change Icon Name and
+Window Title to <i>P <small>t</small></i> . <i><br>
+P <small>s</small></i> = 1 &rarr; Change Icon Name to <i>P
+<small>t</small></i> . <i><br>
+P <small>s</small></i> = 2 &rarr; Change Window Title to
+<i>P <small>t</small></i> . <i><br>
+P <small>s</small></i> = 3 &rarr; Set X property on
+top-level window. <i>P <small>t</small></i> should be in the
+form &quot;<i>prop=value</i>&quot;, or just
+&quot;<i>prop</i>&quot; to delete the property <i><br>
+P <small>s</small></i> = 4 ; <i>c ; spec</i> &rarr; Change
+Color Number <i>c</i> to the color specified by <i>spec</i>.
+This can be a name or RGB specification as per
+<i>XParseColor</i>. Any number of <i>c name</i> pairs may be
+given. The color numbers correspond to the ANSI colors 0-7,
+their bright versions 8-15, and if supported, the remainder
+of the 88-color or 256-color table.</p>
+
+<p style="margin-left:17%; margin-top: 1em">If a
+&quot;?&quot; is given rather than a name or RGB
+specification, xterm replies with a control sequence of the
+same form which can be used to set the corresponding color.
+Because more than one pair of color number and specification
+can be given in one control sequence, <i>xterm</i> can make
+more than one reply.</p>
+
+<p style="margin-left:17%; margin-top: 1em"><i>P
+<small>s</small></i> = 5 ; <i>c ; spec</i> &rarr; Change
+Special Color Number <i>c</i> to the color specified by
+<i>spec</i>. This can be a name or RGB specification as per
+<i>XParseColor</i>. Any number of <i>c name</i> pairs may be
+given. The special colors can also be set by adding the
+maximum number of colors to these codes in an
+<small><small>OSC</small></small> 4 control:</p>
+
+<p style="margin-left:17%; margin-top: 1em"><i>P
+<small>c</small></i> = 0 &larr; resource <b>colorBD</b>
+(BOLD). <i><br>
+P <small>c</small></i> = 1 &larr; resource <b>colorUL</b>
+(UNDERLINE). <i><br>
+P <small>c</small></i> = 2 &larr; resource <b>colorBL</b>
+(BLINK). <i><br>
+P <small>c</small></i> = 3 &larr; resource <b>colorRV</b>
+(REVERSE).</p>
+
+<p style="margin-left:17%; margin-top: 1em">The 10 colors
+(below) which may be set or queried using 1 0 through 1 9
+are denoted <i>dynamic colors</i>, since the corresponding
+control sequences were the first means for setting
+<i>xterm</i>&rsquo;s colors dynamically, i.e., after it was
+started. They are not the same as the ANSI colors. These
+controls may be disabled using the <i>allowColorOps</i>
+resource. At least one parameter is expected for <i>P
+<small>t</small></i> . Each successive parameter changes the
+next color in the list. The value of <i>P
+<small>s</small></i> tells the starting point in the list.
+The colors are specified by name or RGB specification as per
+<i>XParseColor</i>.</p>
+
+<p style="margin-left:17%; margin-top: 1em">If a
+&quot;?&quot; is given rather than a name or RGB
+specification, xterm replies with a control sequence of the
+same form which can be used to set the corresponding dynamic
+color. Because more than one pair of color number and
+specification can be given in one control sequence,
+<i>xterm</i> can make more than one reply.</p>
+
+<p style="margin-left:17%; margin-top: 1em"><i>P
+<small>s</small></i> = 1 0 &rarr; Change VT100 text
+foreground color to <i>P <small>t</small></i> . <i><br>
+P <small>s</small></i> = 1 1 &rarr; Change VT100 text
+background color to <i>P <small>t</small></i> . <i><br>
+P <small>s</small></i> = 1 2 &rarr; Change text cursor color
+to <i>P <small>t</small></i> . <i><br>
+P <small>s</small></i> = 1 3 &rarr; Change mouse foreground
+color to <i>P <small>t</small></i> . <i><br>
+P <small>s</small></i> = 1 4 &rarr; Change mouse background
+color to <i>P <small>t</small></i> . <i><br>
+P <small>s</small></i> = 1 5 &rarr; Change Tektronix
+foreground color to <i>P <small>t</small></i> . <i><br>
+P <small>s</small></i> = 1 6 &rarr; Change Tektronix
+background color to <i>P <small>t</small></i> . <i><br>
+P <small>s</small></i> = 1 7 &rarr; Change highlight
+background color to <i>P <small>t</small></i> . <i><br>
+P <small>s</small></i> = 1 8 &rarr; Change Tektronix cursor
+color to <i>P <small>t</small></i> . <i><br>
+P <small>s</small></i> = 1 9 &rarr; Change highlight
+foreground color to <i>P <small>t</small></i> .</p>
+
+<p style="margin-left:17%; margin-top: 1em"><i>P
+<small>s</small></i> = 4 6 &rarr; Change Log File to <i>P
+<small>t</small></i> . (This is normally disabled by a
+compile-time option).</p>
+
+<p style="margin-left:17%; margin-top: 1em"><i>P
+<small>s</small></i> = 5 0 &rarr; Set Font to <i>P
+<small>t</small></i> . These controls may be disabled using
+the <i>allowFontOps</i> resource. If <i>P
+<small>t</small></i> begins with a &quot;#&quot;, index in
+the font menu, relative (if the next character is a plus or
+minus sign) or absolute. A number is expected but not
+required after the sign (the default is the current entry
+for relative, zero for absolute indexing). <br>
+The same rule (plus or minus sign, optional number) is used
+when querying the font. The remainder of <i>P
+<small>t</small></i> is ignored. <br>
+A font can be specified after a &quot;#&quot; index
+expression, by adding a space and then the font specifier.
+<br>
+If the &quot;TrueType Fonts&quot; menu entry is set (the
+<b>renderFont</b> resource), then this control sets/queries
+the <b>faceName</b> resource.</p>
+
+<p style="margin-left:17%; margin-top: 1em"><i>P
+<small>s</small></i> = 5 1 (reserved for Emacs shell).</p>
+
+<p style="margin-left:17%; margin-top: 1em"><i>P
+<small>s</small></i> = 5 2 &rarr; Manipulate Selection Data.
+These controls may be disabled using the
+<i>allowWindowOps</i> resource. The parameter <i>P
+<small>t</small></i> is parsed as</p>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="8%"></td>
+<td width="92%">
+
+
+<p valign="top"><i>P <small>c</small></i> ; <i>P
+<small>d</small></i></p> </td>
+</table>
+
+<p style="margin-left:17%;">The first, <i>P
+<small>c</small></i> , may contain zero or more characters
+from the set c p s 0 1 2 3 4 5 6 7 . It is used to construct
+a list of selection parameters for clipboard, primary,
+select, or cut buffers 0 through 7 respectively, in the
+order given. If the parameter is empty, <i>xterm</i> uses s
+0 , to specify the configurable primary/clipboard selection
+and cut buffer 0. <br>
+The second parameter, <i>P <small>d</small></i> , gives the
+selection data. Normally this is a string encoded in base64.
+The data becomes the new selection, which is then available
+for pasting by other applications. <br>
+If the second parameter is a ? , <i>xterm</i> replies to the
+host with the selection data encoded using the same
+protocol. <br>
+If the second parameter is neither a base64 string nor ? ,
+then the selection is cleared.</p>
+
+<p style="margin-left:17%; margin-top: 1em"><i>P
+<small>s</small></i> = 1 0 4 ; <i>c</i> &rarr; Reset Color
+Number <i>c</i>. It is reset to the color specified by the
+corresponding X resource. Any number of <i>c</i> parameters
+may be given. These parameters correspond to the ANSI colors
+0-7, their bright versions 8-15, and if supported, the
+remainder of the 88-color or 256-color table. If no
+parameters are given, the entire table will be reset.</p>
+
+<p style="margin-left:17%; margin-top: 1em"><i>P
+<small>s</small></i> = 1 0 5 ; <i>c</i> &rarr; Reset Special
+Color Number <i>c</i>. It is reset to the color specified by
+the corresponding X resource. Any number of <i>c</i>
+parameters may be given. These parameters correspond to the
+special colors which can be set using an
+<small><small>OSC</small></small> 5 control (or by adding
+the maximum number of colors using an
+<small><small>OSC</small></small> 4 control).</p>
+
+<p style="margin-left:17%; margin-top: 1em">The <i>dynamic
+colors</i> can also be reset to their default (resource)
+values: <i><br>
+P <small>s</small></i> = 1 1 0 &rarr; Reset VT100 text
+foreground color. <i><br>
+P <small>s</small></i> = 1 1 1 &rarr; Reset VT100 text
+background color. <i><br>
+P <small>s</small></i> = 1 1 2 &rarr; Reset text cursor
+color. <i><br>
+P <small>s</small></i> = 1 1 3 &rarr; Reset mouse foreground
+color. <i><br>
+P <small>s</small></i> = 1 1 4 &rarr; Reset mouse background
+color. <i><br>
+P <small>s</small></i> = 1 1 5 &rarr; Reset Tektronix
+foreground color. <i><br>
+P <small>s</small></i> = 1 1 6 &rarr; Reset Tektronix
+background color. <i><br>
+P <small>s</small></i> = 1 1 7 &rarr; Reset highlight color.
+<i><br>
+P <small>s</small></i> = 1 1 8 &rarr; Reset Tektronix cursor
+color.</p>
+
+<p style="margin-top: 1em" valign="top"><b>Privacy
+Message</b></p>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="13%">
+
+
+<p valign="top"><small><small>PM</small></small> <i>P
+<small>t</small></i> <small><small>ST</small></small></p></td>
+<td width="4%"></td>
+<td width="83%">
+
+
+<p valign="top"><i>xterm</i> implements no
+<small><small>PM</small></small> functions; <i>P
+<small>t</small></i> is ignored. <i>P <small>t</small></i>
+need not be printable characters.</p></td>
+</table>
+
+<a name="Alt and Meta Keys"></a>
+<h2>Alt and Meta Keys</h2>
+
+
+<p style="margin-top: 1em" valign="top">Many keyboards have
+keys labeled &quot;Alt&quot;. Few have keys labeled
+&quot;Meta&quot;. However, <i>xterm</i>&rsquo;s default
+translations use the <i>Meta</i> modifier. Common keyboard
+configurations assign the <i>Meta</i> modifier to an
+&quot;Alt&quot; key. By using <i>xmodmap</i> one may have
+the modifier assigned to a different key, and have
+&quot;real&quot; alt and meta keys. Here is an example:</p>
+
+<p style="margin-left:22%; margin-top: 1em">! put meta on
+mod3 to distinguish it from alt <br>
+keycode 64 = Alt_L <br>
+clear mod1 <br>
+add mod1 = Alt_L <br>
+keycode 115 = Meta_L <br>
+clear mod3 <br>
+add mod3 = Meta_L</p>
+
+<p style="margin-top: 1em" valign="top">The
+<b>metaSendsEscape</b> resource (and <b>altSendsEscape</b>
+if <b>altIsNotMeta</b> is set) can be used to control the
+way the <i>Meta</i> modifier applies to ordinary keys unless
+the <b>modifyOtherKeys</b> resource is set:</p>
+
+<p style="margin-left:17%;">- prefix a key with the
+<small><small>ESC</small></small> character. <br>
+- shift the key from codes 0-127 to 128-255 by adding
+128.</p>
+
+<p style="margin-top: 1em" valign="top">The table shows the
+result for a given character &quot;x&quot; with modifiers
+according to the default translations with the resources set
+on or off. This assumes <b>altIsNotMeta</b> is set:</p>
+
+
+<p align=center style="margin-top: 1em" valign="top"><img src="grohtml-285551.png" alt="Image grohtml-285551.png"></p>
+
+<a name="PC-Style Function Keys"></a>
+<h2>PC-Style Function Keys</h2>
+
+
+<p style="margin-top: 1em" valign="top">If <i>xterm</i>
+does minimal translation of the function keys, it usually
+does this with a PC-style keyboard, so PC-style function
+keys result. Sun keyboards are similar to PC keyboards. Both
+have cursor and scrolling operations printed on the keypad,
+which duplicate the smaller cursor and scrolling
+keypads.</p>
+
+<p style="margin-top: 1em" valign="top">X does not
+predefine NumLock (used for VT220 keyboards) or Alt (used as
+an extension for the Sun/PC keyboards) as modifiers. These
+keys are recognized as modifiers when enabled by the
+<b>numLock</b> resource, or by the &quot;DECSET 1 0 3 5
+&quot; control sequence.</p>
+
+<p style="margin-top: 1em" valign="top">The cursor keys
+transmit the following escape sequences depending on the
+mode specified via the <b>DECCKM</b> escape sequence.</p>
+
+
+<p align=center style="margin-top: 1em" valign="top"><img src="grohtml-285552.png" alt="Image grohtml-285552.png"></p>
+
+<p valign="top">The home- and end-keys (unlike PageUp and
+other keys also on the 6-key editing keypad) are considered
+&quot;cursor keys&quot; by <i>xterm</i>. Their mode is also
+controlled by the <b>DECCKM</b> escape sequence:</p>
+
+
+<p align=center style="margin-top: 1em" valign="top"><img src="grohtml-285553.png" alt="Image grohtml-285553.png"></p>
+
+<p style="margin-top: 1em" valign="top">The application
+keypad transmits the following escape sequences depending on
+the mode specified via the <b>DECPNM</b> and <b>DECPAM</b>
+escape sequences. Use the NumLock key to override the
+application mode.</p>
+
+<p style="margin-top: 1em" valign="top">Not all keys are
+present on the Sun/PC keypad (e.g., PF1, Tab), but are
+supported by the program.</p>
+
+
+<p align=center style="margin-top: 1em" valign="top"><img src="grohtml-285554.png" alt="Image grohtml-285554.png"></p>
+
+<p valign="top">They also provide 12 function keys, as well
+as a few other special-purpose keys:</p>
+
+
+<p align=center style="margin-top: 1em" valign="top"><img src="grohtml-285555.png" alt="Image grohtml-285555.png"></p>
+
+<p style="margin-top: 1em" valign="top">Older versions of
+<i>xterm</i> implement different escape sequences for F1
+through F4. These can be activated by setting the
+<b>oldXtermFKeys</b> resource. However, since they do not
+correspond to any hardware terminal, they have been
+deprecated. (The DEC VT220 reserves F1 through F5 for local
+functions such as <b>Setup</b>).</p>
+
+
+<p align=center style="margin-top: 1em" valign="top"><img src="grohtml-285556.png" alt="Image grohtml-285556.png"></p>
+
+<p valign="top">In normal mode, i.e., a Sun/PC keyboard
+when the <b>sunKeyboard</b> resource is false, <i>xterm</i>
+recognizes function key modifiers which are parameters
+appended before the final character of the control
+sequence.</p>
+
+
+<p align=center style="margin-top: 1em" valign="top"><img src="grohtml-285557.png" alt="Image grohtml-285557.png"></p>
+
+<p valign="top">For example, shift-F5 would be sent as
+<small><small>CSI</small></small> 1 5 ; 2 ~</p>
+
+<p style="margin-top: 1em" valign="top">If the
+<b>alwaysUseMods</b> resource is set, the Meta modifier also
+is recognized, making parameters 9 through 16.</p>
+
+<a name="VT220-Style Function Keys"></a>
+<h2>VT220-Style Function Keys</h2>
+
+
+<p style="margin-top: 1em" valign="top">However,
+<i>xterm</i> is most useful as a DEC VT102 or VT220
+emulator. Set the <b>sunKeyboard</b> resource to true to
+force a Sun/PC keyboard to act like a VT220 keyboard.</p>
+
+<p style="margin-top: 1em" valign="top">The VT102/VT220
+application keypad transmits unique escape sequences in
+application mode, which are distinct from the cursor and
+scrolling keypad:</p>
+
+
+<p align=center style="margin-top: 1em" valign="top"><img src="grohtml-285558.png" alt="Image grohtml-285558.png"></p>
+
+<p valign="top">The VT220 provides a 6-key editing keypad,
+which is analogous to that on the PC keyboard. It is not
+affected by <b>DECCKM</b> or
+<b>DECPNM</b>/<b>DECPAM</b>:</p>
+
+
+<p align=center style="margin-top: 1em" valign="top"><img src="grohtml-285559.png" alt="Image grohtml-285559.png"></p>
+
+<p valign="top">The VT220 provides 8 additional function
+keys. With a Sun/PC keyboard, access these keys by
+Control/F1 for F13, etc.</p>
+
+
+<p align=center style="margin-top: 1em" valign="top"><img src="grohtml-2855510.png" alt="Image grohtml-2855510.png"></p>
+
+<a name="VT52-Style Function Keys"></a>
+<h2>VT52-Style Function Keys</h2>
+
+
+<p style="margin-top: 1em" valign="top">A VT52 does not
+have function keys, but it does have a numeric keypad and
+cursor keys. They differ from the other emulations by the
+prefix. Also, the cursor keys do not change:</p>
+
+
+<p align=center style="margin-top: 1em" valign="top"><img src="grohtml-2855511.png" alt="Image grohtml-2855511.png"></p>
+
+<p valign="top">The keypad is similar:</p>
+
+
+<p align=center style="margin-top: 1em" valign="top"><img src="grohtml-2855512.png" alt="Image grohtml-2855512.png"></p>
+
+<a name="Sun-Style Function Keys"></a>
+<h2>Sun-Style Function Keys</h2>
+
+
+<p style="margin-top: 1em" valign="top">The <i>xterm</i>
+program provides support for Sun keyboards more directly, by
+a menu toggle that causes it to send Sun-style function key
+codes rather than VT220. Note, however, that the <i>sun</i>
+and <i>VT100</i> emulations are not really compatible. For
+example, their wrap-margin behavior differs.</p>
+
+<p style="margin-top: 1em" valign="top">Only function keys
+are altered; keypad and cursor keys are the same. The
+emulation responds identically. See the xterm-sun terminfo
+entry for details.</p>
+
+<a name="HP-Style Function Keys"></a>
+<h2>HP-Style Function Keys</h2>
+
+
+<p style="margin-top: 1em" valign="top">Similarly,
+<i>xterm</i> can be compiled to support HP keyboards. See
+the xterm-hp terminfo entry for details.</p>
+
+<a name="The Alternate Screen Buffer"></a>
+<h2>The Alternate Screen Buffer</h2>
+
+
+<p style="margin-top: 1em" valign="top"><i>Xterm</i>
+maintains two screen buffers. The normal screen buffer
+allows you to scroll back to view saved lines of output up
+to the maximum set by the <b>saveLines</b> resource. The
+alternate screen buffer is exactly as large as the display,
+contains no additional saved lines. When the alternate
+screen buffer is active, you cannot scroll back to view
+saved lines. <i>Xterm</i> provides control sequences and
+menu entries for switching between the two.</p>
+
+<p style="margin-top: 1em" valign="top">Most full-screen
+applications use terminfo or termcap to obtain strings used
+to start/stop full-screen mode, i.e., <i>smcup</i> and
+<i>rmcup</i> for terminfo, or the corresponding <i>ti</i>
+and <i>te</i> for termcap. The <b>titeInhibit</b> resource
+removes the <i>ti</i> and <i>te</i> strings from the TERMCAP
+string which is set in the environment for some platforms.
+That is not done when <i>xterm</i> is built with terminfo
+libraries because terminfo does not provide the whole text
+of the termcap data in one piece. It would not work for
+terminfo anyway, since terminfo data is not passed in
+environment variables; setting an environment variable in
+this manner would have no effect on the application&rsquo;s
+ability to switch between normal and alternate screen
+buffers. Instead, the newer private mode controls (such as 1
+0 4 9 ) for switching between normal and alternate screen
+buffers simply disable the switching. They add other
+features such as clearing the display for the same reason:
+to make the details of switching independent of the
+application that requests the switch.</p>
+
+<a name="Bracketed Paste Mode"></a>
+<h2>Bracketed Paste Mode</h2>
+
+
+<p style="margin-top: 1em" valign="top">When bracketed
+paste mode is set, pasted text is bracketed with control
+sequences so that the program can differentiate pasted text
+from typed-in text. When bracketed paste mode is set, the
+program will receive: <small><small><br>
+ESC</small></small> [ 200 ~, <br>
+followed by the pasted text, followed by <small><small><br>
+ESC</small></small> [ 201 ~.</p>
+
+<a name="Title Modes"></a>
+<h2>Title Modes</h2>
+
+
+<p style="margin-top: 1em" valign="top">The window- and
+icon-labels can be set or queried using control sequences.
+As a VT220-emulator, <i>xterm</i> &quot;should&quot; limit
+the character encoding for the corresponding strings to
+ISO-8859-1. Indeed, it used to be the case (and was
+documented) that window titles had to be ISO-8859-1. This is
+no longer the case. However, there are many applications
+which still assume that titles are set using ISO-8859-1. So
+that is the default behavior.</p>
+
+<p style="margin-top: 1em" valign="top">If <i>xterm</i> is
+running with UTF-8 encoding, it is possible to use window-
+and icon-labels encoded using UTF-8. That is because the
+underlying X libraries (and many, but not all) window
+managers support this feature.</p>
+
+<p style="margin-top: 1em" valign="top">The
+<b>utf8Title</b> X resource setting tells <i>xterm</i> to
+disable a reconversion of the title string back to
+ISO-8859-1, allowing the title strings to be interpreted as
+UTF-8. The same feature can be enabled using the title mode
+control sequence described in this summary.</p>
+
+<p style="margin-top: 1em" valign="top">Separate from the
+ability to set the titles, <i>xterm</i> provides the ability
+to query the titles, returning them either in ISO-8859-1 or
+UTF-8. This choice is available only while <i>xterm</i> is
+using UTF-8 encoding.</p>
+
+<p style="margin-top: 1em" valign="top">Finally, the
+characters sent to, or returned by a title control are less
+constrained than the rest of the control sequences. To make
+them more manageable (and constrained), for use in shell
+scripts, <i>xterm</i> has an optional feature which decodes
+the string from hexadecimal (for setting titles) or for
+encoding the title into hexadecimal when querying the
+value.</p>
+
+<a name="Mouse Tracking"></a>
+<h2>Mouse Tracking</h2>
+
+
+<p style="margin-top: 1em" valign="top">The VT widget can
+be set to send the mouse position and other information on
+button presses. These modes are typically used by editors
+and other full-screen applications that want to make use of
+the mouse.</p>
+
+<p style="margin-top: 1em" valign="top">There are two sets
+of mutually exclusive modes:</p>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="2%">
+
+
+<p valign="top">&bull;</p></td>
+<td width="5%"></td>
+<td width="28%">
+
+
+<p valign="top">mouse protocol</p></td>
+<td width="65%">
+</td>
+<tr valign="top" align="left">
+<td width="2%">
+
+
+<p valign="top">&bull;</p></td>
+<td width="5%"></td>
+<td width="28%">
+
+
+<p valign="top">protocol encoding</p></td>
+<td width="65%">
+</td>
+</table>
+
+<p style="margin-top: 1em" valign="top">The mouse protocols
+include DEC Locator mode, enabled by the DECELR
+<small><small>CSI</small></small> <i>P <small>s</small></i>
+; <i>P <small>s</small></i> &rsquo; z control sequence, and
+is not described here (control sequences are summarized
+above). The remaining five modes of the mouse protocols are
+each enabled (or disabled) by a different parameter in the
+&quot;DECSET <small><small>CSI</small></small> ? <i>P
+<small>m</small></i> h &quot; or &quot;DECRST
+<small><small>CSI</small></small> ? <i>P
+<small>m</small></i> l &quot; control sequence.</p>
+
+<p style="margin-top: 1em" valign="top">Manifest constants
+for the parameter values are defined in <b>xcharmouse.h</b>
+as follows:</p>
+
+<p style="margin-left:27%; margin-top: 1em">#define
+SET_X10_MOUSE 9 <br>
+#define SET_VT200_MOUSE 1000 <br>
+#define SET_VT200_HIGHLIGHT_MOUSE 1001 <br>
+#define SET_BTN_EVENT_MOUSE 1002 <br>
+#define SET_ANY_EVENT_MOUSE 1003</p>
+
+<p style="margin-left:27%; margin-top: 1em">#define
+SET_FOCUS_EVENT_MOUSE 1004</p>
+
+<p style="margin-left:27%; margin-top: 1em">#define
+SET_EXT_MODE_MOUSE 1005 <br>
+#define SET_SGR_EXT_MODE_MOUSE 1006 <br>
+#define SET_URXVT_EXT_MODE_MOUSE 1015</p>
+
+<p style="margin-top: 1em" valign="top">The motion
+reporting modes are strictly <i>xterm</i> extensions, and
+are not part of any standard, though they are analogous to
+the DEC VT200 DECELR locator reports.</p>
+
+<p style="margin-top: 1em" valign="top">Normally,
+parameters (such as pointer position and button number) for
+all mouse tracking escape sequences generated by
+<i>xterm</i> encode numeric parameters in a single character
+as <i>value</i>+32. For example, ! specifies the value 1.
+The upper left character position on the terminal is denoted
+as 1,1. This scheme dates back to X10, though the normal
+mouse-tracking (from X11) is more elaborate.</p>
+
+<p style="margin-top: 1em" valign="top">X10 compatibility
+mode sends an escape sequence only on button press, encoding
+the location and the mouse button pressed. It is enabled by
+specifying parameter 9 to DECSET. On button press,
+<i>xterm</i> sends <small><small>CSI</small></small> M <i>C
+<small>b</small> C <small>x</small> C <small>y</small></i>
+(6 characters).</p>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="2%">
+
+
+<p valign="top">&bull;</p></td>
+<td width="5%"></td>
+<td width="93%">
+
+
+<p valign="top"><i>C <small>b</small></i> is
+button&minus;1.</p> </td>
+<tr valign="top" align="left">
+<td width="2%">
+
+
+<p valign="top">&bull;</p></td>
+<td width="5%"></td>
+<td width="93%">
+
+
+<p valign="top"><i>C <small>x</small></i> and <i>C
+<small>y</small></i> are the x and y coordinates of the
+mouse when the button was pressed.</p></td>
+</table>
+
+<p style="margin-top: 1em" valign="top">Normal tracking
+mode sends an escape sequence on both button press and
+release. Modifier key (shift, ctrl, meta) information is
+also sent. It is enabled by specifying parameter 1000 to
+DECSET. On button press or release, <i>xterm</i> sends
+<small><small>CSI</small></small> M <i>C <small>b</small> C
+<small>x</small> C <small>y</small></i> .</p>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="2%">
+
+
+<p valign="top">&bull;</p></td>
+<td width="5%"></td>
+<td width="93%">
+
+
+<p valign="top">The low two bits of <i>C
+<small>b</small></i> encode button information: 0=MB1
+pressed, 1=MB2 pressed, 2=MB3 pressed, 3=release.</p></td>
+<tr valign="top" align="left">
+<td width="2%">
+
+
+<p valign="top">&bull;</p></td>
+<td width="5%"></td>
+<td width="93%">
+
+
+<p valign="top">The next three bits encode the modifiers
+which were down when the button was pressed and are added
+together: 4=Shift, 8=Meta, 16=Control. Note however that the
+shift and control bits are normally unavailable because
+<i>xterm</i> uses the control modifier with mouse for popup
+menus, and the shift modifier is used in the default
+translations for button events. The <i>Meta</i> modifier
+recognized by <i>xterm</i> is the <i>mod1</i> mask, and is
+not necessarily the &quot;Meta&quot; key (see
+<i>xmodmap</i>).</p> </td>
+<tr valign="top" align="left">
+<td width="2%">
+
+
+<p valign="top">&bull;</p></td>
+<td width="5%"></td>
+<td width="93%">
+
+
+<p valign="top"><i>C <small>x</small></i> and <i>C
+<small>y</small></i> are the x and y coordinates of the
+mouse event, encoded as in X10 mode.</p></td>
+</table>
+
+<p style="margin-top: 1em" valign="top">Wheel mice may
+return buttons 4 and 5. Those buttons are represented by the
+same event codes as buttons 1 and 2 respectively, except
+that 64 is added to the event code. Release events for the
+wheel buttons are not reported.</p>
+
+<p style="margin-top: 1em" valign="top">Mouse highlight
+tracking notifies a program of a button press, receives a
+range of lines from the program, highlights the region
+covered by the mouse within that range until button release,
+and then sends the program the release coordinates. It is
+enabled by specifying parameter 1001 to DECSET. Highlighting
+is performed only for button 1, though other button events
+can be received.</p>
+
+<p style="margin-top: 1em" valign="top"><b>Warning:</b> use
+of this mode requires a cooperating program or it will hang
+<i>xterm.</i></p>
+
+<p style="margin-top: 1em" valign="top">On button press,
+the same information as for normal tracking is generated;
+<i>xterm</i> then waits for the program to send mouse
+tracking information. <i>All X events are ignored until the
+proper escape sequence is received from the pty:</i>
+<small><small>CSI</small></small> <i>P <small>s</small></i>
+; <i>P <small>s</small></i> ; <i>P <small>s</small></i> ;
+<i>P <small>s</small></i> ; <i>P <small>s</small></i> T .
+The parameters are <i>func, startx, starty, firstrow,</i>
+and <i>lastrow. func</i> is non-zero to initiate highlight
+tracking and zero to abort. <i>startx</i> and <i>starty</i>
+give the starting x and y location for the highlighted
+region. The ending location tracks the mouse, but will never
+be above row <i>firstrow</i> and will always be above row
+<i>lastrow.</i> (The top of the screen is row 1.) When the
+button is released, <i>xterm</i> reports the ending position
+one of two ways:</p>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="2%">
+
+
+<p valign="top">&bull;</p></td>
+<td width="5%"></td>
+<td width="93%">
+
+
+<p valign="top">if the start and end coordinates are the
+same locations:</p></td>
+<td width="0%">
+</td>
+</table>
+
+
+<p style="margin-left:7%;"><small><small>CSI</small></small>
+t <i>C <small>x</small> C <small>y</small></i> .</p>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="2%">
+
+
+<p valign="top">&bull;</p></td>
+<td width="5%"></td>
+<td width="16%">
+
+
+<p valign="top">otherwise:</p></td>
+<td width="77%">
+</td>
+</table>
+
+
+<p style="margin-left:7%;"><small><small>CSI</small></small>
+T <i>C <small>x</small> C <small>y</small> C
+<small>x</small> C <small>y</small> C <small>x</small> C
+<small>y</small></i> . <br>
+The parameters are <i>startx, starty, endx, endy,
+mousex,</i> and <i>mousey.</i></p>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="7%"></td>
+<td width="1%">
+
+
+<p valign="top">&minus;</p></td>
+<td width="7%"></td>
+<td width="85%">
+
+
+<p valign="top"><i>startx, starty, endx,</i> and
+<i>endy</i> give the starting and ending character positions
+of the region.</p></td>
+<tr valign="top" align="left">
+<td width="7%"></td>
+<td width="1%">
+
+
+<p valign="top">&minus;</p></td>
+<td width="7%"></td>
+<td width="85%">
+
+
+<p valign="top"><i>mousex</i> and <i>mousey</i> give the
+location of the mouse at button up, which may not be over a
+character.</p> </td>
+</table>
+
+<p style="margin-top: 1em" valign="top">Button-event
+tracking is essentially the same as normal tracking, but
+<i>xterm</i> also reports button-motion events. Motion
+events are reported only if the mouse pointer has moved to a
+different character cell. It is enabled by specifying
+parameter 1002 to DECSET. On button press or release,
+<i>xterm</i> sends the same codes used by normal tracking
+mode.</p>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="2%">
+
+
+<p valign="top">&bull;</p></td>
+<td width="5%"></td>
+<td width="93%">
+
+
+<p valign="top">On button-motion events, <i>xterm</i> adds
+32 to the event code (the third character, <i>C
+<small>b</small></i> ).</p></td>
+<tr valign="top" align="left">
+<td width="2%">
+
+
+<p valign="top">&bull;</p></td>
+<td width="5%"></td>
+<td width="93%">
+
+
+<p valign="top">The other bits of the event code specify
+button and modifier keys as in normal mode. For example,
+motion into cell x,y with button 1 down is reported as
+<small><small>CSI</small></small> M @ <i>C <small>x</small>
+C <small>y</small></i> . (&nbsp;@ = 32 + 0 (button 1) + 32
+(motion indicator)&nbsp;). Similarly, motion with button 3
+down is reported as <small><small>CSI</small></small> M B
+<i>C <small>x</small> C <small>y</small></i> . (&nbsp;B = 32
++ 2 (button 3) + 32 (motion indicator)&nbsp;).</p></td>
+</table>
+
+<p style="margin-top: 1em" valign="top">Any-event mode is
+the same as button-event mode, except that all motion events
+are reported, even if no mouse button is down. It is enabled
+by specifying 1003 to DECSET.</p>
+
+<p style="margin-top: 1em" valign="top">FocusIn/FocusOut
+can be combined with any of the mouse events since it uses a
+different protocol. When set, it causes <i>xterm</i> to send
+<small><small>CSI</small></small> I when the terminal gains
+focus, and <small><small>CSI</small></small> O when it loses
+focus.</p>
+
+<p style="margin-top: 1em" valign="top">The original X10
+mouse protocol limits the <i>C <small>x</small></i> and <i>C
+<small>y</small></i> ordinates to 223 (=255&nbsp;-&nbsp;32).
+<i>Xterm</i> supports more than one scheme for extending
+this range, by changing the protocol encoding:</p>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="20%">
+
+
+<p valign="top">UTF-8 (1005)</p></td>
+<td width="80%">
+</td>
+</table>
+
+<p style="margin-left:17%;">This enables UTF-8 encoding for
+<i>C <small>x</small></i> and <i>C <small>y</small></i>
+under all tracking modes, expanding the maximum encodable
+position from 223 to 2015. For positions less than 95, the
+resulting output is identical under both modes. Under
+extended mouse mode, positions greater than 95 generate
+&quot;extra&quot; bytes which will confuse applications
+which do not treat their input as a UTF-8 stream. Likewise,
+<i>C <small>b</small></i> will be UTF-8 encoded, to reduce
+confusion with wheel mouse events. <br>
+Under normal mouse mode, positions outside (160,94) result
+in byte pairs which can be interpreted as a single UTF-8
+character; applications which do treat their input as UTF-8
+will almost certainly be confused unless extended mouse mode
+is active. <br>
+This scheme has the drawback that the encoded coordinates
+will not pass through <i>luit</i> unchanged, e.g., for
+locales using non-UTF-8 encoding.</p>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="17%">
+
+
+<p valign="top">SGR (1006)</p></td>
+<td width="83%">
+
+
+<p valign="top">The normal mouse response is altered to use
+<small><small>CSI</small></small> &lt; followed by
+semicolon-separated encoded button value, the <i>C
+<small>x</small></i> and <i>C <small>y</small></i> ordinates
+and a final character which is M for button press and m for
+button release.</p></td>
+</table>
+
+<p style="margin-left:17%;">The encoded button value in
+this case does not add 32 since that was useful only in the
+X10 scheme for ensuring that the byte containing the button
+value is a printable code. The modifiers are encoded in the
+same way. A different final character is used for button
+release to resolve the X10 ambiguity regarding which button
+was released. <br>
+The highlight tracking responses are also modified to an
+SGR-like format, using the same SGR-style scheme and
+button-encodings.</p>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="20%">
+
+
+<p valign="top">URXVT (1015)</p></td>
+<td width="80%">
+</td>
+</table>
+
+<p style="margin-left:17%;">The normal mouse response is
+altered to use <small><small>CSI</small></small> followed by
+semicolon-separated encoded button value, the <i>C
+<small>x</small></i> and <i>C <small>y</small></i> ordinates
+and final character M . <br>
+This uses the same button encoding as X10, but printing it
+as a decimal integer rather than as a single byte. <br>
+However, <small><small>CSI</small></small> M can be mistaken
+for DL (delete lines), while the highlight tracking
+<small><small>CSI</small></small> T can be mistaken for SD
+(scroll down), and the Window manipulation controls. For
+these reasons, the 1015 control is not recommended; it is
+not an improvement over 1005.</p>
+
+<a name="Tektronix 4014 Mode"></a>
+<h2>Tektronix 4014 Mode</h2>
+
+
+<p style="margin-top: 1em" valign="top">Most of these
+sequences are standard Tektronix 4014 control sequences.
+Graph mode supports the 12-bit addressing of the Tektronix
+4014. The major features missing are the write-through and
+defocused modes. This document does not describe the
+commands used in the various Tektronix plotting modes but
+does describe the commands to switch modes.</p>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="12%">
+
+
+
+<p style="margin-top: 1em" valign="top"><small><small>BEL</small></small></p> </td>
+<td width="5%"></td>
+<td width="83%">
+
+
+<p style="margin-top: 1em" valign="top">Bell (Ctrl-G).</p></td>
+<tr valign="top" align="left">
+<td width="12%">
+
+
+<p valign="top"><small><small>BS</small></small></p></td>
+<td width="5%"></td>
+<td width="83%">
+
+
+<p valign="top">Backspace (Ctrl-H).</p></td>
+<tr valign="top" align="left">
+<td width="12%">
+
+
+<p valign="top"><small><small>TAB</small></small></p></td>
+<td width="5%"></td>
+<td width="83%">
+
+
+<p valign="top">Horizontal Tab (Ctrl-I).</p></td>
+<tr valign="top" align="left">
+<td width="12%">
+
+
+<p valign="top"><small><small>LF</small></small></p></td>
+<td width="5%"></td>
+<td width="83%">
+
+
+<p valign="top">Line Feed or New Line (Ctrl-J).</p></td>
+<tr valign="top" align="left">
+<td width="12%">
+
+
+<p valign="top"><small><small>VT</small></small></p></td>
+<td width="5%"></td>
+<td width="83%">
+
+
+<p valign="top">Cursor up (Ctrl-K).</p></td>
+<tr valign="top" align="left">
+<td width="12%">
+
+
+<p valign="top"><small><small>FF</small></small></p></td>
+<td width="5%"></td>
+<td width="83%">
+
+
+<p valign="top">Form Feed or New Page (Ctrl-L).</p></td>
+<tr valign="top" align="left">
+<td width="12%">
+
+
+<p valign="top"><small><small>CR</small></small></p></td>
+<td width="5%"></td>
+<td width="83%">
+
+
+<p valign="top">Carriage Return (Ctrl-M).</p></td>
+<tr valign="top" align="left">
+<td width="12%">
+
+
+<p valign="top"><small><small>ESC ETX</small></small></p></td>
+<td width="5%"></td>
+<td width="83%">
+
+
+<p valign="top">Switch to VT100 Mode (
+<small><small>ESC</small></small> Ctrl-C).</p></td>
+<tr valign="top" align="left">
+<td width="12%">
+
+
+<p valign="top"><small><small>ESC ENQ</small></small></p></td>
+<td width="5%"></td>
+<td width="83%">
+
+
+<p valign="top">Return Terminal Status (
+<small><small>ESC</small></small> Ctrl-E).</p></td>
+<tr valign="top" align="left">
+<td width="12%">
+
+
+<p valign="top"><small><small>ESC FF</small></small></p></td>
+<td width="5%"></td>
+<td width="83%">
+
+
+<p valign="top">PAGE (Clear Screen) (
+<small><small>ESC</small></small> Ctrl-L).</p></td>
+<tr valign="top" align="left">
+<td width="12%">
+
+
+<p valign="top"><small><small>ESC SO</small></small></p></td>
+<td width="5%"></td>
+<td width="83%">
+
+
+<p valign="top">Begin 4015 APL mode (
+<small><small>ESC</small></small> Ctrl-N). (This is ignored
+by <i>xterm</i>).</p></td>
+<tr valign="top" align="left">
+<td width="12%">
+
+
+<p valign="top"><small><small>ESC SI</small></small></p></td>
+<td width="5%"></td>
+<td width="83%">
+
+
+<p valign="top">End 4015 APL mode (
+<small><small>ESC</small></small> Ctrl-O). (This is ignored
+by <i>xterm</i>).</p></td>
+<tr valign="top" align="left">
+<td width="12%">
+
+
+<p valign="top"><small><small>ESC ETB</small></small></p></td>
+<td width="5%"></td>
+<td width="83%">
+
+
+<p valign="top">COPY (Save Tektronix Codes to file
+COPY<i>yyyy-mm-dd.hh:mm:ss</i>).</p> </td>
+</table>
+
+
+<p style="margin-left:17%;"><small><small>ETB</small></small>
+(end transmission block) is the same as Ctrl-W.</p>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="17%">
+
+
+<p valign="top"><small><small>ESC CAN</small></small></p></td>
+<td width="63%">
+
+
+<p valign="top">Bypass Condition (
+<small><small>ESC</small></small> Ctrl-X).</p></td>
+<td width="20%">
+</td>
+<tr valign="top" align="left">
+<td width="17%">
+
+
+<p valign="top"><small><small>ESC SUB</small></small></p></td>
+<td width="63%">
+
+
+<p valign="top">GIN mode (
+<small><small>ESC</small></small> Ctrl-Z).</p></td>
+<td width="20%">
+</td>
+<tr valign="top" align="left">
+<td width="17%">
+
+
+<p valign="top"><small><small>ESC FS</small></small></p></td>
+<td width="63%">
+
+
+<p valign="top">Special Point Plot Mode (
+<small><small>ESC</small></small> Ctrl-\).</p></td>
+<td width="20%">
+</td>
+<tr valign="top" align="left">
+<td width="17%">
+
+
+<p valign="top"><small><small>ESC</small></small> 8</p></td>
+<td width="63%">
+
+
+<p valign="top">Select Large Character Set.</p></td>
+<td width="20%">
+</td>
+<tr valign="top" align="left">
+<td width="17%">
+
+
+<p valign="top"><small><small>ESC</small></small> 9</p></td>
+<td width="63%">
+
+
+<p valign="top">Select #2 Character Set.</p></td>
+<td width="20%">
+</td>
+<tr valign="top" align="left">
+<td width="17%">
+
+
+<p valign="top"><small><small>ESC</small></small> :</p></td>
+<td width="63%">
+
+
+<p valign="top">Select #3 Character Set.</p></td>
+<td width="20%">
+</td>
+<tr valign="top" align="left">
+<td width="17%">
+
+
+<p valign="top"><small><small>ESC</small></small> ;</p></td>
+<td width="63%">
+
+
+<p valign="top">Select Small Character Set.</p></td>
+<td width="20%">
+</td>
+<tr valign="top" align="left">
+<td width="17%">
+
+
+<p valign="top"><small><small>OSC</small></small> <i>P
+<small>s</small></i> ; <i>P</i></p></td>
+<td width="63%"></td>
+<td width="20%">
+</td>
+</table>
+
+<p valign="top"><i><small>t</small></i>
+<small><small>BEL</small></small></p>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="17%"></td>
+<td width="55%">
+
+
+<p valign="top">Set Text Parameters of VT window.</p></td>
+<td width="28%">
+</td>
+</table>
+
+<p style="margin-left:17%;"><i>P <small>s</small></i> = 0
+&rarr; Change Icon Name and Window Title to <i>P
+<small>t</small></i> . <i><br>
+P <small>s</small></i> = 1 &rarr; Change Icon Name to <i>P
+<small>t</small></i> . <i><br>
+P <small>s</small></i> = 2 &rarr; Change Window Title to
+<i>P <small>t</small></i> . <i><br>
+P <small>s</small></i> = 4 6 &rarr; Change Log File to <i>P
+<small>t</small></i> . (This is normally disabled by a
+compile-time option).</p>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="8%">
+
+
+<p valign="top"><small><small>ESC</small></small> `</p></td>
+<td width="9%"></td>
+<td width="73%">
+
+
+<p valign="top">Normal Z Axis and Normal (solid)
+Vectors.</p> </td>
+<td width="10%">
+</td>
+<tr valign="top" align="left">
+<td width="8%">
+
+
+<p valign="top"><small><small>ESC</small></small> a</p></td>
+<td width="9%"></td>
+<td width="73%">
+
+
+<p valign="top">Normal Z Axis and Dotted Line Vectors.</p></td>
+<td width="10%">
+</td>
+<tr valign="top" align="left">
+<td width="8%">
+
+
+<p valign="top"><small><small>ESC</small></small> b</p></td>
+<td width="9%"></td>
+<td width="73%">
+
+
+<p valign="top">Normal Z Axis and Dot-Dashed Vectors.</p></td>
+<td width="10%">
+</td>
+<tr valign="top" align="left">
+<td width="8%">
+
+
+<p valign="top"><small><small>ESC</small></small> c</p></td>
+<td width="9%"></td>
+<td width="73%">
+
+
+<p valign="top">Normal Z Axis and Short-Dashed Vectors.</p></td>
+<td width="10%">
+</td>
+<tr valign="top" align="left">
+<td width="8%">
+
+
+<p valign="top"><small><small>ESC</small></small> d</p></td>
+<td width="9%"></td>
+<td width="73%">
+
+
+<p valign="top">Normal Z Axis and Long-Dashed Vectors.</p></td>
+<td width="10%">
+</td>
+<tr valign="top" align="left">
+<td width="8%">
+
+
+<p valign="top"><small><small>ESC</small></small> h</p></td>
+<td width="9%"></td>
+<td width="73%">
+
+
+<p valign="top">Defocused Z Axis and Normal (solid)
+Vectors.</p> </td>
+<td width="10%">
+</td>
+<tr valign="top" align="left">
+<td width="8%">
+
+
+<p valign="top"><small><small>ESC</small></small> i</p></td>
+<td width="9%"></td>
+<td width="73%">
+
+
+<p valign="top">Defocused Z Axis and Dotted Line
+Vectors.</p> </td>
+<td width="10%">
+</td>
+<tr valign="top" align="left">
+<td width="8%">
+
+
+<p valign="top"><small><small>ESC</small></small> j</p></td>
+<td width="9%"></td>
+<td width="73%">
+
+
+<p valign="top">Defocused Z Axis and Dot-Dashed
+Vectors.</p> </td>
+<td width="10%">
+</td>
+<tr valign="top" align="left">
+<td width="8%">
+
+
+<p valign="top"><small><small>ESC</small></small> k</p></td>
+<td width="9%"></td>
+<td width="73%">
+
+
+<p valign="top">Defocused Z Axis and Short-Dashed
+Vectors.</p> </td>
+<td width="10%">
+</td>
+<tr valign="top" align="left">
+<td width="8%">
+
+
+<p valign="top"><small><small>ESC</small></small> l</p></td>
+<td width="9%"></td>
+<td width="73%">
+
+
+<p valign="top">Defocused Z Axis and Long-Dashed
+Vectors.</p> </td>
+<td width="10%">
+</td>
+<tr valign="top" align="left">
+<td width="8%">
+
+
+<p valign="top"><small><small>ESC</small></small> p</p></td>
+<td width="9%"></td>
+<td width="73%">
+
+
+<p valign="top">Write-Thru Mode and Normal (solid)
+Vectors.</p> </td>
+<td width="10%">
+</td>
+<tr valign="top" align="left">
+<td width="8%">
+
+
+<p valign="top"><small><small>ESC</small></small> q</p></td>
+<td width="9%"></td>
+<td width="73%">
+
+
+<p valign="top">Write-Thru Mode and Dotted Line
+Vectors.</p> </td>
+<td width="10%">
+</td>
+<tr valign="top" align="left">
+<td width="8%">
+
+
+<p valign="top"><small><small>ESC</small></small> r</p></td>
+<td width="9%"></td>
+<td width="73%">
+
+
+<p valign="top">Write-Thru Mode and Dot-Dashed Vectors.</p></td>
+<td width="10%">
+</td>
+<tr valign="top" align="left">
+<td width="8%">
+
+
+<p valign="top"><small><small>ESC</small></small> s</p></td>
+<td width="9%"></td>
+<td width="73%">
+
+
+<p valign="top">Write-Thru Mode and Short-Dashed
+Vectors.</p> </td>
+<td width="10%">
+</td>
+<tr valign="top" align="left">
+<td width="8%">
+
+
+<p valign="top"><small><small>ESC</small></small> t</p></td>
+<td width="9%"></td>
+<td width="73%">
+
+
+<p valign="top">Write-Thru Mode and Long-Dashed
+Vectors.</p> </td>
+<td width="10%">
+</td>
+<tr valign="top" align="left">
+<td width="8%">
+
+
+<p valign="top"><small><small>FS</small></small></p></td>
+<td width="9%"></td>
+<td width="73%">
+
+
+<p valign="top">Point Plot Mode (Ctrl-\).</p></td>
+<td width="10%">
+</td>
+<tr valign="top" align="left">
+<td width="8%">
+
+
+<p valign="top"><small><small>GS</small></small></p></td>
+<td width="9%"></td>
+<td width="73%">
+
+
+<p valign="top">Graph Mode (Ctrl-]).</p></td>
+<td width="10%">
+</td>
+<tr valign="top" align="left">
+<td width="8%">
+
+
+<p valign="top"><small><small>RS</small></small></p></td>
+<td width="9%"></td>
+<td width="73%">
+
+
+<p valign="top">Incremental Plot Mode (Ctrl-^).</p></td>
+<td width="10%">
+</td>
+<tr valign="top" align="left">
+<td width="8%">
+
+
+<p valign="top"><small><small>US</small></small></p></td>
+<td width="9%"></td>
+<td width="73%">
+
+
+<p valign="top">Alpha Mode (Ctrl-_).</p></td>
+<td width="10%">
+</td>
+</table>
+
+<a name="VT52 Mode"></a>
+<h2>VT52 Mode</h2>
+
+
+<p style="margin-top: 1em" valign="top">Parameters for
+cursor movement are at the end of the
+<small><small>ESC</small></small> Y escape sequence. Each
+ordinate is encoded in a single character as
+<i>value</i>+32. For example, ! is 1. The screen coordinate
+system is 0-based.</p>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="17%">
+
+
+
+<p style="margin-top: 1em" valign="top"><small><small>ESC</small></small>
+A</p> </td>
+<td width="78%">
+
+
+<p style="margin-top: 1em" valign="top">Cursor up.</p></td>
+<td width="5%">
+</td>
+<tr valign="top" align="left">
+<td width="17%">
+
+
+<p valign="top"><small><small>ESC</small></small> B</p></td>
+<td width="78%">
+
+
+<p valign="top">Cursor down.</p></td>
+<td width="5%">
+</td>
+<tr valign="top" align="left">
+<td width="17%">
+
+
+<p valign="top"><small><small>ESC</small></small> C</p></td>
+<td width="78%">
+
+
+<p valign="top">Cursor right.</p></td>
+<td width="5%">
+</td>
+<tr valign="top" align="left">
+<td width="17%">
+
+
+<p valign="top"><small><small>ESC</small></small> D</p></td>
+<td width="78%">
+
+
+<p valign="top">Cursor left.</p></td>
+<td width="5%">
+</td>
+<tr valign="top" align="left">
+<td width="17%">
+
+
+<p valign="top"><small><small>ESC</small></small> F</p></td>
+<td width="78%">
+
+
+<p valign="top">Enter graphics mode.</p></td>
+<td width="5%">
+</td>
+<tr valign="top" align="left">
+<td width="17%">
+
+
+<p valign="top"><small><small>ESC</small></small> G</p></td>
+<td width="78%">
+
+
+<p valign="top">Exit graphics mode.</p></td>
+<td width="5%">
+</td>
+<tr valign="top" align="left">
+<td width="17%">
+
+
+<p valign="top"><small><small>ESC</small></small> H</p></td>
+<td width="78%">
+
+
+<p valign="top">Move the cursor to the home position.</p></td>
+<td width="5%">
+</td>
+<tr valign="top" align="left">
+<td width="17%">
+
+
+<p valign="top"><small><small>ESC</small></small> I</p></td>
+<td width="78%">
+
+
+<p valign="top">Reverse line feed.</p></td>
+<td width="5%">
+</td>
+<tr valign="top" align="left">
+<td width="17%">
+
+
+<p valign="top"><small><small>ESC</small></small> J</p></td>
+<td width="78%">
+
+
+<p valign="top">Erase from the cursor to the end of the
+screen.</p> </td>
+<td width="5%">
+</td>
+<tr valign="top" align="left">
+<td width="17%">
+
+
+<p valign="top"><small><small>ESC</small></small> K</p></td>
+<td width="78%">
+
+
+<p valign="top">Erase from the cursor to the end of the
+line.</p> </td>
+<td width="5%">
+</td>
+<tr valign="top" align="left">
+<td width="17%">
+
+
+<p valign="top"><small><small>ESC</small></small> Y <i>P
+<small>s</small> P</i></p></td>
+<td width="78%"></td>
+<td width="5%">
+</td>
+</table>
+
+<p valign="top"><i><small>s</small></i></p>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="8%"></td>
+<td width="9%"></td>
+<td width="66%">
+
+
+<p valign="top">Move the cursor to given row and
+column.</p> </td>
+<td width="17%">
+</td>
+<tr valign="top" align="left">
+<td width="8%">
+
+
+<p valign="top"><small><small>ESC</small></small> Z</p></td>
+<td width="9%"></td>
+<td width="66%">
+
+
+<p valign="top">Identify.</p></td>
+<td width="17%">
+</td>
+</table>
+
+<p style="margin-left:17%;">&rarr;
+<small><small>ESC</small></small> / Z (&lsquo;&lsquo;I am a
+VT52.&rsquo;&rsquo;).</p>
+
+<table width="100%" border=0 rules="none" frame="void"
+       cellspacing="0" cellpadding="0">
+<tr valign="top" align="left">
+<td width="8%">
+
+
+<p valign="top"><small><small>ESC</small></small> =</p></td>
+<td width="9%"></td>
+<td width="56%">
+
+
+<p valign="top">Enter alternate keypad mode.</p></td>
+<td width="27%">
+</td>
+<tr valign="top" align="left">
+<td width="8%">
+
+
+<p valign="top"><small><small>ESC</small></small> &gt;</p></td>
+<td width="9%"></td>
+<td width="56%">
+
+
+<p valign="top">Exit alternate keypad mode.</p></td>
+<td width="27%">
+</td>
+<tr valign="top" align="left">
+<td width="8%">
+
+
+<p valign="top"><small><small>ESC</small></small> &lt;</p></td>
+<td width="9%"></td>
+<td width="56%">
+
+
+<p valign="top">Exit VT52 mode (Enter VT100 mode).</p></td>
+<td width="27%">
+</td>
+ </table>
+<hr>
+</body>
+</html>

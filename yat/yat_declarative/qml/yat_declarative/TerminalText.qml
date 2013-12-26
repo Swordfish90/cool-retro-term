@@ -41,13 +41,13 @@ ObjectDestructItem {
 
     Rectangle {
         anchors.fill: parent
-        color: "black" //objectHandle.backgroundColor
+        color: objectHandle.backgroundColor
 
         MonoText {
             id: textElement
             anchors.fill: parent
             text: objectHandle.text
-            color: "white" //objectHandle.foregroundColor
+            color: objectHandle.foregroundColor
             font.family: textItem.font.family
             font.pixelSize: textItem.font.pixelSize
             font.pointSize: textItem.font.pointSize

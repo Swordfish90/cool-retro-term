@@ -1,4 +1,4 @@
-QT += widgets quick
+QT += widgets quick core-private gui-private qml-private quick quick-private
 
 include(yat/yat_declarative/yat_declarative.pro)
 

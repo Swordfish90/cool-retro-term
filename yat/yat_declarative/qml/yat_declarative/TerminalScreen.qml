@@ -37,8 +37,7 @@ TerminalScreen {
     property var textComponent : Qt.createComponent("TerminalText.qml")
     property var cursorComponent : Qt.createComponent("TerminalCursor.qml")
 
-    font.family: "Pet Me"
-    font.pixelSize: 20
+    font.family: "menlo"
     focus: true
 
     Action {
@@ -207,7 +206,7 @@ TerminalScreen {
             NumberAnimation {
                 target: flash
                 property: "opacity"
-                to: 0.5
+                to: 1
                 duration: 75
             }
             NumberAnimation {
