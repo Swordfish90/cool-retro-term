@@ -224,7 +224,7 @@ ApplicationWindow{
             id: frame
             anchors.fill: parent
             z: 2.1
-            source: "./frames/WhiteSimpleFrame.qml"
+            source: shadersettings.frame_source
         }
 
         TerminalScreen {

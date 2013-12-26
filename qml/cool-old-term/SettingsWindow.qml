@@ -24,6 +24,18 @@ ApplicationWindow {
             ColumnLayout{
                 anchors.fill: parent
                 RowLayout{
+                    Label{
+                        text: "Frame texture"
+                    }
+                    ComboBox{
+                        width: 300
+                        model: shadersettings.frames_list
+                        currentIndex: shadersettings.frames_index
+                        onCurrentIndexChanged: shadersettings.frames_index = currentIndex
+                    }
+                }
+
+                RowLayout{
                     ColumnLayout{
                         Text{text: qsTr("Font color")}
                         ColorButton{
@@ -76,6 +88,11 @@ ApplicationWindow {
                         name: "Screen flickering"
                         onValueChanged: shadersettings.screen_flickering = value;
                         Component.onCompleted:  _value = shadersettings.screen_flickering;
+                    }
+                    CheckBox{
+                        text: "Scanlines"
+                        checked: shadersettings.scanlines
+                        onCheckedChanged: shadersettings.scanlines = checked;
                     }
                 }
             }
