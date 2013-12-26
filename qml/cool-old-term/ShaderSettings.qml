@@ -16,7 +16,11 @@ Item{
 
     property string frame_source: frames_list.get(frames_index).source
     property int frames_index: 1
-    property ListModel frames_list: ListModel{
+
+    property var frames_list: framelist
+
+    ListModel{
+        id: framelist
         ListElement{text: "No frame"; source: "./frames/NoFrame.qml"}
         ListElement{text: "Simple white frame"; source: "./frames/WhiteSimpleFrame.qml"}
         ListElement{text: "Rough black frame"; source: "./frames/BlackRoughFrame.qml"}
