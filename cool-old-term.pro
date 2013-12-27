@@ -47,4 +47,5 @@ OTHER_FILES += \
     qml/cool-old-term/frames/images/black-frame.png \
     qml/cool-old-term/frames/images/black-frame-normals.png \
     qml/cool-old-term/frames/NoFrame.qml \
-    qml/cool-old-term/MainContainer.qml
+    qml/cool-old-term/MainContainer.qml \
+    qml/cool-old-term/TerminalWindow.qml

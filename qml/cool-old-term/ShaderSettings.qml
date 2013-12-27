@@ -22,6 +22,11 @@ Item{
     property int font_index: 2
     property var fonts_list: fontlist
 
+    onFont_indexChanged: {
+        terminalwindowloader.source = "";
+        terminalwindowloader.source = "TerminalWindow.qml";
+    }
+
     FontLoader{
         property int pixelSize: fontlist.get(font_index).pixelSize
         id: currentfont
