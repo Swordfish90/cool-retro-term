@@ -204,6 +204,8 @@ ApplicationWindow{
             //FIXME: Ugly forced clear terminal at the beginning
             Component.onCompleted: {
                 terminal.screen.sendKey("l", 76, 67108864);
+                terminal.setTerminalHeight();
+                terminal.setTerminalWidth();
             }
         }
 

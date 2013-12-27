@@ -27,15 +27,13 @@
 import QtQuick 2.1
 import QtQuick.Window 2.0
 import QtQuick.Controls 1.0
-import QtGraphicalEffects 1.0
-
 Item{
     ShaderSettings{
         id: shadersettings
+        Component.onCompleted: terminalwindowloader.source = "TerminalWindow.qml"
     }
 
     Loader{
         id: terminalwindowloader
-        source: "TerminalWindow.qml"
     }
 }

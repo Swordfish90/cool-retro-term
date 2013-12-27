@@ -23,8 +23,9 @@ Item{
     property var fonts_list: fontlist
 
     onFont_indexChanged: {
-        //Reload the window to avoid ugly glitches
         terminalwindowloader.source = "";
+        currentfont.source = fontlist.get(font_index).source;
+        currentfont.pixelSize = fontlist.get(font_index).pixelSize;
         terminalwindowloader.source = "TerminalWindow.qml";
     }
 
