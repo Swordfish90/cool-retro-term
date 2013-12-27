@@ -8,7 +8,6 @@
 #include "text.h"
 #include "cursor.h"
 #include "mono_text.h"
-#include "selection.h"
 
 void register_qml_types()
 {
@@ -18,5 +17,4 @@ void register_qml_types()
     qmlRegisterType<Screen>();
     qmlRegisterType<Text>();
     qmlRegisterType<Cursor>();
-    qmlRegisterType<Selection>();
 }

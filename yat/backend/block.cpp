@@ -37,7 +37,6 @@ Block::Block(Screen *screen)
     : m_screen(screen)
     , m_line(0)
     , m_new_line(-1)
-    , m_screen_index(0)
     , m_width(m_screen->width())
     , m_visible(true)
     , m_changed(true)
@@ -306,6 +305,14 @@ void Block::insertAtPos(int pos, const QString &text, const TextStyle &style, bo
                 }
             }
         }
+    }
+}
+
+void Block::setIndex(int index)
+{
+    if (index != m_new_line) {
+        m_changed = true;
+        m_new_line = index;
     }
 }
 

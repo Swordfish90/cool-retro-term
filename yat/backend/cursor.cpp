@@ -97,7 +97,6 @@ void Cursor::setDocumentHeight(int height, int currentCursorBlock, int currentSc
         if (!removeLinesAtTop) {
             new_ry() -= removeLinesAtTop;
             notifyChanged();
-
         }
     } else {
         int height_diff = height - m_document_height;

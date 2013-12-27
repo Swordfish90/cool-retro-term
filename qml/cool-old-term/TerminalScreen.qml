@@ -22,7 +22,6 @@
 *******************************************************************************/
 
 import QtQuick 2.0
-import QtQuick.Controls 1.1
 
 import org.yat 1.0
 
@@ -40,17 +39,6 @@ TerminalScreen {
     font.family: "Pet Me"
     font.pixelSize: 20
     focus: true
-
-    Action {
-        id: copyAction
-        shortcut: "Ctrl+Shift+C"
-        onTriggered: screen.selection.sendToClipboard()
-    }
-    Action {
-        id: paseAction
-        shortcut: "Ctrl+Shift+V"
-        onTriggered: screen.selection.pasteFromClipboard()
-    }
 
     onActiveFocusChanged: {
         if (activeFocus) {
@@ -78,9 +66,10 @@ TerminalScreen {
         anchors.left: parent.left
         contentWidth: width
         contentHeight: textContainer.height
-        interactive: true
+        interactive: false
         flickableDirection: Flickable.VerticalFlick
         contentY: ((screen.contentHeight - screen.height) * screenItem.fontHeight)
+        boundsBehavior: Flickable.StopAtBounds
 
         Item {
             id: textContainer
@@ -91,22 +80,7 @@ TerminalScreen {
                 anchors.fill: parent
                 color: terminal.screen.defaultBackgroundColor
             }
-
-            HighlightArea {
-                characterHeight: fontHeight
-                characterWidth: fontWidth
-                screenWidth: terminalWindow.width
-
-                startX: screen.selection.startX
-                startY: screen.selection.startY
-
-                endX: screen.selection.endX
-                endY: screen.selection.endY
-
-                visible: screen.selection.enable
-            }
         }
-
         onContentYChanged: {
             if (!atYEnd) {
                 var top_line = Math.floor(Math.max(contentY,0) / screenItem.fontHeight);
@@ -156,11 +130,13 @@ TerminalScreen {
         onRequestHeightChange: {
             terminalWindow.height = newHeight * screenItem.fontHeight;
             terminalWindow.contentItem.height = newHeight * screenItem.fontHeight;
+            console.log("banana");
         }
 
         onRequestWidthChange: {
             terminalWindow.width = newWidth * screenItem.fontWidth;
             terminalWindow.contentItem.width = newWidth * screenItem.fontWidth;
+            console.log("a");
         }
     }
 
@@ -196,6 +172,16 @@ TerminalScreen {
         }
     }
 
+    HighlightArea {
+        characterHeight: fontHeight
+        characterWidth: fontWidth
+
+        start: screen.selectionAreaStart
+        end: screen.selectionAreaEnd
+
+        visible: screen.selectionEnabled
+    }
+
     Rectangle {
         id: flash
         z: 1.2
@@ -222,49 +208,39 @@ TerminalScreen {
     MouseArea {
         id:mousArea
 
-        property int drag_start_x
-        property int drag_start_y
+        property point drag_start
 
         anchors.fill: parent
         acceptedButtons: Qt.LeftButton | Qt.MiddleButton
         onPressed: {
             if (mouse.button == Qt.LeftButton) {
                 hoverEnabled = true;
-                var transformed_mouse = mapToItem(textContainer, mouse.x, mouse.y);
-                var character = Math.floor((transformed_mouse.x / fontWidth));
-                var line = Math.floor(transformed_mouse.y / fontHeight);
+                var character = Math.floor((mouse.x / screen.charWidth));
+                var line = Math.floor(mouse.y / screen.lineHeight);
                 var start = Qt.point(character,line);
-                drag_start_x = character;
-                drag_start_y = line;
-                screen.selection.startX = character;
-                screen.selection.startY = line;
-                screen.selection.endX = character;
-                screen.selection.endY = line;
+                drag_start = start;
+                screen.selectionAreaStart = start;
+                screen.selectionAreaEnd = start;
             }
         }
 
         onPositionChanged: {
-            var transformed_mouse = mapToItem(textContainer, mouse.x, mouse.y);
-            var character = Math.floor(transformed_mouse.x / fontWidth);
-            var line = Math.floor(transformed_mouse.y / fontHeight);
+            var character = Math.floor(mouse.x / screen.charWidth);
+            var line = Math.floor(mouse.y / screen.lineHeight);
             var current_pos = Qt.point(character,line);
-            if (line < drag_start_y || (line === drag_start_y && character < drag_start_x)) {
-                screen.selection.startX = character;
-                screen.selection.startY = line;
-                screen.selection.endX = drag_start_x;
-                screen.selection.endY = drag_start_y;
+            if (line < drag_start.y || (line === drag_start.y && character < drag_start.x)) {
+                screen.selectionAreaStart = current_pos;
+                screen.selectionAreaEnd = drag_start;
             }else {
-                screen.selection.startX = drag_start_x;
-                screen.selection.startY = drag_start_y;
-                screen.selection.endX = character;
-                screen.selection.endY = line;
+                screen.selectionAreaEnd = current_pos;
+                screen.selectionAreaStart = drag_start;
             }
         }
 
         onReleased: {
             if (mouse.button == Qt.LeftButton) {
                 hoverEnabled = false;
-                screen.selection.sendToSelection();
+                screen.sendSelectionToSelection();
             }
         }
 
@@ -273,12 +249,10 @@ TerminalScreen {
                 screen.pasteFromSelection();
             }
         }
-
         onDoubleClicked: {
             if (mouse.button == Qt.LeftButton) {
-                var transformed_mouse = mapToItem(textContainer, mouse.x, mouse.y);
-                var character = Math.floor(transformed_mouse.x / fontWidth);
-                var line = Math.floor(transformed_mouse.y / fontHeight);
+                var character = Math.floor(mouse.x / screen.charWidth);
+                var line = Math.floor(mouse.y / screen.lineHeight);
                 screen.doubleClicked(Qt.point(character,line));
             }
         }

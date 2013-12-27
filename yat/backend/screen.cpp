@@ -28,7 +28,6 @@
 #include "cursor.h"
 #include "text.h"
 #include "scrollback.h"
-#include "selection.h"
 
 #include "controll_chars.h"
 #include "character_sets.h"
@@ -48,11 +47,12 @@ Screen::Screen(QObject *parent)
     , m_timer_event_id(0)
     , m_width(1)
     , m_height(0)
-    , m_primary_data(new ScreenData(500, this))
+    , m_primary_data(new ScreenData(0, this))
     , m_alternate_data(new ScreenData(0, this))
     , m_current_data(m_primary_data)
     , m_old_current_data(m_primary_data)
-    , m_selection(new Selection(this))
+    , m_selection_valid(false)
+    , m_selection_moved(0)
     , m_flash(false)
     , m_cursor_changed(false)
     , m_application_cursor_key_mode(false)
@@ -64,8 +64,6 @@ Screen::Screen(QObject *parent)
     m_new_cursors << cursor;
 
     connect(m_primary_data, SIGNAL(contentHeightChanged()), this, SIGNAL(contentHeightChanged()));
-    connect(m_primary_data, &ScreenData::contentModified,
-            this, &Screen::contentModified);
     connect(m_palette, SIGNAL(changed()), this, SLOT(paletteChanged()));
 
     setHeight(25);
@@ -156,11 +154,9 @@ void Screen::useAlternateScreenBuffer()
 {
     if (m_current_data == m_primary_data) {
         disconnect(m_primary_data, SIGNAL(contentHeightChanged()), this, SIGNAL(contentHeightChanged()));
-        disconnect(m_primary_data, &ScreenData::contentModified, this, &Screen::contentModified);
         m_current_data = m_alternate_data;
         m_current_data->clear();
         connect(m_alternate_data, SIGNAL(contentHeightChanged()), this, SIGNAL(contentHeightChanged()));
-        connect(m_primary_data, &ScreenData::contentModified, this, &Screen::contentModified);
         emit contentHeightChanged();
     }
 }
@@ -169,10 +165,8 @@ void Screen::useNormalScreenBuffer()
 {
     if (m_current_data == m_alternate_data) {
         disconnect(m_alternate_data, SIGNAL(contentHeightChanged()), this, SIGNAL(contentHeightChanged()));
-        disconnect(m_alternate_data, &ScreenData::contentModified, this, &Screen::contentModified);
         m_current_data = m_primary_data;
         connect(m_primary_data, SIGNAL(contentHeightChanged()), this, SIGNAL(contentHeightChanged()));
-        connect(m_alternate_data, &ScreenData::contentModified, this, &Screen::contentModified);
         emit contentHeightChanged();
     }
 }
@@ -235,9 +229,65 @@ bool Screen::fastScroll() const
     return m_fast_scroll;
 }
 
-Selection *Screen::selection() const
+QPointF Screen::selectionAreaStart() const
 {
-    return m_selection;
+    return m_selection_start;
+}
+
+void Screen::setSelectionAreaStart(const QPointF &start)
+{
+    bool emitChanged = m_selection_start != start;
+    m_selection_start = start;
+    setSelectionValidity();
+    if (emitChanged)
+        emit selectionAreaStartChanged();
+}
+
+QPointF Screen::selectionAreaEnd() const
+{
+    return m_selection_end;
+}
+
+void Screen::setSelectionAreaEnd(const QPointF &end)
+{
+    bool emitChanged = m_selection_end != end;
+    m_selection_end = end;
+    setSelectionValidity();
+    if (emitChanged)
+        emit selectionAreaEndChanged();
+}
+
+bool Screen::selectionEnabled() const
+{
+    return m_selection_valid;
+}
+
+void Screen::setSelectionEnabled(bool enabled)
+{
+    bool emitchanged = m_selection_valid != enabled;
+    m_selection_valid = enabled;
+    if (emitchanged)
+        emit selectionEnabledChanged();
+}
+
+void Screen::sendSelectionToClipboard() const
+{
+    //currentScreenData()->sendSelectionToClipboard(m_selection_start, m_selection_end, QClipboard::Clipboard);
+}
+
+void Screen::sendSelectionToSelection() const
+{
+    //currentScreenData()->sendSelectionToClipboard(m_selection_start, m_selection_end, QClipboard::Selection);
+}
+
+void Screen::pasteFromSelection()
+{
+    m_pty.write(QGuiApplication::clipboard()->text(QClipboard::Selection).toUtf8());
+}
+
+void Screen::pasteFromClipboard()
+{
+    m_pty.write(QGuiApplication::clipboard()->text(QClipboard::Clipboard).toUtf8());
 }
 
 void Screen::doubleClicked(const QPointF &clicked)
@@ -319,7 +369,15 @@ void Screen::dispatchChanges()
         m_cursor_stack[i]->dispatchEvents();
     }
 
-    m_selection->dispatchChanges();
+    if (m_selection_valid && m_selection_moved) {
+        if (m_selection_start.y() < 0 ||
+                m_selection_end.y() >= height()) {
+            setSelectionEnabled(false);
+        } else {
+            emit selectionAreaStartChanged();
+            emit selectionAreaEndChanged();
+        }
+    }
 }
 
 void Screen::sendPrimaryDA()
@@ -608,6 +666,16 @@ void Screen::paletteChanged()
     }
 }
 
+void Screen::setSelectionValidity()
+{
+    if (m_selection_end.y() > m_selection_start.y() ||
+            (m_selection_end.y() == m_selection_start.y() &&
+             m_selection_end.x() > m_selection_start.x())) {
+        setSelectionEnabled(true);
+    } else {
+        setSelectionEnabled(false);
+    }
+}
 
 
 void Screen::timerEvent(QTimerEvent *)

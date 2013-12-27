@@ -32,7 +32,6 @@
 #include <QtCore/QObject>
 #include <QtGui/QClipboard>
 
-#include <QtCore/QDebug>
 class Screen;
 class Scrollback;
 
@@ -82,8 +81,6 @@ public:
 
     Scrollback *scrollback() const;
 
-    void sendSelectionToClipboard(const QPoint &start, const QPoint &end, QClipboard::Mode mode);
-
     inline std::list<Block *>::iterator it_for_row(int row);
 public slots:
     void setHeight(int height, int currentCursorLine, int currentContentHeight);
@@ -91,7 +88,6 @@ public slots:
 
 signals:
     void contentHeightChanged();
-    void contentModified(size_t lineModified, int lineDiff, int contentDiff);
 
 private:
     CursorDiff modify(const QPoint &pos, const QString &text, const TextStyle &style, bool replace, bool only_latin);
@@ -102,7 +98,6 @@ private:
     void reclaim_at_least(int lines);
     void remove_lines_from_end(int lines);
     void ensure_at_least_height(int height);
-    int content_height_diff(size_t old_content_height);
     Screen *m_screen;
     Scrollback *m_scrollback;
     int m_screen_height;
@@ -116,20 +111,19 @@ private:
 
 std::list<Block *>::iterator ScreenData::it_for_row(int row)
 {
-    if (row >= m_screen_height) {
-        return m_screen_blocks.end();
-    }
     auto it = m_screen_blocks.end();
     int line_for_block = m_screen_height;
-    size_t abs_line = contentHeight();
     while (it != m_screen_blocks.begin()) {
         --it;
+        int end_line = line_for_block - 1;
         line_for_block -= (*it)->lineCount();
-        abs_line -= (*it)->lineCount();
-        if (line_for_block <= row) {
-            (*it)->setScreenIndex(line_for_block);
-            (*it)->setLine(abs_line);
+        if (line_for_block <= row && end_line >= row) {
+            (*it)->setIndex(line_for_block);
             return it;
+        }
+
+        if (end_line < row) {
+            break;
         }
     }
 

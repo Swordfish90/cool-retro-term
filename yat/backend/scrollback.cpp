@@ -42,24 +42,17 @@ Scrollback::Scrollback(size_t max_size, ScreenData *screen_data)
 
 void Scrollback::addBlock(Block *block)
 {
-    if (!m_max_size) {
-        delete block;
-        return;
-    }
-
     m_blocks.push_back(block);
     block->releaseTextObjects();
     m_block_count++;
     m_height += m_blocks.back()->lineCount();
-
-    while (m_height - m_blocks.front()->lineCount() >= m_max_size) {
+    if (!m_max_size || m_height == m_max_size - 1) {
         m_block_count--;
         m_height -= m_blocks.front()->lineCount();
         delete m_blocks.front();
         m_blocks.pop_front();
         m_adjust_visible_pages++;
     }
-
     m_visible_pages.clear();
 }
 
@@ -135,7 +128,7 @@ void Scrollback::ensurePageVisible(Page &page, int new_height)
     auto it = page.it;
     std::advance(it, page.size);
     for (int i = page.size; i < new_height; ++it, i++) {
-        (*it)->setLine(line_no + i);
+        (*it)->setIndex(line_no + i);
         (*it)->dispatchEvents();
     }
     page.size = new_height;
@@ -205,11 +198,4 @@ size_t Scrollback::height() const
 void Scrollback::setWidth(int width)
 {
     m_width = width;
-}
-
-QString Scrollback::selection(const QPoint &start, const QPoint &end) const
-{
-    Q_UNUSED(start);
-    Q_UNUSED(end);
-    return QString();
 }

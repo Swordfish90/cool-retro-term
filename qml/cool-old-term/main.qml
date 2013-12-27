@@ -30,7 +30,7 @@ import QtQuick.Controls 1.0
 import QtGraphicalEffects 1.0
 
 ApplicationWindow{
-    id: mainwindow
+    id: terminalWindow
     width: 1024
     height: 768
 
@@ -48,7 +48,7 @@ ApplicationWindow{
                 text: qsTr("Settings")
                 onTriggered: {
                     var component = Qt.createComponent("SettingsWindow.qml");
-                    component.createObject(mainwindow);
+                    component.createObject(terminalWindow);
                 }
             }
         }

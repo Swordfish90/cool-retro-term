@@ -167,7 +167,7 @@ void ScreenData::deleteCharacters(const QPoint &point, int to)
     if (it  == m_screen_blocks.end())
         return;
 
-    int line_in_block = point.y() - (*it)->screenIndex();
+    int line_in_block = point.y() - (*it)->index();
     int chars_to_line = line_in_block * m_width;
 
     (*it)->deleteCharacters(chars_to_line + point.x(), chars_to_line + to);
@@ -189,8 +189,6 @@ void ScreenData::moveLine(int from, int to)
     if (from == to)
         return;
 
-    const size_t old_content_height = contentHeight();
-    const int orig_to = to;
     if (to > from)
         to++;
     auto from_it = it_for_row_ensure_single_line_block(from);
@@ -198,17 +196,13 @@ void ScreenData::moveLine(int from, int to)
 
     (*from_it)->clear();
     m_screen_blocks.splice(to_it, m_screen_blocks, from_it);
-    qDebug() << Q_FUNC_INFO << to;
-    emit contentModified(m_scrollback->height() + to, 1, content_height_diff(old_content_height));
 }
 
 void ScreenData::insertLine(int row, int topMargin)
 {
     auto row_it = it_for_row(row + 1);
 
-    const size_t old_content_height = contentHeight();
-
-    if (!topMargin && m_height >= m_screen_height) {
+    if (!topMargin && m_height - m_screen_blocks.front()->lineCount() >= m_screen_height) {
         push_at_most_to_scrollback(1);
     } else {
         auto row_top_margin = it_for_row_ensure_single_line_block(topMargin);
@@ -226,8 +220,6 @@ void ScreenData::insertLine(int row, int topMargin)
     m_screen_blocks.insert(row_it,block_to_insert);
     m_height++;
     m_block_count++;
-
-    emit contentModified(m_scrollback->height() + row + 1, 1, content_height_diff(old_content_height));
 }
 
 
@@ -245,17 +237,16 @@ void ScreenData::dispatchLineEvents()
 {
     if (!m_block_count)
         return;
-    const int scrollback_height = m_scrollback->height();
+    const int content_height = contentHeight();
     int i = 0;
     for (auto it = m_screen_blocks.begin(); it != m_screen_blocks.end(); ++it) {
-        int line = scrollback_height + i;
-        (*it)->setLine(line);
-        //(*it)->setScreenIndex(i);
+        int line = content_height - m_height + i;
+        (*it)->setIndex(line);
         (*it)->dispatchEvents();
         i+= (*it)->lineCount();
     }
 
-    if (contentHeight() != m_old_total_lines) {
+    if (content_height != m_old_total_lines) {
         m_old_total_lines = contentHeight();
         emit contentHeightChanged();
     }
@@ -298,66 +289,14 @@ Scrollback *ScreenData::scrollback() const
     return m_scrollback;
 }
 
-void ScreenData::sendSelectionToClipboard(const QPoint &start, const QPoint &end, QClipboard::Mode mode)
-{
-    if (start.y() < 0)
-        return;
-    if (end.y() >= contentHeight())
-        return;
-
-    QString to_clip_board_buffer;
-
-    bool started_in_scrollback = false;
-    if (size_t(start.y()) < m_scrollback->height()) {
-        started_in_scrollback = true;
-        QPoint end_scrollback = end;
-        if (size_t(end.y()) >= m_scrollback->height()) {
-            end_scrollback = QPoint(m_width, m_scrollback->height() - 1);
-        }
-        to_clip_board_buffer = m_scrollback->selection(start, end_scrollback);
-    }
-
-    if (size_t(end.y()) >= m_scrollback->height()) {
-        QPoint start_in_screen;
-        if (started_in_scrollback) {
-            start_in_screen = QPoint(0,0);
-        } else {
-            start_in_screen = start;
-            start_in_screen.ry() -= m_scrollback->height();
-        }
-        QPoint end_in_screen = end;
-        end_in_screen.ry() -= m_scrollback->height();
-
-        auto it = it_for_row(start_in_screen.y());
-        size_t screen_index = (*it)->screenIndex();
-        int start_pos = (start_in_screen.y() - (*it)->screenIndex()) * m_width + start.x();
-        for (; it != m_screen_blocks.end(); ++it, start_pos = 0) {
-            int end_pos = (*it)->textSize();
-            bool should_break = false;
-            if (size_t(screen_index + (*it)->lineCount()) > size_t(end_in_screen.y())) {
-                end_pos = (end_in_screen.y() - screen_index) * m_width + end_in_screen.x();
-                should_break = true;
-            }
-            if (to_clip_board_buffer.size())
-                to_clip_board_buffer += '\n';
-            to_clip_board_buffer += (*it)->textLine()->mid(start_pos, end_pos - start_pos);
-            if (should_break)
-                break;
-            screen_index += (*it)->lineCount();
-        }
-    }
-    QGuiApplication::clipboard()->setText(to_clip_board_buffer, mode);
-}
-
 CursorDiff ScreenData::modify(const QPoint &point, const QString &text, const TextStyle &style, bool replace, bool only_latin)
 {
     auto it = it_for_row(point.y());
     Block *block = *it;
-    const int start_char = (point.y() - block->screenIndex()) * m_width + point.x();
-    const size_t lines_before = block->lineCount();
-    const int lines_changed =
+    int start_char = (point.y() - block->index()) * m_width + point.x();
+    size_t lines_before = block->lineCount();
+    int lines_changed =
         block->lineCountAfterModified(start_char, text.size(), replace)  - lines_before;
-    const size_t old_content_height = contentHeight();
     m_height += lines_changed;
     if (lines_changed > 0) {
         int removed = 0;
@@ -392,8 +331,6 @@ CursorDiff ScreenData::modify(const QPoint &point, const QString &text, const Te
     int end_char = (start_char + text.size()) % m_width;
     if (end_char == 0)
         end_char = m_width -1;
-
-    emit contentModified(m_scrollback->height() + point.y(), lines_changed, content_height_diff(old_content_height));
     return { lines_changed, end_char - point.x()};
 }
 
@@ -414,8 +351,8 @@ void ScreenData::clearBlock(std::list<Block *>::iterator line)
 std::list<Block *>::iterator ScreenData::it_for_row_ensure_single_line_block(int row)
 {
     auto it = it_for_row(row);
-    const int index = (*it)->screenIndex();
-    const int lines = (*it)->lineCount();
+    int index = (*it)->index();
+    int lines = (*it)->lineCount();
 
     if (index == row && lines == 1) {
         return it;
@@ -434,12 +371,12 @@ std::list<Block *>::iterator ScreenData::split_out_row_from_block(std::list<Bloc
 
     if (row_in_block == 0) {
         auto insert_before = (*it)->takeLine(0);
-        insert_before->setScreenIndex(row_in_block);
+        insert_before->setIndex(row_in_block);
         m_block_count++;
         return m_screen_blocks.insert(it,insert_before);
     } else if (row_in_block == lines -1) {
         auto insert_after = (*it)->takeLine(lines -1);
-        insert_after->setScreenIndex(row_in_block);
+        insert_after->setIndex(row_in_block);
         ++it;
         m_block_count++;
         return m_screen_blocks.insert(it, insert_after);
@@ -520,11 +457,4 @@ void ScreenData::ensure_at_least_height(int height)
         m_height += to_insert;
         m_block_count += to_insert;
     }
-}
-
-int ScreenData::content_height_diff(size_t old_content_height)
-{
-    const size_t content_height = contentHeight();
-    return old_content_height < content_height ? content_height - old_content_height :
-        - int(old_content_height - content_height);
 }
