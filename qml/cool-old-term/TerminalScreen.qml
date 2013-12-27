@@ -21,7 +21,7 @@
 *
 *******************************************************************************/
 
-import QtQuick 2.0
+import QtQuick 2.1
 
 import org.yat 1.0
 
@@ -36,8 +36,8 @@ TerminalScreen {
     property var textComponent : Qt.createComponent("TerminalText.qml")
     property var cursorComponent : Qt.createComponent("TerminalCursor.qml")
 
-    font.family: "Pet Me"
-    font.pixelSize: 20
+    font.family: shadersettings.font.name
+    font.pixelSize: shadersettings.fontSize
     focus: true
 
     onActiveFocusChanged: {
@@ -130,13 +130,11 @@ TerminalScreen {
         onRequestHeightChange: {
             terminalWindow.height = newHeight * screenItem.fontHeight;
             terminalWindow.contentItem.height = newHeight * screenItem.fontHeight;
-            console.log("banana");
         }
 
         onRequestWidthChange: {
             terminalWindow.width = newWidth * screenItem.fontWidth;
             terminalWindow.contentItem.width = newWidth * screenItem.fontWidth;
-            console.log("a");
         }
     }
 

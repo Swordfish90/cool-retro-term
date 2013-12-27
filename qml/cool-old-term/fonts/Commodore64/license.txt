@@ -1,0 +1,6 @@
+
+Fonts in this package are (c) 2010 Style.
+
+You MAY NOT: sell this font; include/redistribute this font in any font collection regardless of pricing; provide the font for direct download from any web site. You MAY: link to "http://style64.org/c64-truetype" in order for others to download and install the font; embed this font or its .eot and .woff variants without any modification and using the same filename it was provided with for display on any web site using @font-face rules; use this font in static images and vector art; include this font without any modification and using the same filename it was provided with as part of a software package but ONLY if said software package is freely provided to end users. You may also contact us to negotiate a (possibly commercial) license for your use outside of these guidelines at "http://style64.org/contact-style".
+
+At all times the most recent version of this license can be found at "http://style64.org/c64-truetype/license".

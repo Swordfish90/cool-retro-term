@@ -237,6 +237,14 @@ ApplicationWindow{
             }
         }
 
+        Loader{
+            id: terminalloader
+            anchors.fill: parent
+            asynchronous: true
+            sourceComponent: terminal
+        }
+
+
         RadialGradient{
             id: ambientreflection
             z: 2.0

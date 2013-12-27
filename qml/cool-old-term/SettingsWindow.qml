@@ -25,6 +25,17 @@ ApplicationWindow {
                 anchors.fill: parent
                 RowLayout{
                     Label{
+                        text: "Font"
+                    }
+                    ComboBox{
+                        width: 300
+                        model: shadersettings.fonts_list
+                        currentIndex: shadersettings.font_index
+                        onCurrentIndexChanged: shadersettings.font_index = currentIndex
+                    }
+                }
+                RowLayout{
+                    Label{
                         text: "Frame texture"
                     }
                     ComboBox{
