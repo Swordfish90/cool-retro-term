@@ -3,8 +3,8 @@ import QtQuick 2.1
 Item{
     property real ambient_light: 0.2
 
-    property color background_color: "#002200"
-    property color font_color: "#00ff00"
+    property string background_color: "#002200"
+    property string font_color: "#00ff00"
 
     property real screen_flickering: 0.1
     property real noise_strength: 0.1
@@ -23,6 +23,7 @@ Item{
     property var fonts_list: fontlist
 
     onFont_indexChanged: {
+        //Reload the window to avoid ugly glitches
         terminalwindowloader.source = "";
         terminalwindowloader.source = "TerminalWindow.qml";
     }
@@ -62,5 +63,53 @@ Item{
             source: "./fonts/Dos/Perfect DOS VGA 437.ttf"
             pixelSize: 25
         }
+    }
+
+    Storage{id: storage}
+
+    function retrieveFromDB(){
+        var settings = storage.getSetting("CURRENT_SETTINGS");
+        if(!settings) return;
+
+        settings = JSON.parse(settings);
+
+
+        ambient_light = settings.ambient_light ? settings.ambient_light : ambient_light;
+        background_color = settings.background_color ? settings.background_color : background_color;
+        font_color = settings.font_color ? settings.font_color : font_color;
+
+        screen_flickering = settings.screen_flickering ? settings.screen_flickering : screen_flickering;
+        noise_strength = settings.noise_strength ? settings.noise_strength : noise_strength;
+        screen_distortion = settings.screen_distortion ? settings.screen_distortion : screen_distortion;
+        glowing_line_strength = settings.glowing_line_strength ? settings.glowing_line_strength : glowing_line_strength;
+        scanlines = settings.scanlines ? settings.scanlines : scanlines;
+
+        frames_index = settings.frames_index ? settings.frames_index : frames_index;
+        font_index = settings.font_index ? settings.font_index : font_index;
+    }
+
+    function storeToDb(){
+        var settings = {
+            ambient_light : ambient_light,
+            background_color: background_color,
+            font_color: font_color,
+            screen_flickering: screen_flickering,
+            noise_strength: noise_strength,
+            screen_distortion: screen_distortion,
+            glowing_line_strength: glowing_line_strength,
+            scanlines: scanlines,
+            frames_index: frames_index,
+            font_index: font_index
+        }
+
+        storage.setSetting("CURRENT_SETTINGS", JSON.stringify(settings));
+    }
+
+    Component.onCompleted: {
+        retrieveFromDB();
+    }
+    Component.onDestruction: {
+        storeToDb();
+        //storage.dropSettings();
     }
 }

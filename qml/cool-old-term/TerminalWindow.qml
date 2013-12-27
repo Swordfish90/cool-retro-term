@@ -27,8 +27,6 @@ ApplicationWindow{
                 }
             }
         }
-
-
     }
 
     visible: true
