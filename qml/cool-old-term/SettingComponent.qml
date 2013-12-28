@@ -29,6 +29,7 @@ RowLayout {
         onValueChanged: setting_component._value = slider.value;
         Layout.fillWidth: true
         enabled: check.checked
+        value: setting_component._value
 
         Component.onCompleted: slider.value = setting_component._value
     }

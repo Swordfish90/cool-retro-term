@@ -30,6 +30,10 @@ ApplicationWindow {
                     title: qsTr("Profile")
                     ComboBox{
                         anchors.fill: parent
+                        model: shadersettings.profiles_list
+                        onCurrentIndexChanged: {
+                            shadersettings.loadProfile(shadersettings.profiles_list.get(currentIndex).obj_name);
+                        }
                     }
                 }
 
@@ -53,10 +57,10 @@ ApplicationWindow {
                             Layout.fillWidth: true
                             decimals: 1
                             stepSize: 0.1
+                            value: shadersettings.font_scaling
                             minimumValue: 0.5
                             maximumValue: 1.5
                             onValueChanged: shadersettings.font_scaling = value;
-                            Component.onCompleted: value = shadersettings.font_scaling;
                         }
                         Item{Layout.fillHeight: true}
                         ColorButton{

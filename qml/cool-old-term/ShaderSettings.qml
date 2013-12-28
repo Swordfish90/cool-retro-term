@@ -23,6 +23,8 @@ Item{
     property int font_index: 2
     property var fonts_list: fontlist
 
+    property var profiles_list: profileslist
+
     onFont_indexChanged: handleFontChanged();
     onFont_scalingChanged: handleFontChanged();
 
@@ -72,8 +74,8 @@ Item{
 
     Storage{id: storage}
 
-    function retrieveFromDB(){
-        var settings = storage.getSetting("CURRENT_SETTINGS");
+    function loadProfile(profilename){
+        var settings = storage.getSetting(profilename);
         if(!settings) return;
 
         settings = JSON.parse(settings);
@@ -94,7 +96,7 @@ Item{
         font_scaling = settings.font_scaling ? settings.font_scaling: font_scaling;
     }
 
-    function storeToDb(){
+    function storeCurrentSettings(){
         var settings = {
             ambient_light : ambient_light,
             background_color: background_color,
@@ -109,14 +111,41 @@ Item{
             font_scaling: font_scaling
         }
 
+        console.log(JSON.stringify(settings));
         storage.setSetting("CURRENT_SETTINGS", JSON.stringify(settings));
     }
 
     Component.onCompleted: {
-        retrieveFromDB();
+        //Save all the profiles into local storage
+        for(var i=0; i<profileslist.count; i++){
+            var temp = profileslist.get(i);
+            storage.setSetting(temp.obj_name, temp.obj_string);
+        }
+
+        loadProfile("CURRENT_SETTINGS");
     }
     Component.onDestruction: {
-        storeToDb();
-        //storage.dropSettings();
+        storeCurrentSettings();
+        storage.dropSettings();
+    }
+
+
+    ListModel{
+         id: profileslist
+         ListElement{
+             text: "Default"
+             obj_name: "DEFAULT"
+             obj_string: '{"ambient_light":0.3,"background_color":"#000000","font_color":"#00ff3b","font_index":0,"font_scaling":1,"frames_index":2,"glowing_line_strength":0.4,"noise_strength":0.1,"scanlines":true,"screen_distortion":0.15,"screen_flickering":0.07}'
+         }
+         ListElement{
+             text: "Commodore 64"
+             obj_name: "COMMODORE64"
+             obj_string: '{"ambient_light":0.2,"background_color":"#5048b2","font_color":"#8bcad1","font_index":2,"font_scaling":1,"frames_index":1,"glowing_line_strength":0.2,"noise_strength":0.05,"scanlines":false,"screen_distortion":0.1,"screen_flickering":0.03}'
+         }
+         ListElement{
+             text: "IBM Dos"
+             obj_name: "IBMDOS"
+             obj_string: '{"ambient_light":0.4,"background_color":"#000000","font_color":"#ffffff","font_index":3,"font_scaling":1,"frames_index":1,"glowing_line_strength":0,"noise_strength":0,"scanlines":false,"screen_distortion":0.05,"screen_flickering":0.00}'
+         }
     }
 }
