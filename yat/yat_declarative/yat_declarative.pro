@@ -1,5 +1,5 @@
-QT += gui quick
-TARGET = yat
+QT += widgets quick core-private gui-private qml-private quick quick-private
+TARGET = cool-old-term
 
 include(../backend/backend.pri)
 
