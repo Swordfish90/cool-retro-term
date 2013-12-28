@@ -8,7 +8,7 @@ ApplicationWindow {
     id: settings_window
     title: qsTr("Settings")
     width: 640
-    height: 480
+    height: 300
 
     visible: true
     modality: Qt.ApplicationModal
@@ -17,64 +17,97 @@ ApplicationWindow {
         anchors.fill: parent
 
         Tab{
-            title: qsTr("Settings")
-            anchors.fill: parent
+            title: qsTr("Appearance")
             anchors.margins: 20
+            anchors.top: parent.top
 
-            ColumnLayout{
+            GridLayout{
                 anchors.fill: parent
-                RowLayout{
-                    Label{
-                        text: "Font"
-                    }
+                columns: 2
+                GroupBox{
+                    Layout.columnSpan: 2
+                    Layout.fillWidth: true
+                    title: qsTr("Profile")
                     ComboBox{
-                        width: 300
-                        model: shadersettings.fonts_list
-                        currentIndex: shadersettings.font_index
-                        onCurrentIndexChanged: shadersettings.font_index = currentIndex
-                    }
-                }
-                RowLayout{
-                    Label{
-                        text: "Frame texture"
-                    }
-                    ComboBox{
-                        width: 300
-                        model: shadersettings.frames_list
-                        currentIndex: shadersettings.frames_index
-                        onCurrentIndexChanged: shadersettings.frames_index = currentIndex
+                        anchors.fill: parent
                     }
                 }
 
-                RowLayout{
-                    ColumnLayout{
-                        Text{text: qsTr("Font color")}
+                GroupBox{
+                    id: fontbox
+                    title: qsTr("Font")
+                    Layout.fillWidth: true
+                    Layout.fillHeight:true
+                    GridLayout{
+                        anchors.fill: parent
+                        columns: 2
+                        Text{text: qsTr("Font style:")}
+                        ComboBox{
+                            Layout.fillWidth: true
+                            model: shadersettings.fonts_list
+                            currentIndex: shadersettings.font_index
+                            onCurrentIndexChanged: shadersettings.font_index = currentIndex
+                        }
+                        Text{text: qsTr("Font scaling:")}
+                        ComboBox{
+                            Layout.fillWidth: true
+                        }
+                        Item{Layout.fillHeight: true}
                         ColorButton{
-                            height: 200
-                            width: 200
-
+                            height: 50
+                            Layout.fillWidth: true
+                            Layout.columnSpan: 2
                             onButton_colorChanged: shadersettings.font_color = button_color;
                             Component.onCompleted: button_color = shadersettings.font_color;
                         }
                     }
-                    Item{
-                        Layout.fillWidth: true
-                    }
-                    ColumnLayout{
-                        Text{text: qsTr("Backgroud color")}
+                }
+                GroupBox{
+                    title: qsTr("Background")
+                    Layout.fillWidth: true
+                    Layout.fillHeight:true
+                    GridLayout{
+                        anchors.fill: parent
+                        columns: 2
+                        Text{text: "Frame texture"}
+                        ComboBox{
+                            Layout.fillWidth: true
+                            model: shadersettings.frames_list
+                            currentIndex: shadersettings.frames_index
+                            onCurrentIndexChanged: shadersettings.frames_index = currentIndex
+                        }
+                        Item{Layout.fillHeight: true}
+
                         ColorButton{
-                            height: 200
-                            width: 200
+                            height: 50
+                            Layout.fillWidth: true
+                            Layout.columnSpan: 2
 
                             onButton_colorChanged: shadersettings.background_color= button_color
                             Component.onCompleted: button_color = shadersettings.background_color;
                         }
                     }
                 }
-                ColumnLayout{
-                    anchors.left: parent.left
-                    anchors.right: parent.right
+            }
+        }
 
+        Tab{
+            title: qsTr("Eye-candy")
+            anchors.fill: parent
+            anchors.margins: 20
+
+            GroupBox{
+                title: qsTr("Effects")
+                anchors.fill: parent
+
+                ColumnLayout{
+                    anchors.fill: parent
+
+                    CheckBox{
+                        text: "Scanlines"
+                        checked: shadersettings.scanlines
+                        onCheckedChanged: shadersettings.scanlines = checked;
+                    }
                     SettingComponent{
                         name: "Noise"
                         onValueChanged: shadersettings.noise_strength = value
@@ -99,11 +132,6 @@ ApplicationWindow {
                         name: "Screen flickering"
                         onValueChanged: shadersettings.screen_flickering = value;
                         Component.onCompleted:  _value = shadersettings.screen_flickering;
-                    }
-                    CheckBox{
-                        text: "Scanlines"
-                        checked: shadersettings.scanlines
-                        onCheckedChanged: shadersettings.scanlines = checked;
                     }
                 }
             }
