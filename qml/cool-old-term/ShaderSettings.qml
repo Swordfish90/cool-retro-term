@@ -6,7 +6,7 @@ Item{
     property string background_color: "#002200"
     property string font_color: "#00ff00"
 
-    property real screen_flickering: 0.07
+    property real screen_flickering: 0.05
     property real noise_strength: 0.1
     property real screen_distortion: 0.15
     property real glowing_line_strength: 0.4
@@ -14,13 +14,13 @@ Item{
     property bool scanlines: true
 
     property string frame_source: frames_list.get(frames_index).source
-    property int frames_index: 1
+    property int frames_index: 2
     property var frames_list: framelist
 
     property real font_scaling: 1.0
     property var font: currentfont
     property real fontSize: currentfont.pixelSize * font_scaling
-    property int font_index: 2
+    property int font_index: 0
     property var fonts_list: fontlist
 
     property var profiles_list: profileslist

@@ -121,27 +121,27 @@ ApplicationWindow {
                     SettingComponent{
                         name: "Noise"
                         onValueChanged: shadersettings.noise_strength = value
-                        Component.onCompleted: _value = shadersettings.noise_strength
+                        _value: shadersettings.noise_strength
                     }
                     SettingComponent{
                         name: "Glow"
                         onValueChanged: shadersettings.glowing_line_strength = value;
-                        Component.onCompleted: _value = shadersettings.glowing_line_strength
+                        _value: shadersettings.glowing_line_strength
                     }
                     SettingComponent{
                         name: "Ambient light"
                         onValueChanged: shadersettings.ambient_light = value;
-                        Component.onCompleted: _value = shadersettings.ambient_light
+                        _value: shadersettings.ambient_light
                     }
                     SettingComponent{
                         name: "Screen distortion"
                         onValueChanged: shadersettings.screen_distortion = value;
-                        Component.onCompleted:  _value = shadersettings.screen_distortion;
+                        _value: shadersettings.screen_distortion;
                     }
                     SettingComponent{
                         name: "Screen flickering"
                         onValueChanged: shadersettings.screen_flickering = value;
-                        Component.onCompleted:  _value = shadersettings.screen_flickering;
+                        _value: shadersettings.screen_flickering;
                     }
                 }
             }

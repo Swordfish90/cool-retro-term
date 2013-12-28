@@ -48,4 +48,5 @@ OTHER_FILES += \
     qml/cool-old-term/frames/images/black-frame-normals.png \
     qml/cool-old-term/frames/NoFrame.qml \
     qml/cool-old-term/TerminalWindow.qml \
-    qml/cool-old-term/Storage.qml
+    qml/cool-old-term/Storage.qml \
+    qml/cool-old-term/ShaderManager.qml
