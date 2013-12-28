@@ -22,8 +22,7 @@ ApplicationWindow{
             MenuItem {
                 text: qsTr("Settings")
                 onTriggered: {
-                    var component = Qt.createComponent("SettingsWindow.qml");
-                    component.createObject(terminalWindow);
+                    settingswindow.show();
                 }
             }
         }

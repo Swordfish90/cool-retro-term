@@ -17,12 +17,16 @@ Item{
     property int frames_index: 1
     property var frames_list: framelist
 
+    property real font_scaling: 1.0
     property var font: currentfont
-    property alias fontSize: currentfont.pixelSize
+    property real fontSize: currentfont.pixelSize * font_scaling
     property int font_index: 2
     property var fonts_list: fontlist
 
-    onFont_indexChanged: {
+    onFont_indexChanged: handleFontChanged();
+    onFont_scalingChanged: handleFontChanged();
+
+    function handleFontChanged(){
         terminalwindowloader.source = "";
         currentfont.source = fontlist.get(font_index).source;
         currentfont.pixelSize = fontlist.get(font_index).pixelSize;
@@ -85,7 +89,9 @@ Item{
         scanlines = settings.scanlines ? settings.scanlines : scanlines;
 
         frames_index = settings.frames_index ? settings.frames_index : frames_index;
+
         font_index = settings.font_index ? settings.font_index : font_index;
+        font_scaling = settings.font_scaling ? settings.font_scaling: font_scaling;
     }
 
     function storeToDb(){
@@ -99,7 +105,8 @@ Item{
             glowing_line_strength: glowing_line_strength,
             scanlines: scanlines,
             frames_index: frames_index,
-            font_index: font_index
+            font_index: font_index,
+            font_scaling: font_scaling
         }
 
         storage.setSetting("CURRENT_SETTINGS", JSON.stringify(settings));

@@ -36,4 +36,9 @@ Item{
     Loader{
         id: terminalwindowloader
     }
+
+    SettingsWindow{
+        id: settingswindow
+        visible: false
+    }
 }
