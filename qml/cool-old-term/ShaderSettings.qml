@@ -6,7 +6,7 @@ Item{
     property string background_color: "#002200"
     property string font_color: "#00ff00"
 
-    property real screen_flickering: 0.1
+    property real screen_flickering: 0.07
     property real noise_strength: 0.1
     property real screen_distortion: 0.15
     property real glowing_line_strength: 0.4
@@ -52,7 +52,7 @@ Item{
         ListElement{
             text: "Atari 8bit (1979)"
             source: "./fonts/Atari8bit/ATARI400800_original.TTF"
-            pixelSize: 18
+            pixelSize: 20
         }
         ListElement{
             text: "Commodore 64 (1982)"
@@ -62,7 +62,7 @@ Item{
         ListElement{
             text: "IBM DOS (1985)"
             source: "./fonts/Dos/Perfect DOS VGA 437.ttf"
-            pixelSize: 25
+            pixelSize: 32
         }
     }
 
@@ -73,7 +73,6 @@ Item{
         if(!settings) return;
 
         settings = JSON.parse(settings);
-
 
         ambient_light = settings.ambient_light ? settings.ambient_light : ambient_light;
         background_color = settings.background_color ? settings.background_color : background_color;
