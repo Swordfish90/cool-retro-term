@@ -37,6 +37,17 @@ ApplicationWindow{
         shortcut: "Alt+F11"
         onTriggered: shadersettings.fullscreen = !shadersettings.fullscreen;
     }
+    Action {
+        id: quitAction
+        text: "&Quit"
+        shortcut: "Ctrl+Q"
+        onTriggered: terminalWindow.close();
+    }
+    Action{
+        id: showsettingsAction
+        text: "&Settings"
+        onTriggered: settingswindow.show();
+    }
 
     menuBar: MenuBar {
         id: menubar
@@ -44,20 +55,13 @@ ApplicationWindow{
         Menu {
             title: qsTr("File")
             visible: shadersettings.fullscreen ? false : true
-            MenuItem { text: "Close"; onTriggered: terminalWindow.close()}
+            MenuItem {action: quitAction}
         }
         Menu {
             title: qsTr("Edit")
             visible: shadersettings.fullscreen ? false : true
-            MenuItem {
-                text: qsTr("Settings")
-                onTriggered: {
-                    settingswindow.show();
-                }
-            }
-            MenuItem{
-                action: fullscreenAction
-            }
+            MenuItem {action: showsettingsAction}
+            MenuItem {action: fullscreenAction}
         }
     }
 
