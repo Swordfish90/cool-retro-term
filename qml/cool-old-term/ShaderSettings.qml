@@ -21,6 +21,8 @@
 import QtQuick 2.1
 
 Item{
+    property bool fullscreen: false
+
     property real ambient_light: 0.2
 
     property string background_color: "#002200"

@@ -31,29 +31,42 @@ ApplicationWindow{
 
     title: qsTr("Terminal")
 
+    Action {
+        id: fullscreenAction
+        text: "&Fullscreen"
+        shortcut: "Alt+F11"
+        onTriggered: shadersettings.fullscreen = !shadersettings.fullscreen;
+    }
+
     menuBar: MenuBar {
         id: menubar
+
         Menu {
             title: qsTr("File")
+            visible: shadersettings.fullscreen ? false : true
             MenuItem { text: "Close"; onTriggered: terminalWindow.close()}
         }
         Menu {
             title: qsTr("Edit")
+            visible: shadersettings.fullscreen ? false : true
             MenuItem {
                 text: qsTr("Settings")
                 onTriggered: {
                     settingswindow.show();
                 }
             }
+            MenuItem{
+                action: fullscreenAction
+            }
         }
     }
 
     visible: true
+    visibility: shadersettings.fullscreen ? Window.FullScreen : Window.Windowed
 
     Item{
         id: maincontainer
         anchors.fill: parent
-        anchors.top: menuBar.bottom
         clip: true
 
         ShaderEffectSource{
