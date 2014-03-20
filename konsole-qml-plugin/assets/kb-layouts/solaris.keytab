@@ -1,0 +1,108 @@
+# [solaris.keytab] Konsole Keyboard Table 
+# 
+
+keyboard "Solaris console"
+
+# --------------------------------------------------------------
+#
+# This configuration table allows to customize the
+# meaning of the keys.
+#
+# The syntax is that each entry has the form :
+#
+#   "key" Keyname { ("+"|"-") Modename } ":" (String|Operation)
+#
+# Keynames are those defined in <qnamespace.h> with the
+# "Qt::Key_" removed. (We'd better insert the list here)
+#
+# Mode names are :
+#
+# - Shift
+# - Alt
+# - Control
+#
+#   The VT100 emulation has two modes that can affect the
+#   sequences emitted by certain keys. These modes are
+#   under control of the client program.
+#
+#
+# - Newline     : effects Return and Enter key.
+# - Application : effects Up and Down key.
+#
+# - Ansi        : effects Up and Down key (This is for VT52, really).
+#
+# Operations are
+#
+# - scrollUpLine
+# - scrollUpPage
+# - scrollDownLine
+# - scrollDownPage
+#
+# - emitSelection
+#
+# If the key is not found here, the text of the
+# key event as provided by QT is emitted, possibly
+# preceeded by ESC if the Alt key is pressed.
+#
+# --------------------------------------------------------------
+
+key Escape         : "\E" 
+key Tab            : "\t" 
+
+key Return-Alt     : "\r" 
+key Return+Alt     : "\E\r" 
+
+# Backspace and Delete codes are preserving CTRL-H. 
+ 
+key Backspace      : "\x08" 
+#key Delete   : "\x7F" 
+
+# cursor keys 
+
+key Up    -Shift   : "\EOA" 
+key Down  -Shift   : "\EOB" 
+key Right -Shift   : "\EOC" 
+key Left  -Shift   : "\EOD" 
+ 
+# other grey PC keys 
+ 
+key Enter          : "\r" 
+ 
+key Home           : "\E[1~" 
+key Insert-Shift   : "\E[2~" 
+key Delete         : "\E[3~" 
+key End            : "\E[4~" 
+key Prior -Shift   : "\E[5~" 
+key Next  -Shift   : "\E[6~" 
+ 
+# function keys 
+ 
+key F1             : "\E[11~" 
+key F2             : "\E[12~" 
+key F3             : "\E[13~" 
+key F4             : "\E[14~" 
+key F5             : "\E[15~" 
+key F6             : "\E[17~" 
+key F7             : "\E[18~" 
+key F8             : "\E[19~" 
+key F9             : "\E[20~" 
+key F10            : "\E[21~" 
+key F11            : "\E[23~" 
+key F12            : "\E[24~" 
+ 
+# Work around dead keys 
+ 
+key Space +Control : "\x00" 
+ 
+# Some keys are used by konsole to cause operations. 
+# The scroll* operations refer to the history buffer. 
+
+#key Left  +Shift   : prevSession 
+#key Right +Shift   : nextSession 
+key Up    +Shift   : scrollLineUp 
+key Prior +Shift   : scrollPageUp 
+key Down  +Shift   : scrollLineDown 
+key Next  +Shift   : scrollPageDown 
+#key Insert+Shift   : emitSelection 
+
+# keypad characters are not offered differently by Qt.

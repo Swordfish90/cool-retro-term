@@ -1,0 +1,132 @@
+[README.Schema]
+
+The schemata offered in the Options/Schema menu are
+taken from from configurations files with a *.schema
+pattern either located in $KDEDIR/share/apps/konsole
+or ~/.kde/share/apps/konsole.
+
+Schemata allow to configure the color set that konsole
+uses, together with some more information on rendition
+processing.
+
+Syntax
+
+  File
+  :: { [Line] ['#' Comment] '\n' }
+
+  Line
+  :: "title" Title
+  :: "image" Usage PathToPictureFile
+  :: "transparency" Fade Red Green Blue
+  :: "color" Slot Red Green Blue Transparent Bold
+  :: "rcolor" Slot Saturation Value Transparent Bold
+  :: "sysfg" Slot Transparent Bold
+  :: "sysbg" Slot Transparent Bold
+
+Meaning
+
+  - Title is the text to appear in the Option/Schema menu.
+    It should be unique among all other schemata therefore.
+
+  - The "image" clause allows to place an image on the
+    konsole's background.
+
+    - Usage can be either
+      - "tile"   - the image is tilewise replicated.
+      - "center" - the image is centered.
+      - "full"   - the image is stretched to fit the window size.
+      
+    - The Path of the picture can both be relative
+      (to kde wallpapers) or absolute.
+      
+    When a schema uses a background image (or transparency)
+    one has to make at least one color slot transparent to
+    achive any visible effect. Please read below about the
+    "Transparent" field in color,sysbg,sysfg.
+
+  - The "transparency" clause picks and uses the background
+    of the desktop as if it where an image together with
+    a fade effect. This effect will fade the background
+    to the specified color.
+
+    The "Fade" is a real value between 0 and 1, indicating
+    the strength of the fade. A value of 0 will not change
+    the image, a value of 1 will make it the fade color
+    everywhere, and in between. This will make the "glas"
+    of the window be of the color given in the clause and
+    being more(1) or less(0) intransparent.
+
+  - The remaining clauses (color,sysbg,sysfg) are used
+    to setup konsoles rendition system.
+
+    To this end, konsole offers 20 color slots.
+
+     Slot  Meaning
+    -----  --------------------------
+        0  regular   foreground color
+        1  regular   background color
+      2-9  regular   bgr color 0-7
+       10  intensive foreground color
+       11  intensive background color
+    12-19  intensive bgr color 0-7
+
+    The traditional meaning of the "bgr" color codes
+    has a bitwise interpretation of an additive three
+    primary color scheme inherited from early EGA
+    color terminals.
+
+    Color  Bits  Colors
+    -----  ----  -------
+        0   000  Black
+        1   001  Red
+        2   010  Green
+        3   011  Yellow
+        4   100  Blue
+        5   101  Magenta
+        6   110  Cyan
+        7   111  White
+
+    One may or may not stick to this tradition.
+    Konsole allows to assign colors freely to slots.
+
+    The slots fall apart into two groups, regular
+    and intensive colors. The later are used when
+    BOLD rendition is used by the client.
+
+    Each of the groups have a default fore- and
+    background color and the said bgr colors.
+    Normal terminal processing will simply use
+    the default colors.
+
+    The color desired for a slot is indicated
+    in the Red Green Blue fields of the color
+    clause. Use the sysfg or the sysbg clause
+    to indicate the default fore and background
+    colors of the desktop.
+
+    To specify randomized color for a slot use
+    the clause rcolor. The two parameters to it 
+    being Saturation - the amount of colour, 
+    and Value, the darkness of the colour.
+
+    To use transparency/images and to simulate
+    the behavior of the xterm, one can supply
+    two additional tags to each slot:
+    - Transparent (0/1) meaning to show the
+      background picture, if any.
+    - Bold (0/1) to render characters bold.
+
+
+If you know about the escape codes, you might have
+noticed that intensive and bold rendition are sort
+of confused. This is inherited by the xterm which
+konsole is simulating.
+
+One can use the colortest.sh script supplied
+with the konsole source distribution to test
+a schema.
+
+The schema installed with konsole are more or
+less demonstrations and not really beauty,
+beside the Linux.schema, perhaps, which is
+made after the VGA colors.

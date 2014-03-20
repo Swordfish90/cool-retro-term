@@ -1,0 +1,46 @@
+# xterm color schema for konsole
+
+# xterm colors can be configured (almost) like
+# konsole colors can. This is the uncustomized
+# xterm schema. 
+# Please refere to your local xterm setup files
+# if this schema differs.
+
+title XTerm Colors
+
+# foreground colors -------------------------------
+
+# note that the default background color is flagged
+# to become transparent when an image is present.
+
+#   slot    transparent bold
+#      | red grn blu  | |
+#      V V--color--V  V V
+
+color  0   0   0   0  0 0  # regular   foreground color (Black)
+color  1 255 255 255  1 0  # regular   background color (White)
+
+color  2   0   0   0  0 0  # regular   color 0 Black
+color  3 205   0   0  0 0  # regular   color 1 Red
+color  4   0 205   0  0 0  # regular   color 2 Green
+color  5 205 205   0  0 0  # regular   color 3 Yellow
+color  6   0   0 205  0 0  # regular   color 4 Blue
+color  7 205   0 205  0 0  # regular   color 5 Magenta
+color  8   0 205 205  0 0  # regular   color 6 Cyan
+color  9 229 229 229  0 0  # regular   color 7 White
+
+# intensive colors -------------------------------------------
+
+# for some strange reason, intensive colors are bold, also.
+
+color 10  77  77  77  0 1  # intensive foreground color
+color 11 255 255 255  1 1  # intensive background color
+
+color 12  77  77  77  0 1  # intensive color 0
+color 13 255   0   0  0 1  # intensive color 1
+color 14   0 255   0  0 1  # intensive color 2
+color 15 255 255   0  0 1  # intensive color 3
+color 16   0   0 255  0 1  # intensive color 4
+color 17 255   0 255  0 1  # intensive color 5
+color 18   0 255 255  0 1  # intensive color 6
+color 19 255 255 255  0 1  # intensive color 7

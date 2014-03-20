@@ -1,0 +1,44 @@
+# example scheme for konsole
+
+# the title is to appear in the menu.
+
+title Paper
+
+image tile Paper01.jpg
+
+# foreground colors
+
+# note that the default background color is flagged
+# to become transparent when an image is present.
+
+#   slot    transparent bold
+#      |              | |
+#      V V--color--V  V V
+
+color  0   0   0   0  0 0  # regular   foreground color (Black)
+color  1 255 255 255  1 0  # regular   background color (White)
+
+color  2   0   0   0  0 0  # regular   color 0 Black
+color  3 178  24  24  0 0  # regular   color 1 Red
+color  4  24 178  24  0 0  # regular   color 2 Green
+color  5 178 104  24  0 0  # regular   color 3 Yellow
+color  6  24  24 178  0 0  # regular   color 4 Blue
+color  7 178  24 178  0 0  # regular   color 5 Magenta
+color  8  24 178 178  0 0  # regular   color 6 Cyan
+color  9 178 178 178  0 0  # regular   color 7 White
+
+# intensive colors
+
+# instead of changing the colors, we've flaged the text to become bold
+
+color 10   0   0   0  0 1  # intensive foreground color
+color 11 255 255 255  1 0  # intensive background color
+
+color 12 104 104 104  0 0  # intensive color 0
+color 13 255  84  84  0 0  # intensive color 1
+color 14  84 255  84  0 0  # intensive color 2
+color 15 255 255  84  0 0  # intensive color 3
+color 16  84  84 255  0 0  # intensive color 4
+color 17 255  84 255  0 0  # intensive color 5
+color 18  84 255 255  0 0  # intensive color 6
+color 19 255 255 255  0 0  # intensive color 7

@@ -1,0 +1,2 @@
+#!/bin/bash
+qmlscene -I imports app/main.qml

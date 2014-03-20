@@ -1,0 +1,3 @@
+module org.kde.konsole
+typeinfo plugins.qmltypes
+plugin kdekonsole

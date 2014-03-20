@@ -1,0 +1,71 @@
+# [x11r5.Keytab] Keyboard Table for X11 R5
+
+keyboard "XTerm (XFree 3.x.x)"
+
+# --------------------------------------------------------------
+#
+# Note that this particular table is a "risc" version made to
+# ease customization without bothering with obsolete details.
+# See VT100.keytab for the more hairy stuff.
+#
+# --------------------------------------------------------------
+
+# common keys
+
+key Escape         : "\E"
+key Tab            : "\t"
+
+key Return         : "\r"
+
+# Backspace and Delete codes are preserving CTRL-H.
+
+key Backspace      : "\x7f"
+
+# cursor keys
+
+key Up    -Shift   : "\EOA"
+key Down  -Shift   : "\EOB"
+key Right -Shift   : "\EOC"
+key Left  -Shift   : "\EOD"
+
+# other grey PC keys
+
+key Enter          : "\r"
+
+key Home           : "\E[1~"
+key Insert-Shift   : "\E[2~"
+key Delete         : "\E[3~"
+key End            : "\E[4~"
+key Prior -Shift   : "\E[5~"
+key Next  -Shift   : "\E[6~"
+
+# function keys
+
+key F1             : "\E[11~"
+key F2             : "\E[12~"
+key F3             : "\E[13~"
+key F4             : "\E[14~"
+key F5             : "\E[15~"
+key F6             : "\E[17~"
+key F7             : "\E[18~"
+key F8             : "\E[19~"
+key F9             : "\E[20~"
+key F10            : "\E[21~"
+key F11            : "\E[23~"
+key F12            : "\E[24~"
+
+# Work around dead keys
+
+key Space +Control : "\x00"
+
+# Some keys are used by konsole to cause operations.
+# The scroll* operations refer to the history buffer.
+
+key Up    +Shift   : scrollLineUp
+key Prior +Shift   : scrollPageUp
+key Down  +Shift   : scrollLineDown
+key Next  +Shift   : scrollPageDown
+
+key ScrollLock     : scrollLock
+
+# keypad characters are not offered differently by Qt.

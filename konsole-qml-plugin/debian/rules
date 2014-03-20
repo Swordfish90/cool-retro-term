@@ -1,0 +1,21 @@
+#!/usr/bin/make -f
+
+# Uncomment this to turn on verbose mode.
+#export DH_VERBOSE=1
+
+#export CFLAGS := $(shell dpkg-buildflags --get CFLAGS) $(shell dpkg-buildflags --get CPPFLAGS)
+#export CXXFLAGS := $(shell dpkg-buildflags --get CXXFLAGS) $(shell dpkg-buildflags --get CPPFLAGS)
+#export LDFLAGS := $(shell dpkg-buildflags --get LDFLAGS) -Wl,--as-needed
+
+override_dh_auto_configure:
+	QT_SELECT=qt5 dh_auto_configure
+
+%:
+	dh $@ --list-missing --parallel 
+# WARN: currently, no pakgage
+# --dbg-package=konsole-qml-plugin-dbg
+
+
+#override_dh_builddeb:
+#	dh_builddeb -- -Zxz
+

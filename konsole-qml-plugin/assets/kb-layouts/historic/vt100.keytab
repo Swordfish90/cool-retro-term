@@ -1,0 +1,133 @@
+# [vt100.keytab] Konsole Keyboard Table (VT100 keys)
+#
+# --------------------------------------------------------------
+
+keyboard "vt100 (historical)"
+
+# --------------------------------------------------------------
+#
+# This configuration table allows to customize the
+# meaning of the keys.
+#
+# The syntax is that each entry has the form : 
+#
+#   "key" Keyname { ("+"|"-") Modename } ":" (String|Operation)
+#
+# Keynames are those defined in <qnamespace.h> with the
+# "Qt::Key_" removed. (We'd better insert the list here)
+#
+# Mode names are : 
+#
+# - Shift
+# - Alt
+# - Control
+#
+#   The VT100 emulation has two modes that can affect the
+#   sequences emitted by certain keys. These modes are
+#   under control of the client program.
+#   
+# - Newline     : effects Return and Enter key.
+# - Application : effects Up and Down key.
+#
+# - Ansi        : effects Up and Down key (This is for VT52, really).
+#
+# Operations are
+#
+# - scrollUpLine
+# - scrollUpPage
+# - scrollDownLine
+# - scrollDownPage
+#
+# - emitSelection
+#
+# If the key is not found here, the text of the
+# key event as provided by QT is emitted, possibly
+# preceeded by ESC if the Alt key is pressed.
+#
+# --------------------------------------------------------------
+
+key Escape : "\E"
+key Tab    : "\t"
+
+# VT100 can add an extra \n after return.
+# The NewLine mode is set by an escape sequence.
+
+key Return-NewLine : "\r"  
+key Return+NewLine : "\r\n"
+
+# Some desperately try to save the ^H.
+
+key Backspace : "\x7f"
+key Delete    : "\E[3~"
+
+# These codes are for the VT52 mode of VT100
+# The Ansi mode (i.e. VT100 mode) is set by
+# an escape sequence
+
+key Up   -Shift-Ansi : "\EA"
+key Down -Shift-Ansi : "\EB"
+key Right-Shift-Ansi : "\EC"
+key Left -Shift-Ansi : "\ED"
+
+# VT100 emits a mode bit together
+# with the arrow keys.The AppCuKeys
+# mode is set by an escape sequence.
+
+key Up   -Shift+Ansi+AppCuKeys : "\EOA"
+key Down -Shift+Ansi+AppCuKeys : "\EOB"
+key Right-Shift+Ansi+AppCuKeys : "\EOC"
+key Left -Shift+Ansi+AppCuKeys : "\EOD"
+
+key Up   -Shift+Ansi-AppCuKeys : "\E[A"
+key Down -Shift+Ansi-AppCuKeys : "\E[B"
+key Right-Shift+Ansi-AppCuKeys : "\E[C"
+key Left -Shift+Ansi-AppCuKeys : "\E[D"
+
+# function keys (FIXME: make pf1-pf4)
+
+key F1     : "\E[11~"
+key F2     : "\E[12~"
+key F3     : "\E[13~"
+key F4     : "\E[14~"
+key F5     : "\E[15~"
+
+key F6     : "\E[17~" 
+key F7     : "\E[18~" 
+key F8     : "\E[19~" 
+key F9     : "\E[20~" 
+key F10    : "\E[21~" 
+key F11    : "\E[23~" 
+key F12    : "\E[24~" 
+
+key Home   : "\E[H"  
+key End    : "\E[F"  
+
+key Prior -Shift : "\E[5~"  
+key Next  -Shift : "\E[6~"  
+key Insert-Shift : "\E[2~"  
+
+# Keypad-Enter. See comment on Return above.
+
+key Enter+NewLine : "\r\n"
+key Enter-NewLine : "\r"  
+
+key Space +Control : "\x00"
+
+# some of keys are used by konsole.
+
+key Up    +Shift   : scrollLineUp
+key Prior +Shift   : scrollPageUp
+key Down  +Shift   : scrollLineDown
+key Next  +Shift   : scrollPageDown
+
+key ScrollLock     : scrollLock
+
+
+#----------------------------------------------------------
+
+# keypad characters as offered by Qt
+# cannot be recognized as such.
+
+#----------------------------------------------------------
+
+# Following other strings as emitted by konsole.

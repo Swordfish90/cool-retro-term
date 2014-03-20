@@ -1,0 +1,72 @@
+[README.KeyTab]
+
+The keytabs offered in the Options/Keyboard menu are
+taken from from configurations files with a *.keytab
+pattern either located in $KDEDIR/share/apps/konsole
+or ~/.kde/share/apps/konsole.
+
+Keytabs allow to configure the behavior of konsole
+on keyboard events, especially for functions keys.
+Please have a look into the README.keyboard file, too.
+
+The syntax is that each entry has the form : 
+
+  "key" Keyname { ("+"|"-") Modename } ":" (String|Operation)
+
+Keynames are those defined in <qnamespace.h> with the
+"Qt::Key_" prefix removed.
+
+Mode names are: 
+
+  - Shift   : Shift Key pressed
+  - Alt     : Alt Key pressed
+  - Control : Control Key pressed
+
+  ( The VT100 emulation has modes that can affect the
+    sequences emitted by certain keys. These modes are
+    under control of the client program.
+  
+    - Newline     : effects Return and Enter key.
+    - Application : effects Up and Down key.
+    - Ansi        : effects Up and Down key (This is for VT52, really).
+
+    Since sending a state to a program that has set the state
+    itself is positivly wrong and obsolete design, better forget
+    about this nasty detail. I may well remove this "feature"
+    in a future clean up round. )
+
+  A "+" preceeding a Modename means the Key is pressed.
+  A "-" preceeding a Modename means the Key is not pressed.
+  If no mode is given it means don't care.
+
+  Note that the combination of Key and Modes (set/reset)
+  has to be unique. This means, that
+
+    key A + Shift : "A"
+    key A : "a"
+
+  will not accept the small letter "a" rule as expected,
+  one has to add a "- Shift" to the last clause. Use
+  the stdout/stderr dianostics of konsole when modifying
+  keytabs to find problems like this.
+
+Operations are
+
+  - scrollUpLine   : scroll up   one line in the history log
+  - scrollUpPage   : scroll up   one page in the history log
+  - scrollDownLine : scroll down one line in the history log
+  - scrollDownPage : scroll down one page in the history log
+  - emitClipboard  : "paste" the current clipboard
+  - emitSelection  : "paste" the current selection
+
+Strings have the syntax of C strings,
+one may use the following escapes:
+
+  - \E - escape
+  - \\ - backslash
+  - \" - double quote
+  - \t - tab
+  - \r - return
+  - \n - newline
+  - \b - backspace
+  - \xHH - where HH are two hex digits

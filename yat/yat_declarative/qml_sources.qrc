@@ -1,9 +1,0 @@
-<RCC>
-    <qresource prefix="/">
-        <file>qml/yat_declarative/main.qml</file>
-        <file>qml/yat_declarative/TerminalScreen.qml</file>
-        <file>qml/yat_declarative/TerminalText.qml</file>
-        <file>qml/yat_declarative/TerminalCursor.qml</file>
-        <file>qml/yat_declarative/HighlightArea.qml</file>
-    </qresource>
-</RCC>
