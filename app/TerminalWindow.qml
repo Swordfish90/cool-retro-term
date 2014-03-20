@@ -99,8 +99,8 @@ ApplicationWindow{
         KTerminal {
             id: terminal
 
-            font.pointSize: 15
-            font.family: "Pet Me"
+            font.pointSize: shadersettings.fontSize
+            font.family: shadersettings.font.name
 
             colorScheme: "WhiteOnBlack"
             width:  parent.width
@@ -116,9 +116,9 @@ ApplicationWindow{
             }
 
             Component.onCompleted: {
-                font.pointSize = 15;
-                font.family = "Pet Me";
-
+                font.pointSize = shadersettings.fontSize;
+                font.family = shadersettings.font.name;
+                console.log(shadersettings.font.name);
             }
         }
 

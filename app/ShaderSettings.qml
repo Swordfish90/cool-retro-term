@@ -39,7 +39,7 @@ Item{
     property int frames_index: 2
     property var frames_list: framelist
 
-    property real font_scaling: 1.0
+    property real font_scaling: 0.7
     property var font: currentfont
     property real fontSize: currentfont.pixelSize * font_scaling
     property int font_index: 0
@@ -79,17 +79,17 @@ Item{
         }
         ListElement{
             text: "Atari 8bit (1979)"
-            source: "./fonts/Atari8bit/ATARI400800_original.TTF"
+            source: "fonts/Atari8bit/ATARI400800_original.TTF"
             pixelSize: 20
         }
         ListElement{
             text: "Commodore 64 (1982)"
-            source: "./fonts/Commodore64/C64_User_Mono_v1.0-STYLE.ttf"
+            source: "fonts/Commodore64/C64_User_Mono_v1.0-STYLE.ttf"
             pixelSize: 20
         }
         ListElement{
             text: "IBM DOS (1985)"
-            source: "./fonts/Dos/Perfect DOS VGA 437.ttf"
+            source: "fonts/Dos/Perfect DOS VGA 437.ttf"
             pixelSize: 32
         }
     }
