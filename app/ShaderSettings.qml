@@ -51,10 +51,10 @@ Item{
     onFont_scalingChanged: handleFontChanged();
 
     function handleFontChanged(){
-        terminalwindowloader.source = "";
+        terminal.source = "";
         currentfont.source = fontlist.get(font_index).source;
         currentfont.pixelSize = fontlist.get(font_index).pixelSize;
-        terminalwindowloader.source = "TerminalWindow.qml";
+        terminal.source = "Terminal.qml";
     }
 
     FontLoader{

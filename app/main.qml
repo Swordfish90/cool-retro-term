@@ -21,17 +21,103 @@
 import QtQuick 2.1
 import QtQuick.Window 2.0
 import QtQuick.Controls 1.0
+import QtGraphicalEffects 1.0
 
 import org.kde.konsole 0.1
 
-Item{
-    ShaderSettings{
-        id: shadersettings
-        Component.onCompleted: terminalwindowloader.source = "TerminalWindow.qml"
+ApplicationWindow{
+    id: terminalWindow
+    width: 1024
+    height: 768
+
+    title: qsTr("Terminal")
+
+    Action {
+        id: fullscreenAction
+        text: "&Fullscreen"
+        shortcut: "Alt+F11"
+        onTriggered: shadersettings.fullscreen = !shadersettings.fullscreen;
+    }
+    Action {
+        id: quitAction
+        text: "&Quit"
+        shortcut: "Ctrl+Q"
+        onTriggered: terminalWindow.close();
+    }
+    Action{
+        id: showsettingsAction
+        text: "&Settings"
+        onTriggered: settingswindow.show();
     }
 
-    Loader{
-        id: terminalwindowloader
+    menuBar: MenuBar {
+        id: menubar
+
+        Menu {
+            title: qsTr("File")
+            visible: shadersettings.fullscreen ? false : true
+            MenuItem {action: quitAction}
+        }
+        Menu {
+            title: qsTr("Edit")
+            visible: shadersettings.fullscreen ? false : true
+            MenuItem {action: showsettingsAction}
+            MenuItem {action: fullscreenAction}
+        }
+    }
+
+    visible: true
+    visibility: shadersettings.fullscreen ? Window.FullScreen : Window.Windowed
+
+    Item{
+        id: maincontainer
+        anchors.fill: parent
+        clip: true
+
+        ShaderEffectSource{
+            id: theSource
+            sourceItem: terminal
+            sourceRect: frame.sourceRect
+        }
+
+        ShaderManager{
+            id: shadercontainer
+            anchors.fill: terminal
+            blending: true
+            z: 1.9
+        }
+
+        Loader{
+            property rect sourceRect: item.sourceRect
+
+            id: frame
+            anchors.fill: parent
+            z: 2.1
+            source: shadersettings.frame_source
+        }
+
+        Loader{
+            id: terminal
+            width: parent.width
+            height: parent.height
+        }
+
+        RadialGradient{
+            id: ambientreflection
+            z: 2.0
+            anchors.fill: parent
+            cached: true
+            opacity: shadersettings.ambient_light * 0.66
+            gradient: Gradient{
+                GradientStop{position: 0.0; color: "white"}
+                GradientStop{position: 0.7; color: "#00000000"}
+            }
+        }
+    }
+
+    ShaderSettings{
+        id: shadersettings
+        Component.onCompleted: terminal.source = "Terminal.qml"
     }
 
     SettingsWindow{
