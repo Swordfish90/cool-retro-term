@@ -139,6 +139,11 @@ ApplicationWindow {
                         onCheckedChanged: shadersettings.scanlines = checked;
                     }
                     SettingComponent{
+                        name: "Motion Blur"
+                        onValueChanged: shadersettings.motion_blur = value
+                        _value: shadersettings.motion_blur
+                    }
+                    SettingComponent{
                         name: "Noise"
                         onValueChanged: shadersettings.noise_strength = value
                         _value: shadersettings.noise_strength

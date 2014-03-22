@@ -98,8 +98,16 @@ ApplicationWindow{
 
         Loader{
             id: terminal
+
             width: parent.width
             height: parent.height
+        }
+
+        MouseArea{
+            acceptedButtons: Qt.NoButton
+            anchors.fill: parent
+            onWheel:
+                wheel.angleDelta.y > 0 ? terminal.item.scrollUp() : terminal.item.scrollDown()
         }
 
         RadialGradient{

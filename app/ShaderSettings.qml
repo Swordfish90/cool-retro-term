@@ -32,8 +32,9 @@ Item{
     property real noise_strength: 0.1
     property real screen_distortion: 0.15
     property real glowing_line_strength: 0.4
+    property real motion_blur: 0.65
 
-    property bool scanlines: true
+    property bool scanlines: false
 
     property string frame_source: frames_list.get(frames_index).source
     property int frames_index: 2
@@ -112,6 +113,8 @@ Item{
         glowing_line_strength = settings.glowing_line_strength ? settings.glowing_line_strength : glowing_line_strength;
         scanlines = settings.scanlines ? settings.scanlines : scanlines;
 
+        motion_blur = settings.motion_blur ? settings.motion_blur : motion_blur
+
         frames_index = settings.frames_index ? settings.frames_index : frames_index;
 
         font_index = settings.font_index ? settings.font_index : font_index;
@@ -130,7 +133,8 @@ Item{
             scanlines: scanlines,
             frames_index: frames_index,
             font_index: font_index,
-            font_scaling: font_scaling
+            font_scaling: font_scaling,
+            motion_blur: motion_blur
         }
 
         console.log(JSON.stringify(settings));
@@ -153,21 +157,21 @@ Item{
 
 
     ListModel{
-         id: profileslist
-         ListElement{
-             text: "Default"
-             obj_name: "DEFAULT"
-             obj_string: '{"ambient_light":0.3,"background_color":"#000000","font_color":"#00ff3b","font_index":0,"font_scaling":1,"frames_index":2,"glowing_line_strength":0.4,"noise_strength":0.1,"scanlines":true,"screen_distortion":0.15,"screen_flickering":0.07}'
-         }
-         ListElement{
-             text: "Commodore 64"
-             obj_name: "COMMODORE64"
-             obj_string: '{"ambient_light":0.2,"background_color":"#5048b2","font_color":"#8bcad1","font_index":2,"font_scaling":1,"frames_index":1,"glowing_line_strength":0.2,"noise_strength":0.05,"scanlines":false,"screen_distortion":0.1,"screen_flickering":0.03}'
-         }
-         ListElement{
-             text: "IBM Dos"
-             obj_name: "IBMDOS"
-             obj_string: '{"ambient_light":0.4,"background_color":"#000000","font_color":"#ffffff","font_index":3,"font_scaling":1,"frames_index":1,"glowing_line_strength":0,"noise_strength":0,"scanlines":false,"screen_distortion":0.05,"screen_flickering":0.00}'
-         }
+        id: profileslist
+        ListElement{
+            text: "Default"
+            obj_name: "DEFAULT"
+            obj_string: '{"ambient_light":0.3,"background_color":"#000000","font_color":"#00ff3b","font_index":0,"font_scaling":1,"frames_index":2,"glowing_line_strength":0.4,"noise_strength":0.1,"scanlines":true,"screen_distortion":0.15,"screen_flickering":0.07}'
+        }
+        ListElement{
+            text: "Commodore 64"
+            obj_name: "COMMODORE64"
+            obj_string: '{"ambient_light":0.2,"background_color":"#5048b2","font_color":"#8bcad1","font_index":2,"font_scaling":1,"frames_index":1,"glowing_line_strength":0.2,"noise_strength":0.05,"scanlines":false,"screen_distortion":0.1,"screen_flickering":0.03}'
+        }
+        ListElement{
+            text: "IBM Dos"
+            obj_name: "IBMDOS"
+            obj_string: '{"ambient_light":0.4,"background_color":"#000000","font_color":"#ffffff","font_index":3,"font_scaling":1,"frames_index":1,"glowing_line_strength":0,"noise_strength":0,"scanlines":false,"screen_distortion":0.05,"screen_flickering":0.00}'
+        }
     }
 }

@@ -28,6 +28,7 @@ RowLayout {
     property double _value: 0.0
     property double min_value: 0.0
     property double max_value: 1.0
+    property double stepSize: 0.01
 
     id: setting_component
     anchors.left: parent.left
@@ -43,7 +44,7 @@ RowLayout {
     }
     Slider{
         id: slider
-        stepSize: 0.01
+        stepSize: parent.stepSize
         minimumValue: min_value
         maximumValue: max_value
         onValueChanged: setting_component._value = slider.value;
@@ -55,6 +56,6 @@ RowLayout {
     }
     Text{
         id: textfield
-        text: Math.round(((_value - min_value) / (max_value - min_value)) * 100) + "%"
+        text: Math.round(((value - min_value) / (max_value - min_value)) * 100) + "%"
     }
 }
