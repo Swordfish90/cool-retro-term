@@ -131,20 +131,6 @@ ShaderEffect {
             }" : "") +
 
 
-            "vec4 blurredColor(sampler2D source, vec2 coords){
-                vec4 sum = vec4(0.0);
-                sum += texture2D(source, coords - vec2(-deltax, -deltay)) * 0.11;
-                sum += texture2D(source, coords - vec2(-deltax, 0.0)) * 0.11;
-                sum += texture2D(source, coords - vec2(-deltax, +deltay)) * 0.11;
-                sum += texture2D(source, coords - vec2(0.0, -deltay)) * 0.11;
-                sum += texture2D(source, coords - vec2(0.0, 0.0)) * 0.11;
-                sum += texture2D(source, coords - vec2(0.0, +deltay)) * 0.11;
-                sum += texture2D(source, coords - vec2(+deltax, -deltay)) * 0.11;
-                sum += texture2D(source, coords - vec2(+deltax, 0.0)) * 0.11;
-                sum += texture2D(source, coords - vec2(+deltax, +deltay)) * 0.11;
-                return sum;
-            }" +
-
             "void main() {" +
                 (screen_distorsion !== 0 ? "vec2 coords = distortCoordinates(qt_TexCoord0);" : "vec2 coords = qt_TexCoord0;") +
 
@@ -152,7 +138,7 @@ ShaderEffect {
                 "float distortion = (sin(coords.y * 20.0 * fract(time * 0.1) + sin(fract(time * 0.2))) + sin(time * 0.05));
                 coords.x = coords.x + distortion * 0.3 * horizontal_distortion; " : "") +
 
-                "float color = (blurredColor(source, coords).r + texture2D(source, coords).r) * 0.5;" +
+                "float color = texture2D(source, coords).r;" +
 
                 (scanlines !== 0 ?
                 "float scanline_alpha = getScanlineIntensity(coords);" : "float scanline_alpha = 0.0;") +

@@ -139,6 +139,11 @@ ApplicationWindow {
                         onCheckedChanged: shadersettings.scanlines = checked;
                     }
                     SettingComponent{
+                        name: "Bloom"
+                        onValueChanged: shadersettings.bloom_strength = value
+                        _value: shadersettings.bloom_strength
+                    }
+                    SettingComponent{
                         name: "Motion Blur"
                         onValueChanged: shadersettings.motion_blur = value
                         _value: shadersettings.motion_blur

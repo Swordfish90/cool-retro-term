@@ -33,6 +33,7 @@ Item{
     property real screen_distortion: 0.15
     property real glowing_line_strength: 0.4
     property real motion_blur: 0.65
+    property real bloom_strength: 0.8
 
     property bool scanlines: false
 
@@ -114,6 +115,7 @@ Item{
         scanlines = settings.scanlines ? settings.scanlines : scanlines;
 
         motion_blur = settings.motion_blur ? settings.motion_blur : motion_blur
+        bloom_strength = settings.bloom_strength ? settings.bloom_strength : bloom_strength
 
         frames_index = settings.frames_index ? settings.frames_index : frames_index;
 
@@ -134,7 +136,8 @@ Item{
             frames_index: frames_index,
             font_index: font_index,
             font_scaling: font_scaling,
-            motion_blur: motion_blur
+            motion_blur: motion_blur,
+            bloom_strength: bloom_strength
         }
 
         console.log(JSON.stringify(settings));
