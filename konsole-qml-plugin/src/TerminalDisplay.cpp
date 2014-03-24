@@ -1598,7 +1598,7 @@ void KTerminalDisplay::calcGeometry()
     _usedColumns = qMin(_usedColumns,_columns);
 
     // ensure that display is always at least one line high
-    _lines     = qMax(1, qRound(_contentHeight / (double)_fontHeight));
+    _lines     = qMax(1, qFloor(_contentHeight / (double)_fontHeight));
     _usedLines = qMin(_usedLines,_lines);
 }
 
