@@ -12,8 +12,8 @@ TerminalFrame{
     borderTop: 116
     borderBottom: 116
     imageSource: "../images/screen-frame.png"
-    //normalsSource: "../images/screen-frame-normals.png"
+    normalsSource: "../images/screen-frame-normals.png"
     sourceRect: Qt.rect(-65, -75, terminal.width + 130, terminal.height + 150)
 
-    shaderString: "WhiteFrameShader.qml"
+    shaderString: "FrameShader.qml"
 }

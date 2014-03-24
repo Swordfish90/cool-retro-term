@@ -46,11 +46,11 @@ Item{
         sourceItem: frameimage
         hideSource: true
     }
-//    ShaderEffectSource{
-//        id: framesourcenormals
-//        sourceItem: framenormals
-//        hideSource: true
-//    }
+    ShaderEffectSource{
+        id: framesourcenormals
+        sourceItem: framenormals
+        hideSource: true
+    }
     Loader{
         anchors.fill: frameimage
         source: shaderString

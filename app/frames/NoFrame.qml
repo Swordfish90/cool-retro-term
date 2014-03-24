@@ -5,8 +5,8 @@ TerminalFrame{
     id: frame
     z: 2.1
     anchors.fill: parent
-    addedWidth: 190
-    addedHeight: 190
+    addedWidth: 140
+    addedHeight: 140
     borderLeft: 116
     borderRight: 116
     borderTop: 116

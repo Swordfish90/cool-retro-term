@@ -16,5 +16,5 @@ TerminalFrame{
     normalsSource: "../images/black-frame-normals.png"
     sourceRect: Qt.rect(-80, -90, terminal.width + 160, terminal.height + 180)
 
-    shaderString: "WhiteFrameShader.qml"
+    shaderString: "FrameShader.qml"
 }
