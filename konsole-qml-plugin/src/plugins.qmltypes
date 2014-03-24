@@ -165,5 +165,11 @@ Module {
             Parameter { name: "session"; type: "KSession"; isPointer: true }
         }
         Method { name: "getSession"; type: "KSession*" }
+
+        //My additions
+        Method {
+            name: "setLineSpacing"
+            Parameter { name: "i"; type: "uint"}
+        }
     }
 }

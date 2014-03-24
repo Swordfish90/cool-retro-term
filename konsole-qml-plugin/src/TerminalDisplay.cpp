@@ -155,7 +155,7 @@ KTerminalDisplay::KTerminalDisplay(QQuickItem *parent) :
   ,_isFixedSize(false)
   ,_resizeTimer(0)
   ,_flowControlWarningEnabled(false)
-  ,_lineSpacing(0)
+  ,_lineSpacing(2)
   ,_colorsInverted(false)
   ,_cursorShape(BlockCursor)
   ,m_session(0)

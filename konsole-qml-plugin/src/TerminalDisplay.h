@@ -70,6 +70,7 @@ class KONSOLEPRIVATE_EXPORT KTerminalDisplay : public QQuickPaintedItem
     Q_PROPERTY(bool ShowIMEOnClick     READ autoVKB         WRITE setAutoVKB     NOTIFY changedAutoVKB)
 
 
+
 public:
     KTerminalDisplay(QQuickItem *parent = 0);
     ~KTerminalDisplay();
@@ -95,7 +96,7 @@ public:
     /** Specifies whether or not text can blink. */
     void setBlinkingTextEnabled(bool blink);
 
-    void setLineSpacing(uint);
+    Q_INVOKABLE void setLineSpacing(uint);
     uint lineSpacing() const;
 
     void emitSelection(bool useXselection,bool appendReturn);
