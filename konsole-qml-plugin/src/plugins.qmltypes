@@ -171,5 +171,7 @@ Module {
             name: "setLineSpacing"
             Parameter { name: "i"; type: "uint"}
         }
+        Method { name: "scrollUp" }
+        Method { name: "scrollDown" }
     }
 }

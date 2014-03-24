@@ -243,6 +243,18 @@ ScreenWindow* KTerminalDisplay::screenWindow() const
     return _screenWindow;
 }
 
+
+void KTerminalDisplay::scrollDown(){
+    _screenWindow->scrollBy( ScreenWindow::ScrollLines, +2 );
+    _screenWindow->scrollCount();
+    updateImage();
+}
+
+void KTerminalDisplay::scrollUp(){
+    _screenWindow->scrollBy( ScreenWindow::ScrollLines, -2 );
+    updateImage();
+}
+
 void KTerminalDisplay::forcedFocus()
 {
 

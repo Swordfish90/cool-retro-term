@@ -11,6 +11,14 @@ Item{
     property real _minBlurCoefficient: 0.015
     property real _maxBlurCoefficient: 0.10
 
+    function scrollUp(){
+        kterminal.scrollUp();
+    }
+
+    function scrollDown(){
+        kterminal.scrollDown();
+    }
+
     KTerminal {
         id: kterminal
         font.pointSize: shadersettings.fontSize

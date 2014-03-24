@@ -99,6 +99,9 @@ public:
     Q_INVOKABLE void setLineSpacing(uint);
     uint lineSpacing() const;
 
+    Q_INVOKABLE void scrollDown();
+    Q_INVOKABLE void scrollUp();
+
     void emitSelection(bool useXselection,bool appendReturn);
 
     /**
