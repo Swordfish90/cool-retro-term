@@ -30,56 +30,41 @@ ShaderEffect {
     property real noise_strength: shadersettings.noise_strength
     property real screen_distorsion: shadersettings.screen_distortion
     property real glowing_line_strength: shadersettings.glowing_line_strength
-    property real brightness: 1.0
 
     property real scanlines: shadersettings.scanlines ? 1.0 : 0.0
 
-    Behavior on brightness {
-        NumberAnimation{
-            duration: 250
-            onRunningChanged:
-                if(!running) shadercontainer.brightness = 1.0;
-        }
-    }
 
     Behavior on horizontal_distortion {
         NumberAnimation{
-            duration: 150
+            duration: 100
             onRunningChanged:
                 if(!running) shadercontainer.horizontal_distortion = 0.0;
         }
     }
 
-    Loader{
-        active: shadersettings.screen_flickering !== 0
-        sourceComponent: Timer{
-            property real randval
-            id: flickertimer
-            interval: 500
-            onTriggered: {
-                randval = Math.random();
-                if(randval < shadersettings.screen_flickering){
-                    shadercontainer.horizontal_distortion = Math.random() * shadersettings.screen_flickering;
-                }
-                randval = Math.random();
-                if(randval < shadersettings.screen_flickering)
-                    shadercontainer.brightness = Math.random() * 0.5 + 0.5;
-            }
 
-            repeat: true
-            running: true
-        }
-    }
+    //Manage brightness the function might be improved
+    property real screen_flickering: shadersettings.screen_flickering
+    property real _A: 0.5 + Math.random() * 0.2
+    property real _B: 0.3 + Math.random() * 0.2
+    property real _C: 1.2 - _A - _B
+    property real a: (0.2 + Math.random() * 0.2) * 0.05
+    property real b: (0.4 + Math.random() * 0.2) * 0.05
+    property real c: (0.7 + Math.random() * 0.2) * 0.05
+    property real brightness: screen_flickering * (
+                                  _A * Math.cos(a * time) +
+                                  _B * Math.sin(b * time) +
+                                  _C * Math.cos(c * time))
+
 
     property real deltay: 3 / terminal.height
     property real deltax: 3 / terminal.width
     property real horizontal_distortion: 0.0
-    //property real faulty_screen_prob: shadersettings.faulty_screen_prob
 
     NumberAnimation on time{
         from: -1
-        to: 100
-        duration: 5000
+        to: 10000
+        duration: 10000
 
         loops: Animation.Infinite
     }
@@ -99,7 +84,7 @@ ShaderEffect {
             (noise_strength !== 0 ? "uniform highp float noise_strength;" : "") +
             (screen_distorsion !== 0 ? "uniform highp float screen_distorsion;" : "")+
             (glowing_line_strength !== 0 ? "uniform highp float glowing_line_strength;" : "")+
-            "uniform highp float brightness;" +
+            "uniform lowp float brightness;" +
 
             (scanlines != 0 ? "uniform highp float scanlines;" : "") +
 
@@ -127,7 +112,7 @@ ShaderEffect {
 
             (glowing_line_strength !== 0 ?
             "float randomPass(vec2 coords){
-                return fract(smoothstep(-0.2, 0.0, coords.y - time * 0.03)) * glowing_line_strength;
+                return fract(smoothstep(-0.2, 0.0, coords.y - time * 0.0007)) * glowing_line_strength;
             }" : "") +
 
 
@@ -152,8 +137,8 @@ ShaderEffect {
                 "vec3 finalColor = mix(background_color, font_color, color).rgb;
                 finalColor = mix(finalColor, vec3(0.0), scanline_alpha);" +
 
-                (brightness !== 1.0 ?
-                "finalColor = finalColor * brightness;" : "") +
+                (screen_flickering !== 0 ?
+                "finalColor = mix(finalColor, vec3(0.0), brightness);" : "") +
 
                 "gl_FragColor = vec4(finalColor, 1.0);
             }"

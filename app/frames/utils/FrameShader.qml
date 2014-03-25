@@ -38,7 +38,7 @@ ShaderEffect{
                                 vec4 txt_normal = texture2D(normals, coords);
                                 vec3 normal = normalize(txt_normal.rgb * 2.0 - 1.0);
                                 vec3 light_dir = normalize(vec3(0.5,0.5, 0.0) - vec3(qt_TexCoord0, 0.0));
-                                float reflection = dot(normal, light_dir) * 0.4 * brightness + 0.2;
+                                float reflection = (dot(normal, light_dir) * 0.4 + 0.2) * (1.0-brightness);
                                 vec3 final_color = reflection_color * reflection * 0.5;
                                 final_color += txt_color * ambient_light;
                                 gl_FragColor = vec4(final_color * txt_normal.a, txt_color.a);
