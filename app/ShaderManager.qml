@@ -33,39 +33,33 @@ ShaderEffect {
 
     property real scanlines: shadersettings.scanlines ? 1.0 : 0.0
 
-
-    Behavior on horizontal_distortion {
-        NumberAnimation{
-            duration: 100
-            onRunningChanged:
-                if(!running) shadercontainer.horizontal_distortion = 0.0;
-        }
-    }
-
-
     //Manage brightness (the function might be improved)
     property real screen_flickering: shadersettings.screen_flickering
-    property real _A: 0.5 + Math.random() * 0.2
-    property real _B: 0.3 + Math.random() * 0.2
+    property real _A: 0.4 + Math.random() * 0.4
+    property real _B: 0.2 + Math.random() * 0.4
     property real _C: 1.2 - _A - _B
-    property real a: (0.2 + Math.random() * 0.2) * 0.05
-    property real b: (0.4 + Math.random() * 0.2) * 0.05
-    property real c: (0.7 + Math.random() * 0.2) * 0.05
-    property real brightness: screen_flickering * (
-                                  _A * Math.cos(a * time) +
-                                  _B * Math.sin(b * time) +
-                                  _C * Math.cos(c * time))
+    property real a: (0.1 + Math.random() * 0.4) * 0.05
+    property real b: (0.3 + Math.random() * 0.4) * 0.05
+    property real c: (0.6 + Math.random() * 0.4) * 0.05
+
+    property real randval: (_A * Math.cos(a * time + _B) +
+                            _B * Math.sin(b * time + _C) +
+                            _C * Math.cos(c * time + _A))
+
+    property real brightness: screen_flickering * randval
+    property real horizontal_sincronization: shadersettings.horizontal_sincronization
+    property real _neg_sinc: 1 - horizontal_sincronization
+    property real horizontal_distortion: randval > (_neg_sinc) ? (randval - _neg_sinc) * horizontal_sincronization : 0
 
     property real deltay: 3 / terminal.height
     property real deltax: 3 / terminal.width
-    property real horizontal_distortion: 0.0
 
-    NumberAnimation on time{
-        from: -1
-        to: 10000
-        duration: 10000
-
-        loops: Animation.Infinite
+    Timer{
+        id: timetimer
+        onTriggered: time += interval
+        interval: 16
+        running: true
+        repeat: true
     }
 
     fragmentShader: "
@@ -118,9 +112,12 @@ ShaderEffect {
                  vec2 coords = (qt_TexCoord0 - cc * (1.0 + distortion) * distortion);"
                 :"vec2 coords = qt_TexCoord0;") +
 
-                (horizontal_distortion !== 0 ?
-                "float distortion = (sin(coords.y * 20.0 * fract(time * 0.1) + sin(fract(time * 0.2))) + sin(time * 0.05));
-                coords.x = coords.x + distortion * 0.3 * horizontal_distortion; " : "") +
+                (shadersettings.horizontal_sincronization !== 0 ?
+                "float h_distortion = 0.5 * sin(time*0.001 + coords.y*10.0*fract(time/10.0));
+                h_distortion += 0.5 * cos(time*0.04 + 0.03 + coords.y*50.0*fract(time/10.0 + 0.4));
+                coords.x = coords.x + h_distortion * 0.3 * horizontal_distortion;" +
+                    (noise_strength ? "noise_strength += horizontal_distortion * 0.5;" : "")
+                 : "") +
 
                 "float color = texture2D(source, coords).r;" +
 

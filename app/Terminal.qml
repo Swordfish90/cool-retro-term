@@ -74,8 +74,10 @@ Item{
             sourceItem: blurredterminal
             recursive: true
             live: true
+            smooth: false
         }
     }
+
     ShaderEffect {
         id: blurredterminal
         anchors.fill: parent
@@ -83,6 +85,7 @@ Item{
         property variant blurredSource: (mBlur !== 0) ? blurredSource : undefined
         property variant bloomSource: (mBloom !== 0) ? bloomSource : undefined
         z: 2
+
         fragmentShader:
             "uniform lowp float qt_Opacity;" +
             "uniform lowp sampler2D source;" +

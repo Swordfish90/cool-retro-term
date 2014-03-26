@@ -34,7 +34,7 @@ Item{
     property real motion_blur: 0.65
     property real bloom_strength: 0.8
 
-    property real horizontal_sinc: 0.2
+    property real horizontal_sincronization: 0.1
     property real screen_flickering: 0.12
 
     property bool scanlines: false

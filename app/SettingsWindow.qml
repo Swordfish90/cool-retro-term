@@ -28,10 +28,9 @@ ApplicationWindow {
     id: settings_window
     title: qsTr("Settings")
     width: 640
-    height: 300
+    height: 400
 
-    visible: true
-    modality: Qt.ApplicationModal
+    //modality: Qt.ApplicationModal
 
     TabView{
         anchors.fill: parent
@@ -172,6 +171,11 @@ ApplicationWindow {
                         name: "Screen flickering"
                         onValueChanged: shadersettings.screen_flickering = value;
                         _value: shadersettings.screen_flickering;
+                    }
+                    SettingComponent{
+                        name: "Horizontal flickering"
+                        onValueChanged: shadersettings.horizontal_sincronization = value;
+                        _value: shadersettings.horizontal_sincronization;
                     }
                 }
             }
