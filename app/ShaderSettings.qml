@@ -32,7 +32,7 @@ Item{
     property real screen_distortion: 0.15
     property real glowing_line_strength: 0.4
     property real motion_blur: 0.65
-    property real bloom_strength: 0.8
+    property real bloom_strength: 0.6
 
     property real horizontal_sincronization: 0.1
     property real screen_flickering: 0.12
