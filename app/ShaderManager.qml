@@ -43,7 +43,7 @@ ShaderEffect {
     }
 
 
-    //Manage brightness the function might be improved
+    //Manage brightness (the function might be improved)
     property real screen_flickering: shadersettings.screen_flickering
     property real _A: 0.5 + Math.random() * 0.2
     property real _B: 0.3 + Math.random() * 0.2
@@ -55,7 +55,6 @@ ShaderEffect {
                                   _A * Math.cos(a * time) +
                                   _B * Math.sin(b * time) +
                                   _C * Math.cos(c * time))
-
 
     property real deltay: 3 / terminal.height
     property real deltax: 3 / terminal.width
@@ -103,12 +102,6 @@ ShaderEffect {
                 return abs(sin(pos.y * txt_Size.y)) * 0.5;
             }" +
 
-            (screen_distorsion !== 0 ?
-            "vec2 distortCoordinates(vec2 coords){
-                vec2 cc = coords - vec2(0.5);
-                float dist = dot(cc, cc) * screen_distorsion ;
-                return (coords + cc * (1.0 + dist) * dist);
-            }" : "") +
 
             (glowing_line_strength !== 0 ?
             "float randomPass(vec2 coords){
@@ -117,7 +110,13 @@ ShaderEffect {
 
 
             "void main() {" +
-                (screen_distorsion !== 0 ? "vec2 coords = distortCoordinates(qt_TexCoord0);" : "vec2 coords = qt_TexCoord0;") +
+                "vec2 cc = vec2(0.5) - qt_TexCoord0;" +
+                "float distance = length(cc);" +
+
+                (screen_distorsion !== 0 ?
+                "float distortion = dot(cc, cc) * screen_distorsion;
+                 vec2 coords = (qt_TexCoord0 - cc * (1.0 + distortion) * distortion);"
+                :"vec2 coords = qt_TexCoord0;") +
 
                 (horizontal_distortion !== 0 ?
                 "float distortion = (sin(coords.y * 20.0 * fract(time * 0.1) + sin(fract(time * 0.2))) + sin(time * 0.05));
@@ -129,17 +128,16 @@ ShaderEffect {
                 "float scanline_alpha = getScanlineIntensity(coords);" : "float scanline_alpha = 0.0;") +
 
                 (noise_strength !== 0 ?
-                "color += stepNoise(coords) * noise_strength;" : "") +
+                "color += stepNoise(coords) * noise_strength * (1.0 - distance * distance * 2.0);" : "") +
 
                 (glowing_line_strength !== 0 ?
                 "color += randomPass(coords) * glowing_line_strength;" : "") +
 
-                "vec3 finalColor = mix(background_color, font_color, color).rgb;
-                finalColor = mix(finalColor, vec3(0.0), scanline_alpha);" +
+                "vec3 finalColor = mix(background_color, font_color, color).rgb;" +
+                "finalColor = mix(finalColor * 1.1, vec3(0.0), 1.2 * distance * distance + scanline_alpha);" +
 
                 (screen_flickering !== 0 ?
                 "finalColor = mix(finalColor, vec3(0.0), brightness);" : "") +
-
                 "gl_FragColor = vec4(finalColor, 1.0);
             }"
 }
