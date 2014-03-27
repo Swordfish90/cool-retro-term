@@ -42,9 +42,9 @@ ShaderEffect {
     property real _A: 0.4 + Math.random() * 0.4
     property real _B: 0.2 + Math.random() * 0.4
     property real _C: 1.2 - _A - _B
-    property real a: (0.1 + Math.random() * 0.4) * 0.05
-    property real b: (0.3 + Math.random() * 0.4) * 0.05
-    property real c: (0.6 + Math.random() * 0.4) * 0.05
+    property real a: (0.0 + Math.random() * 0.4) * 0.05
+    property real b: (0.1 + Math.random() * 0.4) * 0.05
+    property real c: (0.4 + Math.random() * 0.4) * 0.05
 
     property real randval: (_A * Math.cos(a * time + _B) +
                             _B * Math.sin(b * time + _C) +
@@ -83,7 +83,6 @@ ShaderEffect {
         repeat: true
     }
 
-    //TODO fix the glow line which is after the first time
     fragmentShader: "
             uniform sampler2D source;
             uniform highp float qt_Opacity;
@@ -106,13 +105,20 @@ ShaderEffect {
 
     (shadersettings.screen_flickering !== 0 ? "uniform highp float horizontal_distortion;" : "") +
 
-    "float rand(vec2 co, float time){
-                return fract(sin(dot(co.xy ,vec2(0.37898 * time ,0.78233))) * 437.5875453);
+
+            "highp float rand(vec2 co)
+            {
+                highp float a = 12.9898;
+                highp float b = 78.233;
+                highp float c = 43758.5453;
+                highp float dt= dot(co.xy ,vec2(a,b));
+                highp float sn= mod(dt,3.14);
+                return fract(sin(sn) * c);
             }
 
             float stepNoise(vec2 p){
-                vec2 newP = p * txt_Size*0.25;
-                return rand(floor(newP), time);
+                vec2 newP = p * txt_Size*0.5;
+                return rand(floor(newP) + fract(time / 100.0));
             }
 
             float getScanlineIntensity(vec2 pos){
@@ -122,7 +128,7 @@ ShaderEffect {
 
     (glowing_line_strength !== 0 ?
     "float randomPass(vec2 coords){
-                return fract(smoothstep(-0.2, 0.0, coords.y - 3.0 * fract(time * 0.0002))) * glowing_line_strength;
+                return fract(smoothstep(-0.2, 0.0, coords.y - 3.0 * fract(time * 0.0001))) * glowing_line_strength;
             }" : "") +
 
 

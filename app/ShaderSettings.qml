@@ -24,9 +24,20 @@ Item{
     property bool fullscreen: false
 
     property real ambient_light: 0.2
+    property real contrast: 0.9
 
-    property string background_color: "#002200"
-    property string font_color: "#00ff00"
+    function mix(c1, c2, alpha){
+        return Qt.rgba(c1.r * alpha + c2.r * (1-alpha),
+                       c1.g * alpha + c2.g * (1-alpha),
+                       c1.b * alpha + c2.b * (1-alpha),
+                       c1.a * alpha + c2.a * (1-alpha))
+    }
+
+    //Private atttributes might need processing
+    property color _background_color: "#002200"
+    property color _font_color: "#00ff00"
+    property color font_color: mix(_font_color, _background_color, 0.5 + (contrast * 0.5))
+    property color background_color: mix(_background_color, _font_color, 0.5 + (contrast * 0.5))
 
     property real noise_strength: 0.1
     property real screen_distortion: 0.15
@@ -130,6 +141,8 @@ Item{
 
         settings = JSON.parse(settings);
 
+        contrast = settings.contrast ? settings.contrast : contrast;
+
         ambient_light = settings.ambient_light ? settings.ambient_light : ambient_light;
         background_color = settings.background_color ? settings.background_color : background_color;
         font_color = settings.font_color ? settings.font_color : font_color;
@@ -152,6 +165,7 @@ Item{
     function storeCurrentSettings(){
         var settings = {
             ambient_light : ambient_light,
+            contrast : contrast,
             background_color: background_color,
             font_color: font_color,
             screen_flickering: screen_flickering,

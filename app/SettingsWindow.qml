@@ -86,8 +86,8 @@ ApplicationWindow {
                             height: 50
                             Layout.fillWidth: true
                             Layout.columnSpan: 2
-                            onButton_colorChanged: shadersettings.font_color = button_color;
-                            Component.onCompleted: button_color = shadersettings.font_color;
+                            onButton_colorChanged: shadersettings._font_color = button_color;
+                            Component.onCompleted: button_color = shadersettings._font_color;
                         }
                     }
                 }
@@ -112,8 +112,20 @@ ApplicationWindow {
                             Layout.fillWidth: true
                             Layout.columnSpan: 2
 
-                            onButton_colorChanged: shadersettings.background_color= button_color
-                            Component.onCompleted: button_color = shadersettings.background_color;
+                            onButton_colorChanged: shadersettings._background_color= button_color
+                            Component.onCompleted: button_color = shadersettings._background_color;
+                        }
+                    }
+                }
+                GroupBox{
+                    title: qsTr("Background")
+                    Layout.fillWidth: true
+                    Layout.fillHeight:true
+                    ColumnLayout{
+                        SettingComponent{
+                            name: "Contrast"
+                            onValueChanged: shadersettings.contrast = value
+                            _value: shadersettings.contrast
                         }
                     }
                 }
