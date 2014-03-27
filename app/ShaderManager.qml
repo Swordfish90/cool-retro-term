@@ -122,7 +122,7 @@ ShaderEffect {
             }
 
             float getScanlineIntensity(vec2 pos){
-                return abs(sin(pos.y * txt_Size.y)) * 0.5;
+                return abs(sin(pos.y * txt_Size.y)) * 0.5 + 0.5;
             }" +
 
 
@@ -153,7 +153,7 @@ ShaderEffect {
     (bloom !== 0 ? "color += texture2D(bloomSource, coords).r *" + 2.5 * bloom + ";" : "") +
 
     (scanlines !== 0 ?
-    "float scanline_alpha = getScanlineIntensity(coords);" : "float scanline_alpha = 0.0;") +
+    "float scanline_alpha = getScanlineIntensity(coords);" : "float scanline_alpha = 1.0;") +
 
     (noise_strength !== 0 ?
     "color += stepNoise(coords) * noise_strength * (1.0 - distance * distance * 2.0);" : "") +
@@ -161,8 +161,8 @@ ShaderEffect {
     (glowing_line_strength !== 0 ?
     "color += randomPass(coords) * glowing_line_strength;" : "") +
 
-    "vec3 finalColor = mix(background_color, font_color, color).rgb;" +
-    "finalColor = mix(finalColor * 1.1, vec3(0.0), 1.2 * distance * distance + scanline_alpha);" +
+    "vec3 finalColor = mix(background_color, font_color, color * scanline_alpha).rgb;" +
+    "finalColor = mix(finalColor * 1.1, vec3(0.0), 1.2 * distance * distance);" +
 
     (screen_flickering !== 0 ?
     "finalColor = mix(finalColor, vec3(0.0), brightness);" : "") +
