@@ -37,6 +37,8 @@ Item{
             }
         }
 
+        onUpdatedImage: {blurredSource.live = true;livetimer.restart();}
+
         Component.onCompleted: {
             font.pointSize = shadersettings.fontSize;
             font.family = shadersettings.font.name;
@@ -58,6 +60,12 @@ Item{
             sourceItem: blurredterminal
             recursive: true
             live: true
+
+            Timer{
+                id: livetimer
+                running: true
+                onTriggered: parent.live = false;
+            }
         }
     }
 

@@ -121,10 +121,6 @@ ApplicationWindow{
                 GradientStop{position: 0.7; color: "#00000000"}
             }
         }
-
-        Terminal{
-            anchors.fill: parent
-        }
     }
 
     ShaderSettings{

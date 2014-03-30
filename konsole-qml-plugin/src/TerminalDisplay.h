@@ -404,6 +404,7 @@ signals:
     void changedAutoVKB(bool au);
     void changedAutoFocus(bool au);
 
+    void updatedImage();
     void clicked();
 
     /////////////////////////////////////////////////////////////////////////////////////

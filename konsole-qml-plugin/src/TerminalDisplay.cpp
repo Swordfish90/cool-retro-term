@@ -903,6 +903,8 @@ void KTerminalDisplay::updateImage()
   delete[] dirtyMask;
   delete[] disstrU;
 
+  //Notify changes to qml
+  emit updatedImage();
 }
 
 void KTerminalDisplay::setBlinkingCursor(bool blink)

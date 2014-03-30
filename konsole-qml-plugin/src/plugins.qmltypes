@@ -110,6 +110,7 @@ Module {
             name: "changedSession"
             Parameter { name: "session"; type: "KSession"; isPointer: true }
         }
+        Signal { name: "updatedImage" }
         Method { name: "forcedFocus" }
         Method {
             name: "setColorScheme"
