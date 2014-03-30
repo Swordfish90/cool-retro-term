@@ -30,7 +30,9 @@ ApplicationWindow{
     width: 1024
     height: 768
 
-    title: qsTr("Terminal")
+    title: qsTr("cool-old-term")
+    visible: true
+    visibility: shadersettings.fullscreen ? Window.FullScreen : Window.Windowed
 
     Action {
         id: fullscreenAction
@@ -52,7 +54,6 @@ ApplicationWindow{
 
     menuBar: MenuBar {
         id: menubar
-
         Menu {
             title: qsTr("File")
             visible: shadersettings.fullscreen ? false : true
@@ -66,50 +67,34 @@ ApplicationWindow{
         }
     }
 
-    visible: true
-    visibility: shadersettings.fullscreen ? Window.FullScreen : Window.Windowed
-
     Item{
         id: maincontainer
         anchors.fill: parent
         clip: true
-
+        Terminal{
+            id: terminal
+            width: parent.width
+            height: parent.height
+        }
         ShaderEffectSource{
             id: theSource
             sourceItem: terminal
             sourceRect: frame.sourceRect
         }
-
         ShaderManager{
             id: shadercontainer
             anchors.fill: terminal
             blending: true
             z: 1.9
         }
-
         Loader{
+            id: frame
             property rect sourceRect: item.sourceRect
 
-            id: frame
             anchors.fill: parent
             z: 2.1
             source: shadersettings.frame_source
         }
-
-        Loader{
-            id: terminal
-
-            width: parent.width
-            height: parent.height
-        }
-
-        MouseArea{
-            acceptedButtons: Qt.NoButton
-            anchors.fill: parent
-            onWheel:
-                wheel.angleDelta.y > 0 ? terminal.item.scrollUp() : terminal.item.scrollDown()
-        }
-
         RadialGradient{
             id: ambientreflection
             z: 2.0
@@ -122,12 +107,10 @@ ApplicationWindow{
             }
         }
     }
-
     ShaderSettings{
         id: shadersettings
-        Component.onCompleted: terminal.source = "Terminal.qml"
+        Component.onCompleted: terminal.loadKTerminal();
     }
-
     SettingsWindow{
         id: settingswindow
         visible: false

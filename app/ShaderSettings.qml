@@ -66,11 +66,11 @@ Item{
     onFont_scalingChanged: handleFontChanged();
 
     function handleFontChanged(){
-        terminal.source = "";
+        terminal.unloadKTerminal();
         currentfont.source = fontlist.get(font_index).source;
         currentfont.pixelSize = fontlist.get(font_index).pixelSize;
         currentfont.lineSpacing = fontlist.get(font_index).lineSpacing;
-        terminal.source = "Terminal.qml";
+        terminal.loadKTerminal();
     }
 
     FontLoader{

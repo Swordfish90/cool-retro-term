@@ -11,47 +11,52 @@ Item{
     property real _minBlurCoefficient: 0.015
     property real _maxBlurCoefficient: 0.10
 
-    function scrollUp(){
-        kterminal.scrollUp();
+    function loadKTerminal(){
+        kterminal.active = true;
+    }
+    function unloadKTerminal(){
+        kterminal.active = false;
     }
 
-    function scrollDown(){
-        kterminal.scrollDown();
-    }
-
-    KTerminal {
+    Loader{
         id: kterminal
-        font.pointSize: shadersettings.fontSize
-        font.family: shadersettings.font.name
-        width: parent.width
-        height: parent.height
+        active: false
+        anchors.fill: parent
+        sourceComponent: KTerminal {
+            font.pointSize: shadersettings.fontSize
+            font.family: shadersettings.font.name
 
-        colorScheme: "MyWhiteOnBlack"
+            colorScheme: "MyWhiteOnBlack"
 
-        session: KSession {
-            id: ksession
-            kbScheme: "linux"
+            session: KSession {
+                id: ksession
+                kbScheme: "linux"
 
-            onFinished: {
-                Qt.quit()
+                onFinished: {
+                    Qt.quit()
+                }
+            }
+
+            onUpdatedImage: {blurredSource.live = true;livetimer.restart();}
+
+            Component.onCompleted: {
+                font.pointSize = shadersettings.fontSize;
+                font.family = shadersettings.font.name;
+                forceActiveFocus();
             }
         }
-
-        onUpdatedImage: {blurredSource.live = true;livetimer.restart();}
-
-        Component.onCompleted: {
-            font.pointSize = shadersettings.fontSize;
-            font.family = shadersettings.font.name;
-            forceActiveFocus();
-        }
     }
-
+    MouseArea{
+        acceptedButtons: Qt.NoButton
+        anchors.fill: parent
+        onWheel:
+            wheel.angleDelta.y > 0 ? kterminal.item.scrollUp() : kterminal.item.scrollDown()
+    }
     ShaderEffectSource{
         id: source
         sourceItem: kterminal
         hideSource: true
     }
-
     Loader{
         anchors.fill: parent
         active: mBlur !== 0
@@ -68,7 +73,6 @@ Item{
             }
         }
     }
-
     ShaderEffect {
         id: blurredterminal
         anchors.fill: parent

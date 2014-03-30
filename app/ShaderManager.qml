@@ -50,6 +50,7 @@ ShaderEffect {
                             _B * Math.sin(b * time + _C) +
                             _C * Math.cos(c * time + _A))
 
+
     property real brightness: screen_flickering * randval
     property real horizontal_sincronization: shadersettings.horizontal_sincronization
     property real _neg_sinc: 1 - horizontal_sincronization
