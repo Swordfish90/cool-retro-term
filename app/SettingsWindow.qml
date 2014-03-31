@@ -50,9 +50,8 @@ ApplicationWindow {
                     ComboBox{
                         anchors.fill: parent
                         model: shadersettings.profiles_list
-                        onCurrentIndexChanged: {
-                            shadersettings.loadProfile(shadersettings.profiles_list.get(currentIndex).obj_name);
-                        }
+                        onCurrentIndexChanged: shadersettings.profiles_index = currentIndex
+                        currentIndex: shadersettings.profiles_index
                     }
                 }
 
@@ -87,7 +86,7 @@ ApplicationWindow {
                             Layout.fillWidth: true
                             Layout.columnSpan: 2
                             onButton_colorChanged: shadersettings._font_color = button_color;
-                            Component.onCompleted: button_color = shadersettings._font_color;
+                            button_color: shadersettings._font_color;
                         }
                     }
                 }
@@ -113,24 +112,29 @@ ApplicationWindow {
                             Layout.columnSpan: 2
 
                             onButton_colorChanged: shadersettings._background_color= button_color
-                            Component.onCompleted: button_color = shadersettings._background_color;
+                            button_color: shadersettings._background_color;
                         }
                     }
                 }
                 GroupBox{
                     title: qsTr("Background")
                     Layout.fillWidth: true
-                    Layout.fillHeight:true
+                    Layout.columnSpan: 2
+                    anchors.left: parent.left
+                    anchors.right: parent.right
                     ColumnLayout{
-                        SettingComponent{
+                        Layout.columnSpan: 2
+                        anchors.left: parent.left
+                        anchors.right: parent.right
+                        SimpleSlider{
                             name: "Contrast"
                             onValueChanged: shadersettings.contrast = value
-                            _value: shadersettings.contrast
+                            value: shadersettings.contrast
                         }
-                        SettingComponent{
+                        SimpleSlider{
                             name: "Brightness"
                             onValueChanged: shadersettings.brightness = value
-                            _value: shadersettings.brightness
+                            value: shadersettings.brightness
                         }
                     }
                 }

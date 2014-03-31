@@ -49,7 +49,7 @@ ApplicationWindow{
     Action{
         id: showsettingsAction
         text: "&Settings"
-        onTriggered: settingswindow.show();
+        onTriggered: settingswindowloader.active = true;
     }
 
     menuBar: MenuBar {
@@ -132,8 +132,13 @@ ApplicationWindow{
         id: shadersettings
         Component.onCompleted: terminal.loadKTerminal();
     }
-    SettingsWindow{
-        id: settingswindow
-        visible: false
+    Loader{
+        id: settingswindowloader
+        active: false
+        sourceComponent: SettingsWindow{
+            id: settingswindow
+            visible: true
+            onClosing: settingswindowloader.active = false;
+        }
     }
 }

@@ -34,12 +34,18 @@ Item{
                        c1.b * alpha + c2.b * (1-alpha),
                        c1.a * alpha + c2.a * (1-alpha))
     }
+    function strToColor(s){
+        var r = parseInt(s.substring(1,3), 16) / 256;
+        var g = parseInt(s.substring(3,5), 16) / 256;
+        var b = parseInt(s.substring(5,7), 16) / 256;
+        return Qt.rgba(r, g, b, 1.0);
+    }
 
-    //Private atttributes might need processing
-    property color _background_color: "#000000"
-    property color _font_color: "#00ff00"
-    property color font_color: mix(_font_color, _background_color, 0.5 + (contrast * 0.5))
-    property color background_color: mix(_background_color, _font_color, 0.5 + (contrast * 0.5))
+    //Probably there is a better way to cast string to colors.
+    property string _background_color: "#000000"
+    property string _font_color: "#00ff00"
+    property color font_color: mix(strToColor(_font_color), strToColor(_background_color), 0.7 + (contrast * 0.3))
+    property color background_color: mix(strToColor(_background_color), strToColor(_font_color), 0.7 + (contrast * 0.3))
 
     property real noise_strength: 0.1
     property real screen_distortion: 0.15
@@ -53,7 +59,7 @@ Item{
     property real scanlines: 0.0
 
     property string frame_source: frames_list.get(frames_index).source
-    property int frames_index: 2
+    property int frames_index: 1
     property var frames_list: framelist
 
     property real font_scaling: 1.0
@@ -63,6 +69,8 @@ Item{
     property var fonts_list: fontlist
 
     property var profiles_list: profileslist
+    property int profiles_index: 0
+    onProfiles_indexChanged: loadProfile(profiles_list.get(profiles_index).obj_name);
 
     onFont_indexChanged: handleFontChanged();
     onFont_scalingChanged: handleFontChanged();
@@ -140,14 +148,15 @@ Item{
     function loadProfile(profilename){
         var settings = storage.getSetting(profilename);
         if(!settings) return;
-
+        console.log(profilename + settings);
         settings = JSON.parse(settings);
 
         contrast = settings.contrast ? settings.contrast : contrast;
+        brightness = settings.brightness ? settings.brightness : brightness
 
         ambient_light = settings.ambient_light ? settings.ambient_light : ambient_light;
-        background_color = settings.background_color ? settings.background_color : background_color;
-        font_color = settings.font_color ? settings.font_color : font_color;
+        _background_color = settings.background_color ? settings.background_color : _background_color;
+        _font_color = settings.font_color ? settings.font_color : _font_color;
 
         brightness_flickering = settings.brightness_flickering ? settings.brightness_flickering : brightness_flickering;
         noise_strength = settings.noise_strength ? settings.noise_strength : noise_strength;
@@ -167,9 +176,10 @@ Item{
     function storeCurrentSettings(){
         var settings = {
             ambient_light : ambient_light,
+            brightness : brightness,
             contrast : contrast,
-            background_color: background_color,
-            font_color: font_color,
+            background_color: _background_color,
+            font_color: _font_color,
             brightness_flickering: brightness_flickering,
             noise_strength: noise_strength,
             screen_distortion: screen_distortion,
@@ -197,7 +207,7 @@ Item{
     }
     Component.onDestruction: {
         storeCurrentSettings();
-        storage.dropSettings();
+        //storage.dropSettings(); //DROPS THE SETTINGS!.. REMEMBER TO DISABLE ONCE ENABLED!!
     }
 
 
