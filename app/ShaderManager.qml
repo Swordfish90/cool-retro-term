@@ -34,8 +34,6 @@ ShaderEffect {
     property real screen_distorsion: shadersettings.screen_distortion
     property real glowing_line_strength: shadersettings.glowing_line_strength
 
-    property real scanlines: shadersettings.scanlines ? 1.0 : 0.0
-
     property real brightness_flickering: shadersettings.brightness_flickering
     property real horizontal_sincronization: shadersettings.horizontal_sincronization
 
@@ -116,8 +114,6 @@ ShaderEffect {
     (horizontal_sincronization !== 0 ? "
         varying lowp float horizontal_distortion;" : "") +
 
-    (scanlines != 0 ? "uniform highp float scanlines;" : "") +
-
     "
     highp float rand(vec2 co)
     {
@@ -132,12 +128,7 @@ ShaderEffect {
     float stepNoise(vec2 p){
         vec2 newP = p * txt_Size*0.5;
         return rand(floor(newP) + fract(time / 100.0));
-    }
-
-    float getScanlineIntensity(vec2 pos){
-        return abs(sin(pos.y * txt_Size.y)) * 0.5 + 0.5;
     }" +
-
 
     (glowing_line_strength !== 0 ? "
         float randomPass(vec2 coords){
@@ -169,22 +160,18 @@ ShaderEffect {
         (bloom !== 0 ? "
             color += texture2D(bloomSource, coords).r *" + 2.5 * bloom + ";" : "") +
 
-        (scanlines !== 0 ? "
-            float scanline_alpha = getScanlineIntensity(coords);"
-        :
-            "float scanline_alpha = 1.0;") +
-
         (noise_strength !== 0 ? "
             color += stepNoise(coords) * noise_strength * (1.0 - distance * distance * 2.0);" : "") +
 
         (glowing_line_strength !== 0 ? "
             color += randomPass(coords) * glowing_line_strength;" : "") +
 
-        "vec3 finalColor = mix(background_color, font_color, color * scanline_alpha).rgb;" +
+        "vec3 finalColor = mix(background_color, font_color, color).rgb;" +
         "finalColor = mix(finalColor * 1.1, vec3(0.0), 1.2 * distance * distance);" +
 
         (brightness_flickering !== 0 ? "
             finalColor = mix(finalColor, vec3(0.0), brightness);" : "") +
+
         "
         gl_FragColor = vec4(finalColor, 1.0);
     }"

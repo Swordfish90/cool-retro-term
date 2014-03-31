@@ -144,10 +144,10 @@ ApplicationWindow {
                 ColumnLayout{
                     anchors.fill: parent
 
-                    CheckBox{
-                        text: "Scanlines"
-                        checked: shadersettings.scanlines
-                        onCheckedChanged: shadersettings.scanlines = checked;
+                    SettingComponent{
+                        name: "Scanlines"
+                        onValueChanged: shadersettings.scanlines = value
+                        _value: shadersettings.scanlines
                     }
                     SettingComponent{
                         name: "Bloom"

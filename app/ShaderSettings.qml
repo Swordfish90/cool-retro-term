@@ -24,7 +24,7 @@ Item{
     property bool fullscreen: false
 
     property real ambient_light: 0.2
-    property real contrast: 0.9
+    property real contrast: 0.8
 
     function mix(c1, c2, alpha){
         return Qt.rgba(c1.r * alpha + c2.r * (1-alpha),
@@ -34,7 +34,7 @@ Item{
     }
 
     //Private atttributes might need processing
-    property color _background_color: "#002200"
+    property color _background_color: "#000000"
     property color _font_color: "#00ff00"
     property color font_color: mix(_font_color, _background_color, 0.5 + (contrast * 0.5))
     property color background_color: mix(_background_color, _font_color, 0.5 + (contrast * 0.5))
@@ -48,7 +48,7 @@ Item{
     property real horizontal_sincronization: 0.1
     property real brightness_flickering: 0.12
 
-    property bool scanlines: false
+    property real scanlines: 0.0
 
     property string frame_source: frames_list.get(frames_index).source
     property int frames_index: 2
@@ -204,17 +204,17 @@ Item{
         ListElement{
             text: "Default"
             obj_name: "DEFAULT"
-            obj_string: '{"ambient_light":0.3,"background_color":"#000000","font_color":"#00ff3b","font_index":0,"font_scaling":1,"frames_index":2,"glowing_line_strength":0.4,"noise_strength":0.1,"scanlines":true,"screen_distortion":0.15,"brightness_flickering":0.07}'
+            obj_string: '{"ambient_light":0.3,"background_color":"#000000","font_color":"#00ff3b","font_index":0,"font_scaling":1,"frames_index":2,"glowing_line_strength":0.4,"noise_strength":0.1,"scanlines":0.0,"screen_distortion":0.15,"brightness_flickering":0.07}'
         }
         ListElement{
             text: "Commodore 64"
             obj_name: "COMMODORE64"
-            obj_string: '{"ambient_light":0.2,"background_color":"#5048b2","font_color":"#8bcad1","font_index":2,"font_scaling":1,"frames_index":1,"glowing_line_strength":0.2,"noise_strength":0.05,"scanlines":false,"screen_distortion":0.1,"brightness_flickering":0.03}'
+            obj_string: '{"ambient_light":0.2,"background_color":"#5048b2","font_color":"#8bcad1","font_index":2,"font_scaling":1,"frames_index":1,"glowing_line_strength":0.2,"noise_strength":0.05,"scanlines":0.0,"screen_distortion":0.1,"brightness_flickering":0.03}'
         }
         ListElement{
             text: "IBM Dos"
             obj_name: "IBMDOS"
-            obj_string: '{"ambient_light":0.4,"background_color":"#000000","font_color":"#ffffff","font_index":3,"font_scaling":1,"frames_index":1,"glowing_line_strength":0,"noise_strength":0,"scanlines":false,"screen_distortion":0.05,"brightness_flickering":0.00}'
+            obj_string: '{"ambient_light":0.4,"background_color":"#000000","font_color":"#ffffff","font_index":3,"font_scaling":1,"frames_index":1,"glowing_line_strength":0,"noise_strength":0,"scanlines":0.0,"screen_distortion":0.05,"brightness_flickering":0.00}'
         }
     }
 }
