@@ -26,6 +26,8 @@ Item{
     property real ambient_light: 0.2
     property real contrast: 0.8
 
+    property real brightness: 0.5
+
     function mix(c1, c2, alpha){
         return Qt.rgba(c1.r * alpha + c2.r * (1-alpha),
                        c1.g * alpha + c2.g * (1-alpha),

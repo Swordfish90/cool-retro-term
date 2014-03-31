@@ -37,6 +37,8 @@ ShaderEffect {
     property real brightness_flickering: shadersettings.brightness_flickering
     property real horizontal_sincronization: shadersettings.horizontal_sincronization
 
+    property real brightness: shadersettings.brightness * 1.5 + 0.5
+
     property real deltay: 3 / terminal.height
     property real deltax: 3 / terminal.width
 
@@ -173,6 +175,6 @@ ShaderEffect {
             finalColor = mix(finalColor, vec3(0.0), brightness);" : "") +
 
         "
-        gl_FragColor = vec4(finalColor, 1.0);
+        gl_FragColor = vec4(finalColor *"+brightness+", 1.0);
     }"
 }

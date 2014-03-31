@@ -10,6 +10,7 @@ ShaderEffect{
     property real time: timetimer.time
     property variant randomFunctionSource: randfuncsource
     property real brightness_flickering: shadersettings.brightness_flickering
+    property real brightness: shadersettings.brightness * 1.5 + 0.5
 
     property color reflection_color: Qt.rgba((font_color.r*0.3 + background_color.r*0.7),
                                              (font_color.g*0.3 + background_color.g*0.7),
@@ -28,12 +29,11 @@ ShaderEffect{
                     varying lowp float brightness;
 
                     void main() {
-                        qt_TexCoord0 = qt_MultiTexCoord0;" +
-
+                        qt_TexCoord0 = qt_MultiTexCoord0;
+                        brightness = "+brightness+";" +
                         (brightness_flickering !== 0 ?
-                            "brightness = texture2D(randomFunctionSource, vec2(fract(time/(1024.0*2.0)), fract(time/(1024.0*1024.0*2.0)))).r * "+brightness_flickering+";"
-                        :
-                            "brightness = 0.0;") + "
+                            "brightness -= texture2D(randomFunctionSource, vec2(fract(time/(1024.0*2.0)), fract(time/(1024.0*1024.0*2.0)))).r * "+brightness_flickering+";"
+                        : "") + "
 
                         gl_Position = qt_Matrix * qt_Vertex;
                     }"
@@ -61,7 +61,7 @@ ShaderEffect{
                                 vec4 txt_normal = texture2D(normals, coords);
                                 vec3 normal = normalize(txt_normal.rgb * 2.0 - 1.0);
                                 vec3 light_dir = normalize(vec3(0.5,0.5, 0.0) - vec3(qt_TexCoord0, 0.0));
-                                float reflection = (dot(normal, light_dir) * 0.4 + 0.2) * (1.0-brightness);
+                                float reflection = (dot(normal, light_dir) * 0.4 + 0.2) * brightness;
                                 vec3 final_color = reflection_color * reflection * 0.5;
                                 final_color += txt_color * ambient_light;
                                 gl_FragColor = vec4(final_color * txt_normal.a, txt_color.a);

@@ -127,6 +127,11 @@ ApplicationWindow {
                             onValueChanged: shadersettings.contrast = value
                             _value: shadersettings.contrast
                         }
+                        SettingComponent{
+                            name: "Brightness"
+                            onValueChanged: shadersettings.brightness = value
+                            _value: shadersettings.brightness
+                        }
                     }
                 }
             }
