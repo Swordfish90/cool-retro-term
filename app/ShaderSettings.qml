@@ -46,7 +46,7 @@ Item{
     property real bloom_strength: 0.6
 
     property real horizontal_sincronization: 0.1
-    property real screen_flickering: 0.12
+    property real brightness_flickering: 0.12
 
     property bool scanlines: false
 
@@ -147,7 +147,7 @@ Item{
         background_color = settings.background_color ? settings.background_color : background_color;
         font_color = settings.font_color ? settings.font_color : font_color;
 
-        screen_flickering = settings.screen_flickering ? settings.screen_flickering : screen_flickering;
+        brightness_flickering = settings.brightness_flickering ? settings.brightness_flickering : brightness_flickering;
         noise_strength = settings.noise_strength ? settings.noise_strength : noise_strength;
         screen_distortion = settings.screen_distortion ? settings.screen_distortion : screen_distortion;
         glowing_line_strength = settings.glowing_line_strength ? settings.glowing_line_strength : glowing_line_strength;
@@ -168,7 +168,7 @@ Item{
             contrast : contrast,
             background_color: background_color,
             font_color: font_color,
-            screen_flickering: screen_flickering,
+            brightness_flickering: brightness_flickering,
             noise_strength: noise_strength,
             screen_distortion: screen_distortion,
             glowing_line_strength: glowing_line_strength,
@@ -204,17 +204,17 @@ Item{
         ListElement{
             text: "Default"
             obj_name: "DEFAULT"
-            obj_string: '{"ambient_light":0.3,"background_color":"#000000","font_color":"#00ff3b","font_index":0,"font_scaling":1,"frames_index":2,"glowing_line_strength":0.4,"noise_strength":0.1,"scanlines":true,"screen_distortion":0.15,"screen_flickering":0.07}'
+            obj_string: '{"ambient_light":0.3,"background_color":"#000000","font_color":"#00ff3b","font_index":0,"font_scaling":1,"frames_index":2,"glowing_line_strength":0.4,"noise_strength":0.1,"scanlines":true,"screen_distortion":0.15,"brightness_flickering":0.07}'
         }
         ListElement{
             text: "Commodore 64"
             obj_name: "COMMODORE64"
-            obj_string: '{"ambient_light":0.2,"background_color":"#5048b2","font_color":"#8bcad1","font_index":2,"font_scaling":1,"frames_index":1,"glowing_line_strength":0.2,"noise_strength":0.05,"scanlines":false,"screen_distortion":0.1,"screen_flickering":0.03}'
+            obj_string: '{"ambient_light":0.2,"background_color":"#5048b2","font_color":"#8bcad1","font_index":2,"font_scaling":1,"frames_index":1,"glowing_line_strength":0.2,"noise_strength":0.05,"scanlines":false,"screen_distortion":0.1,"brightness_flickering":0.03}'
         }
         ListElement{
             text: "IBM Dos"
             obj_name: "IBMDOS"
-            obj_string: '{"ambient_light":0.4,"background_color":"#000000","font_color":"#ffffff","font_index":3,"font_scaling":1,"frames_index":1,"glowing_line_strength":0,"noise_strength":0,"scanlines":false,"screen_distortion":0.05,"screen_flickering":0.00}'
+            obj_string: '{"ambient_light":0.4,"background_color":"#000000","font_color":"#ffffff","font_index":3,"font_scaling":1,"frames_index":1,"glowing_line_strength":0,"noise_strength":0,"scanlines":false,"screen_distortion":0.05,"brightness_flickering":0.00}'
         }
     }
 }

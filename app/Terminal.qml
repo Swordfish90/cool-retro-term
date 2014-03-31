@@ -10,6 +10,7 @@ Item{
     property real motionBlurCoefficient: (_minBlurCoefficient)*mBlur + (_maxBlurCoefficient)*(1.0-mBlur)
     property real _minBlurCoefficient: 0.015
     property real _maxBlurCoefficient: 0.10
+    anchors.fill: parent
 
     function loadKTerminal(){
         kterminal.active = true;
@@ -22,7 +23,9 @@ Item{
         id: kterminal
         active: false
         anchors.fill: parent
+
         sourceComponent: KTerminal {
+            id: ktermitem
             font.pointSize: shadersettings.fontSize
             font.family: shadersettings.font.name
 

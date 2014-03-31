@@ -71,6 +71,27 @@ ApplicationWindow{
         id: maincontainer
         anchors.fill: parent
         clip: true
+        Image{
+            id: randtexture
+            source: "frames/images/randfunction.png"
+            width: 512
+            height: 512
+        }
+        ShaderEffectSource{
+            id: randfuncsource
+            sourceItem: randtexture
+            live: false
+            hideSource: true
+            wrapMode: ShaderEffectSource.Repeat
+        }
+        Timer{
+            id: timetimer
+            property real time: 0
+            onTriggered: time += interval
+            interval: 16
+            running: true
+            repeat: true
+        }
         Terminal{
             id: terminal
             width: parent.width
@@ -81,12 +102,6 @@ ApplicationWindow{
             sourceItem: terminal
             sourceRect: frame.sourceRect
         }
-        ShaderManager{
-            id: shadercontainer
-            anchors.fill: terminal
-            blending: true
-            z: 1.9
-        }
         Loader{
             id: frame
             property rect sourceRect: item.sourceRect
@@ -94,6 +109,12 @@ ApplicationWindow{
             anchors.fill: parent
             z: 2.1
             source: shadersettings.frame_source
+        }
+        ShaderManager{
+            id: shadercontainer
+            anchors.fill: parent
+            blending: true
+            z: 1.9
         }
         RadialGradient{
             id: ambientreflection

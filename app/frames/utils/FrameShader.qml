@@ -7,13 +7,36 @@ ShaderEffect{
     property real ambient_light: shadersettings.ambient_light
     property color font_color: shadersettings.font_color
     property color background_color: shadersettings.background_color
-    property real brightness: shadercontainer.brightness
+    property real time: timetimer.time
+    property variant randomFunctionSource: randfuncsource
+    property real brightness_flickering: shadersettings.brightness_flickering
 
     property color reflection_color: Qt.rgba((font_color.r*0.3 + background_color.r*0.7),
                                              (font_color.g*0.3 + background_color.g*0.7),
                                              (font_color.b*0.3 + background_color.b*0.7),
                                              1.0)
 
+    vertexShader: "
+                    uniform highp mat4 qt_Matrix;
+                    uniform highp float time;
+                    uniform sampler2D randomFunctionSource;
+
+                    attribute highp vec4 qt_Vertex;
+                    attribute highp vec2 qt_MultiTexCoord0;
+
+                    varying highp vec2 qt_TexCoord0;
+                    varying lowp float brightness;
+
+                    void main() {
+                        qt_TexCoord0 = qt_MultiTexCoord0;" +
+
+                        (brightness_flickering !== 0 ?
+                            "brightness = texture2D(randomFunctionSource, vec2(fract(time/(1024.0*2.0)), fract(time/(1024.0*1024.0*2.0)))).r * "+brightness_flickering+";"
+                        :
+                            "brightness = 0.0;") + "
+
+                        gl_Position = qt_Matrix * qt_Vertex;
+                    }"
 
     fragmentShader: "
                             uniform sampler2D source;
@@ -22,7 +45,7 @@ ShaderEffect{
                             uniform highp float ambient_light;
 
                             uniform vec4 reflection_color;
-                            uniform highp float brightness;
+                            varying lowp float brightness;
 
                             varying highp vec2 qt_TexCoord0;
 

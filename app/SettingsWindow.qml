@@ -180,9 +180,9 @@ ApplicationWindow {
                         _value: shadersettings.screen_distortion;
                     }
                     SettingComponent{
-                        name: "Screen flickering"
-                        onValueChanged: shadersettings.screen_flickering = value;
-                        _value: shadersettings.screen_flickering;
+                        name: "Brightness flickering"
+                        onValueChanged: shadersettings.brightness_flickering= value;
+                        _value: shadersettings.brightness_flickering;
                     }
                     SettingComponent{
                         name: "Horizontal flickering"
