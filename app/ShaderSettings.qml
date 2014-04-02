@@ -64,7 +64,6 @@ Item{
 
     property real font_scaling: 1.0
     property var font: currentfont
-    property real fontSize: currentfont.pixelSize * font_scaling
     property int font_index: 0
     property var fonts_list: fontlist
 
@@ -103,43 +102,43 @@ Item{
             text: "Terminus (Modern)"
             source: "fonts/modern-terminus/TerminusTTF-4.38.2.ttf"
             pixelSize: 22
-            lineSpacing: 0
+            lineSpacing: 2
         }
         ListElement{
             text: "Commodore PET (1977)"
             source: "fonts/1977-commodore-pet/COMMODORE_PET.ttf"
             pixelSize: 15
-            lineSpacing: 0
+            lineSpacing: 2
         }
         ListElement{
             text: "Apple ][ (1977)"
             source: "fonts/1977-apple2/PrintChar21.ttf"
             pixelSize: 18
-            lineSpacing: 0
+            lineSpacing: 2
         }
         ListElement{
             text: "Atari 400-800 (1979)"
             source: "fonts/1979-atari-400-800/ATARI400800_original.TTF"
             pixelSize: 16
-            lineSpacing: 0
+            lineSpacing: 2
         }
         ListElement{
             text: "Commodore 64 (1982)"
             source: "fonts/1982-commodore64/C64_User_Mono_v1.0-STYLE.ttf"
             pixelSize: 16
-            lineSpacing: 0
+            lineSpacing: 2
         }
         ListElement{
             text: "Atari ST (1985)"
             source: "fonts/1985-atari-st/AtariST8x16SystemFont.ttf"
             pixelSize: 18
-            lineSpacing: 0
+            lineSpacing: 2
         }
         ListElement{
             text: "IBM DOS (1985)"
             source: "fonts/1985-ibm-pc-vga/Perfect DOS VGA 437.ttf"
             pixelSize: 20
-            lineSpacing: 0
+            lineSpacing: 2
         }
     }
 

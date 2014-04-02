@@ -74,8 +74,9 @@ Item{
             onUpdatedImage: {blurredSource.live = true;livetimer.restart();}
 
             Component.onCompleted: {
-                font.pointSize = shadersettings.fontSize;
+                font.pointSize = shadersettings.font.pixelSize * shadersettings.font_scaling;
                 font.family = shadersettings.font.name;
+                setLineSpacing(shadersettings.font.lineSpacing);
                 forceActiveFocus();
             }
         }
