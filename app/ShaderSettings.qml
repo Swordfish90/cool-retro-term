@@ -25,8 +25,15 @@ Item{
 
     property real ambient_light: 0.2
     property real contrast: 0.8
-
     property real brightness: 0.5
+
+    //Scaling of the preprocessed terminal with respect to the window.
+    property real terminal_scaling: 1.0
+
+    //Scaling of the whole window
+    property real window_scaling: 1.0
+
+    property real total_scaling: terminal_scaling * window_scaling
 
     function mix(c1, c2, alpha){
         return Qt.rgba(c1.r * alpha + c2.r * (1-alpha),

@@ -31,7 +31,6 @@ Item{
     property real motionBlurCoefficient: (_minBlurCoefficient)*mBlur + (_maxBlurCoefficient)*(1.0-mBlur)
     property real _minBlurCoefficient: 0.015
     property real _maxBlurCoefficient: 0.10
-    anchors.fill: parent
 
     //Force reload of the blursource when settings change
     onScanlinesChanged: restartBlurredSource()
@@ -74,7 +73,8 @@ Item{
             onUpdatedImage: {blurredSource.live = true;livetimer.restart();}
 
             Component.onCompleted: {
-                font.pointSize = shadersettings.font.pixelSize * shadersettings.font_scaling;
+                var scaling_factor = shadersettings.font_scaling * shadersettings.terminal_scaling * shadersettings.window_scaling;
+                font.pointSize = shadersettings.font.pixelSize * scaling_factor;
                 font.family = shadersettings.font.name;
                 setLineSpacing(shadersettings.font.lineSpacing);
                 forceActiveFocus();

@@ -67,10 +67,21 @@ ApplicationWindow{
         }
     }
 
+    Loader{
+        id: frame
+        property rect sourceRect: item.sourceRect
+        anchors.fill: parent
+        z: 2.1
+        source: shadersettings.frame_source
+    }
+
     Item{
         id: maincontainer
-        anchors.fill: parent
-        clip: true
+        anchors.centerIn: parent
+        width: parent.width * shadersettings.window_scaling
+        height: parent.height * shadersettings.window_scaling
+        scale: 1.0 / shadersettings.window_scaling
+        clip: false
         Image{
             id: randtexture
             source: "frames/images/randfunction.png"
@@ -94,21 +105,13 @@ ApplicationWindow{
         }
         Terminal{
             id: terminal
-            width: parent.width
-            height: parent.height
+            width: parent.width * shadersettings.terminal_scaling
+            height: parent.height * shadersettings.terminal_scaling
         }
         ShaderEffectSource{
             id: theSource
             sourceItem: terminal
             sourceRect: frame.sourceRect
-        }
-        Loader{
-            id: frame
-            property rect sourceRect: item.sourceRect
-
-            anchors.fill: parent
-            z: 2.1
-            source: shadersettings.frame_source
         }
         ShaderManager{
             id: shadercontainer
