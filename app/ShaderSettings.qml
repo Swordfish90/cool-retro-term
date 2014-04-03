@@ -24,8 +24,8 @@ Item{
     property bool fullscreen: false
 
     property real ambient_light: 0.2
-    property real contrast: 0.8
-    property real brightness: 0.5
+    property real contrast: 0.85
+    property real brightness: 0.75
 
     //Scaling of the preprocessed terminal with respect to the window.
     property real terminal_scaling: 1.0
@@ -50,7 +50,7 @@ Item{
 
     //Probably there is a better way to cast string to colors.
     property string _background_color: "#000000"
-    property string _font_color: "#00ff00"
+    property string _font_color: "#ff9400"
     property color font_color: mix(strToColor(_font_color), strToColor(_background_color), 0.7 + (contrast * 0.3))
     property color background_color: mix(strToColor(_background_color), strToColor(_font_color), 0.7 + (contrast * 0.3))
 
@@ -232,17 +232,17 @@ Item{
         ListElement{
             text: "Default"
             obj_name: "DEFAULT"
-            obj_string: '{"ambient_light":0.3,"background_color":"#000000","font_color":"#00ff3b","font_index":0,"font_scaling":1,"frames_index":2,"glowing_line_strength":0.4,"noise_strength":0.1,"scanlines":0.0,"screen_distortion":0.15,"brightness_flickering":0.07}'
+            obj_string: '{"ambient_light":0.2,"background_color":"#000000","bloom_strength":0.6,"brightness":0.7000000000000001,"brightness_flickering":0.12,"contrast":0.85,"font_color":"#ff9400","font_index":0,"font_scaling":1,"frames_index":1,"glowing_line_strength":0.4,"horizontal_sincronization":0.1,"motion_blur":0.65,"noise_strength":0.1,"rasterization":1,"rasterization_strength":0.5,"screen_distortion":0.15}'
         }
-        ListElement{
-            text: "Commodore 64"
-            obj_name: "COMMODORE64"
-            obj_string: '{"ambient_light":0.2,"background_color":"#5048b2","font_color":"#8bcad1","font_index":2,"font_scaling":1,"frames_index":1,"glowing_line_strength":0.2,"noise_strength":0.05,"scanlines":0.0,"screen_distortion":0.1,"brightness_flickering":0.03}'
-        }
-        ListElement{
-            text: "IBM Dos"
-            obj_name: "IBMDOS"
-            obj_string: '{"ambient_light":0.4,"background_color":"#000000","font_color":"#ffffff","font_index":3,"font_scaling":1,"frames_index":1,"glowing_line_strength":0,"noise_strength":0,"scanlines":0.0,"screen_distortion":0.05,"brightness_flickering":0.00}'
-        }
+//        ListElement{
+//            text: "Commodore 64"
+//            obj_name: "COMMODORE64"
+//            obj_string: '{"ambient_light":0.2,"background_color":"#5048b2","font_color":"#8bcad1","font_index":2,"font_scaling":1,"frames_index":1,"glowing_line_strength":0.2,"noise_strength":0.05,"scanlines":0.0,"screen_distortion":0.1,"brightness_flickering":0.03}'
+//        }
+//        ListElement{
+//            text: "IBM Dos"
+//            obj_name: "IBMDOS"
+//            obj_string: '{"ambient_light":0.4,"background_color":"#000000","font_color":"#ffffff","font_index":3,"font_scaling":1,"frames_index":1,"glowing_line_strength":0,"noise_strength":0,"scanlines":0.0,"screen_distortion":0.05,"brightness_flickering":0.00}'
+//        }
     }
 }
