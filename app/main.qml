@@ -81,7 +81,7 @@ ApplicationWindow{
         width: parent.width * shadersettings.window_scaling
         height: parent.height * shadersettings.window_scaling
         scale: 1.0 / shadersettings.window_scaling
-        clip: false
+
         Image{
             id: randtexture
             source: "frames/images/randfunction.png"
@@ -99,7 +99,7 @@ ApplicationWindow{
             id: timetimer
             property real time: 0
             onTriggered: time += interval
-            interval: 16
+            interval: Math.round(1000 / shadersettings.fps)
             running: true
             repeat: true
         }

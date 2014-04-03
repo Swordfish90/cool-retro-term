@@ -35,6 +35,8 @@ Item{
     property real window_scaling: 1.0
     property real total_scaling: terminal_scaling * window_scaling
 
+    property real fps: 60
+
     function mix(c1, c2, alpha){
         return Qt.rgba(c1.r * alpha + c2.r * (1-alpha),
                        c1.g * alpha + c2.g * (1-alpha),
@@ -162,6 +164,8 @@ Item{
         console.log(profilename + settings);
         settings = JSON.parse(settings);
 
+        fps = settings.fps !== undefined ? settings.fps: fps
+
         contrast = settings.contrast !== undefined ? settings.contrast : contrast;
         brightness = settings.brightness !== undefined ? settings.brightness : brightness
 
@@ -189,6 +193,7 @@ Item{
 
     function storeCurrentSettings(){
         var settings = {
+            fps: fps,
             ambient_light : ambient_light,
             brightness : brightness,
             contrast : contrast,

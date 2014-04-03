@@ -25,11 +25,14 @@ import org.kde.konsole 0.1
 
 Item{
     id: terminalContainer
-    property real mBloom: shadersettings.bloom_strength
+    //The blur effect has to take into account the framerate
+    property real fpsAttenuation: shadersettings.fps / 60
     property real mBlur: shadersettings.motion_blur
-    property real motionBlurCoefficient: (_minBlurCoefficient)*mBlur + (_maxBlurCoefficient)*(1.0-mBlur)
+    property real motionBlurCoefficient: ((_minBlurCoefficient)*mBlur + (_maxBlurCoefficient)*(1.0-mBlur)) / fpsAttenuation
     property real _minBlurCoefficient: 0.015
     property real _maxBlurCoefficient: 0.10
+
+    property real mBloom: shadersettings.bloom_strength
 
     //Force reload of the blursource when settings change
     onMBloomChanged: restartBlurredSource()

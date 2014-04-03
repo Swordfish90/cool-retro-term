@@ -150,6 +150,32 @@ ApplicationWindow {
                         //                        }
                     }
                 }
+                GroupBox{
+                    title: qsTr("Performace")
+                    Layout.fillWidth: true
+                    Layout.columnSpan: 2
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    RowLayout{
+                        Layout.columnSpan: 2
+                        anchors.left: parent.left
+                        anchors.right: parent.right
+                        Text{text: "Animation FPS"}
+                        Slider{
+                            Layout.fillWidth: true
+                            id: slider
+                            stepSize: 1
+                            maximumValue: 60
+                            minimumValue: 0
+                            onValueChanged: shadersettings.fps = value;
+                            value: shadersettings.fps
+                        }
+                        Text{
+                            id: textfield
+                            text: slider.value
+                        }
+                    }
+                }
             }
         }
 
