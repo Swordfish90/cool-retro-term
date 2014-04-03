@@ -153,6 +153,9 @@ ShaderEffect {
         "vec2 cc = vec2(0.5) - qt_TexCoord0;" +
         "float distance = length(cc);" +
 
+        (noise_strength ? "
+            float noise = noise_strength;" : "") +
+
         (screen_distorsion !== 0 ? "
             float distortion = dot(cc, cc) * screen_distorsion;
             vec2 coords = (qt_TexCoord0 - cc * (1.0 + distortion) * distortion);"
@@ -164,14 +167,14 @@ ShaderEffect {
             h_distortion += 0.5 * cos(time*0.04 + 0.03 + coords.y*50.0*fract(time/10.0 + 0.4));
             coords.x = coords.x + h_distortion * horizontal_distortion;" +
             (noise_strength ? "
-                noise_strength += horizontal_distortion * 0.5;" : "")
+                noise += horizontal_distortion * 0.5;" : "")
         : "") +
 
 
         "float color = texture2D(source, coords).r;" +
 
         (noise_strength !== 0 ? "
-            color += stepNoise(coords) * noise_strength * (1.0 - distance * distance * 2.0);" : "") +
+            color += stepNoise(coords) * noise * (1.0 - distance * distance * 2.0);" : "") +
 
         (glowing_line_strength !== 0 ? "
             color += randomPass(coords) * glowing_line_strength;" : "") +
