@@ -162,29 +162,29 @@ Item{
         console.log(profilename + settings);
         settings = JSON.parse(settings);
 
-        contrast = settings.contrast ? settings.contrast : contrast;
-        brightness = settings.brightness ? settings.brightness : brightness
+        contrast = settings.contrast !== undefined ? settings.contrast : contrast;
+        brightness = settings.brightness !== undefined ? settings.brightness : brightness
 
-        ambient_light = settings.ambient_light ? settings.ambient_light : ambient_light;
-        _background_color = settings.background_color ? settings.background_color : _background_color;
-        _font_color = settings.font_color ? settings.font_color : _font_color;
+        ambient_light = settings.ambient_light !== undefined ? settings.ambient_light : ambient_light;
+        _background_color = settings.background_color !== undefined ? settings.background_color : _background_color;
+        _font_color = settings.font_color !== undefined ? settings.font_color : _font_color;
 
-        horizontal_sincronization = settings.horizontal_sincronization ? settings.horizontal_sincronization : horizontal_sincronization
-        brightness_flickering = settings.brightness_flickering ? settings.brightness_flickering : brightness_flickering;
-        noise_strength = settings.noise_strength ? settings.noise_strength : noise_strength;
-        screen_distortion = settings.screen_distortion ? settings.screen_distortion : screen_distortion;
-        glowing_line_strength = settings.glowing_line_strength ? settings.glowing_line_strength : glowing_line_strength;
+        horizontal_sincronization = settings.horizontal_sincronization !== undefined ? settings.horizontal_sincronization : horizontal_sincronization
+        brightness_flickering = settings.brightness_flickering !== undefined ? settings.brightness_flickering : brightness_flickering;
+        noise_strength = settings.noise_strength !== undefined ? settings.noise_strength : noise_strength;
+        screen_distortion = settings.screen_distortion !== undefined ? settings.screen_distortion : screen_distortion;
+        glowing_line_strength = settings.glowing_line_strength !== undefined ? settings.glowing_line_strength : glowing_line_strength;
 
-        motion_blur = settings.motion_blur ? settings.motion_blur : motion_blur
-        bloom_strength = settings.bloom_strength ? settings.bloom_strength : bloom_strength
+        motion_blur = settings.motion_blur !== undefined ? settings.motion_blur : motion_blur
+        bloom_strength = settings.bloom_strength !== undefined ? settings.bloom_strength : bloom_strength
 
-        frames_index = settings.frames_index ? settings.frames_index : frames_index;
+        frames_index = settings.frames_index !== undefined ? settings.frames_index : frames_index;
 
-        font_index = settings.font_index ? settings.font_index : font_index;
-        font_scaling = settings.font_scaling ? settings.font_scaling: font_scaling;
+        font_index = settings.font_index !== undefined ? settings.font_index : font_index;
+        font_scaling = settings.font_scaling !== undefined ? settings.font_scaling: font_scaling;
 
-        rasterization_strength = settings.rasterization_strength ?  settings.rasterization_strength : rasterization_strength;
-        rasterization = settings.rasterization ? settings.rasterization : rasterization;
+        rasterization_strength = settings.rasterization_strength !== undefined ?  settings.rasterization_strength : rasterization_strength;
+        rasterization = settings.rasterization !== undefined ? settings.rasterization : rasterization;
     }
 
     function storeCurrentSettings(){
