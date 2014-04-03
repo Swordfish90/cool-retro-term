@@ -29,10 +29,10 @@ Item{
 
     //Scaling of the preprocessed terminal with respect to the window.
     property real terminal_scaling: 1.0
+    onTerminal_scalingChanged: handleFontChanged();
 
     //Scaling of the whole window
     property real window_scaling: 1.0
-
     property real total_scaling: terminal_scaling * window_scaling
 
     function mix(c1, c2, alpha){
@@ -63,7 +63,12 @@ Item{
     property real horizontal_sincronization: 0.1
     property real brightness_flickering: 0.12
 
-    property real scanlines: 0.0
+    readonly property int no_rasterization: 0
+    readonly property int scanline_rasterization: 1
+    readonly property int pixel_rasterization: 2
+
+    property int rasterization: no_rasterization
+    property real rasterization_strength: 0.5
 
     property string frame_source: frames_list.get(frames_index).source
     property int frames_index: 1
@@ -115,7 +120,7 @@ Item{
             text: "Commodore PET (1977)"
             source: "fonts/1977-commodore-pet/COMMODORE_PET.ttf"
             pixelSize: 15
-            lineSpacing: 2
+            lineSpacing: 3
         }
         ListElement{
             text: "Apple ][ (1977)"
@@ -164,11 +169,11 @@ Item{
         _background_color = settings.background_color ? settings.background_color : _background_color;
         _font_color = settings.font_color ? settings.font_color : _font_color;
 
+        horizontal_sincronization = settings.horizontal_sincronization ? settings.horizontal_sincronization : horizontal_sincronization
         brightness_flickering = settings.brightness_flickering ? settings.brightness_flickering : brightness_flickering;
         noise_strength = settings.noise_strength ? settings.noise_strength : noise_strength;
         screen_distortion = settings.screen_distortion ? settings.screen_distortion : screen_distortion;
         glowing_line_strength = settings.glowing_line_strength ? settings.glowing_line_strength : glowing_line_strength;
-        scanlines = settings.scanlines ? settings.scanlines : scanlines;
 
         motion_blur = settings.motion_blur ? settings.motion_blur : motion_blur
         bloom_strength = settings.bloom_strength ? settings.bloom_strength : bloom_strength
@@ -177,6 +182,9 @@ Item{
 
         font_index = settings.font_index ? settings.font_index : font_index;
         font_scaling = settings.font_scaling ? settings.font_scaling: font_scaling;
+
+        rasterization_strength = settings.rasterization_strength ?  settings.rasterization_strength : rasterization_strength;
+        rasterization = settings.rasterization ? settings.rasterization : rasterization;
     }
 
     function storeCurrentSettings(){
@@ -187,15 +195,17 @@ Item{
             background_color: _background_color,
             font_color: _font_color,
             brightness_flickering: brightness_flickering,
+            horizontal_sincronization: horizontal_sincronization,
             noise_strength: noise_strength,
             screen_distortion: screen_distortion,
             glowing_line_strength: glowing_line_strength,
-            scanlines: scanlines,
             frames_index: frames_index,
             font_index: font_index,
             font_scaling: font_scaling,
             motion_blur: motion_blur,
-            bloom_strength: bloom_strength
+            bloom_strength: bloom_strength,
+            rasterization_strength: rasterization_strength,
+            rasterization: rasterization
         }
 
         console.log(JSON.stringify(settings));

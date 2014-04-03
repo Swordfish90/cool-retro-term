@@ -26,9 +26,12 @@ ShaderEffect {
     property color background_color: shadersettings.background_color
     property variant source: theSource
     property variant bloomSource: bloomSource
-    property size txt_Size: Qt.size(terminal.width, terminal.height)
+    property size txt_Size: Qt.size(width, height)
 
     property real bloom: shadersettings.bloom_strength
+
+    property int rasterization: shadersettings.rasterization
+    property real rasterization_strength: shadersettings.rasterization_strength
 
     property real noise_strength: shadersettings.noise_strength
     property real screen_distorsion: shadersettings.screen_distortion
@@ -39,8 +42,8 @@ ShaderEffect {
 
     property real brightness: shadersettings.brightness * 1.5 + 0.5
 
-    property real deltay: 3 / terminal.height
-    property real deltax: 3 / terminal.width
+    property real deltay: 3 / parent.height
+    property real deltax: 3 / parent.width
 
     property real time: timetimer.time
     property variant randomFunctionSource: randfuncsource
@@ -116,6 +119,14 @@ ShaderEffect {
     (horizontal_sincronization !== 0 ? "
         varying lowp float horizontal_distortion;" : "") +
 
+    (rasterization !== shadersettings.no_rasterization ? "
+    float getScanlineIntensity(vec2 coord){
+        float result = step(0.4, fract(coord.y * txt_Size.y * 0.5));" +
+        (rasterization === shadersettings.pixel_rasterization ? "
+            result *= step(0.4, fract(coord.x * txt_Size.x * 0.5));" : "") +
+        "return result;
+    }" : "") +
+
     "
     highp float rand(vec2 co)
     {
@@ -159,14 +170,18 @@ ShaderEffect {
 
         "float color = texture2D(source, coords).r;" +
 
-        (bloom !== 0 ? "
-            color += texture2D(bloomSource, coords).r *" + 2.5 * bloom + ";" : "") +
-
         (noise_strength !== 0 ? "
             color += stepNoise(coords) * noise_strength * (1.0 - distance * distance * 2.0);" : "") +
 
         (glowing_line_strength !== 0 ? "
             color += randomPass(coords) * glowing_line_strength;" : "") +
+
+        (rasterization !== shadersettings.no_rasterization ? "
+            color = mix(color, color * getScanlineIntensity(qt_TexCoord0), "+ rasterization_strength +");"
+        : "") +
+
+        (bloom !== 0 ? "
+            color += texture2D(bloomSource, coords).r *" + 2.5 * bloom + ";" : "") +
 
         "vec3 finalColor = mix(background_color, font_color, color).rgb;" +
         "finalColor = mix(finalColor * 1.1, vec3(0.0), 1.2 * distance * distance);" +
@@ -174,7 +189,6 @@ ShaderEffect {
         (brightness_flickering !== 0 ? "
             finalColor = mix(finalColor, vec3(0.0), brightness);" : "") +
 
-        "
-        gl_FragColor = vec4(finalColor *"+brightness+", 1.0);
+        "gl_FragColor = vec4(finalColor *"+brightness+", 1.0);
     }"
 }

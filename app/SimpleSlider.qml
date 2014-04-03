@@ -28,12 +28,7 @@ RowLayout {
     property double stepSize: 0.01
 
     id: setting_component
-    anchors.left: parent.left
-    anchors.right: parent.right
     spacing: 10
-    Text{
-        text: name
-    }
     Slider{
         id: slider
         stepSize: parent.stepSize

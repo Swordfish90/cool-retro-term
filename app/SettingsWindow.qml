@@ -28,24 +28,24 @@ ApplicationWindow {
     id: settings_window
     title: qsTr("Settings")
     width: 640
-    height: 400
+    height: 460
 
-    //modality: Qt.ApplicationModal
+    modality: Qt.ApplicationModal
 
     TabView{
         anchors.fill: parent
-
+        anchors.margins: 10
         Tab{
             title: qsTr("Appearance")
-            anchors.margins: 20
-            anchors.top: parent.top
-
+            anchors.fill: parent
+            anchors.margins: 15
             GridLayout{
                 anchors.fill: parent
                 columns: 2
                 GroupBox{
+                    anchors.left: parent.left
+                    anchors.right: parent.right
                     Layout.columnSpan: 2
-                    Layout.fillWidth: true
                     title: qsTr("Profile")
                     ComboBox{
                         anchors.fill: parent
@@ -58,8 +58,8 @@ ApplicationWindow {
                 GroupBox{
                     id: fontbox
                     title: qsTr("Font")
+                    Layout.fillHeight: true
                     Layout.fillWidth: true
-                    Layout.fillHeight:true
                     GridLayout{
                         anchors.fill: parent
                         columns: 2
@@ -92,8 +92,8 @@ ApplicationWindow {
                 }
                 GroupBox{
                     title: qsTr("Background")
+                    Layout.fillHeight: true
                     Layout.fillWidth: true
-                    Layout.fillHeight:true
                     GridLayout{
                         anchors.fill: parent
                         columns: 2
@@ -105,7 +105,6 @@ ApplicationWindow {
                             onCurrentIndexChanged: shadersettings.frames_index = currentIndex
                         }
                         Item{Layout.fillHeight: true}
-
                         ColorButton{
                             height: 50
                             Layout.fillWidth: true
@@ -117,25 +116,38 @@ ApplicationWindow {
                     }
                 }
                 GroupBox{
-                    title: qsTr("Background")
+                    title: qsTr("Lights")
                     Layout.fillWidth: true
                     Layout.columnSpan: 2
                     anchors.left: parent.left
                     anchors.right: parent.right
-                    ColumnLayout{
+                    GridLayout{
                         Layout.columnSpan: 2
+                        columns: 2
+                        rows: 2
                         anchors.left: parent.left
                         anchors.right: parent.right
+                        Text{text: qsTr("Contrast")}
                         SimpleSlider{
-                            name: "Contrast"
                             onValueChanged: shadersettings.contrast = value
                             value: shadersettings.contrast
                         }
+                        Text{text: qsTr("Brightness")}
                         SimpleSlider{
-                            name: "Brightness"
                             onValueChanged: shadersettings.brightness = value
                             value: shadersettings.brightness
                         }
+                        //TODO decide later what to do with scaling
+                        //                        SimpleSlider{
+                        //                            name: "Terminal Scaling"
+                        //                            onValueChanged: shadersettings.terminal_scaling = value
+                        //                            value: shadersettings.terminal_scaling
+                        //                        }
+                        //                        SimpleSlider{
+                        //                            name: "Window Scaling"
+                        //                            onValueChanged: shadersettings.window_scaling = value
+                        //                            value: shadersettings.window_scaling
+                        //                        }
                     }
                 }
             }
@@ -144,59 +156,96 @@ ApplicationWindow {
         Tab{
             title: qsTr("Eye-candy")
             anchors.fill: parent
-            anchors.margins: 20
+            anchors.margins: 15
 
-            GroupBox{
-                title: qsTr("Effects")
+            ColumnLayout{
                 anchors.fill: parent
-
-                ColumnLayout{
-                    anchors.fill: parent
-
-                    SettingComponent{
-                        name: "Scanlines"
-                        onValueChanged: shadersettings.scanlines = value
-                        _value: shadersettings.scanlines
+                GroupBox{
+                    title: qsTr("Rasterization")
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    ColumnLayout{
+                        anchors.left: parent.left
+                        anchors.right: parent.right
+                        RowLayout{
+                            anchors.left: parent.left
+                            anchors.right: parent.right
+                            ExclusiveGroup { id: rasterizationgroup }
+                            RadioButton {
+                                text: qsTr("No Rasterization")
+                                exclusiveGroup: rasterizationgroup
+                                checked: shadersettings.rasterization === shadersettings.no_rasterization
+                                onCheckedChanged: if(checked)
+                                                      shadersettings.rasterization = shadersettings.no_rasterization
+                            }
+                            RadioButton {
+                                text: qsTr("Scanlines")
+                                exclusiveGroup: rasterizationgroup
+                                checked: shadersettings.rasterization === shadersettings.scanline_rasterization
+                                onCheckedChanged: if(checked)
+                                                      shadersettings.rasterization = shadersettings.scanline_rasterization
+                            }
+                            RadioButton {
+                                text: qsTr("Pixels")
+                                exclusiveGroup: rasterizationgroup
+                                checked: shadersettings.rasterization === shadersettings.pixel_rasterization
+                                onCheckedChanged: if(checked)
+                                                      shadersettings.rasterization = shadersettings.pixel_rasterization
+                            }
+                        }
+                        SimpleSlider{
+                            Layout.fillWidth: true
+                            value: shadersettings.rasterization_strength
+                            onValueChanged: shadersettings.rasterization_strength = value
+                        }
                     }
-                    SettingComponent{
-                        name: "Bloom"
-                        onValueChanged: shadersettings.bloom_strength = value
-                        _value: shadersettings.bloom_strength
-                    }
-                    SettingComponent{
-                        name: "Motion Blur"
-                        onValueChanged: shadersettings.motion_blur = value
-                        _value: shadersettings.motion_blur
-                    }
-                    SettingComponent{
-                        name: "Noise"
-                        onValueChanged: shadersettings.noise_strength = value
-                        _value: shadersettings.noise_strength
-                    }
-                    SettingComponent{
-                        name: "Glow"
-                        onValueChanged: shadersettings.glowing_line_strength = value;
-                        _value: shadersettings.glowing_line_strength
-                    }
-                    SettingComponent{
-                        name: "Ambient light"
-                        onValueChanged: shadersettings.ambient_light = value;
-                        _value: shadersettings.ambient_light
-                    }
-                    SettingComponent{
-                        name: "Screen distortion"
-                        onValueChanged: shadersettings.screen_distortion = value;
-                        _value: shadersettings.screen_distortion;
-                    }
-                    SettingComponent{
-                        name: "Brightness flickering"
-                        onValueChanged: shadersettings.brightness_flickering= value;
-                        _value: shadersettings.brightness_flickering;
-                    }
-                    SettingComponent{
-                        name: "Horizontal flickering"
-                        onValueChanged: shadersettings.horizontal_sincronization = value;
-                        _value: shadersettings.horizontal_sincronization;
+                }
+                GroupBox{
+                    title: qsTr("Effects")
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    ColumnLayout{
+                        anchors.fill: parent
+                        SettingComponent{
+                            name: "Bloom"
+                            onValueChanged: shadersettings.bloom_strength = value
+                            _value: shadersettings.bloom_strength
+                        }
+                        SettingComponent{
+                            name: "Motion Blur"
+                            onValueChanged: shadersettings.motion_blur = value
+                            _value: shadersettings.motion_blur
+                        }
+                        SettingComponent{
+                            name: "Noise"
+                            onValueChanged: shadersettings.noise_strength = value
+                            _value: shadersettings.noise_strength
+                        }
+                        SettingComponent{
+                            name: "Glow"
+                            onValueChanged: shadersettings.glowing_line_strength = value;
+                            _value: shadersettings.glowing_line_strength
+                        }
+                        SettingComponent{
+                            name: "Ambient light"
+                            onValueChanged: shadersettings.ambient_light = value;
+                            _value: shadersettings.ambient_light
+                        }
+                        SettingComponent{
+                            name: "Screen distortion"
+                            onValueChanged: shadersettings.screen_distortion = value;
+                            _value: shadersettings.screen_distortion;
+                        }
+                        SettingComponent{
+                            name: "Brightness flickering"
+                            onValueChanged: shadersettings.brightness_flickering= value;
+                            _value: shadersettings.brightness_flickering;
+                        }
+                        SettingComponent{
+                            name: "Horizontal flickering"
+                            onValueChanged: shadersettings.horizontal_sincronization = value;
+                            _value: shadersettings.horizontal_sincronization;
+                        }
                     }
                 }
             }

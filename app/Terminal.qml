@@ -27,13 +27,11 @@ Item{
     id: terminalContainer
     property real mBloom: shadersettings.bloom_strength
     property real mBlur: shadersettings.motion_blur
-    property real scanlines: shadersettings.scanlines
     property real motionBlurCoefficient: (_minBlurCoefficient)*mBlur + (_maxBlurCoefficient)*(1.0-mBlur)
     property real _minBlurCoefficient: 0.015
     property real _maxBlurCoefficient: 0.10
 
     //Force reload of the blursource when settings change
-    onScanlinesChanged: restartBlurredSource()
     onMBloomChanged: restartBlurredSource()
 
     function restartBlurredSource(){
@@ -124,11 +122,6 @@ Item{
 
             "varying highp vec2 qt_TexCoord0;" +
 
-            "float getScanlineIntensity(vec2 coord){
-                float h = coord.y * txt_size.y * 0.5;
-                return step(0.5, fract(h));
-            }" +
-
             (mBlur !== 0 ?
                  "uniform lowp sampler2D blurredSource;"
             : "") +
@@ -141,9 +134,6 @@ Item{
                      "color = mix(blurredSourceColor, color, " + motionBlurCoefficient + ");"
                 : "") +
 
-                (scanlines !== 0 ? "
-                    color = mix(color, 1.0 * color*getScanlineIntensity(qt_TexCoord0), "+scanlines+");"
-                : "") +
 
                 "gl_FragColor = vec4(vec3(floor(color) / 512.0), 1.0);" +
             "}"

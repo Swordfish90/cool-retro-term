@@ -33,7 +33,7 @@ RowLayout {
     id: setting_component
     anchors.left: parent.left
     anchors.right: parent.right
-    spacing: 10
+    spacing: 25
 
     CheckBox{
         id: check
