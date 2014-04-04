@@ -43,6 +43,7 @@ ShaderEffect{
                             uniform sampler2D normals;
                             uniform highp float screen_distorsion;
                             uniform highp float ambient_light;
+                            uniform highp float qt_Opacity;
 
                             uniform vec4 reflection_color;
                             varying lowp float brightness;
@@ -62,8 +63,10 @@ ShaderEffect{
                                 vec3 normal = normalize(txt_normal.rgb * 2.0 - 1.0);
                                 vec3 light_dir = normalize(vec3(0.5,0.5, 0.0) - vec3(qt_TexCoord0, 0.0));
                                 float reflection = (dot(normal, light_dir) * 0.4 + 0.2) * brightness;
-                                vec3 final_color = reflection_color * reflection * 0.5;
-                                final_color += txt_color * ambient_light;
-                                gl_FragColor = vec4(final_color * txt_normal.a, txt_color.a);
+                                vec3 final_color = reflection_color.rgb * reflection * 0.5;
+                                final_color += txt_color.rgb * ambient_light;
+                                gl_FragColor = vec4(final_color * txt_normal.a, txt_color.a * qt_Opacity);
                             }"
+
+    onStatusChanged: console.log(log) //Print warning messages
 }

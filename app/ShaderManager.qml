@@ -192,6 +192,8 @@ ShaderEffect {
         (brightness_flickering !== 0 ? "
             finalColor = mix(finalColor, vec3(0.0), brightness);" : "") +
 
-        "gl_FragColor = vec4(finalColor *"+brightness+", 1.0);
+        "gl_FragColor = vec4(finalColor *"+brightness+", qt_Opacity);
     }"
+
+     onStatusChanged: console.log(log) //Print warning messages
 }
