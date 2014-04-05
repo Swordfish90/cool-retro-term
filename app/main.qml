@@ -73,6 +73,7 @@ ApplicationWindow{
         anchors.fill: parent
         z: 2.1
         source: shadersettings.frame_source
+        opacity: 1.0
     }
 
     Item{

@@ -3,7 +3,7 @@ import QtQuick 2.1
 ShaderEffect{
     property variant source: framesource
     property variant normals: framesourcenormals
-    property real screen_distorsion: shadersettings.screen_distortion
+    property real screen_distorsion: shadersettings.screen_distortion * framecontainer.distortionCoefficient
     property real ambient_light: shadersettings.ambient_light
     property color font_color: shadersettings.font_color
     property color background_color: shadersettings.background_color
@@ -11,6 +11,8 @@ ShaderEffect{
     property variant randomFunctionSource: randfuncsource
     property real brightness_flickering: shadersettings.brightness_flickering
     property real brightness: shadersettings.brightness * 1.5 + 0.5
+
+    property real frame_reflection_strength: shadersettings.frame_reflection_strength
 
     property color reflection_color: Qt.rgba((font_color.r*0.3 + background_color.r*0.7),
                                              (font_color.g*0.3 + background_color.g*0.7),
@@ -62,10 +64,12 @@ ShaderEffect{
                                 vec4 txt_normal = texture2D(normals, coords);
                                 vec3 normal = normalize(txt_normal.rgb * 2.0 - 1.0);
                                 vec3 light_dir = normalize(vec3(0.5,0.5, 0.0) - vec3(qt_TexCoord0, 0.0));
-                                float reflection = (dot(normal, light_dir) * 0.4 + 0.2) * brightness;
-                                vec3 final_color = reflection_color.rgb * reflection * 0.5;
+                                float reflection = (dot(normal, light_dir));
+                                float light = (reflection * 0.4 + 0.2) * brightness;
+                                vec3 final_color = reflection_color.rgb * light * 0.5;
                                 final_color += txt_color.rgb * ambient_light;
-                                gl_FragColor = vec4(final_color * txt_normal.a, txt_color.a * qt_Opacity);
+                                float reflection_alpha = (1.0 - reflection*0.4);
+                                gl_FragColor = vec4(final_color * txt_normal.a, txt_color.a * qt_Opacity * reflection_alpha);
                             }"
 
     onStatusChanged: console.log(log) //Print warning messages

@@ -40,6 +40,12 @@ ShaderEffect {
     property real brightness_flickering: shadersettings.brightness_flickering
     property real horizontal_sincronization: shadersettings.horizontal_sincronization
 
+    property bool frame_reflection_strength: shadersettings.frame_reflection_strength
+    property real disp_top: frame.item.displacementTop.toFixed(1)
+    property real disp_bottom: frame.item.displacementBottom
+    property real disp_left: frame.item.displacementLeft
+    property real disp_right: frame.item.displacementRight
+
     property real brightness: shadersettings.brightness * 1.5 + 0.5
 
     property real deltay: 3 / parent.height
@@ -69,10 +75,12 @@ ShaderEffect {
                     uniform highp mat4 qt_Matrix;
                     uniform highp float time;
                     uniform sampler2D randomFunctionSource;
+                    uniform highp vec2 txt_Size;
 
                     attribute highp vec4 qt_Vertex;
                     attribute highp vec2 qt_MultiTexCoord0;
 
+                    varying highp vec2 originalCoord;
                     varying highp vec2 qt_TexCoord0;" +
                     (brightness_flickering !== 0.0 ?"
                         varying lowp float brightness;" : "") +
@@ -80,8 +88,10 @@ ShaderEffect {
                         varying lowp float horizontal_distortion;" : "") +
                     "
                     void main() {
-                        qt_TexCoord0 = qt_MultiTexCoord0;
-                        vec2 coords = vec2(fract(time/(1024.0*2.0)), fract(time/(1024.0*1024.0*2.0)));" +
+                        originalCoord = qt_MultiTexCoord0;
+                        qt_TexCoord0.x = -"+disp_left.toFixed(1)+"/txt_Size.x + qt_MultiTexCoord0.x / ((txt_Size.x -("+(disp_left+disp_right).toFixed(1)+")) / txt_Size.x);" +
+                        "qt_TexCoord0.y = -"+disp_top.toFixed(1)+"/txt_Size.y + qt_MultiTexCoord0.y / ((txt_Size.y -("+(disp_top+disp_bottom).toFixed(1)+")) / txt_Size.y);" +
+                        "vec2 coords = vec2(fract(time/(1024.0*2.0)), fract(time/(1024.0*1024.0*2.0)));" +
                         (brightness_flickering !== 0.0 ? "
                             brightness = texture2D(randomFunctionSource, coords).g * "+brightness_flickering+";"
                         :   "") +
@@ -100,6 +110,7 @@ ShaderEffect {
             uniform highp float time;
             uniform highp vec2 txt_Size;
             varying highp vec2 qt_TexCoord0;
+            varying highp vec2 originalCoord;
 
             uniform highp vec4 font_color;
             uniform highp vec4 background_color;
@@ -170,6 +181,8 @@ ShaderEffect {
                 noise += horizontal_distortion * 0.5;" : "")
         : "") +
 
+        (frame_reflection_strength ? "
+            coords = abs(mod(floor(coords), 2.0) - fract(coords));" : "") +
 
         "float color = texture2D(source, coords).r;" +
 
@@ -180,7 +193,7 @@ ShaderEffect {
             color += randomPass(coords) * glowing_line_strength;" : "") +
 
         (rasterization !== shadersettings.no_rasterization ? "
-            color = mix(color, color * getScanlineIntensity(qt_TexCoord0), "+ rasterization_strength +");"
+            color = mix(color, color * getScanlineIntensity(originalCoord), "+ rasterization_strength +");"
         : "") +
 
         (bloom !== 0 ? "

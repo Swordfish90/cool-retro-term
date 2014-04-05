@@ -99,11 +99,21 @@ ApplicationWindow {
                         columns: 2
                         Text{text: "Frame texture"}
                         ComboBox{
+                            id: framescombobox
                             Layout.fillWidth: true
                             model: shadersettings.frames_list
                             currentIndex: shadersettings.frames_index
                             onCurrentIndexChanged: shadersettings.frames_index = currentIndex
                         }
+                        CheckBox{
+                            Layout.columnSpan: 2
+                            Layout.fillWidth: true
+                            checked: shadersettings.frame_reflections
+                            text: qsTr("Frame reflections")
+                            onCheckedChanged: shadersettings.frame_reflections = checked
+                            enabled: framescombobox.model.get(framescombobox.currentIndex).reflections
+                        }
+
                         Item{Layout.fillHeight: true}
                         ColorButton{
                             height: 50

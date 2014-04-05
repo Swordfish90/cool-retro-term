@@ -81,6 +81,9 @@ Item{
     property int font_index: 0
     property var fonts_list: fontlist
 
+    property bool frame_reflections: true
+    property real frame_reflection_strength: ((frame_reflections && framelist.get(frames_index).reflections) ? 1.0 : 0.0) * 0.4
+
     property var profiles_list: profileslist
     property int profiles_index: 0
     onProfiles_indexChanged: loadProfile(profiles_list.get(profiles_index).obj_name);
@@ -105,9 +108,9 @@ Item{
 
     ListModel{
         id: framelist
-        ListElement{text: "No frame"; source: "./frames/NoFrame.qml"}
-        ListElement{text: "Simple white frame"; source: "./frames/WhiteSimpleFrame.qml"}
-        ListElement{text: "Rough black frame"; source: "./frames/BlackRoughFrame.qml"}
+        ListElement{text: "No frame"; source: "./frames/NoFrame.qml"; reflections: false}
+        ListElement{text: "Simple white frame"; source: "./frames/WhiteSimpleFrame.qml"; reflections: true}
+        ListElement{text: "Rough black frame"; source: "./frames/BlackRoughFrame.qml"; reflections: true}
     }
 
     ListModel{

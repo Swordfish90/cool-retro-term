@@ -15,4 +15,9 @@ TerminalFrame{
                         -15,
                         terminal.width + 15,
                         terminal.height + 15)
+
+    displacementLeft: 0
+    displacementTop: 0
+    displacementRight: 0
+    displacementBottom: 0
 }
