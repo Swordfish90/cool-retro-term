@@ -82,7 +82,7 @@ Item{
     property var fonts_list: fontlist
 
     property bool frame_reflections: true
-    property real frame_reflection_strength: ((frame_reflections && framelist.get(frames_index).reflections) ? 1.0 : 0.0) * 0.4
+    property real frame_reflection_strength: ((frame_reflections && framelist.get(frames_index).reflections) ? 1.0 : 0.0) * 0.15
 
     property var profiles_list: profileslist
     property int profiles_index: 0

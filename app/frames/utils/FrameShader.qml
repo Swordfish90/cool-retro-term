@@ -32,9 +32,9 @@ ShaderEffect{
 
                     void main() {
                         qt_TexCoord0 = qt_MultiTexCoord0;
-                        brightness = "+brightness+";" +
+                        brightness = "+brightness.toFixed(1)+";" +
                         (brightness_flickering !== 0 ?
-                            "brightness -= texture2D(randomFunctionSource, vec2(fract(time/(1024.0*2.0)), fract(time/(1024.0*1024.0*2.0)))).r * "+brightness_flickering+";"
+                            "brightness -= texture2D(randomFunctionSource, vec2(fract(time/(1024.0*2.0)), fract(time/(1024.0*1024.0*2.0)))).r * "+brightness_flickering.toFixed(1)+";"
                         : "") + "
 
                         gl_Position = qt_Matrix * qt_Vertex;
@@ -68,7 +68,7 @@ ShaderEffect{
                                 float light = (reflection * 0.4 + 0.2) * brightness;
                                 vec3 final_color = reflection_color.rgb * light * 0.5;
                                 final_color += txt_color.rgb * ambient_light;
-                                float reflection_alpha = (1.0 - reflection*0.4);
+                                float reflection_alpha = (1.0 - reflection*"+frame_reflection_strength.toFixed(1)+");
                                 gl_FragColor = vec4(final_color * txt_normal.a, txt_color.a * qt_Opacity * reflection_alpha);
                             }"
 

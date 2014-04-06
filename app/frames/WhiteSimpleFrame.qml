@@ -23,7 +23,7 @@ TerminalFrame{
     displacementLeft: 43.0
     displacementTop: 40.0
     displacementRight: 35.0
-    displacementBottom: 32.0
+    displacementBottom: 30.0
 
     shaderString: "FrameShader.qml"
 }

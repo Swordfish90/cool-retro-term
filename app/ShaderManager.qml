@@ -93,7 +93,7 @@ ShaderEffect {
                         "qt_TexCoord0.y = -"+disp_top.toFixed(1)+"/txt_Size.y + qt_MultiTexCoord0.y / ((txt_Size.y -("+(disp_top+disp_bottom).toFixed(1)+")) / txt_Size.y);" +
                         "vec2 coords = vec2(fract(time/(1024.0*2.0)), fract(time/(1024.0*1024.0*2.0)));" +
                         (brightness_flickering !== 0.0 ? "
-                            brightness = texture2D(randomFunctionSource, coords).g * "+brightness_flickering+";"
+                            brightness = texture2D(randomFunctionSource, coords).g * "+brightness_flickering.toFixed(1)+";"
                         :   "") +
 
                         (horizontal_sincronization !== 0.0 ? "
@@ -193,11 +193,11 @@ ShaderEffect {
             color += randomPass(coords) * glowing_line_strength;" : "") +
 
         (rasterization !== shadersettings.no_rasterization ? "
-            color = mix(color, color * getScanlineIntensity(originalCoord), "+ rasterization_strength +");"
+            color = mix(color, color * getScanlineIntensity(originalCoord), "+ rasterization_strength.toFixed(1) +");"
         : "") +
 
         (bloom !== 0 ? "
-            color += texture2D(bloomSource, coords).r *" + 2.5 * bloom + ";" : "") +
+            color += texture2D(bloomSource, coords).r *" + (2.5 * bloom).toFixed(1) + ";" : "") +
 
         "vec3 finalColor = mix(background_color, font_color, color).rgb;" +
         "finalColor = mix(finalColor * 1.1, vec3(0.0), 1.2 * distance * distance);" +
@@ -205,7 +205,7 @@ ShaderEffect {
         (brightness_flickering !== 0 ? "
             finalColor = mix(finalColor, vec3(0.0), brightness);" : "") +
 
-        "gl_FragColor = vec4(finalColor *"+brightness+", qt_Opacity);
+        "gl_FragColor = vec4(finalColor *"+brightness.toFixed(1)+", qt_Opacity);
     }"
 
      onStatusChanged: console.log(log) //Print warning messages
