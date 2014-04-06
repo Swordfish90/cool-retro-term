@@ -173,6 +173,9 @@ ShaderEffect {
         :"
             vec2 coords = qt_TexCoord0;") +
 
+        (frame_reflection_strength ? "
+            coords = abs(mod(floor(coords), 2.0) - fract(coords));" : "") +
+
         (horizontal_sincronization !== 0 ? "
             float h_distortion = 0.5 * sin(time*0.001 + coords.y*10.0*fract(time/10.0));
             h_distortion += 0.5 * cos(time*0.04 + 0.03 + coords.y*50.0*fract(time/10.0 + 0.4));
@@ -180,9 +183,6 @@ ShaderEffect {
             (noise_strength ? "
                 noise += horizontal_distortion * 0.5;" : "")
         : "") +
-
-        (frame_reflection_strength ? "
-            coords = abs(mod(floor(coords), 2.0) - fract(coords));" : "") +
 
         "float color = texture2D(source, coords).r;" +
 
