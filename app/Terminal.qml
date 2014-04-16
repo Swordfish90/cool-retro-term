@@ -50,6 +50,12 @@ Item{
     function unloadKTerminal(){
         kterminal.active = false;
     }
+    function pasteClipboard(){
+        kterminal.item.pasteClipboard();
+    }
+    function copyClipboard(){
+        kterminal.item.copyClipboard();
+    }
 
     Loader{
         id: kterminal
@@ -85,14 +91,8 @@ Item{
     }
     Menu{
         id: contextmenu
-        MenuItem{
-            text: qsTr("Copy")
-            onTriggered: kterminal.item.copyClipboard()
-        }
-        MenuItem{
-            text: qsTr("Paste")
-            onTriggered: kterminal.item.pasteClipboard()
-        }
+        MenuItem{action: copyAction}
+        MenuItem{action: pasteAction}
     }
     MouseArea{
 

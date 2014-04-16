@@ -36,20 +36,32 @@ ApplicationWindow{
 
     Action {
         id: fullscreenAction
-        text: "&Fullscreen"
+        text: qsTr("&Fullscreen")
         shortcut: "Alt+F11"
         onTriggered: shadersettings.fullscreen = !shadersettings.fullscreen;
     }
     Action {
         id: quitAction
-        text: "&Quit"
+        text: qsTr("&Quit")
         shortcut: "Ctrl+Q"
         onTriggered: terminalWindow.close();
     }
     Action{
         id: showsettingsAction
-        text: "&Settings"
+        text: qsTr("&Settings")
         onTriggered: settingswindowloader.active = true;
+    }
+    Action{
+        id: copyAction
+        text: qsTr("&Copy")
+        shortcut: "Ctrl+Shift+C"
+        onTriggered: terminal.copyClipboard()
+    }
+    Action{
+        id: pasteAction
+        text: qsTr("&Paste")
+        shortcut: "Ctrl+Shift+V"
+        onTriggered: terminal.pasteClipboard()
     }
 
     menuBar: MenuBar {
@@ -62,7 +74,14 @@ ApplicationWindow{
         Menu {
             title: qsTr("Edit")
             visible: shadersettings.fullscreen ? false : true
+            MenuItem {action: copyAction}
+            MenuItem {action: pasteAction}
+            MenuSeparator{}
             MenuItem {action: showsettingsAction}
+        }
+        Menu{
+            title: qsTr("View")
+            visible: shadersettings.fullscreen ? false : true
             MenuItem {action: fullscreenAction}
         }
     }
