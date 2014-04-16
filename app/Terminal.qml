@@ -20,6 +20,7 @@
 
 import QtQuick 2.0
 import QtGraphicalEffects 1.0
+import QtQuick.Controls 1.0
 
 import org.kde.konsole 0.1
 
@@ -82,11 +83,63 @@ Item{
             }
         }
     }
+    Menu{
+        id: contextmenu
+        MenuItem{
+            text: qsTr("Copy")
+            onTriggered: kterminal.item.copyClipboard()
+        }
+        MenuItem{
+            text: qsTr("Paste")
+            onTriggered: kterminal.item.pasteClipboard()
+        }
+    }
     MouseArea{
-        acceptedButtons: Qt.NoButton
+
+        acceptedButtons: Qt.LeftButton | Qt.MiddleButton | Qt.RightButton
         anchors.fill: parent
         onWheel:
             wheel.angleDelta.y > 0 ? kterminal.item.scrollUp() : kterminal.item.scrollDown()
+        onClicked: {
+            console.log(correctDistortion(0,0))
+            if (mouse.button == Qt.RightButton){
+                contextmenu.popup();
+            } else if (mouse.button == Qt.MiddleButton){
+                kterminal.item.pasteSelection();
+            }
+        }
+        onDoubleClicked: {
+            if (mouse.button == Qt.LeftButton){
+                var coord = correctDistortion(mouse.x, mouse.y);
+                kterminal.item.mouseDoubleClick(coord.width, coord.height);
+            }
+        }
+        onPositionChanged: {
+            var coord = correctDistortion(mouse.x, mouse.y);
+            kterminal.item.mouseMove(coord.width, coord.height);
+        }
+        onPressed: {
+            if (mouse.button == Qt.LeftButton){
+                var coord = correctDistortion(mouse.x, mouse.y);
+                kterminal.item.mousePress(coord.width, coord.height);
+            }
+        }
+        onReleased: {
+            if (mouse.button == Qt.LeftButton){
+                kterminal.item.mouseRelease(mouse.x, mouse.y);
+            }
+        }
+
+        function correctDistortion(x, y){
+            x = x / width;
+            y = y / height;
+
+            var cc = Qt.size(0.5 - x, 0.5 - y);
+            var distortion = (cc.height * cc.height + cc.width * cc.width) * shadersettings.screen_distortion;
+
+            return Qt.size((x - cc.width  * (1+distortion) * distortion) * width,
+                           (y - cc.height * (1+distortion) * distortion) * height)
+        }
     }
     ShaderEffectSource{
         id: source

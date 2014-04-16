@@ -5484,35 +5484,35 @@ compiler_clean: compiler_moc_header_clean
 ####### Install
 
 install_target: first FORCE
-	@test -d $(INSTALL_ROOT)/tmp/cool/konsole-qml-plugin/../imports/org/kde/konsole || mkdir -p $(INSTALL_ROOT)/tmp/cool/konsole-qml-plugin/../imports/org/kde/konsole
-	-$(INSTALL_PROGRAM) "$(TARGET)" "$(INSTALL_ROOT)/tmp/cool/imports/org/kde/konsole/$(TARGET)"
-	-$(STRIP) --strip-unneeded "$(INSTALL_ROOT)/tmp/cool/imports/org/kde/konsole/$(TARGET)"
+	@test -d $(INSTALL_ROOT)/home/swordfish/workspaces/qt5/cool-old-term/konsole-qml-plugin/../imports/org/kde/konsole || mkdir -p $(INSTALL_ROOT)/home/swordfish/workspaces/qt5/cool-old-term/konsole-qml-plugin/../imports/org/kde/konsole
+	-$(INSTALL_PROGRAM) "$(TARGET)" "$(INSTALL_ROOT)/home/swordfish/workspaces/qt5/cool-old-term/imports/org/kde/konsole/$(TARGET)"
+	-$(STRIP) --strip-unneeded "$(INSTALL_ROOT)/home/swordfish/workspaces/qt5/cool-old-term/imports/org/kde/konsole/$(TARGET)"
 
 uninstall_target: FORCE
-	-$(DEL_FILE) "$(INSTALL_ROOT)/tmp/cool/imports/org/kde/konsole/$(TARGET)"
-	-$(DEL_DIR) $(INSTALL_ROOT)/tmp/cool/konsole-qml-plugin/../imports/org/kde/konsole/ 
+	-$(DEL_FILE) "$(INSTALL_ROOT)/home/swordfish/workspaces/qt5/cool-old-term/imports/org/kde/konsole/$(TARGET)"
+	-$(DEL_DIR) $(INSTALL_ROOT)/home/swordfish/workspaces/qt5/cool-old-term/konsole-qml-plugin/../imports/org/kde/konsole/ 
 
 
 install_qmldir: first FORCE
-	@test -d $(INSTALL_ROOT)/tmp/cool/konsole-qml-plugin/../imports/org/kde/konsole || mkdir -p $(INSTALL_ROOT)/tmp/cool/konsole-qml-plugin/../imports/org/kde/konsole
-	-$(INSTALL_FILE) /tmp/cool/konsole-qml-plugin/src/qmldir $(INSTALL_ROOT)/tmp/cool/konsole-qml-plugin/../imports/org/kde/konsole/
-	-$(INSTALL_FILE) /tmp/cool/konsole-qml-plugin/src/plugins.qmltypes $(INSTALL_ROOT)/tmp/cool/konsole-qml-plugin/../imports/org/kde/konsole/
+	@test -d $(INSTALL_ROOT)/home/swordfish/workspaces/qt5/cool-old-term/konsole-qml-plugin/../imports/org/kde/konsole || mkdir -p $(INSTALL_ROOT)/home/swordfish/workspaces/qt5/cool-old-term/konsole-qml-plugin/../imports/org/kde/konsole
+	-$(INSTALL_FILE) /home/swordfish/workspaces/qt5/cool-old-term/konsole-qml-plugin/src/qmldir $(INSTALL_ROOT)/home/swordfish/workspaces/qt5/cool-old-term/konsole-qml-plugin/../imports/org/kde/konsole/
+	-$(INSTALL_FILE) /home/swordfish/workspaces/qt5/cool-old-term/konsole-qml-plugin/src/plugins.qmltypes $(INSTALL_ROOT)/home/swordfish/workspaces/qt5/cool-old-term/konsole-qml-plugin/../imports/org/kde/konsole/
 
 uninstall_qmldir: FORCE
-	-$(DEL_FILE) -r $(INSTALL_ROOT)/tmp/cool/konsole-qml-plugin/../imports/org/kde/konsole/plugins.qmltypes
-	-$(DEL_FILE) -r $(INSTALL_ROOT)/tmp/cool/konsole-qml-plugin/../imports/org/kde/konsole/qmldir
-	-$(DEL_DIR) $(INSTALL_ROOT)/tmp/cool/konsole-qml-plugin/../imports/org/kde/konsole/ 
+	-$(DEL_FILE) -r $(INSTALL_ROOT)/home/swordfish/workspaces/qt5/cool-old-term/konsole-qml-plugin/../imports/org/kde/konsole/plugins.qmltypes
+	-$(DEL_FILE) -r $(INSTALL_ROOT)/home/swordfish/workspaces/qt5/cool-old-term/konsole-qml-plugin/../imports/org/kde/konsole/qmldir
+	-$(DEL_DIR) $(INSTALL_ROOT)/home/swordfish/workspaces/qt5/cool-old-term/konsole-qml-plugin/../imports/org/kde/konsole/ 
 
 
 install_assets: first FORCE
-	@test -d $(INSTALL_ROOT)/tmp/cool/konsole-qml-plugin/../imports/org/kde/konsole || mkdir -p $(INSTALL_ROOT)/tmp/cool/konsole-qml-plugin/../imports/org/kde/konsole
-	-$(INSTALL_DIR) /tmp/cool/konsole-qml-plugin/assets/color-schemes $(INSTALL_ROOT)/tmp/cool/konsole-qml-plugin/../imports/org/kde/konsole/
-	-$(INSTALL_DIR) /tmp/cool/konsole-qml-plugin/assets/kb-layouts $(INSTALL_ROOT)/tmp/cool/konsole-qml-plugin/../imports/org/kde/konsole/
+	@test -d $(INSTALL_ROOT)/home/swordfish/workspaces/qt5/cool-old-term/konsole-qml-plugin/../imports/org/kde/konsole || mkdir -p $(INSTALL_ROOT)/home/swordfish/workspaces/qt5/cool-old-term/konsole-qml-plugin/../imports/org/kde/konsole
+	-$(INSTALL_DIR) /home/swordfish/workspaces/qt5/cool-old-term/konsole-qml-plugin/assets/color-schemes $(INSTALL_ROOT)/home/swordfish/workspaces/qt5/cool-old-term/konsole-qml-plugin/../imports/org/kde/konsole/
+	-$(INSTALL_DIR) /home/swordfish/workspaces/qt5/cool-old-term/konsole-qml-plugin/assets/kb-layouts $(INSTALL_ROOT)/home/swordfish/workspaces/qt5/cool-old-term/konsole-qml-plugin/../imports/org/kde/konsole/
 
 uninstall_assets: FORCE
-	-$(DEL_FILE) -r $(INSTALL_ROOT)/tmp/cool/konsole-qml-plugin/../imports/org/kde/konsole/kb-layouts
-	-$(DEL_FILE) -r $(INSTALL_ROOT)/tmp/cool/konsole-qml-plugin/../imports/org/kde/konsole/color-schemes
-	-$(DEL_DIR) $(INSTALL_ROOT)/tmp/cool/konsole-qml-plugin/../imports/org/kde/konsole/ 
+	-$(DEL_FILE) -r $(INSTALL_ROOT)/home/swordfish/workspaces/qt5/cool-old-term/konsole-qml-plugin/../imports/org/kde/konsole/kb-layouts
+	-$(DEL_FILE) -r $(INSTALL_ROOT)/home/swordfish/workspaces/qt5/cool-old-term/konsole-qml-plugin/../imports/org/kde/konsole/color-schemes
+	-$(DEL_DIR) $(INSTALL_ROOT)/home/swordfish/workspaces/qt5/cool-old-term/konsole-qml-plugin/../imports/org/kde/konsole/ 
 
 
 install:  install_target install_qmldir install_assets  FORCE

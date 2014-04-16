@@ -304,7 +304,10 @@ public slots:
     void setColorScheme(const QString &name);
     QStringList availableColorSchemes();
 
-    void click(qreal x, qreal y);
+    void mousePress(qreal x, qreal y);
+    void mouseMove(qreal x, qreal y);
+    void mouseDoubleClick(qreal x, qreal y);
+    void mouseRelease(qreal x, qreal y);
 
     bool autoFocus() { return m_focusOnClick; }
     void setAutoFocus(bool au);
@@ -456,9 +459,9 @@ protected:
     void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry);
     QRect geometryRound(const QRectF &r) const;
 
-    void mousePressEvent(QMouseEvent*ev);
-//    void mouseReleaseEvent( QMouseEvent* );
-//    void mouseMoveEvent( QMouseEvent* );
+    //void mousePressEvent(QMouseEvent*ev);
+    //void mouseReleaseEvent( QMouseEvent* );
+    //void mouseMoveEvent( QMouseEvent* );
 
     void focusInEvent(QFocusEvent* event);
     void focusOutEvent(QFocusEvent* event);
@@ -677,7 +680,6 @@ private:
     // color of the character under the cursor is used
     QColor _cursorColor;
 
-
     struct InputMethodData
     {
         QString preeditString;
@@ -701,20 +703,20 @@ public:
     }
 };
 
-class AutoScrollHandler : public QObject
-{
-    Q_OBJECT
+//class AutoScrollHandler : public QObject
+//{
+//    Q_OBJECT
 
-public:
-    AutoScrollHandler(QQuickItem* parent);
+//public:
+//    AutoScrollHandler(QQuickItem* parent);
 
-protected:
-    virtual void timerEvent(QTimerEvent* event);
-    virtual bool eventFilter(QObject* watched,QEvent* event);
+//protected:
+//    virtual void timerEvent(QTimerEvent* event);
+//    virtual bool eventFilter(QObject* watched,QEvent* event);
 
-private:
-    QQuickItem* widget() const { return static_cast<QQuickItem*>(parent()); }
-    int _timerId;
-};
+//private:
+//    QQuickItem* widget() const { return static_cast<QQuickItem*>(parent()); }
+//    int _timerId;
+//};
 
 #endif // TERMINALDISPLAY_H

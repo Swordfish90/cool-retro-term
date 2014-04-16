@@ -118,7 +118,22 @@ Module {
         }
         Method { name: "availableColorSchemes"; type: "QStringList" }
         Method {
-            name: "click"
+            name: "mousePress"
+            Parameter { name: "x"; type: "double" }
+            Parameter { name: "y"; type: "double" }
+        }
+        Method {
+            name: "mouseMove"
+            Parameter { name: "x"; type: "double" }
+            Parameter { name: "y"; type: "double" }
+        }
+        Method {
+            name: "mouseRelease"
+            Parameter { name: "x"; type: "double" }
+            Parameter { name: "y"; type: "double" }
+        }
+        Method {
+            name: "mouseDoubleClick"
             Parameter { name: "x"; type: "double" }
             Parameter { name: "y"; type: "double" }
         }

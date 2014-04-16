@@ -106,8 +106,11 @@ ApplicationWindow{
         }
         Terminal{
             id: terminal
-            width: parent.width * shadersettings.terminal_scaling
-            height: parent.height * shadersettings.terminal_scaling
+            anchors.centerIn: parent
+            property int frameOffsetX: frame.item.addedWidth - frame.item.borderLeft - frame.item.borderRight
+            property int frameOffsetY: frame.item.addedHeight -frame.item.borderTop - frame.item.borderBottom
+            width: (parent.width + frameOffsetX) * shadersettings.terminal_scaling
+            height: (parent.height + frameOffsetY) * shadersettings.terminal_scaling
         }
         ShaderEffectSource{
             id: theSource

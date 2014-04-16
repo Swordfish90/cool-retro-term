@@ -61,28 +61,28 @@
 #endif
 
 #define REPCHAR   "ABCDEFGHIJKLMNOPQRSTUVWXYZ" \
-                  "abcdefgjijklmnopqrstuvwxyz" \
-                  "0123456789./+@"
+    "abcdefgjijklmnopqrstuvwxyz" \
+    "0123456789./+@"
 
 const ColorEntry base_color_table[TABLE_COLORS] =
-// The following are almost IBM standard color codes, with some slight
-// gamma correction for the dim colors to compensate for bright X screens.
-// It contains the 8 ansiterm/xterm colors in 2 intensities.
+        // The following are almost IBM standard color codes, with some slight
+        // gamma correction for the dim colors to compensate for bright X screens.
+        // It contains the 8 ansiterm/xterm colors in 2 intensities.
 {
-  // Fixme: could add faint colors here, also.
-  // normal
-  ColorEntry(QColor(0x00,0x00,0x00), 0), ColorEntry( QColor(0xB2,0xB2,0xB2), 1), // Dfore, Dback
-  ColorEntry(QColor(0x00,0x00,0x00), 0), ColorEntry( QColor(0xB2,0x18,0x18), 0), // Black, Red
-  ColorEntry(QColor(0x18,0xB2,0x18), 0), ColorEntry( QColor(0xB2,0x68,0x18), 0), // Green, Yellow
-  ColorEntry(QColor(0x18,0x18,0xB2), 0), ColorEntry( QColor(0xB2,0x18,0xB2), 0), // Blue, Magenta
-  ColorEntry(QColor(0x18,0xB2,0xB2), 0), ColorEntry( QColor(0xB2,0xB2,0xB2), 0), // Cyan, White
-  // intensiv
-  ColorEntry(QColor(0x00,0x00,0x00), 0), ColorEntry( QColor(0xFF,0xFF,0xFF), 1),
-  ColorEntry(QColor(0x68,0x68,0x68), 0), ColorEntry( QColor(0xFF,0x54,0x54), 0),
-  ColorEntry(QColor(0x54,0xFF,0x54), 0), ColorEntry( QColor(0xFF,0xFF,0x54), 0),
-  ColorEntry(QColor(0x54,0x54,0xFF), 0), ColorEntry( QColor(0xFF,0x54,0xFF), 0),
-  ColorEntry(QColor(0x54,0xFF,0xFF), 0), ColorEntry( QColor(0xFF,0xFF,0xFF), 0)
-};
+        // Fixme: could add faint colors here, also.
+        // normal
+        ColorEntry(QColor(0x00,0x00,0x00), 0), ColorEntry( QColor(0xB2,0xB2,0xB2), 1), // Dfore, Dback
+        ColorEntry(QColor(0x00,0x00,0x00), 0), ColorEntry( QColor(0xB2,0x18,0x18), 0), // Black, Red
+        ColorEntry(QColor(0x18,0xB2,0x18), 0), ColorEntry( QColor(0xB2,0x68,0x18), 0), // Green, Yellow
+        ColorEntry(QColor(0x18,0x18,0xB2), 0), ColorEntry( QColor(0xB2,0x18,0xB2), 0), // Blue, Magenta
+        ColorEntry(QColor(0x18,0xB2,0xB2), 0), ColorEntry( QColor(0xB2,0xB2,0xB2), 0), // Cyan, White
+        // intensiv
+        ColorEntry(QColor(0x00,0x00,0x00), 0), ColorEntry( QColor(0xFF,0xFF,0xFF), 1),
+        ColorEntry(QColor(0x68,0x68,0x68), 0), ColorEntry( QColor(0xFF,0x54,0x54), 0),
+        ColorEntry(QColor(0x54,0xFF,0x54), 0), ColorEntry( QColor(0xFF,0xFF,0x54), 0),
+        ColorEntry(QColor(0x54,0x54,0xFF), 0), ColorEntry( QColor(0xFF,0x54,0xFF), 0),
+        ColorEntry(QColor(0x54,0xFF,0xFF), 0), ColorEntry( QColor(0xFF,0xFF,0xFF), 0)
+        };
 
 // scroll increment used when dragging selection at top/bottom of window.
 
@@ -194,7 +194,7 @@ KTerminalDisplay::KTerminalDisplay(QQuickItem *parent) :
 
     setColorTable(base_color_table);
 
-    new AutoScrollHandler(this);
+    //new AutoScrollHandler(this);
 
     setAcceptedMouseButtons(Qt::LeftButton);
     setFlags(ItemHasContents | ItemAcceptsInputMethod);
@@ -280,8 +280,8 @@ void KTerminalDisplay::setScreenWindow(ScreenWindow* window)
     if ( window )
     {
 
-// TODO: Determine if this is an issue.
-//#warning "The order here is not specified - does it matter whether updateImage or updateLineProperties comes first?"
+        // TODO: Determine if this is an issue.
+        //#warning "The order here is not specified - does it matter whether updateImage or updateLineProperties comes first?"
         connect( _screenWindow , SIGNAL(outputChanged()) , this , SLOT(updateLineProperties()) );
         connect( _screenWindow , SIGNAL(outputChanged()) , this , SLOT(updateImage()) );
         window->setWindowLines(_lines);
@@ -290,14 +290,14 @@ void KTerminalDisplay::setScreenWindow(ScreenWindow* window)
 
 const ColorEntry* KTerminalDisplay::colorTable() const
 {
-  return _colorTable;
+    return _colorTable;
 }
 void KTerminalDisplay::setBackgroundColor(const QColor& color)
 {
     _colorTable[DEFAULT_BACK_COLOR].color = color;
-//    QPalette p = m_palette;
-//    p.setColor( backgroundRole(), color );
-//    setPalette( p );
+    //    QPalette p = m_palette;
+    //    p.setColor( backgroundRole(), color );
+    //    setPalette( p );
 
     update();
 }
@@ -309,10 +309,10 @@ void KTerminalDisplay::setForegroundColor(const QColor& color)
 }
 void KTerminalDisplay::setColorTable(const ColorEntry table[])
 {
-  for (int i = 0; i < TABLE_COLORS; i++)
-      _colorTable[i] = table[i];
+    for (int i = 0; i < TABLE_COLORS; i++)
+        _colorTable[i] = table[i];
 
-  setBackgroundColor(_colorTable[DEFAULT_BACK_COLOR].color);
+    setBackgroundColor(_colorTable[DEFAULT_BACK_COLOR].color);
 }
 
 
@@ -337,7 +337,7 @@ void KTerminalDisplay::setColorTable(const ColorEntry table[])
 static inline bool isLineChar(quint16 c) { return ((c & 0xFF80) == 0x2500);}
 static inline bool isLineCharString(const QString& string)
 {
-        return (string.length() > 0) && (isLineChar(string.at(0).unicode()));
+    return (string.length() > 0) && (isLineChar(string.at(0).unicode()));
 }
 
 
@@ -353,40 +353,40 @@ unsigned short vt100_graphics[32] =
 
 void KTerminalDisplay::fontChange(const QFont&)
 {
-  QFontMetrics fm(m_font);
-  _fontHeight = fm.height() + _lineSpacing;
+    QFontMetrics fm(m_font);
+    _fontHeight = fm.height() + _lineSpacing;
 
-  // waba TerminalDisplay 1.123:
-  // "Base character width on widest ASCII character. This prevents too wide
-  //  characters in the presence of double wide (e.g. Japanese) characters."
-  // Get the width from representative normal width characters
-  _fontWidth = (double)fm.width(REPCHAR)/(double)strlen(REPCHAR);
+    // waba TerminalDisplay 1.123:
+    // "Base character width on widest ASCII character. This prevents too wide
+    //  characters in the presence of double wide (e.g. Japanese) characters."
+    // Get the width from representative normal width characters
+    _fontWidth = (double)fm.width(REPCHAR)/(double)strlen(REPCHAR);
 
-  _fixedFont = true;
+    _fixedFont = true;
 
-  int fw = fm.width(REPCHAR[0]);
-  for(unsigned int i=1; i< strlen(REPCHAR); i++)
-  {
-    if (fw != fm.width(REPCHAR[i]))
+    int fw = fm.width(REPCHAR[0]);
+    for(unsigned int i=1; i< strlen(REPCHAR); i++)
     {
-      _fixedFont = false;
-      break;
+        if (fw != fm.width(REPCHAR[i]))
+        {
+            _fixedFont = false;
+            break;
+        }
     }
-  }
 
-  if (_fontWidth < 1)
-    _fontWidth=1;
+    if (_fontWidth < 1)
+        _fontWidth=1;
 
-  _fontAscent = fm.ascent();
+    _fontAscent = fm.ascent();
 
-  emit changedFontMetricSignal( _fontHeight, _fontWidth );
-  propagateSize();
-  update();
+    emit changedFontMetricSignal( _fontHeight, _fontWidth );
+    propagateSize();
+    update();
 }
 
 void KTerminalDisplay::setVTFont(const QFont& f)
 {
-  QFont font = f;
+    QFont font = f;
 
 #if defined(Q_WS_MAC) || defined(Q_WS_UBUNTU)
 #if QT_VERSION >= 0x040700
@@ -396,29 +396,29 @@ void KTerminalDisplay::setVTFont(const QFont& f)
 #endif
 #endif
 
-  QFontMetrics metrics(font);
+    QFontMetrics metrics(font);
 
-  if ( !QFontInfo(font).fixedPitch() )
-  {
-      qDebug() << "Using an unsupported variable-width font in the terminal.  This may produce display errors.";
-  }
+    if ( !QFontInfo(font).fixedPitch() )
+    {
+        qDebug() << "Using an unsupported variable-width font in the terminal.  This may produce display errors.";
+    }
 
-  if ( metrics.height() < height() && metrics.maxWidth() < width() )
-  {
-    // hint that text should be drawn without anti-aliasing.
-    // depending on the user's font configuration, this may not be respected
-    if (!_antialiasText)
-        font.setStyleStrategy( QFont::NoAntialias );
+    if ( metrics.height() < height() && metrics.maxWidth() < width() )
+    {
+        // hint that text should be drawn without anti-aliasing.
+        // depending on the user's font configuration, this may not be respected
+        if (!_antialiasText)
+            font.setStyleStrategy( QFont::NoAntialias );
 
-    // experimental optimization.  Konsole assumes that the terminal is using a
-    // mono-spaced font, in which case kerning information should have an effect.
-    // Disabling kerning saves some computation when rendering text.
-    font.setKerning(false);
+        // experimental optimization.  Konsole assumes that the terminal is using a
+        // mono-spaced font, in which case kerning information should have an effect.
+        // Disabling kerning saves some computation when rendering text.
+        font.setKerning(false);
 
-    //QWidget::setFont(font);
-    m_font = font;
-    fontChange(font);
-  }
+        //QWidget::setFont(font);
+        m_font = font;
+        fontChange(font);
+    }
 }
 
 void KTerminalDisplay::setColorScheme(const QString &name)
@@ -452,10 +452,41 @@ QStringList KTerminalDisplay::availableColorSchemes()
     return ret;
 }
 
-void KTerminalDisplay::click(qreal x, qreal y)
-{
-    QMouseEvent me(QEvent::MouseButtonPress, QPointF(x,y), Qt::RightButton, Qt::RightButton, Qt::NoModifier);
-    mousePressEvent(&me);
+void KTerminalDisplay::mousePress(qreal x, qreal y){
+    if (m_focusOnClick) forcedFocus();
+    if (m_showVKBonClick) ShowVKB(true);
+
+    emit clicked();
+
+    int charLine;
+    int charColumn;
+    getCharacterPosition(QPoint(x,y), charLine, charColumn);
+
+    QPoint pos = QPoint(charColumn, charLine);
+
+    _wordSelectionMode = false;
+    _lineSelectionMode = false;
+
+    _screenWindow->clearSelection();
+    _iPntSel = _pntSel = pos;
+    _actSel = 1; // left mouse button pressed but nothing selected yet.
+}
+
+void KTerminalDisplay::mouseMove(qreal x, qreal y){
+    QPoint pos(x, y);
+    extendSelection(pos);
+}
+
+void KTerminalDisplay::mouseDoubleClick(qreal x, qreal y){
+    _wordSelectionMode = true;
+    QPoint pos(x, y);
+    extendSelection(pos);
+}
+
+void KTerminalDisplay::mouseRelease(qreal x, qreal y){
+    Q_UNUSED(x);
+    Q_UNUSED(y);
+    _actSel = 0;
 }
 
 void KTerminalDisplay::setAutoFocus(bool au)
@@ -607,9 +638,9 @@ void KTerminalDisplay::setKeyboardCursorColor(bool useForegroundColor, const QCo
 {
     if (useForegroundColor)
         _cursorColor = QColor(); // an invalid color means that
-                                 // the foreground color of the
-                                 // current character should
-                                 // be used
+    // the foreground color of the
+    // current character should
+    // be used
 
     else
         _cursorColor = color;
@@ -673,10 +704,10 @@ void KTerminalDisplay::scrollImage(int lines , const QRect& screenWindowRegion)
 
     // return if there is nothing to do
     if (    lines == 0
-         || _image == 0
-         || !region.isValid()
-         || (region.top() + abs(lines)) >= region.bottom()
-         || this->_lines <= region.height() ) return;
+            || _image == 0
+            || !region.isValid()
+            || (region.top() + abs(lines)) >= region.bottom()
+            || this->_lines <= region.height() ) return;
 
 
     void* firstCharPos = &_image[ region.top() * this->_columns ];
@@ -686,8 +717,8 @@ void KTerminalDisplay::scrollImage(int lines , const QRect& screenWindowRegion)
     Q_UNUSED(top) //BAD IDEA!
     int linesToMove = region.height() - abs(lines);
     int bytesToMove = linesToMove *
-                      this->_columns *
-                      sizeof(Character);
+            this->_columns *
+            sizeof(Character);
 
     Q_ASSERT( linesToMove > 0 );
     Q_ASSERT( bytesToMove > 0 );
@@ -722,206 +753,206 @@ void KTerminalDisplay::scrollImage(int lines , const QRect& screenWindowRegion)
 
 void KTerminalDisplay::updateImage()
 {
-  if ( !_screenWindow )
-      return;
+    if ( !_screenWindow )
+        return;
 
-  // optimization - scroll the existing image where possible and
-  // avoid expensive text drawing for parts of the image that
-  // can simply be moved up or down
-  scrollImage( _screenWindow->scrollCount() ,
-               _screenWindow->scrollRegion() );
-  _screenWindow->resetScrollCount();
+    // optimization - scroll the existing image where possible and
+    // avoid expensive text drawing for parts of the image that
+    // can simply be moved up or down
+    scrollImage( _screenWindow->scrollCount() ,
+                 _screenWindow->scrollRegion() );
+    _screenWindow->resetScrollCount();
 
-  if (!_image) {
-     // Create _image.
-     // The emitted changedContentSizeSignal also leads to getImage being recreated, so do this first.
-     updateImageSize();
-  }
-
-  Character* const newimg = _screenWindow->getImage();
-  int lines   = _screenWindow->windowLines();
-  int columns = _screenWindow->windowColumns();
-
-  Q_ASSERT( this->_usedLines <= this->_lines );
-  Q_ASSERT( this->_usedColumns <= this->_columns );
-
-  int y,x,len;
-
-  _hasBlinker = false;
-
-  CharacterColor cf;       // undefined
-  CharacterColor _clipboard;       // undefined
-  int cr  = -1;   // undefined
-
-  const int linesToUpdate   = qMin(this->_lines,  qMax(0,lines  ));
-  const int columnsToUpdate = qMin(this->_columns,qMax(0,columns));
-
-  QChar *disstrU = new QChar[columnsToUpdate];
-  char *dirtyMask = new char[columnsToUpdate+2];
-  QRegion dirtyRegion;
-
-  // debugging variable, this records the number of lines that are found to
-  // be 'dirty' ( ie. have changed from the old _image to the new _image ) and
-  // which therefore need to be repainted
-  int dirtyLineCount = 0;
-
-  for (y = 0; y < linesToUpdate; ++y)
-  {
-    const Character*       currentLine = &_image[y*this->_columns];
-    const Character* const newLine = &newimg[y*columns];
-
-    bool updateLine = false;
-
-    // The dirty mask indicates which characters need repainting. We also
-    // mark surrounding neighbours dirty, in case the character exceeds
-    // its cell boundaries
-    memset(dirtyMask, 0, columnsToUpdate+2);
-
-    for( x = 0 ; x < columnsToUpdate ; ++x)
-    {
-        if ( newLine[x] != currentLine[x] )
-        {
-            dirtyMask[x] = true;
-        }
+    if (!_image) {
+        // Create _image.
+        // The emitted changedContentSizeSignal also leads to getImage being recreated, so do this first.
+        updateImageSize();
     }
 
-    if (!_resizing) // not while _resizing, we're expecting a paintEvent
-    for (x = 0; x < columnsToUpdate; ++x)
+    Character* const newimg = _screenWindow->getImage();
+    int lines   = _screenWindow->windowLines();
+    int columns = _screenWindow->windowColumns();
+
+    Q_ASSERT( this->_usedLines <= this->_lines );
+    Q_ASSERT( this->_usedColumns <= this->_columns );
+
+    int y,x,len;
+
+    _hasBlinker = false;
+
+    CharacterColor cf;       // undefined
+    CharacterColor _clipboard;       // undefined
+    int cr  = -1;   // undefined
+
+    const int linesToUpdate   = qMin(this->_lines,  qMax(0,lines  ));
+    const int columnsToUpdate = qMin(this->_columns,qMax(0,columns));
+
+    QChar *disstrU = new QChar[columnsToUpdate];
+    char *dirtyMask = new char[columnsToUpdate+2];
+    QRegion dirtyRegion;
+
+    // debugging variable, this records the number of lines that are found to
+    // be 'dirty' ( ie. have changed from the old _image to the new _image ) and
+    // which therefore need to be repainted
+    int dirtyLineCount = 0;
+
+    for (y = 0; y < linesToUpdate; ++y)
     {
-      _hasBlinker |= (newLine[x].rendition & RE_BLINK);
+        const Character*       currentLine = &_image[y*this->_columns];
+        const Character* const newLine = &newimg[y*columns];
 
-      // Start drawing if this character or the next one differs.
-      // We also take the next one into account to handle the situation
-      // where characters exceed their cell width.
-      if (dirtyMask[x])
-      {
-        quint16 c = newLine[x+0].character;
-        if ( !c )
-            continue;
-        int p = 0;
-        disstrU[p++] = c; //fontMap(c);
-        bool lineDraw = isLineChar(c);
-        bool doubleWidth = (x+1 == columnsToUpdate) ? false : (newLine[x+1].character == 0);
-        cr = newLine[x].rendition;
-        _clipboard = newLine[x].backgroundColor;
-        if (newLine[x].foregroundColor != cf) cf = newLine[x].foregroundColor;
-        int lln = columnsToUpdate - x;
-        for (len = 1; len < lln; ++len)
+        bool updateLine = false;
+
+        // The dirty mask indicates which characters need repainting. We also
+        // mark surrounding neighbours dirty, in case the character exceeds
+        // its cell boundaries
+        memset(dirtyMask, 0, columnsToUpdate+2);
+
+        for( x = 0 ; x < columnsToUpdate ; ++x)
         {
-            const Character& ch = newLine[x+len];
-
-            if (!ch.character)
-                continue; // Skip trailing part of multi-col chars.
-
-            bool nextIsDoubleWidth = (x+len+1 == columnsToUpdate) ? false : (newLine[x+len+1].character == 0);
-
-            if (  ch.foregroundColor != cf ||
-                  ch.backgroundColor != _clipboard ||
-                  ch.rendition != cr ||
-                  !dirtyMask[x+len] ||
-                  isLineChar(c) != lineDraw ||
-                  nextIsDoubleWidth != doubleWidth )
-            break;
-
-          disstrU[p++] = c; //fontMap(c);
+            if ( newLine[x] != currentLine[x] )
+            {
+                dirtyMask[x] = true;
+            }
         }
 
-        QString unistr(disstrU, p);
+        if (!_resizing) // not while _resizing, we're expecting a paintEvent
+            for (x = 0; x < columnsToUpdate; ++x)
+            {
+                _hasBlinker |= (newLine[x].rendition & RE_BLINK);
 
-        bool saveFixedFont = _fixedFont;
-        if (lineDraw)
-           _fixedFont = false;
-        if (doubleWidth)
-           _fixedFont = false;
+                // Start drawing if this character or the next one differs.
+                // We also take the next one into account to handle the situation
+                // where characters exceed their cell width.
+                if (dirtyMask[x])
+                {
+                    quint16 c = newLine[x+0].character;
+                    if ( !c )
+                        continue;
+                    int p = 0;
+                    disstrU[p++] = c; //fontMap(c);
+                    bool lineDraw = isLineChar(c);
+                    bool doubleWidth = (x+1 == columnsToUpdate) ? false : (newLine[x+1].character == 0);
+                    cr = newLine[x].rendition;
+                    _clipboard = newLine[x].backgroundColor;
+                    if (newLine[x].foregroundColor != cf) cf = newLine[x].foregroundColor;
+                    int lln = columnsToUpdate - x;
+                    for (len = 1; len < lln; ++len)
+                    {
+                        const Character& ch = newLine[x+len];
 
-        updateLine = true;
+                        if (!ch.character)
+                            continue; // Skip trailing part of multi-col chars.
 
-        _fixedFont = saveFixedFont;
-        x += len - 1;
-      }
+                        bool nextIsDoubleWidth = (x+len+1 == columnsToUpdate) ? false : (newLine[x+len+1].character == 0);
 
+                        if (  ch.foregroundColor != cf ||
+                              ch.backgroundColor != _clipboard ||
+                              ch.rendition != cr ||
+                              !dirtyMask[x+len] ||
+                              isLineChar(c) != lineDraw ||
+                              nextIsDoubleWidth != doubleWidth )
+                            break;
+
+                        disstrU[p++] = c; //fontMap(c);
+                    }
+
+                    QString unistr(disstrU, p);
+
+                    bool saveFixedFont = _fixedFont;
+                    if (lineDraw)
+                        _fixedFont = false;
+                    if (doubleWidth)
+                        _fixedFont = false;
+
+                    updateLine = true;
+
+                    _fixedFont = saveFixedFont;
+                    x += len - 1;
+                }
+
+            }
+
+        //both the top and bottom halves of double height _lines must always be redrawn
+        //although both top and bottom halves contain the same characters, only
+        //the top one is actually
+        //drawn.
+        if (_lineProperties.count() > y)
+            updateLine |= (_lineProperties[y] & LINE_DOUBLEHEIGHT);
+
+        // if the characters on the line are different in the old and the new _image
+        // then this line must be repainted.
+        if (updateLine)
+        {
+            dirtyLineCount++;
+
+            // add the area occupied by this line to the region which needs to be
+            // repainted
+            QRect dirtyRect = QRect( qRound(_leftMargin),
+                                     qRound(_topMargin + _fontHeight*y) ,
+                                     qRound(_fontWidth * columnsToUpdate) ,
+                                     _fontHeight );
+
+            dirtyRegion |= dirtyRect;
+        }
+
+        // replace the line of characters in the old _image with the
+        // current line of the new _image
+        memcpy((void*)currentLine,(const void*)newLine,columnsToUpdate*sizeof(Character));
     }
 
-    //both the top and bottom halves of double height _lines must always be redrawn
-    //although both top and bottom halves contain the same characters, only
-    //the top one is actually
-    //drawn.
-    if (_lineProperties.count() > y)
-        updateLine |= (_lineProperties[y] & LINE_DOUBLEHEIGHT);
-
-    // if the characters on the line are different in the old and the new _image
-    // then this line must be repainted.
-    if (updateLine)
+    // if the new _image is smaller than the previous _image, then ensure that the area
+    // outside the new _image is cleared
+    if ( linesToUpdate < _usedLines )
     {
-        dirtyLineCount++;
-
-        // add the area occupied by this line to the region which needs to be
-        // repainted
-        QRect dirtyRect = QRect( qRound(_leftMargin),
-                                 qRound(_topMargin + _fontHeight*y) ,
-                                 qRound(_fontWidth * columnsToUpdate) ,
-                                 _fontHeight );
-
-        dirtyRegion |= dirtyRect;
+        dirtyRegion |= QRect( qRound(_leftMargin),
+                              qRound(_topMargin + _fontHeight*linesToUpdate) ,
+                              qRound(_fontWidth * this->_columns) ,
+                              _fontHeight * (_usedLines-linesToUpdate) );
     }
+    _usedLines = linesToUpdate;
 
-    // replace the line of characters in the old _image with the
-    // current line of the new _image
-    memcpy((void*)currentLine,(const void*)newLine,columnsToUpdate*sizeof(Character));
-  }
+    if ( columnsToUpdate < _usedColumns )
+    {
+        dirtyRegion |= QRect( qRound(_leftMargin + columnsToUpdate*_fontWidth) ,
+                              qRound(_topMargin),
+                              qRound(_fontWidth * (_usedColumns-columnsToUpdate)) ,
+                              _fontHeight * this->_lines );
+    }
+    _usedColumns = columnsToUpdate;
 
-  // if the new _image is smaller than the previous _image, then ensure that the area
-  // outside the new _image is cleared
-  if ( linesToUpdate < _usedLines )
-  {
-    dirtyRegion |= QRect( qRound(_leftMargin),
-                          qRound(_topMargin + _fontHeight*linesToUpdate) ,
-                          qRound(_fontWidth * this->_columns) ,
-                          _fontHeight * (_usedLines-linesToUpdate) );
-  }
-  _usedLines = linesToUpdate;
+    dirtyRegion |= geometryRound(_inputMethodData.previousPreeditRect);
 
-  if ( columnsToUpdate < _usedColumns )
-  {
-    dirtyRegion |= QRect( qRound(_leftMargin + columnsToUpdate*_fontWidth) ,
-                          qRound(_topMargin),
-                          qRound(_fontWidth * (_usedColumns-columnsToUpdate)) ,
-                          _fontHeight * this->_lines );
-  }
-  _usedColumns = columnsToUpdate;
+    // update the parts of the display which have changed
+    // update(dirtyRegion.boundingRect());
 
-  dirtyRegion |= geometryRound(_inputMethodData.previousPreeditRect);
+    // update whole widget
+    update();
 
-  // update the parts of the display which have changed
-  // update(dirtyRegion.boundingRect());
+    if ( _hasBlinker && !_blinkTimer->isActive()) _blinkTimer->start( TEXT_BLINK_DELAY );
+    if (!_hasBlinker && _blinkTimer->isActive()) { _blinkTimer->stop(); _blinking = false; }
+    delete[] dirtyMask;
+    delete[] disstrU;
 
-  // update whole widget
-  update();
-
-  if ( _hasBlinker && !_blinkTimer->isActive()) _blinkTimer->start( TEXT_BLINK_DELAY );
-  if (!_hasBlinker && _blinkTimer->isActive()) { _blinkTimer->stop(); _blinking = false; }
-  delete[] dirtyMask;
-  delete[] disstrU;
-
-  //Notify changes to qml
-  emit updatedImage();
+    //Notify changes to qml
+    emit updatedImage();
 }
 
 void KTerminalDisplay::setBlinkingCursor(bool blink)
 {
-  _hasBlinkingCursor=blink;
+    _hasBlinkingCursor=blink;
 
-  if (blink && !_blinkCursorTimer->isActive())
-      _blinkCursorTimer->start(100); // WARN! HARDCODE
+    if (blink && !_blinkCursorTimer->isActive())
+        _blinkCursorTimer->start(100); // WARN! HARDCODE
 
-  if (!blink && _blinkCursorTimer->isActive())
-  {
-    _blinkCursorTimer->stop();
-    if (_cursorBlinking)
-      blinkCursorEvent();
-    else
-      _cursorBlinking = false;
-  }
+    if (!blink && _blinkCursorTimer->isActive())
+    {
+        _blinkCursorTimer->stop();
+        if (_cursorBlinking)
+            blinkCursorEvent();
+        else
+            _cursorBlinking = false;
+    }
 }
 
 void KTerminalDisplay::setBlinkingTextEnabled(bool blink)
@@ -980,26 +1011,26 @@ QPoint KTerminalDisplay::cursorPosition() const
 
 void KTerminalDisplay::blinkEvent()
 {
-  if (!_allowBlinkingText) return;
+    if (!_allowBlinkingText) return;
 
-  _blinking = !_blinking;
+    _blinking = !_blinking;
 
-  //TODO:  Optimize to only repaint the areas of the widget
-  // where there is blinking text
-  // rather than repainting the whole widget.
-  update();
+    //TODO:  Optimize to only repaint the areas of the widget
+    // where there is blinking text
+    // rather than repainting the whole widget.
+    update();
 }
 
 void KTerminalDisplay::updateCursor()
 {
-  QRect cursorRect = imageToWidget( QRect(cursorPosition(),QSize(1,1)) );
-  update(cursorRect);
+    QRect cursorRect = imageToWidget( QRect(cursorPosition(),QSize(1,1)) );
+    update(cursorRect);
 }
 
 void KTerminalDisplay::blinkCursorEvent()
 {
-  _cursorBlinking = !_cursorBlinking;
-  updateCursor();
+    _cursorBlinking = !_cursorBlinking;
+    updateCursor();
 }
 
 /* ------------------------------------------------------------------------- */
@@ -1010,199 +1041,199 @@ void KTerminalDisplay::blinkCursorEvent()
 
 void KTerminalDisplay::propagateSize()
 {
-  if (_image) {
-     updateImageSize();
-  }
+    if (_image) {
+        updateImageSize();
+    }
 }
 
 void KTerminalDisplay::updateImageSize()
 {
-  Character* oldimg = _image;
-  int oldlin = _lines;
-  int oldcol = _columns;
+    Character* oldimg = _image;
+    int oldlin = _lines;
+    int oldcol = _columns;
 
-  makeImage();
+    makeImage();
 
-  // copy the old image to reduce flicker
-  int lines =   qMin(oldlin,_lines);
-  int columns = qMin(oldcol,_columns);
+    // copy the old image to reduce flicker
+    int lines =   qMin(oldlin,_lines);
+    int columns = qMin(oldcol,_columns);
 
-  if (oldimg)
-  {
-    for (int line = 0; line < lines; line++)
+    if (oldimg)
     {
-      memcpy((void*)&_image[_columns*line],
-             (void*)&oldimg[oldcol*line],columns*sizeof(Character));
+        for (int line = 0; line < lines; line++)
+        {
+            memcpy((void*)&_image[_columns*line],
+                    (void*)&oldimg[oldcol*line],columns*sizeof(Character));
+        }
+        delete[] oldimg;
     }
-    delete[] oldimg;
-  }
 
-  if (_screenWindow)
-      _screenWindow->setWindowLines(_lines);
+    if (_screenWindow)
+        _screenWindow->setWindowLines(_lines);
 
-  _resizing = (oldlin!=_lines) || (oldcol!=_columns);
+    _resizing = (oldlin!=_lines) || (oldcol!=_columns);
 
-  if ( _resizing )
-  {
-    emit changedContentSizeSignal(_contentHeight, _contentWidth); // expose resizeEvent
-  }
+    if ( _resizing )
+    {
+        emit changedContentSizeSignal(_contentHeight, _contentWidth); // expose resizeEvent
+    }
 
-  _resizing = false;
+    _resizing = false;
 }
 
 void KTerminalDisplay::scrollToEnd()
 {
-  //_screenWindow->scrollTo( _scrollBar->value() + 1 );
-  _screenWindow->setTrackOutput( _screenWindow->atEndOfOutput() );
+    //_screenWindow->scrollTo( _scrollBar->value() + 1 );
+    _screenWindow->setTrackOutput( _screenWindow->atEndOfOutput() );
 }
 
 void KTerminalDisplay::extendSelection( const QPoint& position )
 {
-  QPoint pos = position;
+    QPoint pos = position;
 
-  if ( !_screenWindow )
-      return;
+    if ( !_screenWindow )
+        return;
 
-  //if ( !contentsRect().contains(ev->pos()) ) return;
+    //if ( !contentsRect().contains(ev->pos()) ) return;
 
-  // we're in the process of moving the mouse with the left button pressed
-  // the mouse cursor will kept caught within the bounds of the text in
-  // this widget.
+    // we're in the process of moving the mouse with the left button pressed
+    // the mouse cursor will kept caught within the bounds of the text in
+    // this widget.
 
-  int linesBeyondWidget = 0;
+    int linesBeyondWidget = 0;
 
-  QRect textBounds( _leftMargin,
-                    _topMargin,
-                   _usedColumns*_fontWidth-1,
-                   _usedLines*_fontHeight-1);
+    QRect textBounds( _leftMargin,
+                      _topMargin,
+                      _usedColumns*_fontWidth-1,
+                      _usedLines*_fontHeight-1);
 
-  // Adjust position within text area bounds.
-  QPoint oldpos = pos;
+    // Adjust position within text area bounds.
+    QPoint oldpos = pos;
 
-  pos.setX( qBound(textBounds.left(),pos.x(),textBounds.right()) );
-  pos.setY( qBound(textBounds.top(),pos.y(),textBounds.bottom()) );
+    pos.setX( qBound(textBounds.left(),pos.x(),textBounds.right()) );
+    pos.setY( qBound(textBounds.top(),pos.y(),textBounds.bottom()) );
 
-  if ( oldpos.y() > textBounds.bottom() )
-  {
-      linesBeyondWidget = (oldpos.y()-textBounds.bottom()) / _fontHeight;
-  }
-  if ( oldpos.y() < textBounds.top() )
-  {
-      linesBeyondWidget = (textBounds.top()-oldpos.y()) / _fontHeight;
-  }
-
-  int charColumn = 0;
-  int charLine = 0;
-  getCharacterPosition(pos,charLine,charColumn);
-
-  QPoint here = QPoint(charColumn,charLine); //QPoint((pos.x()-tLx-_leftMargin+(_fontWidth/2))/_fontWidth,(pos.y()-tLy-_topMargin)/_fontHeight);
-  QPoint ohere;
-  QPoint _iPntSelCorr = _iPntSel;
-  _iPntSelCorr.ry() -= 0; //_scrollBar->value();
-  QPoint _pntSelCorr = _pntSel;
-  _pntSelCorr.ry() -= 0; //_scrollBar->value();
-  bool swapping = false;
-
-  if ( _wordSelectionMode )
-  {
-    // Extend to word boundaries
-    int i;
-    QChar selClass;
-
-    bool left_not_right = ( here.y() < _iPntSelCorr.y() ||
-       ( here.y() == _iPntSelCorr.y() && here.x() < _iPntSelCorr.x() ) );
-    bool old_left_not_right = ( _pntSelCorr.y() < _iPntSelCorr.y() ||
-       ( _pntSelCorr.y() == _iPntSelCorr.y() && _pntSelCorr.x() < _iPntSelCorr.x() ) );
-    swapping = left_not_right != old_left_not_right;
-
-    // Find left (left_not_right ? from here : from start)
-    QPoint left = left_not_right ? here : _iPntSelCorr;
-    i = loc(left.x(),left.y());
-    if (i>=0 && i<=_imageSize) {
-      selClass = charClass(_image[i].character);
-      while ( ((left.x()>0) || (left.y()>0 && (_lineProperties[left.y()-1] & LINE_WRAPPED) ))
-                      && charClass(_image[i-1].character) == selClass )
-      { i--; if (left.x()>0) left.rx()--; else {left.rx()=_usedColumns-1; left.ry()--;} }
-    }
-
-    // Find left (left_not_right ? from start : from here)
-    QPoint right = left_not_right ? _iPntSelCorr : here;
-    i = loc(right.x(),right.y());
-    if (i>=0 && i<=_imageSize) {
-      selClass = charClass(_image[i].character);
-      while( ((right.x()<_usedColumns-1) || (right.y()<_usedLines-1 && (_lineProperties[right.y()] & LINE_WRAPPED) ))
-                      && charClass(_image[i+1].character) == selClass )
-      { i++; if (right.x()<_usedColumns-1) right.rx()++; else {right.rx()=0; right.ry()++; } }
-    }
-
-    // Pick which is start (ohere) and which is extension (here)
-    if ( left_not_right )
+    if ( oldpos.y() > textBounds.bottom() )
     {
-      here = left; ohere = right;
+        linesBeyondWidget = (oldpos.y()-textBounds.bottom()) / _fontHeight;
     }
-    else
+    if ( oldpos.y() < textBounds.top() )
     {
-      here = right; ohere = left;
-    }
-    ohere.rx()++;
-  }
-
-  if ( _lineSelectionMode )
-  {
-    // Extend to complete line
-    bool above_not_below = ( here.y() < _iPntSelCorr.y() );
-
-    QPoint above = above_not_below ? here : _iPntSelCorr;
-    QPoint below = above_not_below ? _iPntSelCorr : here;
-
-    while (above.y()>0 && (_lineProperties[above.y()-1] & LINE_WRAPPED) )
-      above.ry()--;
-    while (below.y()<_usedLines-1 && (_lineProperties[below.y()] & LINE_WRAPPED) )
-      below.ry()++;
-
-    above.setX(0);
-    below.setX(_usedColumns-1);
-
-    // Pick which is start (ohere) and which is extension (here)
-    if ( above_not_below )
-    {
-      here = above; ohere = below;
-    }
-    else
-    {
-      here = below; ohere = above;
+        linesBeyondWidget = (textBounds.top()-oldpos.y()) / _fontHeight;
     }
 
-    QPoint newSelBegin = QPoint( ohere.x(), ohere.y() );
-    swapping = !(_tripleSelBegin==newSelBegin);
-    _tripleSelBegin = newSelBegin;
+    int charColumn = 0;
+    int charLine = 0;
+    getCharacterPosition(pos,charLine,charColumn);
 
-    ohere.rx()++;
-  }
+    QPoint here = QPoint(charColumn,charLine); //QPoint((pos.x()-tLx-_leftMargin+(_fontWidth/2))/_fontWidth,(pos.y()-tLy-_topMargin)/_fontHeight);
+    QPoint ohere;
+    QPoint _iPntSelCorr = _iPntSel;
+    _iPntSelCorr.ry() -= 0; //_scrollBar->value();
+    QPoint _pntSelCorr = _pntSel;
+    _pntSelCorr.ry() -= 0; //_scrollBar->value();
+    bool swapping = false;
 
-  int offset = 0;
-  if ( !_wordSelectionMode && !_lineSelectionMode )
-  {
-    int i;
-    QChar selClass;
-
-    bool left_not_right = ( here.y() < _iPntSelCorr.y() ||
-       ( here.y() == _iPntSelCorr.y() && here.x() < _iPntSelCorr.x() ) );
-    bool old_left_not_right = ( _pntSelCorr.y() < _iPntSelCorr.y() ||
-       ( _pntSelCorr.y() == _iPntSelCorr.y() && _pntSelCorr.x() < _iPntSelCorr.x() ) );
-    swapping = left_not_right != old_left_not_right;
-
-    // Find left (left_not_right ? from here : from start)
-    QPoint left = left_not_right ? here : _iPntSelCorr;
-
-    // Find left (left_not_right ? from start : from here)
-    QPoint right = left_not_right ? _iPntSelCorr : here;
-    if ( right.x() > 0 && !_columnSelectionMode )
+    if ( _wordSelectionMode )
     {
-      i = loc(right.x(),right.y());
-      if (i>=0 && i<=_imageSize) {
-        selClass = charClass(_image[i-1].character);
-       /* if (selClass == ' ')
+        // Extend to word boundaries
+        int i;
+        QChar selClass;
+
+        bool left_not_right = ( here.y() < _iPntSelCorr.y() ||
+                                ( here.y() == _iPntSelCorr.y() && here.x() < _iPntSelCorr.x() ) );
+        bool old_left_not_right = ( _pntSelCorr.y() < _iPntSelCorr.y() ||
+                                    ( _pntSelCorr.y() == _iPntSelCorr.y() && _pntSelCorr.x() < _iPntSelCorr.x() ) );
+        swapping = left_not_right != old_left_not_right;
+
+        // Find left (left_not_right ? from here : from start)
+        QPoint left = left_not_right ? here : _iPntSelCorr;
+        i = loc(left.x(),left.y());
+        if (i>=0 && i<=_imageSize) {
+            selClass = charClass(_image[i].character);
+            while ( ((left.x()>0) || (left.y()>0 && (_lineProperties[left.y()-1] & LINE_WRAPPED) ))
+                    && charClass(_image[i-1].character) == selClass )
+            { i--; if (left.x()>0) left.rx()--; else {left.rx()=_usedColumns-1; left.ry()--;} }
+        }
+
+        // Find left (left_not_right ? from start : from here)
+        QPoint right = left_not_right ? _iPntSelCorr : here;
+        i = loc(right.x(),right.y());
+        if (i>=0 && i<=_imageSize) {
+            selClass = charClass(_image[i].character);
+            while( ((right.x()<_usedColumns-1) || (right.y()<_usedLines-1 && (_lineProperties[right.y()] & LINE_WRAPPED) ))
+                   && charClass(_image[i+1].character) == selClass )
+            { i++; if (right.x()<_usedColumns-1) right.rx()++; else {right.rx()=0; right.ry()++; } }
+        }
+
+        // Pick which is start (ohere) and which is extension (here)
+        if ( left_not_right )
+        {
+            here = left; ohere = right;
+        }
+        else
+        {
+            here = right; ohere = left;
+        }
+        ohere.rx()++;
+    }
+
+    if ( _lineSelectionMode )
+    {
+        // Extend to complete line
+        bool above_not_below = ( here.y() < _iPntSelCorr.y() );
+
+        QPoint above = above_not_below ? here : _iPntSelCorr;
+        QPoint below = above_not_below ? _iPntSelCorr : here;
+
+        while (above.y()>0 && (_lineProperties[above.y()-1] & LINE_WRAPPED) )
+            above.ry()--;
+        while (below.y()<_usedLines-1 && (_lineProperties[below.y()] & LINE_WRAPPED) )
+            below.ry()++;
+
+        above.setX(0);
+        below.setX(_usedColumns-1);
+
+        // Pick which is start (ohere) and which is extension (here)
+        if ( above_not_below )
+        {
+            here = above; ohere = below;
+        }
+        else
+        {
+            here = below; ohere = above;
+        }
+
+        QPoint newSelBegin = QPoint( ohere.x(), ohere.y() );
+        swapping = !(_tripleSelBegin==newSelBegin);
+        _tripleSelBegin = newSelBegin;
+
+        ohere.rx()++;
+    }
+
+    int offset = 0;
+    if ( !_wordSelectionMode && !_lineSelectionMode )
+    {
+        int i;
+        QChar selClass;
+
+        bool left_not_right = ( here.y() < _iPntSelCorr.y() ||
+                                ( here.y() == _iPntSelCorr.y() && here.x() < _iPntSelCorr.x() ) );
+        bool old_left_not_right = ( _pntSelCorr.y() < _iPntSelCorr.y() ||
+                                    ( _pntSelCorr.y() == _iPntSelCorr.y() && _pntSelCorr.x() < _iPntSelCorr.x() ) );
+        swapping = left_not_right != old_left_not_right;
+
+        // Find left (left_not_right ? from here : from start)
+        QPoint left = left_not_right ? here : _iPntSelCorr;
+
+        // Find left (left_not_right ? from start : from here)
+        QPoint right = left_not_right ? _iPntSelCorr : here;
+        if ( right.x() > 0 && !_columnSelectionMode )
+        {
+            i = loc(right.x(),right.y());
+            if (i>=0 && i<=_imageSize) {
+                selClass = charClass(_image[i-1].character);
+                /* if (selClass == ' ')
         {
           while ( right.x() < _usedColumns-1 && charClass(_image[i+1].character) == selClass && (right.y()<_usedLines-1) &&
                           !(_lineProperties[right.y()] & LINE_WRAPPED))
@@ -1212,49 +1243,49 @@ void KTerminalDisplay::extendSelection( const QPoint& position )
           else
             right.rx()++;  // will be balanced later because of offset=-1;
         }*/
-      }
+            }
+        }
+
+        // Pick which is start (ohere) and which is extension (here)
+        if ( left_not_right )
+        {
+            here = left; ohere = right; offset = 0;
+        }
+        else
+        {
+            here = right; ohere = left; offset = -1;
+        }
     }
 
-    // Pick which is start (ohere) and which is extension (here)
-    if ( left_not_right )
+    //if ((here == _pntSelCorr) && (scroll == _scrollBar->value())) return; // not moved
+
+    if (here == ohere) return; // It's not left, it's not right.
+
+    if ( _actSel < 2 || swapping )
     {
-      here = left; ohere = right; offset = 0;
+        if ( _columnSelectionMode && !_lineSelectionMode && !_wordSelectionMode )
+        {
+            _screenWindow->setSelectionStart( ohere.x() , ohere.y() , true );
+        }
+        else
+        {
+            _screenWindow->setSelectionStart( ohere.x()-1-offset , ohere.y() , false );
+        }
+
     }
-    else
-    {
-      here = right; ohere = left; offset = -1;
-    }
-  }
 
-  //if ((here == _pntSelCorr) && (scroll == _scrollBar->value())) return; // not moved
+    _actSel = 2; // within selection
+    _pntSel = here;
+    _pntSel.ry() += 0; //_scrollBar->value();
 
-  if (here == ohere) return; // It's not left, it's not right.
-
-  if ( _actSel < 2 || swapping )
-  {
     if ( _columnSelectionMode && !_lineSelectionMode && !_wordSelectionMode )
     {
-        _screenWindow->setSelectionStart( ohere.x() , ohere.y() , true );
+        _screenWindow->setSelectionEnd( here.x() , here.y() );
     }
     else
     {
-        _screenWindow->setSelectionStart( ohere.x()-1-offset , ohere.y() , false );
+        _screenWindow->setSelectionEnd( here.x()+offset , here.y() );
     }
-
-  }
-
-  _actSel = 2; // within selection
-  _pntSel = here;
-  _pntSel.ry() += 0; //_scrollBar->value();
-
-  if ( _columnSelectionMode && !_lineSelectionMode && !_wordSelectionMode )
-  {
-     _screenWindow->setSelectionEnd( here.x() , here.y() );
-  }
-  else
-  {
-     _screenWindow->setSelectionEnd( here.x()+offset , here.y() );
-  }
 
     Q_UNUSED(linesBeyondWidget)
 
@@ -1273,7 +1304,7 @@ QChar KTerminalDisplay::charClass(QChar qch) const
     if ( qch.isSpace() ) return ' ';
 
     if ( qch.isLetterOrNumber() || _wordCharacters.contains(qch, Qt::CaseInsensitive ) )
-    return 'a';
+        return 'a';
 
     return qch;
 }
@@ -1293,47 +1324,56 @@ void KTerminalDisplay::setWordCharacters(const QString& wc)
 
 void KTerminalDisplay::emitSelection(bool useXselection,bool appendReturn)
 {
-  if ( !_screenWindow )
-      return;
+    if ( !_screenWindow )
+        return;
 
-  // Paste Clipboard by simulating keypress events
-  QString text = QGuiApplication::clipboard()->text(useXselection ? QClipboard::Selection :
-                                                                 QClipboard::Clipboard);
-  if(appendReturn)
-    text.append("\r");
-  if ( ! text.isEmpty() )
-  {
-    text.replace('\n', '\r');
-    QKeyEvent e(QEvent::KeyPress, 0, Qt::NoModifier, text);
-    emit keyPressedSignal(&e); // expose as a big fat keypress event
+    // Paste Clipboard by simulating keypress events
+    QString text = QGuiApplication::clipboard()->text(useXselection ? QClipboard::Selection :
+                                                                      QClipboard::Clipboard);
+    if(appendReturn)
+        text.append("\r");
+    if ( ! text.isEmpty() )
+    {
+        text.replace('\n', '\r');
+        QKeyEvent e(QEvent::KeyPress, 0, Qt::NoModifier, text);
+        emit keyPressedSignal(&e); // expose as a big fat keypress event
 
-    _screenWindow->clearSelection();
-  }
+        _screenWindow->clearSelection();
+    }
 }
 
 void KTerminalDisplay::setSelection(const QString& t)
 {
-  QGuiApplication::clipboard()->setText(t, QClipboard::Selection);
+    QGuiApplication::clipboard()->setText(t, QClipboard::Selection);
 }
 
 void KTerminalDisplay::copyClipboard()
 {
-  if ( !_screenWindow )
-      return;
+    if ( !_screenWindow )
+        return;
 
-  QString text = _screenWindow->selectedText(_preserveLineBreaks);
-  if (!text.isEmpty())
-    QGuiApplication::clipboard()->setText(text);
+    QString text = _screenWindow->selectedText(_preserveLineBreaks);
+    if (!text.isEmpty())
+        QGuiApplication::clipboard()->setText(text);
 }
 
 void KTerminalDisplay::pasteClipboard()
 {
-  emitSelection(false,false);
+    emitSelection(false,false);
 }
 
 void KTerminalDisplay::pasteSelection()
 {
-  emitSelection(true,false);
+    if (!_screenWindow)
+        return;
+
+    QString text = _screenWindow->selectedText(_preserveLineBreaks);
+    if (text.isEmpty())
+        return;
+
+    text.replace('\n', '\r');
+    QKeyEvent e(QEvent::KeyPress, 0, Qt::NoModifier, text);
+    emit keyPressedSignal(&e); // expose as a big fat keypress event
 }
 
 /* ------------------------------------------------------------------------- */
@@ -1348,8 +1388,8 @@ void KTerminalDisplay::setFlowControlWarningEnabled( bool enable )
 
     // if the dialog is currently visible and the flow control warning has
     // been disabled then hide the dialog
-//    if (!enable)
-//        outputSuspended(false);
+    //    if (!enable)
+    //        outputSuspended(false);
 }
 
 void KTerminalDisplay::inputMethodEvent( QInputMethodEvent* event )
@@ -1375,36 +1415,36 @@ QVariant KTerminalDisplay::inputMethodQuery(Qt::InputMethodQuery query) const
     const QPoint cursorPos = _screenWindow ? _screenWindow->cursorPosition() : QPoint(0,0);
     switch ( query )
     {
-        case Qt::ImEnabled:
-            return (bool)(flags() & ItemAcceptsInputMethod);
-            break;
-        case Qt::ImMicroFocus:
-            return imageToWidget(QRect(cursorPos.x(),cursorPos.y(),1,1));
-            break;
-        case Qt::ImFont:
-            return m_font;
-            break;
-        case Qt::ImCursorPosition:
-            // return the cursor position within the current line
-            return cursorPos.x();
-            break;
-        case Qt::ImSurroundingText:
-            {
-                // return the text from the current line
-                QString lineText;
-                QTextStream stream(&lineText);
-                PlainTextDecoder decoder;
-                decoder.begin(&stream);
-                decoder.decodeLine(&_image[loc(0,cursorPos.y())],_usedColumns,_lineProperties[cursorPos.y()]);
-                decoder.end();
-                return lineText;
-            }
-            break;
-        case Qt::ImCurrentSelection:
-            return QString();
-            break;
-        default:
-            break;
+    case Qt::ImEnabled:
+        return (bool)(flags() & ItemAcceptsInputMethod);
+        break;
+    case Qt::ImMicroFocus:
+        return imageToWidget(QRect(cursorPos.x(),cursorPos.y(),1,1));
+        break;
+    case Qt::ImFont:
+        return m_font;
+        break;
+    case Qt::ImCursorPosition:
+        // return the cursor position within the current line
+        return cursorPos.x();
+        break;
+    case Qt::ImSurroundingText:
+    {
+        // return the text from the current line
+        QString lineText;
+        QTextStream stream(&lineText);
+        PlainTextDecoder decoder;
+        decoder.begin(&stream);
+        decoder.decodeLine(&_image[loc(0,cursorPos.y())],_usedColumns,_lineProperties[cursorPos.y()]);
+        decoder.end();
+        return lineText;
+    }
+        break;
+    case Qt::ImCurrentSelection:
+        return QString();
+        break;
+    default:
+        break;
     }
 
     return QVariant();
@@ -1445,14 +1485,14 @@ bool KTerminalDisplay::handleShortcutOverrideEvent(QKeyEvent* keyEvent)
     int keyCode = keyEvent->key() | modifiers;
     switch ( keyCode )
     {
-      // list is taken from the QLineEdit::event() code
-      case Qt::Key_Tab:
-      case Qt::Key_Delete:
-      case Qt::Key_Home:
-      case Qt::Key_End:
-      case Qt::Key_Backspace:
-      case Qt::Key_Left:
-      case Qt::Key_Right:
+    // list is taken from the QLineEdit::event() code
+    case Qt::Key_Tab:
+    case Qt::Key_Delete:
+    case Qt::Key_Home:
+    case Qt::Key_End:
+    case Qt::Key_Backspace:
+    case Qt::Key_Left:
+    case Qt::Key_Right:
         keyEvent->accept();
         return true;
     }
@@ -1461,9 +1501,9 @@ bool KTerminalDisplay::handleShortcutOverrideEvent(QKeyEvent* keyEvent)
 
 bool KTerminalDisplay::event(QEvent* event)
 {
-  bool eventHandled = false;
-  switch (event->type())
-  {
+    bool eventHandled = false;
+    switch (event->type())
+    {
     case QEvent::ShortcutOverride:
         eventHandled = handleShortcutOverrideEvent((QKeyEvent*)event);
         break;
@@ -1479,8 +1519,8 @@ bool KTerminalDisplay::event(QEvent* event)
     default:
         eventHandled = QQuickPaintedItem::event(event);
         break;
-  }
-  return eventHandled; //parent->event(event);
+    }
+    return eventHandled; //parent->event(event);
 }
 
 void KTerminalDisplay::geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry)
@@ -1506,18 +1546,9 @@ QRect KTerminalDisplay::geometryRound(const QRectF &r) const
     return rect;
 }
 
-void KTerminalDisplay::mousePressEvent(QMouseEvent *ev)
-{
-    if (m_focusOnClick) forcedFocus();
-    if (m_showVKBonClick) ShowVKB(true);
-
-    emit clicked();
-    QQuickPaintedItem::mouseMoveEvent(ev);
-}
-
 void KTerminalDisplay::setBellMode(int mode)
 {
-  _bellMode=mode;
+    _bellMode=mode;
 }
 
 void KTerminalDisplay::enableBell()
@@ -1527,36 +1558,36 @@ void KTerminalDisplay::enableBell()
 
 void KTerminalDisplay::bell(const QString& message)
 {
-  Q_UNUSED(message)
+    Q_UNUSED(message)
 
-  if (_bellMode==NoBell) return;
+    if (_bellMode==NoBell) return;
 
-  //limit the rate at which bells can occur
-  //...mainly for sound effects where rapid bells in sequence
-  //produce a horrible noise
-  if ( _allowBell )
-  {
-    _allowBell = false;
-    QTimer::singleShot(500,this,SLOT(enableBell()));
+    //limit the rate at which bells can occur
+    //...mainly for sound effects where rapid bells in sequence
+    //produce a horrible noise
+    if ( _allowBell )
+    {
+        _allowBell = false;
+        QTimer::singleShot(500,this,SLOT(enableBell()));
 
-    if (_bellMode==SystemBeepBell)
-    {
-        // NO BEEP !
-        //QGuiApplication::beep();
-        int a = 0;
-        Q_UNUSED(a)
+        if (_bellMode==SystemBeepBell)
+        {
+            // NO BEEP !
+            //QGuiApplication::beep();
+            int a = 0;
+            Q_UNUSED(a)
+        }
+        else if (_bellMode==NotifyBell)
+        {
+            //KNotification::event("BellVisible", message,QPixmap(),this);
+            // TODO/FIXME: qt4 notifications?
+        }
+        else if (_bellMode==VisualBell)
+        {
+            swapColorTable();
+            QTimer::singleShot(200,this,SLOT(swapColorTable()));
+        }
     }
-    else if (_bellMode==NotifyBell)
-    {
-        //KNotification::event("BellVisible", message,QPixmap(),this);
-        // TODO/FIXME: qt4 notifications?
-    }
-    else if (_bellMode==VisualBell)
-    {
-        swapColorTable();
-        QTimer::singleShot(200,this,SLOT(swapColorTable()));
-    }
-  }
 }
 
 void KTerminalDisplay::selectionChanged()
@@ -1566,25 +1597,25 @@ void KTerminalDisplay::selectionChanged()
 
 void KTerminalDisplay::swapColorTable()
 {
-  ColorEntry color = _colorTable[1];
-  _colorTable[1]=_colorTable[0];
-  _colorTable[0]= color;
-  _colorsInverted = !_colorsInverted;
-  update();
+    ColorEntry color = _colorTable[1];
+    _colorTable[1]=_colorTable[0];
+    _colorTable[0]= color;
+    _colorsInverted = !_colorsInverted;
+    update();
 }
 
 void KTerminalDisplay::clearImage()
 {
-  // We initialize _image[_imageSize] too. See makeImage()
-  for (int i = 0; i <= _imageSize; i++)
-  {
-    _image[i].character = ' ';
-    _image[i].foregroundColor = CharacterColor(COLOR_SPACE_DEFAULT,
-                                               DEFAULT_FORE_COLOR);
-    _image[i].backgroundColor = CharacterColor(COLOR_SPACE_DEFAULT,
-                                               DEFAULT_BACK_COLOR);
-    _image[i].rendition = DEFAULT_RENDITION;
-  }
+    // We initialize _image[_imageSize] too. See makeImage()
+    for (int i = 0; i <= _imageSize; i++)
+    {
+        _image[i].character = ' ';
+        _image[i].foregroundColor = CharacterColor(COLOR_SPACE_DEFAULT,
+                                                   DEFAULT_FORE_COLOR);
+        _image[i].backgroundColor = CharacterColor(COLOR_SPACE_DEFAULT,
+                                                   DEFAULT_BACK_COLOR);
+        _image[i].rendition = DEFAULT_RENDITION;
+    }
 }
 
 void KTerminalDisplay::calcGeometry()
@@ -1606,31 +1637,31 @@ void KTerminalDisplay::calcGeometry()
 
 void KTerminalDisplay::makeImage()
 {
-  calcGeometry();
+    calcGeometry();
 
-  // confirm that array will be of non-zero size, since the painting code
-  // assumes a non-zero array length
-  Q_ASSERT( _lines > 0 && _columns > 0 );
-  Q_ASSERT( _usedLines <= _lines && _usedColumns <= _columns );
+    // confirm that array will be of non-zero size, since the painting code
+    // assumes a non-zero array length
+    Q_ASSERT( _lines > 0 && _columns > 0 );
+    Q_ASSERT( _usedLines <= _lines && _usedColumns <= _columns );
 
-  _imageSize=_lines*_columns;
+    _imageSize=_lines*_columns;
 
-  // We over-commit one character so that we can be more relaxed in dealing with
-  // certain boundary conditions: _image[_imageSize] is a valid but unused position
-  _image = new Character[_imageSize+1];
+    // We over-commit one character so that we can be more relaxed in dealing with
+    // certain boundary conditions: _image[_imageSize] is a valid but unused position
+    _image = new Character[_imageSize+1];
 
-  clearImage();
+    clearImage();
 }
 
 uint KTerminalDisplay::lineSpacing() const
 {
-  return _lineSpacing;
+    return _lineSpacing;
 }
 
 void KTerminalDisplay::setLineSpacing(uint i)
 {
-  _lineSpacing = i;
-  setVTFont(m_font); // Trigger an update.
+    _lineSpacing = i;
+    setVTFont(m_font); // Trigger an update.
 }
 
 
@@ -1672,218 +1703,218 @@ void KTerminalDisplay::paint(QPainter *painter)
 
 void KTerminalDisplay::drawContents(QPainter  *paint, QRectF &rect)
 {
-  //Q_UNUSED(rect)
-  int left_   = ceil(rect.left());
-  int top_    = ceil(rect.top());
-  int right_  = ceil(rect.right());
-  int bottom_ = ceil(rect.bottom());
+    //Q_UNUSED(rect)
+    int left_   = ceil(rect.left());
+    int top_    = ceil(rect.top());
+    int right_  = ceil(rect.right());
+    int bottom_ = ceil(rect.bottom());
 
-  int lux = qMin(_usedColumns-1, qMax(0, qRound((left_   + _leftMargin ) / _fontWidth  )));
-  int luy = qMin(_usedLines-1,   qMax(0, qRound((top_    + _topMargin  ) / _fontHeight )));
-  int rlx = qMin(_usedColumns-1, qMax(0, qRound((right_  - _leftMargin ) / _fontWidth  )));
-  int rly = qMin(_usedLines-1,   qMax(0, qRound((bottom_ - _topMargin  ) / _fontHeight )));
+    int lux = qMin(_usedColumns-1, qMax(0, qRound((left_   + _leftMargin ) / _fontWidth  )));
+    int luy = qMin(_usedLines-1,   qMax(0, qRound((top_    + _topMargin  ) / _fontHeight )));
+    int rlx = qMin(_usedColumns-1, qMax(0, qRound((right_  - _leftMargin ) / _fontWidth  )));
+    int rly = qMin(_usedLines-1,   qMax(0, qRound((bottom_ - _topMargin  ) / _fontHeight )));
 
-  // prevent zero size buffer
-  if (_usedColumns<=1) return;
+    // prevent zero size buffer
+    if (_usedColumns<=1) return;
 
-  const int bufferSize = _usedColumns;
-  QString unistr;
-  unistr.reserve(bufferSize);
-  for (int y = luy; y <= rly; y++)
-  {
-    quint16 c = _image[loc(lux,y)].character;
-    int x = lux;
-    if(!c && x)
-      x--; // Search for start of multi-column character
-    for (; x <= rlx; x++)
+    const int bufferSize = _usedColumns;
+    QString unistr;
+    unistr.reserve(bufferSize);
+    for (int y = luy; y <= rly; y++)
     {
-      int len = 1;
-      int p = 0;
-
-      // reset our buffer to the maximal size
-      unistr.resize(bufferSize);
-      QChar *disstrU = unistr.data();
-
-      // is this a single character or a sequence of characters ?
-      if ( _image[loc(x,y)].rendition & RE_EXTENDED_CHAR )
-      {
-        // sequence of characters
-        ushort extendedCharLength = 0;
-        ushort* chars = ExtendedCharTable::instance
-                            .lookupExtendedChar(_image[loc(x,y)].charSequence,extendedCharLength);
-        for ( int index = 0 ; index < extendedCharLength ; index++ )
+        quint16 c = _image[loc(lux,y)].character;
+        int x = lux;
+        if(!c && x)
+            x--; // Search for start of multi-column character
+        for (; x <= rlx; x++)
         {
-            Q_ASSERT( p < bufferSize );
-            disstrU[p++] = chars[index];
+            int len = 1;
+            int p = 0;
+
+            // reset our buffer to the maximal size
+            unistr.resize(bufferSize);
+            QChar *disstrU = unistr.data();
+
+            // is this a single character or a sequence of characters ?
+            if ( _image[loc(x,y)].rendition & RE_EXTENDED_CHAR )
+            {
+                // sequence of characters
+                ushort extendedCharLength = 0;
+                ushort* chars = ExtendedCharTable::instance
+                        .lookupExtendedChar(_image[loc(x,y)].charSequence,extendedCharLength);
+                for ( int index = 0 ; index < extendedCharLength ; index++ )
+                {
+                    Q_ASSERT( p < bufferSize );
+                    disstrU[p++] = chars[index];
+                }
+            }
+            else
+            {
+                // single character
+                c = _image[loc(x,y)].character;
+                if (c)
+                {
+                    Q_ASSERT( p < bufferSize );
+                    disstrU[p++] = c; //fontMap(c);
+                }
+            }
+
+            bool lineDraw = isLineChar(c);
+            bool doubleWidth = (_image[ qMin(loc(x,y)+1,_imageSize) ].character == 0);
+            CharacterColor currentForeground = _image[loc(x,y)].foregroundColor;
+            CharacterColor currentBackground = _image[loc(x,y)].backgroundColor;
+            quint8 currentRendition = _image[loc(x,y)].rendition;
+
+            while (x+len <= rlx &&
+                   _image[loc(x+len,y)].foregroundColor == currentForeground &&
+                   _image[loc(x+len,y)].backgroundColor == currentBackground &&
+                   _image[loc(x+len,y)].rendition == currentRendition &&
+                   (_image[ qMin(loc(x+len,y)+1,_imageSize) ].character == 0) == doubleWidth &&
+                   isLineChar( c = _image[loc(x+len,y)].character) == lineDraw) // Assignment!
+            {
+                if (c)
+                    disstrU[p++] = c; //fontMap(c);
+                if (doubleWidth) // assert((_image[loc(x+len,y)+1].character == 0)), see above if condition
+                    len++; // Skip trailing part of multi-column character
+                len++;
+            }
+            if ((x+len < _usedColumns) && (!_image[loc(x+len,y)].character))
+                len++; // Adjust for trailing part of multi-column character
+
+            bool save__fixedFont = _fixedFont;
+
+            if (lineDraw)
+                _fixedFont = false;
+            if (doubleWidth)
+                _fixedFont = false;
+            unistr.resize(p);
+
+            // Create a text scaling matrix for double width and double height lines.
+            QMatrix textScale;
+
+            if (y < _lineProperties.size())
+            {
+                if (_lineProperties[y] & LINE_DOUBLEWIDTH)
+                    textScale.scale(2,1);
+
+                if (_lineProperties[y] & LINE_DOUBLEHEIGHT)
+                    textScale.scale(1,2);
+            }
+
+            //Apply text scaling matrix.
+            paint->setWorldMatrix(textScale, true);
+
+            //calculate the area in which the text will be drawn
+            QRectF textArea = QRectF( _leftMargin + _fontWidth*x , _topMargin + _fontHeight*y , _fontWidth*len , _fontHeight);
+
+            //move the calculated area to take account of scaling applied to the painter.
+            //the position of the area from the origin (0,0) is scaled
+            //by the opposite of whatever
+            //transformation has been applied to the painter.  this ensures that
+            //painting does actually start from textArea.topLeft()
+            //(instead of textArea.topLeft() * painter-scale)
+            textArea.moveTopLeft( textScale.inverted().map(textArea.topLeft()) );
+
+            //paint text fragment
+            drawTextFragment(  paint,
+                               textArea,
+                               unistr,
+                               &_image[loc(x,y)] ); //,
+            //0,
+            //!_isPrinting );
+
+            _fixedFont = save__fixedFont;
+
+            //reset back to single-width, single-height _lines
+            paint->setWorldMatrix(textScale.inverted(), true);
+
+            if (y < _lineProperties.size()-1)
+            {
+                //double-height _lines are represented by two adjacent _lines
+                //containing the same characters
+                //both _lines will have the LINE_DOUBLEHEIGHT attribute.
+                //If the current line has the LINE_DOUBLEHEIGHT attribute,
+                //we can therefore skip the next line
+                if (_lineProperties[y] & LINE_DOUBLEHEIGHT)
+                    y++;
+            }
+
+            x += len - 1;
         }
-      }
-      else
-      {
-        // single character
-        c = _image[loc(x,y)].character;
-        if (c)
-        {
-             Q_ASSERT( p < bufferSize );
-             disstrU[p++] = c; //fontMap(c);
-        }
-      }
-
-      bool lineDraw = isLineChar(c);
-      bool doubleWidth = (_image[ qMin(loc(x,y)+1,_imageSize) ].character == 0);
-      CharacterColor currentForeground = _image[loc(x,y)].foregroundColor;
-      CharacterColor currentBackground = _image[loc(x,y)].backgroundColor;
-      quint8 currentRendition = _image[loc(x,y)].rendition;
-
-      while (x+len <= rlx &&
-             _image[loc(x+len,y)].foregroundColor == currentForeground &&
-             _image[loc(x+len,y)].backgroundColor == currentBackground &&
-             _image[loc(x+len,y)].rendition == currentRendition &&
-             (_image[ qMin(loc(x+len,y)+1,_imageSize) ].character == 0) == doubleWidth &&
-             isLineChar( c = _image[loc(x+len,y)].character) == lineDraw) // Assignment!
-      {
-        if (c)
-          disstrU[p++] = c; //fontMap(c);
-        if (doubleWidth) // assert((_image[loc(x+len,y)+1].character == 0)), see above if condition
-          len++; // Skip trailing part of multi-column character
-        len++;
-      }
-      if ((x+len < _usedColumns) && (!_image[loc(x+len,y)].character))
-        len++; // Adjust for trailing part of multi-column character
-
-         bool save__fixedFont = _fixedFont;
-
-         if (lineDraw)
-            _fixedFont = false;
-         if (doubleWidth)
-            _fixedFont = false;
-         unistr.resize(p);
-
-         // Create a text scaling matrix for double width and double height lines.
-         QMatrix textScale;
-
-         if (y < _lineProperties.size())
-         {
-            if (_lineProperties[y] & LINE_DOUBLEWIDTH)
-                textScale.scale(2,1);
-
-            if (_lineProperties[y] & LINE_DOUBLEHEIGHT)
-                textScale.scale(1,2);
-         }
-
-         //Apply text scaling matrix.
-         paint->setWorldMatrix(textScale, true);
-
-         //calculate the area in which the text will be drawn
-         QRectF textArea = QRectF( _leftMargin + _fontWidth*x , _topMargin + _fontHeight*y , _fontWidth*len , _fontHeight);
-
-         //move the calculated area to take account of scaling applied to the painter.
-         //the position of the area from the origin (0,0) is scaled
-         //by the opposite of whatever
-         //transformation has been applied to the painter.  this ensures that
-         //painting does actually start from textArea.topLeft()
-         //(instead of textArea.topLeft() * painter-scale)
-         textArea.moveTopLeft( textScale.inverted().map(textArea.topLeft()) );
-
-         //paint text fragment
-         drawTextFragment(  paint,
-                            textArea,
-                            unistr,
-                            &_image[loc(x,y)] ); //,
-                            //0,
-                            //!_isPrinting );
-
-         _fixedFont = save__fixedFont;
-
-         //reset back to single-width, single-height _lines
-         paint->setWorldMatrix(textScale.inverted(), true);
-
-         if (y < _lineProperties.size()-1)
-         {
-            //double-height _lines are represented by two adjacent _lines
-            //containing the same characters
-            //both _lines will have the LINE_DOUBLEHEIGHT attribute.
-            //If the current line has the LINE_DOUBLEHEIGHT attribute,
-            //we can therefore skip the next line
-            if (_lineProperties[y] & LINE_DOUBLEHEIGHT)
-                y++;
-         }
-
-        x += len - 1;
     }
-  }
 }
 
 
 void KTerminalDisplay::drawLineCharString( QPainter* painter, qreal x, qreal y, const QString& str,
                                            const Character* attributes)
 {
-        const QPen& currentPen = painter->pen();
+    const QPen& currentPen = painter->pen();
 
-        if ( (attributes->rendition & RE_BOLD) && _boldIntense )
-        {
-            QPen boldPen(currentPen);
-            boldPen.setWidth(3);
-            painter->setPen( boldPen );
-        }
+    if ( (attributes->rendition & RE_BOLD) && _boldIntense )
+    {
+        QPen boldPen(currentPen);
+        boldPen.setWidth(3);
+        painter->setPen( boldPen );
+    }
 
-        for (int i=0 ; i < str.length(); i++)
-        {
-            uchar code = str[i].cell();
-            if (LineChars[code])
-                drawLineChar(painter, x + (_fontWidth*i), y, _fontWidth, _fontHeight, code);
-        }
+    for (int i=0 ; i < str.length(); i++)
+    {
+        uchar code = str[i].cell();
+        if (LineChars[code])
+            drawLineChar(painter, x + (_fontWidth*i), y, _fontWidth, _fontHeight, code);
+    }
 
-        painter->setPen( currentPen );
+    painter->setPen( currentPen );
 }
 
 void KTerminalDisplay::drawBackground(QPainter* painter, const QRectF &rect, const QColor& backgroundColor, bool useOpacitySetting )
 {
-        // the area of the widget showing the contents of the terminal display is drawn
-        // using the background color from the color scheme set with setColorTable()
+    // the area of the widget showing the contents of the terminal display is drawn
+    // using the background color from the color scheme set with setColorTable()
 
-        QRectF contentsRect = rect;
+    QRectF contentsRect = rect;
 
-        if ( HAVE_TRANSPARENCY && qAlpha(_blendColor) < 0xff && useOpacitySetting )
-        {
-            QColor color(backgroundColor);
-            color.setAlpha(qAlpha(_blendColor));
+    if ( HAVE_TRANSPARENCY && qAlpha(_blendColor) < 0xff && useOpacitySetting )
+    {
+        QColor color(backgroundColor);
+        color.setAlpha(qAlpha(_blendColor));
 
-            painter->save();
-            painter->setCompositionMode(QPainter::CompositionMode_Source);
-            painter->fillRect(contentsRect, color);
-            painter->restore();
-        }
-        else
-            painter->fillRect(contentsRect, backgroundColor);
+        painter->save();
+        painter->setCompositionMode(QPainter::CompositionMode_Source);
+        painter->fillRect(contentsRect, color);
+        painter->restore();
+    }
+    else
+        painter->fillRect(contentsRect, backgroundColor);
 
 }
 
 void KTerminalDisplay::drawCursor(QPainter* painter,
-                                 const QRectF& rect,
-                                 const QColor& foregroundColor,
-                                 const QColor& /*backgroundColor*/,
-                                 bool& invertCharacterColor)
+                                  const QRectF& rect,
+                                  const QColor& foregroundColor,
+                                  const QColor& /*backgroundColor*/,
+                                  bool& invertCharacterColor)
 {
     QRectF cursorRect = rect;
     cursorRect.setHeight(_fontHeight - _lineSpacing - 1);
 
     if (!_cursorBlinking)
     {
-       if ( _cursorColor.isValid() )
-           painter->setPen(_cursorColor);
-       else
-           painter->setPen(foregroundColor);
+        if ( _cursorColor.isValid() )
+            painter->setPen(_cursorColor);
+        else
+            painter->setPen(foregroundColor);
 
-       if ( _cursorShape == BlockCursor )
-       {
+        if ( _cursorShape == BlockCursor )
+        {
             // draw the cursor outline, adjusting the area so that
             // it is draw entirely inside 'rect'
             int penWidth = qMax(1,painter->pen().width());
 
             painter->drawRect(cursorRect.adjusted( penWidth/2,
                                                    penWidth/2,
-                                                 - penWidth/2 - penWidth%2,
-                                                 - penWidth/2 - penWidth%2));
+                                                   - penWidth/2 - penWidth%2,
+                                                   - penWidth/2 - penWidth%2));
             if ( hasFocus() )
             {
                 painter->fillRect(cursorRect, _cursorColor.isValid() ? _cursorColor : foregroundColor);
@@ -1895,13 +1926,13 @@ void KTerminalDisplay::drawCursor(QPainter* painter,
                     invertCharacterColor = true;
                 }
             }
-       }
-       else if ( _cursorShape == UnderlineCursor )
+        }
+        else if ( _cursorShape == UnderlineCursor )
             painter->drawLine(cursorRect.left(),
                               cursorRect.bottom(),
                               cursorRect.right(),
                               cursorRect.bottom());
-       else if ( _cursorShape == IBeamCursor )
+        else if ( _cursorShape == IBeamCursor )
             painter->drawLine(cursorRect.left(),
                               cursorRect.top(),
                               cursorRect.left(),
@@ -1911,14 +1942,14 @@ void KTerminalDisplay::drawCursor(QPainter* painter,
 }
 
 void KTerminalDisplay::drawCharacters(QPainter* painter,
-                                     const QRectF& rect,
-                                     const QString& text,
-                                     const Character* style,
-                                     bool invertCharacterColor)
+                                      const QRectF& rect,
+                                      const QString& text,
+                                      const Character* style,
+                                      bool invertCharacterColor)
 {
     // don't draw text which is currently blinking
     if ( _blinking && (style->rendition & RE_BLINK) )
-            return;
+        return;
 
     // setup bold and underline
     bool useBold;
@@ -1932,10 +1963,10 @@ void KTerminalDisplay::drawCharacters(QPainter* painter,
     QFont font  = m_font;
     QFont font_ = painter->font();
     if (    font.bold() != useBold
-         || font.underline() != useUnderline )
+            || font.underline() != useUnderline )
     {
-       font.setBold(useBold);
-       font.setUnderline(useUnderline);
+        font.setBold(useBold);
+        font.setUnderline(useUnderline);
     }
 
 #ifdef Q_WS_UBUNTU
@@ -1973,9 +2004,9 @@ void KTerminalDisplay::drawCharacters(QPainter* painter,
 }
 
 void KTerminalDisplay::drawTextFragment(QPainter* painter ,
-                                       const QRectF& rect,
-                                       const QString& text,
-                                       const Character* style)
+                                        const QRectF& rect,
+                                        const QString& text,
+                                        const Character* style)
 {
     painter->save();
 
@@ -2004,8 +2035,8 @@ void KTerminalDisplay::getCharacterPosition(const QPointF &widgetPoint, int& lin
     //contentsBoundingRect()
     QRectF rect = m_widgetRect;
 
-    column = qRound((widgetPoint.x() + _fontWidth/2 - rect.left()-_leftMargin) / _fontWidth);
-    line   = qRound((widgetPoint.y() - rect.top()-_topMargin) / _fontHeight);
+    column = qFloor((widgetPoint.x() + _fontWidth/2 - rect.left()-_leftMargin) / _fontWidth);
+    line   = qFloor((widgetPoint.y() - rect.top()-_topMargin) / _fontHeight);
 
     if ( line < 0 )
         line = 0;
@@ -2099,15 +2130,15 @@ void KTerminalDisplay::keyPressEvent(QKeyEvent *event)
     }
 
     _actSel=0; // Key stroke implies a screen update, so TerminalDisplay won't
-              // know where the current selection is.
+    // know where the current selection is.
 
     if (_hasBlinkingCursor)
     {
-      _blinkCursorTimer->start(100); //WARN! HARDCODE
-      if (_cursorBlinking)
-        blinkCursorEvent();
-      else
-        _cursorBlinking = false;
+        _blinkCursorTimer->start(100); //WARN! HARDCODE
+        if (_cursorBlinking)
+            blinkCursorEvent();
+        else
+            _cursorBlinking = false;
     }
 
     if ( emitKeyPressSignal )
@@ -2123,62 +2154,62 @@ void KTerminalDisplay::keyPressEvent(QKeyEvent *event)
 /////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////
 
-AutoScrollHandler::AutoScrollHandler(QQuickItem* parent)
-: QObject(parent)
-, _timerId(0)
-{
-    parent->installEventFilter(this);
-}
-void AutoScrollHandler::timerEvent(QTimerEvent* event)
-{
-    if (event->timerId() != _timerId)
-        return;
+//AutoScrollHandler::AutoScrollHandler(QQuickItem* parent)
+//: QObject(parent)
+//, _timerId(0)
+//{
+//    parent->installEventFilter(this);
+//}
+//void AutoScrollHandler::timerEvent(QTimerEvent* event)
+//{
+//    if (event->timerId() != _timerId)
+//        return;
 
-    QMouseEvent mouseEvent(    QEvent::MouseMove,
-                              widget()->mapFromScene(QCursor::pos()),
-                              Qt::NoButton,
-                              Qt::LeftButton,
-                              Qt::NoModifier);
+//    QMouseEvent mouseEvent(    QEvent::MouseMove,
+//                              widget()->mapFromScene(QCursor::pos()),
+//                              Qt::NoButton,
+//                              Qt::LeftButton,
+//                              Qt::NoModifier);
 
-    QGuiApplication::sendEvent(widget(),&mouseEvent);
-}
-bool AutoScrollHandler::eventFilter(QObject* watched,QEvent* event)
-{
-    Q_ASSERT( watched == parent() );
-    Q_UNUSED( watched );
+//    QGuiApplication::sendEvent(widget(),&mouseEvent);
+//}
+//bool AutoScrollHandler::eventFilter(QObject* watched,QEvent* event)
+//{
+//    Q_ASSERT( watched == parent() );
+//    Q_UNUSED( watched );
 
-    QMouseEvent* mouseEvent = (QMouseEvent*)event;
-    switch (event->type())
-    {
-        case QEvent::MouseMove:
-        {
-            bool mouseInWidget = false; //widget()->rect().contains(mouseEvent->pos());
+//    QMouseEvent* mouseEvent = (QMouseEvent*)event;
+//    switch (event->type())
+//    {
+//        case QEvent::MouseMove:
+//        {
+//            bool mouseInWidget = false; //widget()->rect().contains(mouseEvent->pos());
 
-            if (mouseInWidget)
-            {
-                if (_timerId)
-                    killTimer(_timerId);
-                _timerId = 0;
-            }
-            else
-            {
-                if (!_timerId && (mouseEvent->buttons() & Qt::LeftButton))
-                    _timerId = startTimer(100);
-            }
-                break;
-        }
-        case QEvent::MouseButtonRelease:
-            if (_timerId && (mouseEvent->buttons() & ~Qt::LeftButton))
-            {
-                killTimer(_timerId);
-                _timerId = 0;
-            }
-        break;
-        default:
-        break;
-    };
+//            if (mouseInWidget)
+//            {
+//                if (_timerId)
+//                    killTimer(_timerId);
+//                _timerId = 0;
+//            }
+//            else
+//            {
+//                if (!_timerId && (mouseEvent->buttons() & Qt::LeftButton))
+//                    _timerId = startTimer(100);
+//            }
+//                break;
+//        }
+//        case QEvent::MouseButtonRelease:
+//            if (_timerId && (mouseEvent->buttons() & ~Qt::LeftButton))
+//            {
+//                killTimer(_timerId);
+//                _timerId = 0;
+//            }
+//        break;
+//        default:
+//        break;
+//    };
 
-    return false;
-}
+//    return false;
+//}
 
 //#include "TerminalDisplay.moc"
