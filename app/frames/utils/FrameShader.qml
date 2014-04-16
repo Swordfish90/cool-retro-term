@@ -72,5 +72,5 @@ ShaderEffect{
                                 gl_FragColor = vec4(final_color * txt_normal.a, txt_color.a * qt_Opacity * reflection_alpha);
                             }"
 
-    onStatusChanged: console.log(log) //Print warning messages
+    onStatusChanged: if (log) console.log(log) //Print warning messages
 }

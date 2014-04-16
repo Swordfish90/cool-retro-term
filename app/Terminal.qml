@@ -101,7 +101,6 @@ Item{
         onWheel:
             wheel.angleDelta.y > 0 ? kterminal.item.scrollUp() : kterminal.item.scrollDown()
         onClicked: {
-            console.log(correctDistortion(0,0))
             if (mouse.button == Qt.RightButton){
                 contextmenu.popup();
             } else if (mouse.button == Qt.MiddleButton){

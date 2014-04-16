@@ -208,5 +208,5 @@ ShaderEffect {
         "gl_FragColor = vec4(finalColor *"+brightness.toFixed(1)+", qt_Opacity);
     }"
 
-     onStatusChanged: console.log(log) //Print warning messages
+     onStatusChanged: if (log) console.log(log) //Print warning messages
 }
