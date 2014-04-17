@@ -143,17 +143,6 @@ ApplicationWindow{
             anchors.fill: parent
             z: 1.9
         }
-        RadialGradient{
-            id: ambientreflection
-            z: 2.0
-            anchors.fill: parent
-            cached: true
-            opacity: shadersettings.ambient_light * 0.4
-            gradient: Gradient{
-                GradientStop{position: 0.0; color: "white"}
-                GradientStop{position: 0.7; color: "#00000000"}
-            }
-        }
         Loader{
             id: sizeoverlayloader
             z: 3

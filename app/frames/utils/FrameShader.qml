@@ -64,12 +64,10 @@ ShaderEffect{
                                 vec4 txt_normal = texture2D(normals, coords);
                                 vec3 normal = normalize(txt_normal.rgb * 2.0 - 1.0);
                                 vec3 light_dir = normalize(vec3(0.5,0.5, 0.0) - vec3(qt_TexCoord0, 0.0));
-                                float reflection = (dot(normal, light_dir));
-                                float light = (reflection * 0.4 + 0.2) * brightness;
-                                vec3 final_color = reflection_color.rgb * light * 0.5;
-                                final_color += txt_color.rgb * ambient_light;
+                                float reflection = dot(normal, light_dir) * 0.5 * txt_normal.a;
                                 float reflection_alpha = (1.0 - reflection*"+frame_reflection_strength.toFixed(1)+");
-                                gl_FragColor = vec4(final_color * txt_normal.a, txt_color.a * qt_Opacity * reflection_alpha);
+                                vec4 dark_color = vec4(reflection_color.rgb * (reflection + 0.2) * 0.5, txt_normal.a * reflection_alpha);
+                                gl_FragColor = mix(dark_color, txt_color, ambient_light);
                             }"
 
     onStatusChanged: if (log) console.log(log) //Print warning messages
