@@ -174,7 +174,8 @@ ShaderEffect {
             vec2 coords = qt_TexCoord0;") +
 
         (frame_reflection_strength ? "
-            coords = abs(mod(floor(coords), 2.0) - fract(coords));" : "") +
+            vec2 inside = step(0.0, coords) - step(1.0, coords);
+            coords = abs(mod(floor(coords), 2.0) - fract(coords)) * clamp(inside.x + inside.y, 0.0, 1.0);" : "") +
 
         (horizontal_sincronization !== 0 ? "
             float h_distortion = 0.5 * sin(time*0.001 + coords.y*10.0*fract(time/10.0));
