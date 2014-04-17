@@ -126,8 +126,8 @@ ApplicationWindow{
         Terminal{
             id: terminal
             anchors.centerIn: parent
-            property int frameOffsetX: frame.item.addedWidth - frame.item.borderLeft - frame.item.borderRight
-            property int frameOffsetY: frame.item.addedHeight -frame.item.borderTop - frame.item.borderBottom
+            property int frameOffsetX: frame.item.addedWidth -  frame.item.borderLeft - frame.item.borderRight
+            property int frameOffsetY: frame.item.addedHeight - frame.item.borderTop  - frame.item.borderBottom
             width: (parent.width + frameOffsetX) * shadersettings.terminal_scaling
             height: (parent.height + frameOffsetY) * shadersettings.terminal_scaling
         }
@@ -139,7 +139,6 @@ ApplicationWindow{
         ShaderManager{
             id: shadercontainer
             anchors.fill: parent
-            blending: true
             z: 1.9
         }
         RadialGradient{
@@ -153,10 +152,21 @@ ApplicationWindow{
                 GradientStop{position: 0.7; color: "#00000000"}
             }
         }
+        Loader{
+            id: sizeoverlayloader
+            z: 3
+            anchors.centerIn: parent
+            active: shadersettings.show_terminal_size
+            sourceComponent: SizeOverlay{
+                terminalSize: terminal.terminalSize
+            }
+        }
     }
     ShaderSettings{
         id: shadersettings
-        Component.onCompleted: terminal.loadKTerminal();
+        Component.onCompleted: {
+            terminal.loadKTerminal();
+        }
     }
     Loader{
         id: settingswindowloader

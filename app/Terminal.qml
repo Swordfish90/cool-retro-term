@@ -35,6 +35,8 @@ Item{
 
     property real mBloom: shadersettings.bloom_strength
 
+    property size terminalSize
+
     //Force reload of the blursource when settings change
     onMBloomChanged: restartBlurredSource()
 
@@ -68,6 +70,8 @@ Item{
             font.family: shadersettings.font.name
 
             colorScheme: "MyWhiteOnBlack"
+
+            onTerminalSizeChanged: terminalContainer.terminalSize = ktermitem.terminalSize
 
             session: KSession {
                 id: ksession

@@ -27,6 +27,8 @@ Item{
     property real contrast: 0.85
     property real brightness: 0.75
 
+    property bool show_terminal_size: true
+
     //Scaling of the preprocessed terminal with respect to the window.
     property real terminal_scaling: 1.0
     onTerminal_scalingChanged: handleFontChanged();
@@ -167,6 +169,8 @@ Item{
         console.log(profilename + settings);
         settings = JSON.parse(settings);
 
+        show_terminal_size = settings.show_terminal_size ? settings.show_terminal_size : show_terminal_size
+
         fps = settings.fps !== undefined ? settings.fps: fps
 
         contrast = settings.contrast !== undefined ? settings.contrast : contrast;
@@ -197,9 +201,10 @@ Item{
     function storeCurrentSettings(){
         var settings = {
             fps: fps,
-            ambient_light : ambient_light,
-            brightness : brightness,
-            contrast : contrast,
+            show_terminal_size: show_terminal_size,
+            ambient_light: ambient_light,
+            brightness: brightness,
+            contrast: contrast,
             background_color: _background_color,
             font_color: _font_color,
             brightness_flickering: brightness_flickering,

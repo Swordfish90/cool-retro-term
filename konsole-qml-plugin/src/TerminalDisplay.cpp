@@ -1058,6 +1058,8 @@ void KTerminalDisplay::updateImageSize()
     int lines =   qMin(oldlin,_lines);
     int columns = qMin(oldcol,_columns);
 
+    emit terminalSizeChanged();
+
     if (oldimg)
     {
         for (int line = 0; line < lines; line++)
