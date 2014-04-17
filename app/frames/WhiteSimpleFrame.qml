@@ -18,7 +18,7 @@ TerminalFrame{
                         terminal.width + 20 * shadersettings.total_scaling,
                         terminal.height+ 10 * shadersettings.total_scaling)
 
-    distortionCoefficient: 1.3
+    distortionCoefficient: 1.75
 
     displacementLeft: 43.0
     displacementTop: 40.0
