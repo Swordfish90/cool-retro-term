@@ -18,9 +18,9 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *******************************************************************************/
 
-import QtQuick 2.1
-import QtQuick.Window 2.0
-import QtQuick.Controls 1.0
+import QtQuick 2.2
+import QtQuick.Window 2.1
+import QtQuick.Controls 1.1
 import QtGraphicalEffects 1.0
 
 import org.kde.konsole 0.1
@@ -39,6 +39,8 @@ ApplicationWindow{
         text: qsTr("&Fullscreen")
         shortcut: "Alt+F11"
         onTriggered: shadersettings.fullscreen = !shadersettings.fullscreen;
+        checkable: true
+        checked: shadersettings.fullscreen
     }
     Action {
         id: quitAction
@@ -49,7 +51,7 @@ ApplicationWindow{
     Action{
         id: showsettingsAction
         text: qsTr("&Settings")
-        onTriggered: settingswindowloader.active = true;
+        onTriggered: settingswindow.show();
     }
     Action{
         id: copyAction
@@ -168,13 +170,8 @@ ApplicationWindow{
             terminal.loadKTerminal();
         }
     }
-    Loader{
-        id: settingswindowloader
-        active: false
-        sourceComponent: SettingsWindow{
-            id: settingswindow
-            visible: true
-            onClosing: settingswindowloader.active = false;
-        }
+    SettingsWindow{
+        id: settingswindow
+        visible: false
     }
 }

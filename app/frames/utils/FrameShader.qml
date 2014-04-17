@@ -1,4 +1,4 @@
-import QtQuick 2.1
+import QtQuick 2.2
 
 ShaderEffect{
     property variant source: framesource
