@@ -13,17 +13,17 @@ TerminalFrame{
     borderBottom: 116
     imageSource: "../images/screen-frame.png"
     normalsSource: "../images/screen-frame-normals.png"
-    sourceRect: Qt.rect(-10 * shadersettings.total_scaling,
-                        -5 * shadersettings.total_scaling,
-                        terminal.width + 20 * shadersettings.total_scaling,
-                        terminal.height+ 10 * shadersettings.total_scaling)
+    sourceRect: Qt.rect(-15 * shadersettings.total_scaling,
+                        -15 * shadersettings.total_scaling,
+                        terminal.width + 30 * shadersettings.total_scaling,
+                        terminal.height+ 30 * shadersettings.total_scaling)
 
-    distortionCoefficient: 1.75
+    distortionCoefficient: 1.5
 
-    displacementLeft: 43.0
-    displacementTop: 40.0
-    displacementRight: 35.0
-    displacementBottom: 30.0
+    displacementLeft: 45
+    displacementTop: 40
+    displacementRight: 38.0
+    displacementBottom: 28.0
 
     shaderString: "FrameShader.qml"
 }
