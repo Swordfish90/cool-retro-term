@@ -109,6 +109,9 @@ ApplicationWindow{
             source: "frames/images/randfunction.png"
             width: 512
             height: 512
+            sourceSize.width: 512
+            sourceSize.height: 256
+            fillMode: Image.TileVertically
         }
         ShaderEffectSource{
             id: randfuncsource

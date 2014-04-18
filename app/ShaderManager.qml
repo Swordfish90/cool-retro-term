@@ -91,7 +91,7 @@ ShaderEffect {
                         originalCoord = qt_MultiTexCoord0;
                         qt_TexCoord0.x = -"+disp_left.toFixed(1)+"/txt_Size.x + qt_MultiTexCoord0.x / ((txt_Size.x -("+(disp_left+disp_right).toFixed(1)+")) / txt_Size.x);" +
                         "qt_TexCoord0.y = -"+disp_top.toFixed(1)+"/txt_Size.y + qt_MultiTexCoord0.y / ((txt_Size.y -("+(disp_top+disp_bottom).toFixed(1)+")) / txt_Size.y);" +
-                        "vec2 coords = vec2(fract(time/(1024.0*2.0)), fract(time/(1024.0*1024.0*2.0)));" +
+                        "vec2 coords = vec2(fract(time/(1024.0*2.0)), fract(time/(1024.0*1024.0)));" +
                         (brightness_flickering !== 0.0 ? "
                             brightness = texture2D(randomFunctionSource, coords).g * "+brightness_flickering.toFixed(1)+";"
                         :   "") +
