@@ -94,7 +94,7 @@ ShaderEffect {
                         "qt_TexCoord0.y = -"+disp_top.toFixed(1)+"/txt_Size.y + qt_MultiTexCoord0.y / ((txt_Size.y -("+(disp_top+disp_bottom).toFixed(1)+")) / txt_Size.y);" +
                         "vec2 coords = vec2(fract(time/(1024.0*2.0)), fract(time/(1024.0*1024.0)));" +
                         (brightness_flickering !== 0.0 ? "
-                            brightness = texture2D(randomFunctionSource, coords).g * "+brightness_flickering.toFixed(1)+";"
+                            brightness = 1.0 + (texture2D(randomFunctionSource, coords).g - 0.5) * "+brightness_flickering.toFixed(2)+";"
                         :   "") +
 
                         (horizontal_sincronization !== 0.0 ? "
@@ -183,7 +183,7 @@ ShaderEffect {
             h_distortion += 0.5 * cos(time*0.04 + 0.03 + coords.y*50.0*fract(time/10.0 + 0.4));
             coords.x = coords.x + h_distortion * horizontal_distortion;" +
             (noise_strength ? "
-                noise += horizontal_distortion * 0.5;" : "")
+                noise += horizontal_distortion;" : "")
         : "") +
 
         "float color = texture2D(source, coords).r;" +
@@ -205,7 +205,7 @@ ShaderEffect {
         "finalColor = mix(finalColor * 1.1, vec3(0.0), 1.2 * distance * distance);" +
 
         (brightness_flickering !== 0 ? "
-            finalColor = mix(finalColor, vec3(0.0), brightness);" : "") +
+            finalColor *= brightness;" : "") +
 
         "gl_FragColor = vec4(finalColor *"+brightness.toFixed(1)+", qt_Opacity);
     }"
