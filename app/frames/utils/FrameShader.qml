@@ -19,6 +19,8 @@ ShaderEffect{
                                              (font_color.b*0.3 + background_color.b*0.7),
                                              1.0)
 
+    blending: true
+
     vertexShader: "
                     uniform highp mat4 qt_Matrix;
                     uniform highp float time;
@@ -64,9 +66,10 @@ ShaderEffect{
                                 vec4 txt_normal = texture2D(normals, coords);
                                 vec3 normal = normalize(txt_normal.rgb * 2.0 - 1.0);
                                 vec3 light_dir = normalize(vec3(0.5,0.5, 0.0) - vec3(qt_TexCoord0, 0.0));
-                                float reflection = dot(normal, light_dir) * 0.5 * txt_normal.a;
-                                float reflection_alpha = (1.0 - reflection*"+frame_reflection_strength.toFixed(1)+");
-                                vec4 dark_color = vec4(reflection_color.rgb * (reflection + 0.2) * 0.5, txt_normal.a * reflection_alpha);
+                                float diffuse = dot(normal, light_dir);
+                                float reflection = (diffuse * 0.6 + 0.4) * txt_normal.a;
+                                float reflection_alpha = (1.0 - diffuse*"+frame_reflection_strength.toFixed(1)+");
+                                vec4 dark_color = vec4(reflection_color.rgb * reflection * 0.4, txt_normal.a * reflection_alpha);
                                 gl_FragColor = mix(dark_color, txt_color, ambient_light);
                             }"
 
