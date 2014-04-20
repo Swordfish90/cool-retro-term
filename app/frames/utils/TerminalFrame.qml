@@ -13,6 +13,10 @@ Item{
     property rect sourceRect
     property string shaderString
 
+    //Value used to create the rect used to add the border to the texture
+    property real rectX
+    property real rectY
+
     //Values used to displace the texture in the screen. Used to make reflections correct.
     property real displacementLeft
     property real displacementTop

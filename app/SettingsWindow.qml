@@ -28,7 +28,7 @@ Window {
     id: settings_window
     title: qsTr("Settings")
     width: 640
-    height: 460
+    height: 480
 
     modality: Qt.ApplicationModal
 
@@ -147,17 +147,6 @@ Window {
                             onValueChanged: shadersettings.brightness = value
                             value: shadersettings.brightness
                         }
-                        //TODO decide later what to do with scaling
-                        //                        SimpleSlider{
-                        //                            name: "Terminal Scaling"
-                        //                            onValueChanged: shadersettings.terminal_scaling = value
-                        //                            value: shadersettings.terminal_scaling
-                        //                        }
-                        //                        SimpleSlider{
-                        //                            name: "Window Scaling"
-                        //                            onValueChanged: shadersettings.window_scaling = value
-                        //                            value: shadersettings.window_scaling
-                        //                        }
                     }
                 }
                 GroupBox{
@@ -166,10 +155,10 @@ Window {
                     Layout.columnSpan: 2
                     anchors.left: parent.left
                     anchors.right: parent.right
-                    RowLayout{
+                    GridLayout{
+                        columns: 3
                         Layout.columnSpan: 2
-                        anchors.left: parent.left
-                        anchors.right: parent.right
+                        anchors {left: parent.left; right: parent.right}
                         Text{text: "Animation FPS"}
                         Slider{
                             Layout.fillWidth: true
@@ -180,10 +169,19 @@ Window {
                             onValueChanged: shadersettings.fps = value;
                             value: shadersettings.fps
                         }
-                        Text{
-                            id: textfield
-                            text: slider.value
+                        Text{text: slider.value}
+                        Text{text: "Texture quality"}
+                        Slider{
+                            Layout.fillWidth: true
+                            id: txtslider
+                            stepSize: 0.01
+                            maximumValue: 1
+                            minimumValue: 0
+                            onValueChanged: shadersettings.window_scaling = value;
+                            value: shadersettings.window_scaling
+                            updateValueWhileDragging: false
                         }
+                        Text{text: Math.round(txtslider.value * 100) + "%"}
                     }
                 }
             }

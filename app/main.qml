@@ -90,7 +90,10 @@ ApplicationWindow{
 
     Loader{
         id: frame
-        property rect sourceRect: item.sourceRect
+        property rect sourceRect: Qt.rect(-item.rectX * shadersettings.window_scaling,
+                                          -item.rectY * shadersettings.window_scaling,
+                                          terminal.width + 2*item.rectX * shadersettings.window_scaling,
+                                          terminal.height + 2*item.rectY * shadersettings.window_scaling)
         anchors.fill: parent
         z: 2.1
         source: shadersettings.frame_source
@@ -133,8 +136,8 @@ ApplicationWindow{
             anchors.centerIn: parent
             property int frameOffsetX: frame.item.addedWidth -  frame.item.borderLeft - frame.item.borderRight
             property int frameOffsetY: frame.item.addedHeight - frame.item.borderTop  - frame.item.borderBottom
-            width: (parent.width + frameOffsetX) * shadersettings.terminal_scaling
-            height: (parent.height + frameOffsetY) * shadersettings.terminal_scaling
+            width: parent.width + frameOffsetX * shadersettings.window_scaling
+            height: parent.height + frameOffsetY * shadersettings.window_scaling
         }
         ShaderEffectSource{
             id: theSource
@@ -146,15 +149,6 @@ ApplicationWindow{
             anchors.fill: parent
             z: 1.9
         }
-        Loader{
-            id: sizeoverlayloader
-            z: 3
-            anchors.centerIn: parent
-            active: shadersettings.show_terminal_size
-            sourceComponent: SizeOverlay{
-                terminalSize: terminal.terminalSize
-            }
-        }
     }
     ShaderSettings{
         id: shadersettings
@@ -165,5 +159,14 @@ ApplicationWindow{
     SettingsWindow{
         id: settingswindow
         visible: false
+    }
+    Loader{
+        id: sizeoverlayloader
+        z: 3
+        anchors.centerIn: parent
+        active: shadersettings.show_terminal_size
+        sourceComponent: SizeOverlay{
+            terminalSize: terminal.terminalSize
+        }
     }
 }

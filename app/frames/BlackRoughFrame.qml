@@ -13,10 +13,9 @@ TerminalFrame{
     borderBottom: 232
     imageSource: "../images/black-frame.png"
     normalsSource: "../images/black-frame-normals.png"
-    sourceRect: Qt.rect(-20 * shadersettings.total_scaling,
-                        -20 * shadersettings.total_scaling,
-                        terminal.width + 40 * shadersettings.total_scaling,
-                        terminal.height + 40 * shadersettings.total_scaling)
+
+    rectX: 20
+    rectY: 20
 
     distortionCoefficient: 1.9
 

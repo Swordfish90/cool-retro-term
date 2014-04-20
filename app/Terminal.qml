@@ -85,7 +85,7 @@ Item{
             onUpdatedImage: {blurredSource.live = true;livetimer.restart();}
 
             Component.onCompleted: {
-                var scaling_factor = shadersettings.font_scaling * shadersettings.terminal_scaling * shadersettings.window_scaling;
+                var scaling_factor = shadersettings.font_scaling * shadersettings.window_scaling;
                 font.pointSize = shadersettings.font.pixelSize * scaling_factor;
                 font.family = shadersettings.font.name;
                 setLineSpacing(shadersettings.font.lineSpacing);
@@ -159,6 +159,9 @@ Item{
             sourceItem: blurredterminal
             recursive: true
             live: true
+
+            smooth: false
+            antialiasing: false
 
             Timer{
                 id: livetimer

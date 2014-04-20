@@ -41,10 +41,11 @@ ShaderEffect {
     property real horizontal_sincronization: shadersettings.horizontal_sincronization
 
     property bool frame_reflection_strength: shadersettings.frame_reflection_strength
-    property real disp_top: frame.item.displacementTop.toFixed(1)
-    property real disp_bottom: frame.item.displacementBottom
-    property real disp_left: frame.item.displacementLeft
-    property real disp_right: frame.item.displacementRight
+
+    property real disp_top: frame.item.displacementTop * shadersettings.window_scaling
+    property real disp_bottom: frame.item.displacementBottom * shadersettings.window_scaling
+    property real disp_left: frame.item.displacementLeft * shadersettings.window_scaling
+    property real disp_right: frame.item.displacementRight * shadersettings.window_scaling
 
     property real brightness: shadersettings.brightness * 1.5 + 0.5
 

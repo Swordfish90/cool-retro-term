@@ -27,15 +27,11 @@ Item{
     property real contrast: 0.85
     property real brightness: 0.75
 
+    //On resize shows an overlay with the current size
     property bool show_terminal_size: true
 
-    //Scaling of the preprocessed terminal with respect to the window.
-    property real terminal_scaling: 1.0
-    onTerminal_scalingChanged: handleFontChanged();
-
-    //Scaling of the whole window
     property real window_scaling: 1.0
-    property real total_scaling: terminal_scaling * window_scaling
+    onWindow_scalingChanged: handleFontChanged();
 
     property real fps: 60
 
@@ -172,6 +168,7 @@ Item{
         show_terminal_size = settings.show_terminal_size ? settings.show_terminal_size : show_terminal_size
 
         fps = settings.fps !== undefined ? settings.fps: fps
+        window_scaling = settings.window_scaling ? settings.window_scaling : window_scaling
 
         contrast = settings.contrast !== undefined ? settings.contrast : contrast;
         brightness = settings.brightness !== undefined ? settings.brightness : brightness
@@ -201,6 +198,7 @@ Item{
     function storeCurrentSettings(){
         var settings = {
             fps: fps,
+            window_scaling: window_scaling,
             show_terminal_size: show_terminal_size,
             ambient_light: ambient_light,
             brightness: brightness,
