@@ -86,9 +86,11 @@ Item{
 
             Component.onCompleted: {
                 var scaling_factor = shadersettings.font_scaling * shadersettings.window_scaling;
-                font.pointSize = shadersettings.font.pixelSize * scaling_factor;
+                var font_size = shadersettings.font.pixelSize * scaling_factor;
+                var line_spacing = Math.round(shadersettings.font.lineSpacing * font_size);
+                font.pointSize = font_size;
                 font.family = shadersettings.font.name;
-                setLineSpacing(shadersettings.font.lineSpacing);
+                setLineSpacing(line_spacing);
                 forceActiveFocus();
             }
         }
