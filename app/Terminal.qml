@@ -27,11 +27,11 @@ import org.kde.konsole 0.1
 Item{
     id: terminalContainer
     //The blur effect has to take into account the framerate
-    property real fpsAttenuation: shadersettings.fps / 60
+    property real fpsAttenuation: 60 / shadersettings.fps
     property real mBlur: shadersettings.motion_blur
-    property real motionBlurCoefficient: ((_minBlurCoefficient)*mBlur + (_maxBlurCoefficient)*(1.0-mBlur)) / fpsAttenuation
-    property real _minBlurCoefficient: 0.015
-    property real _maxBlurCoefficient: 0.10
+    property real motionBlurCoefficient: (_maxBlurCoefficient * mBlur + _minBlurCoefficient * (1 - mBlur))
+    property real _minBlurCoefficient: 0.75
+    property real _maxBlurCoefficient: 0.95
 
     property real mBloom: shadersettings.bloom_strength
 
@@ -193,15 +193,16 @@ Item{
             : "") +
 
             "void main() {" +
-                "float color = texture2D(source, qt_TexCoord0).r * 0.8 * 512.0;" +
+                "float color = texture2D(source, qt_TexCoord0).r * 256.0;" +
 
                 (mBlur !== 0 ?
-                     "float blurredSourceColor = texture2D(blurredSource, qt_TexCoord0).r * 512.0;" +
-                     "color = mix(blurredSourceColor, color, " + motionBlurCoefficient + ");"
+                     "float blurredSourceColor = texture2D(blurredSource, qt_TexCoord0).r * 256.0;" +
+                     "blurredSourceColor = blurredSourceColor - blurredSourceColor * " + (1.0 - motionBlurCoefficient) * fpsAttenuation+ ";" +
+                     "color = step(1.0, color) * color + step(color, 1.0) * blurredSourceColor;"
                 : "") +
 
 
-                "gl_FragColor = vec4(vec3(floor(color) / 512.0), 1.0);" +
+                "gl_FragColor = vec4(vec3(floor(color) / 256.0), 1.0);" +
             "}"
     }
 }
