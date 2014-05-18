@@ -82,9 +82,9 @@ Item{
     property bool frame_reflections: true
     property real frame_reflection_strength: ((frame_reflections && framelist.get(frames_index).reflections) ? 1.0 : 0.0) * 0.15
 
-    property var profiles_list: profileslist
+    property alias profiles_list: profileslist
     property int profiles_index: 0
-    onProfiles_indexChanged: loadProfile(profiles_list.get(profiles_index).obj_name);
+    onProfiles_indexChanged: loadProfile(profiles_index);
 
     onFont_indexChanged: handleFontChanged();
     onFont_scalingChanged: handleFontChanged();
@@ -159,21 +159,80 @@ Item{
 
     Storage{id: storage}
 
-    function loadProfile(profilename){
-        var settings = storage.getSetting(profilename);
-        if(!settings) return;
-        console.log(profilename + settings);
-        settings = JSON.parse(settings);
+    function composeSettingsString(){
+        var settings = {
+            fps: fps,
+            window_scaling: window_scaling,
+            show_terminal_size: show_terminal_size,
+            brightness: brightness,
+            contrast: contrast,
+            ambient_light: ambient_light,
+            font_scaling: font_scaling,
+        }
+        return JSON.stringify(settings);
+    }
+
+    function composeProfileString(){
+        var settings = {
+            background_color: _background_color,
+            font_color: _font_color,
+            brightness_flickering: brightness_flickering,
+            horizontal_sincronization: horizontal_sincronization,
+            noise_strength: noise_strength,
+            screen_distortion: screen_distortion,
+            glowing_line_strength: glowing_line_strength,
+            frames_index: frames_index,
+            font_index: font_index,
+            motion_blur: motion_blur,
+            bloom_strength: bloom_strength,
+            rasterization_strength: rasterization_strength,
+            rasterization: rasterization
+        }
+        return JSON.stringify(settings);
+    }
+
+    function loadSettings(){
+        var settingsString = storage.getSetting("_CURRENT_SETTINGS");
+        var profileString = storage.getSetting("_CURRENT_PROFILE");
+
+        if(!settingsString) return;
+        if(!profileString) return;
+
+        loadSettingsString(settingsString);
+        loadProfileString(profileString);
+
+        console.log("Loading settings: " + settingsString + profileString);
+    }
+
+    function storeSettings(){
+        var settingsString = composeSettingsString();
+        var profileString = composeProfileString();
+
+        storage.setSetting("_CURRENT_SETTINGS", settingsString);
+        storage.setSetting("_CURRENT_PROFILE", profileString);
+
+        console.log("Storing settings :" + settingsString + profileString);
+    }
+
+    function loadSettingsString(settingsString){
+        var settings = JSON.parse(settingsString);
+
+        ambient_light = settings.ambient_light !== undefined ? settings.ambient_light : ambient_light;
+
+        contrast = settings.contrast !== undefined ? settings.contrast : contrast;
+        brightness = settings.brightness !== undefined ? settings.brightness : brightness
 
         show_terminal_size = settings.show_terminal_size ? settings.show_terminal_size : show_terminal_size
 
         fps = settings.fps !== undefined ? settings.fps: fps
         window_scaling = settings.window_scaling ? settings.window_scaling : window_scaling
 
-        contrast = settings.contrast !== undefined ? settings.contrast : contrast;
-        brightness = settings.brightness !== undefined ? settings.brightness : brightness
+        font_scaling = settings.font_scaling !== undefined ? settings.font_scaling: font_scaling;
+    }
 
-        ambient_light = settings.ambient_light !== undefined ? settings.ambient_light : ambient_light;
+    function loadProfileString(profileString){
+        var settings = JSON.parse(profileString);
+
         _background_color = settings.background_color !== undefined ? settings.background_color : _background_color;
         _font_color = settings.font_color !== undefined ? settings.font_color : _font_color;
 
@@ -189,71 +248,76 @@ Item{
         frames_index = settings.frames_index !== undefined ? settings.frames_index : frames_index;
 
         font_index = settings.font_index !== undefined ? settings.font_index : font_index;
-        font_scaling = settings.font_scaling !== undefined ? settings.font_scaling: font_scaling;
 
         rasterization_strength = settings.rasterization_strength !== undefined ?  settings.rasterization_strength : rasterization_strength;
         rasterization = settings.rasterization !== undefined ? settings.rasterization : rasterization;
     }
 
-    function storeCurrentSettings(){
-        var settings = {
-            fps: fps,
-            window_scaling: window_scaling,
-            show_terminal_size: show_terminal_size,
-            ambient_light: ambient_light,
-            brightness: brightness,
-            contrast: contrast,
-            background_color: _background_color,
-            font_color: _font_color,
-            brightness_flickering: brightness_flickering,
-            horizontal_sincronization: horizontal_sincronization,
-            noise_strength: noise_strength,
-            screen_distortion: screen_distortion,
-            glowing_line_strength: glowing_line_strength,
-            frames_index: frames_index,
-            font_index: font_index,
-            font_scaling: font_scaling,
-            motion_blur: motion_blur,
-            bloom_strength: bloom_strength,
-            rasterization_strength: rasterization_strength,
-            rasterization: rasterization
-        }
+    function storeCustomProfiles(){
+        storage.setSetting("_CUSTOM_PROFILES", composeCustomProfilesString());
+    }
 
-        console.log(JSON.stringify(settings));
-        storage.setSetting("CURRENT_SETTINGS", JSON.stringify(settings));
+    function loadCustomProfiles(){
+        var customProfileString = storage.getSetting("_CUSTOM_PROFILES");
+        if(customProfileString === undefined) customProfileString = "[]";
+        loadCustomProfilesString(customProfileString);
+    }
+
+    function loadCustomProfilesString(customProfilesString){
+        var customProfiles = JSON.parse(customProfilesString);
+        for (var i=0; i<customProfiles.length; i++) {
+            var profile = customProfiles[i];
+            console.log("Loading custom profile: " + JSON.stringify(profile));
+            profiles_list.append(profile);
+        }
+    }
+
+    function composeCustomProfilesString(){
+        var customProfiles = []
+        for(var i=0; i<profileslist.count; i++){
+            var profile = profileslist.get(i);
+            if(profile.builtin) continue;
+            customProfiles.push({text: profile.text, obj_string: profile.obj_string, builtin: false})
+        }
+        return JSON.stringify(customProfiles);
+    }
+
+    function loadProfile(index){
+        var profile = profileslist.get(index);
+        loadProfileString(profile.obj_string);
+    }
+
+    function addNewCustomProfile(name){
+        var profileString = composeProfileString();
+        profileslist.append({text: name, obj_string: profileString, builtin: false});
     }
 
     Component.onCompleted: {
-        //Save all the profiles into local storage
-        for(var i=0; i<profileslist.count; i++){
-            var temp = profileslist.get(i);
-            storage.setSetting(temp.obj_name, temp.obj_string);
-        }
-
-        loadProfile("CURRENT_SETTINGS");
+        loadSettings();
+        loadCustomProfiles();
     }
     Component.onDestruction: {
-        storeCurrentSettings();
+        storeSettings();
+        storeCustomProfiles();
         //storage.dropSettings(); //DROPS THE SETTINGS!.. REMEMBER TO DISABLE ONCE ENABLED!!
     }
-
 
     ListModel{
         id: profileslist
         ListElement{
             text: "Default"
-            obj_name: "DEFAULT"
-            obj_string: '{"ambient_light":0.2,"background_color":"#000000","bloom_strength":0.6,"brightness":0.7000000000000001,"brightness_flickering":0.12,"contrast":0.85,"font_color":"#ff9400","font_index":0,"font_scaling":1,"frames_index":1,"glowing_line_strength":0.4,"horizontal_sincronization":0.1,"motion_blur":0.65,"noise_strength":0.1,"rasterization":1,"rasterization_strength":0.5,"screen_distortion":0.15}'
+            obj_string: '{"background_color":"#000000","bloom_strength":0.6,"brightness_flickering":0.12,"font_color":"#ff9400","font_index":0,"frames_index":1,"glowing_line_strength":0.4,"horizontal_sincronization":0.1,"motion_blur":0.65,"noise_strength":0.1,"rasterization":1,"rasterization_strength":0.5,"screen_distortion":0.15}'
+            builtin: true
         }
-//        ListElement{
-//            text: "Commodore 64"
-//            obj_name: "COMMODORE64"
-//            obj_string: '{"ambient_light":0.2,"background_color":"#5048b2","font_color":"#8bcad1","font_index":2,"font_scaling":1,"frames_index":1,"glowing_line_strength":0.2,"noise_strength":0.05,"scanlines":0.0,"screen_distortion":0.1,"brightness_flickering":0.03}'
-//        }
-//        ListElement{
-//            text: "IBM Dos"
-//            obj_name: "IBMDOS"
-//            obj_string: '{"ambient_light":0.4,"background_color":"#000000","font_color":"#ffffff","font_index":3,"font_scaling":1,"frames_index":1,"glowing_line_strength":0,"noise_strength":0,"scanlines":0.0,"screen_distortion":0.05,"brightness_flickering":0.00}'
-//        }
+        ListElement{
+            text: "Commodore 64"
+            obj_string: '{"ambient_light":0.2,"background_color":"#5048b2","font_color":"#8bcad1","font_index":2,"font_scaling":1,"frames_index":1,"glowing_line_strength":0.2,"noise_strength":0.05,"scanlines":0.0,"screen_distortion":0.1,"brightness_flickering":0.03}'
+            builtin: true
+        }
+        ListElement{
+            text: "IBM Dos"
+            obj_string: '{"ambient_light":0.4,"background_color":"#000000","font_color":"#ffffff","font_index":3,"font_scaling":1,"frames_index":1,"glowing_line_strength":0,"noise_strength":0,"scanlines":0.0,"screen_distortion":0.05,"brightness_flickering":0.00}'
+            builtin: true
+        }
     }
 }

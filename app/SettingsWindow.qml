@@ -47,11 +47,34 @@ Window {
                     anchors.right: parent.right
                     Layout.columnSpan: 2
                     title: qsTr("Profile")
-                    ComboBox{
+                    RowLayout{
                         anchors.fill: parent
-                        model: shadersettings.profiles_list
-                        onCurrentIndexChanged: shadersettings.profiles_index = currentIndex
-                        currentIndex: shadersettings.profiles_index
+                        ComboBox{
+                            id: profilesbox
+                            Layout.fillWidth: true
+                            model: shadersettings.profiles_list
+                            currentIndex: shadersettings.profiles_index
+                        }
+                        Button{
+                            text: "Load"
+                            onClicked: shadersettings.profiles_index = profilesbox.currentIndex
+                        }
+                        Button{
+                            text: "Add"
+                            onClicked: insertname.show()
+                        }
+                        Button{
+                            text: "Remove"
+                            enabled: !shadersettings.profiles_list.get(profilesbox.currentIndex).builtin
+                            onClicked: {
+                                shadersettings.profiles_list.remove(profilesbox.currentIndex)
+                                profilesbox.currentIndex = profilesbox.currentIndex - 1
+                            }
+                        }
+                        InsertNameDialog{
+                            id: insertname
+                            onNameSelected: shadersettings.addNewCustomProfile(name)
+                        }
                     }
                 }
 
