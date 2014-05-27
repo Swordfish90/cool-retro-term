@@ -66,7 +66,7 @@ Item{
 
         sourceComponent: KTerminal {
             id: ktermitem
-            font.pointSize: shadersettings.fontSize
+            font.pixelSize: shadersettings.fontSize
             font.family: shadersettings.font.name
 
             colorScheme: "MyWhiteOnBlack"
@@ -88,7 +88,7 @@ Item{
                 var scaling_factor = shadersettings.font_scaling * shadersettings.window_scaling;
                 var font_size = shadersettings.font.pixelSize * scaling_factor;
                 var line_spacing = Math.round(shadersettings.font.lineSpacing * font_size);
-                font.pointSize = font_size;
+                font.pixelSize = font_size;
                 font.family = shadersettings.font.name;
                 setLineSpacing(line_spacing);
                 forceActiveFocus();
