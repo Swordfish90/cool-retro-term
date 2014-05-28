@@ -69,7 +69,7 @@ class KONSOLEPRIVATE_EXPORT KTerminalDisplay : public QQuickPaintedItem
     Q_PROPERTY(bool activeFocusOnClick READ autoFocus       WRITE setAutoFocus   NOTIFY changedAutoFocus)
     Q_PROPERTY(bool ShowIMEOnClick     READ autoVKB         WRITE setAutoVKB     NOTIFY changedAutoVKB)
     Q_PROPERTY(QSize terminalSize      READ getTerminalSize                      NOTIFY terminalSizeChanged)
-
+    Q_PROPERTY(QSize paintedFontSize   READ getFontSize                          NOTIFY paintedFontSizeChanged)
 
 
 public:
@@ -194,8 +194,12 @@ public:
     /**
      * Return size of the terminal as columns lines.
      */
-    QSize getTerminalSize(){
+    QSize getTerminalSize() {
         return QSize(columns(), lines());
+    }
+
+    QSize getFontSize() {
+        return QSize(fontWidth(), fontHeight());
     }
 
     /**
@@ -417,6 +421,7 @@ signals:
     void clicked();
 
     void terminalSizeChanged();
+    void paintedFontSizeChanged();
 
     /////////////////////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////////////////////////

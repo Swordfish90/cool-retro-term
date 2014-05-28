@@ -100,6 +100,8 @@ Item{
     FontLoader{
         property int pixelSize: fontlist.get(font_index).pixelSize
         property real lineSpacing: fontlist.get(font_index).lineSpacing
+        property real verticalPixelDensity: fontlist.get(font_index).verticalPixelDensity
+        property real horizontalPixelDensity: fontlist.get(font_index).horizontalPixelDensity
         id: currentfont
         source: fontlist.get(font_index).source
     }
@@ -116,44 +118,58 @@ Item{
         ListElement{
             text: "Terminus (Modern)"
             source: "fonts/modern-terminus/TerminusTTF-4.38.2.ttf"
-            pixelSize: 30
-            lineSpacing: 0.1
+            pixelSize: 32
+            lineSpacing: 0.12
+            verticalPixelDensity: 12
+            horizontalPixelDensity: 12
         }
         ListElement{
             text: "Commodore PET (1977)"
             source: "fonts/1977-commodore-pet/COMMODORE_PET.ttf"
-            pixelSize: 22
-            lineSpacing: 0.2
+            pixelSize: 25
+            lineSpacing: 0.1
+            verticalPixelDensity: 9
+            horizontalPixelDensity: 9
         }
         ListElement{
             text: "Apple ][ (1977)"
             source: "fonts/1977-apple2/PrintChar21.ttf"
-            pixelSize: 24
-            lineSpacing: 0.2
+            pixelSize: 25
+            lineSpacing: 0.1
+            verticalPixelDensity: 9
+            horizontalPixelDensity: 10
         }
         ListElement{
             text: "Atari 400-800 (1979)"
             source: "fonts/1979-atari-400-800/ATARI400800_original.TTF"
-            pixelSize: 22
-            lineSpacing: 0.25
+            pixelSize: 25
+            lineSpacing: 0.22
+            verticalPixelDensity: 10
+            horizontalPixelDensity: 10
         }
         ListElement{
             text: "Commodore 64 (1982)"
             source: "fonts/1982-commodore64/C64_User_Mono_v1.0-STYLE.ttf"
-            pixelSize: 22
-            lineSpacing: 0.25
+            pixelSize: 25
+            lineSpacing: 0.22
+            verticalPixelDensity: 10
+            horizontalPixelDensity: 10
         }
         ListElement{
             text: "Atari ST (1985)"
             source: "fonts/1985-atari-st/AtariST8x16SystemFont.ttf"
             pixelSize: 26
-            lineSpacing: 0.2
+            lineSpacing: 0.15
+            verticalPixelDensity: 11
+            horizontalPixelDensity: 12
         }
         ListElement{
             text: "IBM DOS (1985)"
             source: "fonts/1985-ibm-pc-vga/Perfect DOS VGA 437.ttf"
-            pixelSize: 30
-            lineSpacing: 0.1
+            pixelSize: 32
+            lineSpacing: 0.17
+            verticalPixelDensity: 15
+            horizontalPixelDensity: 15
         }
     }
 

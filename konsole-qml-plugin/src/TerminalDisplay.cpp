@@ -380,6 +380,7 @@ void KTerminalDisplay::fontChange(const QFont&)
     _fontAscent = fm.ascent();
 
     emit changedFontMetricSignal( _fontHeight, _fontWidth );
+    emit paintedFontSizeChanged();
     propagateSize();
     update();
 }

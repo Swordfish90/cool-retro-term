@@ -61,6 +61,7 @@ Module {
         Property { name: "activeFocusOnClick"; type: "bool" }
         Property { name: "ShowIMEOnClick"; type: "bool" }
         Property { name: "terminalSize"; type: "QSize" }
+        Property { name: "paintedFontSize"; type: "QSize"}
         Signal {
             name: "changedScheme"
             Parameter { name: "scheme"; type: "string" }
@@ -112,6 +113,7 @@ Module {
             Parameter { name: "session"; type: "KSession"; isPointer: true }
         }
         Signal { name: "terminalSizeChanged" }
+        Singal { name: "paintedFontSizeChanged" }
         Signal { name: "updatedImage" }
         Method { name: "forcedFocus" }
         Method {

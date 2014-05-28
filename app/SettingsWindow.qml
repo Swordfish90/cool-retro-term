@@ -96,11 +96,11 @@ Window {
                         Text{text: qsTr("Font scaling:")}
                         SpinBox{
                             Layout.fillWidth: true
-                            decimals: 1
-                            stepSize: 0.1
+                            decimals: 2
+                            stepSize: 0.25
                             value: shadersettings.font_scaling
                             minimumValue: 0.5
-                            maximumValue: 1.5
+                            maximumValue: 2.0
                             onValueChanged: shadersettings.font_scaling = value;
                         }
                         Item{Layout.fillHeight: true}

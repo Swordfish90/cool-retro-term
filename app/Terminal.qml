@@ -36,6 +36,8 @@ Item{
     property real mBloom: shadersettings.bloom_strength
 
     property size terminalSize
+    property size _paintedFontSize
+    property size paintedFontSize: _paintedFontSize ? _paintedFontSize : 0
 
     //Force reload of the blursource when settings change
     onMBloomChanged: restartBlurredSource()
@@ -66,12 +68,13 @@ Item{
 
         sourceComponent: KTerminal {
             id: ktermitem
-            font.pixelSize: shadersettings.fontSize
+            font.pixelSize: shadersettings.font.pixelSize
             font.family: shadersettings.font.name
 
             colorScheme: "MyWhiteOnBlack"
 
             onTerminalSizeChanged: terminalContainer.terminalSize = ktermitem.terminalSize
+            onPaintedFontSizeChanged: terminalContainer._paintedFontSize = ktermitem.paintedFontSize
 
             session: KSession {
                 id: ksession
@@ -86,8 +89,8 @@ Item{
 
             Component.onCompleted: {
                 var scaling_factor = shadersettings.font_scaling * shadersettings.window_scaling;
-                var font_size = shadersettings.font.pixelSize * scaling_factor;
-                var line_spacing = Math.round(shadersettings.font.lineSpacing * font_size);
+                var font_size = Math.ceil(shadersettings.font.pixelSize * scaling_factor);
+                var line_spacing = Math.ceil(shadersettings.font.lineSpacing * font_size);
                 font.pixelSize = font_size;
                 font.family = shadersettings.font.name;
                 setLineSpacing(line_spacing);
@@ -194,7 +197,6 @@ Item{
 
             "void main() {" +
                 "float color = texture2D(source, qt_TexCoord0).r * 256.0;" +
-
                 (mBlur !== 0 ?
                      "float blurredSourceColor = texture2D(blurredSource, qt_TexCoord0).r * 256.0;" +
                      "blurredSourceColor = blurredSourceColor - blurredSourceColor * " + (1.0 - motionBlurCoefficient) * fpsAttenuation+ ";" +
