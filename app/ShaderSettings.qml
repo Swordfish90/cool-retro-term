@@ -74,6 +74,7 @@ Item{
     property int frames_index: 1
     property var frames_list: framelist
 
+    signal terminalFontChanged
     property real font_scaling: 1.0
     property var font: currentfont
     property int font_index: 0
@@ -90,11 +91,10 @@ Item{
     onFont_scalingChanged: handleFontChanged();
 
     function handleFontChanged(){
-        terminal.unloadKTerminal();
         currentfont.source = fontlist.get(font_index).source;
         currentfont.pixelSize = fontlist.get(font_index).pixelSize;
         currentfont.lineSpacing = fontlist.get(font_index).lineSpacing;
-        terminal.loadKTerminal();
+        terminalFontChanged();
     }
 
     FontLoader{

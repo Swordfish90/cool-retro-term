@@ -152,9 +152,6 @@ ApplicationWindow{
     }
     ShaderSettings{
         id: shadersettings
-        Component.onCompleted: {
-            terminal.loadKTerminal();
-        }
     }
     SettingsWindow{
         id: settingswindow
@@ -168,5 +165,9 @@ ApplicationWindow{
         sourceComponent: SizeOverlay{
             terminalSize: terminal.terminalSize
         }
+    }
+
+    Component.onCompleted: {
+        terminal.loadKTerminal();
     }
 }
