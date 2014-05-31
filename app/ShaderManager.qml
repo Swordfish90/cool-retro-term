@@ -30,14 +30,13 @@ ShaderEffect {
     property real bloom: shadersettings.bloom_strength
 
     property int rasterization: shadersettings.rasterization
-    property real rasterization_strength: shadersettings.rasterization_strength
+    property real _verticalResDensity: shadersettings.font.virtualResolution.height + shadersettings.font.lineSpacing
+    property real _horizontalResDensity: shadersettings.font.virtualResolution.width
     property real _lines: frame.sourceRect.height / terminal.paintedFontSize.height
     property real _columns: frame.sourceRect.width / terminal.paintedFontSize.width
-    property real verticalPixelDensity: shadersettings.font.virtualResolution.height + shadersettings.font.lineSpacing
-    property real horizontalPixelDensity: shadersettings.font.virtualResolution.width
-    property size num_scanlines: Qt.size(_columns * horizontalPixelDensity, _lines * verticalPixelDensity)
-    property real scanlineHeight: frame.sourceRect.height / num_scanlines.height
-    property real scanlineWidth: frame.sourceRect.width / num_scanlines.width
+    property size virtual_resolution: Qt.size(_columns * _horizontalResDensity, _lines * _verticalResDensity)
+    property real scanlineHeight: frame.sourceRect.height / virtual_resolution.height
+    property real scanlineWidth: frame.sourceRect.width / virtual_resolution.width
 
     property real noise_strength: shadersettings.noise_strength
     property real screen_distorsion: shadersettings.screen_distortion
@@ -61,6 +60,10 @@ ShaderEffect {
     property real time: timetimer.time
     property variant randomFunctionSource: randfuncsource
 
+    function str(num){
+        return num.toFixed(8);
+    }
+
     //Blurred texture used for bloom
     Loader{
         anchors.fill: parent
@@ -79,147 +82,147 @@ ShaderEffect {
     }
 
     vertexShader: "
-                    uniform highp mat4 qt_Matrix;
-                    uniform highp float time;
-                    uniform sampler2D randomFunctionSource;
-                    uniform highp vec2 txt_Size;
+        uniform highp mat4 qt_Matrix;
+        uniform highp float time;
+        uniform sampler2D randomFunctionSource;
+        uniform highp vec2 txt_Size;
 
-                    attribute highp vec4 qt_Vertex;
-                    attribute highp vec2 qt_MultiTexCoord0;
+        attribute highp vec4 qt_Vertex;
+        attribute highp vec2 qt_MultiTexCoord0;
 
-                    varying highp vec2 originalCoord;
-                    varying highp vec2 qt_TexCoord0;" +
-                    (brightness_flickering !== 0.0 ?"
-                        varying lowp float brightness;" : "") +
-                    (horizontal_sincronization !== 0.0 ?"
-                        varying lowp float horizontal_distortion;" : "") +
-                    "
-                    void main() {
-                        originalCoord = qt_MultiTexCoord0;
-                        qt_TexCoord0.x = -"+disp_left.toFixed(8)+"/txt_Size.x + qt_MultiTexCoord0.x / ((txt_Size.x -("+(disp_left+disp_right).toFixed(8)+")) / txt_Size.x);" +
-                        "qt_TexCoord0.y = -"+disp_top.toFixed(8)+"/txt_Size.y + qt_MultiTexCoord0.y / ((txt_Size.y -("+(disp_top+disp_bottom).toFixed(8)+")) / txt_Size.y);" +
-                        "vec2 coords = vec2(fract(time/(1024.0*2.0)), fract(time/(1024.0*1024.0)));" +
-                        (brightness_flickering !== 0.0 ? "
-                            brightness = 1.0 + (texture2D(randomFunctionSource, coords).g - 0.5) * "+brightness_flickering.toFixed(2)+";"
-                        :   "") +
+        varying highp vec2 qt_TexCoord0;" +
 
-                        (horizontal_sincronization !== 0.0 ? "
-                            float randval = 1.5 * texture2D(randomFunctionSource,(vec2(1.0) -coords) * 0.5).g;
-                            float negsinc = 1.0 - "+0.6*horizontal_sincronization+";
-                            horizontal_distortion = step(negsinc, randval) * (randval - negsinc) * "+0.3*horizontal_sincronization+";"
-                        : "") +
-                        "gl_Position = qt_Matrix * qt_Vertex;
-                    }"
+        (brightness_flickering !== 0.0 ?"
+            varying lowp float brightness;" : "") +
+        (horizontal_sincronization !== 0.0 ?"
+            varying lowp float horizontal_distortion;" : "") +
+        "
+        void main() {
+            qt_TexCoord0.x = -"+str(disp_left)+"/txt_Size.x + qt_MultiTexCoord0.x / ((txt_Size.x -("+str(disp_left+disp_right)+")) / txt_Size.x);" + "
+            qt_TexCoord0.y = -"+str(disp_top)+"/txt_Size.y + qt_MultiTexCoord0.y / ((txt_Size.y -("+str(disp_top+disp_bottom)+")) / txt_Size.y);" + "
+            vec2 coords = vec2(fract(time/(1024.0*2.0)), fract(time/(1024.0*1024.0)));" +
+            (brightness_flickering !== 0.0 ? "
+                brightness = 1.0 + (texture2D(randomFunctionSource, coords).g - 0.5) * "+str(brightness_flickering)+";"
+            :   "") +
+
+            (horizontal_sincronization !== 0.0 ? "
+                float randval = 1.5 * texture2D(randomFunctionSource,(vec2(1.0) -coords) * 0.5).g;
+                float negsinc = 1.0 - "+str(0.6*horizontal_sincronization)+";
+                horizontal_distortion = step(negsinc, randval) * (randval - negsinc) * "+str(0.3*horizontal_sincronization)+";"
+            : "") +
+
+            "gl_Position = qt_Matrix * qt_Vertex;
+        }"
 
     fragmentShader: "
-            uniform sampler2D source;
-            uniform highp float qt_Opacity;
-            uniform highp float time;
-            uniform highp vec2 txt_Size;
-            varying highp vec2 qt_TexCoord0;
-            varying highp vec2 originalCoord;
+        uniform sampler2D source;
+        uniform highp float qt_Opacity;
+        uniform highp float time;
+        uniform highp vec2 txt_Size;
+        varying highp vec2 qt_TexCoord0;
 
-            uniform highp vec4 font_color;
-            uniform highp vec4 background_color;" +
+        uniform highp vec4 font_color;
+        uniform highp vec4 background_color;
 
-    (bloom !== 0 ? "
-        uniform highp sampler2D bloomSource;" : "") +
-    (noise_strength !== 0 ? "
-        uniform highp float noise_strength;" : "") +
-    (screen_distorsion !== 0 ? "
-        uniform highp float screen_distorsion;" : "")+
-    (glowing_line_strength !== 0 ? "
-        uniform highp float glowing_line_strength;" : "")+
-    (brightness_flickering !== 0 ? "
-        varying lowp float brightness;" : "") +
-    (horizontal_sincronization !== 0 ? "
-        varying lowp float horizontal_distortion;" : "") +
-
-    (rasterization !== shadersettings.no_rasterization ? "
-    float getScanlineIntensity(vec2 coord){
-        float result = abs(sin(coord.y * "+(num_scanlines.height * Math.PI).toFixed(8)+"));" +
-        (rasterization === shadersettings.pixel_rasterization ? "
-            result *= abs(sin(coord.x * "+(num_scanlines.width * Math.PI).toFixed(8)+"));" : "") +
-        "return result;
-    }" : "") +
-
-    "
-    highp float rand(vec2 co)
-    {
-        highp float a = 12.9898;
-        highp float b = 78.233;
-        highp float c = 43758.5453;
-        highp float dt= dot(co.xy ,vec2(a,b));
-        highp float sn= mod(dt,3.14);
-        return fract(sin(sn) * c);
-    }
-
-    float stepNoise(vec2 p){
-        vec2 newP = p * txt_Size*0.5;
-        return rand(floor(newP) + fract(time / 100.0));
-    }" +
-
-    (glowing_line_strength !== 0 ? "
-        float randomPass(vec2 coords){
-            return fract(smoothstep(-0.2, 0.0, coords.y - 3.0 * fract(time * 0.0001))) * glowing_line_strength;
-        }" : "") +
-
-
-    "void main() {" +
-        "vec2 cc = vec2(0.5) - qt_TexCoord0;" +
-        "float distance = length(cc);" +
-
-        (noise_strength ? "
-            float noise = noise_strength;" : "") +
-
-        (screen_distorsion !== 0 ? "
-            float distortion = dot(cc, cc) * screen_distorsion;
-            vec2 coords = (qt_TexCoord0 - cc * (1.0 + distortion) * distortion);"
-        :"
-            vec2 coords = qt_TexCoord0;") +
-
-        (frame_reflection_strength ? "
-            vec2 inside = step(0.0, coords) - step(1.0, coords);
-            coords = abs(mod(floor(coords), 2.0) - fract(coords)) * clamp(inside.x + inside.y, 0.0, 1.0);" : "") +
-
-        (horizontal_sincronization !== 0 ? "
-            float h_distortion = 0.5 * sin(time*0.001 + coords.y*10.0*fract(time/10.0));
-            h_distortion += 0.5 * cos(time*0.04 + 0.03 + coords.y*50.0*fract(time/10.0 + 0.4));
-            coords.x = coords.x + h_distortion * horizontal_distortion;" +
-            (noise_strength ? "
-                noise += horizontal_distortion;" : "")
-        : "") +
-
-        (rasterization !== shadersettings.no_rasterization ? "
-            vec2 txt_coords = coords;
-            txt_coords.y = floor(coords.y * "+num_scanlines.height.toFixed(8)+") / "+num_scanlines.height.toFixed(8)+";" +
-            (rasterization === shadersettings.pixel_rasterization ?
-                "txt_coords.x = floor(coords.x * "+num_scanlines.width.toFixed(8)+") / "+num_scanlines.width.toFixed(8)+";" : "")
-        : " vec2 txt_coords = coords;") +
-
-        "float color = texture2D(source, txt_coords + vec2("+(deltax * 0.5).toFixed(8)+", "+(deltay * 0.5).toFixed(8)+")).r;" +
-
-        (noise_strength !== 0 ? "
-            color += stepNoise(coords) * noise * (1.0 - distance * distance * 2.0);" : "") +
-
-        (glowing_line_strength !== 0 ? "
-            color += randomPass(txt_coords) * glowing_line_strength;" : "") +
-
-        (rasterization !== shadersettings.no_rasterization ? "
-            color = mix(texture2D(source, coords).r, color * getScanlineIntensity(coords), "+ rasterization_strength.toFixed(8) +");"
-        : "") +
+        uniform highp vec2 virtual_resolution;" +
 
         (bloom !== 0 ? "
-            color += texture2D(bloomSource, coords).r *" + (2.5 * bloom).toFixed(8) + ";" : "") +
-
-        "vec3 finalColor = mix(background_color, font_color, color).rgb;" +
-        "finalColor = mix(finalColor * 1.1, vec3(0.0), 1.2 * distance * distance);" +
-
+            uniform highp sampler2D bloomSource;" : "") +
+        (noise_strength !== 0 ? "
+            uniform highp float noise_strength;" : "") +
+        (screen_distorsion !== 0 ? "
+            uniform highp float screen_distorsion;" : "")+
+        (glowing_line_strength !== 0 ? "
+            uniform highp float glowing_line_strength;" : "")+
         (brightness_flickering !== 0 ? "
-            finalColor *= brightness;" : "") +
+            varying lowp float brightness;" : "") +
+        (horizontal_sincronization !== 0 ? "
+            varying lowp float horizontal_distortion;" : "") +
 
-        "gl_FragColor = vec4(finalColor *"+brightness.toFixed(8)+", qt_Opacity);
-    }"
+        (rasterization !== shadersettings.no_rasterization ? "
+        float getScanlineIntensity(vec2 coord){
+            float result = abs(sin(coord.y * virtual_resolution.y * "+str(Math.PI)+" ));" +
+            (rasterization === shadersettings.pixel_rasterization ? "
+                result *= abs(sin(coord.x * virtual_resolution.x * "+str(Math.PI)+"));" : "") +
+            "return result;
+        }" : "") +
+
+        "
+        highp float rand(vec2 co)
+        {
+            highp float a = 12.9898;
+            highp float b = 78.233;
+            highp float c = 43758.5453;
+            highp float dt= dot(co.xy ,vec2(a,b));
+            highp float sn= mod(dt,3.14);
+            return fract(sin(sn) * c);
+        }
+
+        float stepNoise(vec2 p){
+            vec2 newP = p * virtual_resolution;
+            return rand(floor(newP) + fract(time / 100.0));
+        }" +
+
+        (glowing_line_strength !== 0 ? "
+            float randomPass(vec2 coords){
+                return fract(smoothstep(-0.2, 0.0, coords.y - 3.0 * fract(time * 0.0001))) * glowing_line_strength;
+            }" : "") +
+
+
+        "void main() {" +
+            "vec2 cc = vec2(0.5) - qt_TexCoord0;" +
+            "float distance = length(cc);" +
+
+            (noise_strength ? "
+                float noise = noise_strength;" : "") +
+
+            (screen_distorsion !== 0 ? "
+                float distortion = dot(cc, cc) * screen_distorsion;
+                vec2 coords = (qt_TexCoord0 - cc * (1.0 + distortion) * distortion);"
+            :"
+                vec2 coords = qt_TexCoord0;") +
+
+            (frame_reflection_strength ? "
+                vec2 inside = step(0.0, coords) - step(1.0, coords);
+                coords = abs(mod(floor(coords), 2.0) - fract(coords)) * clamp(inside.x + inside.y, 0.0, 1.0);" : "") +
+
+            (horizontal_sincronization !== 0 ? "
+                float h_distortion = 0.5 * sin(time*0.001 + coords.y*10.0*fract(time/10.0));
+                h_distortion += 0.5 * cos(time*0.04 + 0.03 + coords.y*50.0*fract(time/10.0 + 0.4));
+                coords.x = coords.x + h_distortion * horizontal_distortion;" +
+                (noise_strength ? "
+                    noise += horizontal_distortion;" : "")
+            : "") +
+
+            (rasterization !== shadersettings.no_rasterization ? "
+                vec2 txt_coords = coords;
+                txt_coords.y = floor(coords.y * virtual_resolution.y) / virtual_resolution.y;" +
+                (rasterization === shadersettings.pixel_rasterization ?
+                    "txt_coords.x = floor(coords.x * virtual_resolution.x) / virtual_resolution.x;" : "")
+            : " vec2 txt_coords = coords;") +
+
+            "float color = texture2D(source, txt_coords + vec2("+str(deltax * 0.5)+", "+str(deltay * 0.5)+")).r;" +
+
+            (noise_strength !== 0 ? "
+                color += stepNoise(coords) * noise * (1.0 - distance * distance * 2.0);" : "") +
+
+            (rasterization !== shadersettings.no_rasterization ? "
+                color = color * getScanlineIntensity(coords);" : "") +
+
+            (glowing_line_strength !== 0 ? "
+                color += randomPass(txt_coords) * glowing_line_strength;" : "") +
+
+            (bloom !== 0 ? "
+                color += texture2D(bloomSource, coords).r *" + str(2.5 * bloom) + ";" : "") +
+
+            "vec3 finalColor = mix(background_color, font_color, color).rgb;" +
+            "finalColor = mix(finalColor * 1.1, vec3(0.0), 1.2 * distance * distance);" +
+
+            (brightness_flickering !== 0 ? "
+                finalColor *= brightness;" : "") +
+
+            "gl_FragColor = vec4(finalColor *"+str(brightness)+", qt_Opacity);
+        }"
 
      onStatusChanged: if (log) console.log(log) //Print warning messages
 }

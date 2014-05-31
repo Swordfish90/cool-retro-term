@@ -247,11 +247,6 @@ Window {
                                                       shadersettings.rasterization = shadersettings.pixel_rasterization
                             }
                         }
-                        SimpleSlider{
-                            Layout.fillWidth: true
-                            value: shadersettings.rasterization_strength
-                            onValueChanged: shadersettings.rasterization_strength = value
-                        }
                     }
                 }
                 GroupBox{

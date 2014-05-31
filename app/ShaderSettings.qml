@@ -68,7 +68,6 @@ Item{
     readonly property int pixel_rasterization: 2
 
     property int rasterization: no_rasterization
-    property real rasterization_strength: 0.5
 
     property string frame_source: frames_list.get(frames_index).source
     property int frames_index: 1
@@ -241,7 +240,6 @@ Item{
             font_index: font_index,
             motion_blur: motion_blur,
             bloom_strength: bloom_strength,
-            rasterization_strength: rasterization_strength,
             rasterization: rasterization
         }
         return JSON.stringify(settings);
@@ -305,7 +303,6 @@ Item{
 
         font_index = settings.font_index !== undefined ? settings.font_index : font_index;
 
-        rasterization_strength = settings.rasterization_strength !== undefined ?  settings.rasterization_strength : rasterization_strength;
         rasterization = settings.rasterization !== undefined ? settings.rasterization : rasterization;
     }
 
@@ -362,7 +359,7 @@ Item{
         id: profileslist
         ListElement{
             text: "Default"
-            obj_string: '{"background_color":"#000000","bloom_strength":0.6,"brightness_flickering":0.12,"font_color":"#ff9400","font_index":0,"frames_index":1,"glowing_line_strength":0.4,"horizontal_sincronization":0.1,"motion_blur":0.65,"noise_strength":0.1,"rasterization":1,"rasterization_strength":0.5,"screen_distortion":0.15}'
+            obj_string: '{"background_color":"#000000","bloom_strength":0.6,"brightness_flickering":0.12,"font_color":"#ff9400","font_index":0,"frames_index":1,"glowing_line_strength":0.4,"horizontal_sincronization":0.1,"motion_blur":0.65,"noise_strength":0.1,"rasterization":1,"screen_distortion":0.15}'
             builtin: true
         }
         ListElement{
