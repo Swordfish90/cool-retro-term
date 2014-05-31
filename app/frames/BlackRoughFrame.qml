@@ -14,8 +14,8 @@ TerminalFrame{
     imageSource: "../images/black-frame.png"
     normalsSource: "../images/black-frame-normals.png"
 
-    rectX: 20
-    rectY: 20
+    rectX: 15
+    rectY: 15
 
     distortionCoefficient: 1.9
 

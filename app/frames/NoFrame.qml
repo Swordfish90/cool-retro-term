@@ -11,10 +11,9 @@ TerminalFrame{
     borderRight: 0
     borderTop: 0
     borderBottom: 0
-    sourceRect: Qt.rect(-15,
-                        -15,
-                        terminal.width + 30,
-                        terminal.height + 30)
+
+    rectX: 15
+    rectY: 15
 
     displacementLeft: 0
     displacementTop: 0
