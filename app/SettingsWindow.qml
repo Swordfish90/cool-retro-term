@@ -94,14 +94,11 @@ Window {
                             onCurrentIndexChanged: shadersettings.font_index = currentIndex
                         }
                         Text{text: qsTr("Font scaling:")}
-                        SpinBox{
+                        ComboBox{
                             Layout.fillWidth: true
-                            decimals: 2
-                            stepSize: 0.25
-                            value: shadersettings.font_scaling
-                            minimumValue: 0.5
-                            maximumValue: 2.0
-                            onValueChanged: shadersettings.font_scaling = value;
+                            model: shadersettings._font_scalings
+                            currentIndex: shadersettings.font_scaling_index
+                            onCurrentIndexChanged: shadersettings.font_scaling_index = currentIndex
                         }
                         Item{Layout.fillHeight: true}
                         ColorButton{

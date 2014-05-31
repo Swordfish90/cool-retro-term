@@ -75,7 +75,8 @@ Item{
     property var frames_list: framelist
 
     signal terminalFontChanged
-    property real font_scaling: 1.0
+
+    property var _font_scalings: [0.5, 0.75, 1.0, 1.25, 1.50, 1.75, 2.0]
     property var font: currentfont
     property int font_index: 0
     property var fonts_list: fontlist
@@ -88,20 +89,23 @@ Item{
     onProfiles_indexChanged: loadProfile(profiles_index);
 
     onFont_indexChanged: handleFontChanged();
-    onFont_scalingChanged: handleFontChanged();
+    onFont_scaling_indexChanged: handleFontChanged();
 
     function handleFontChanged(){
-        currentfont.source = fontlist.get(font_index).source;
-        currentfont.pixelSize = fontlist.get(font_index).pixelSize;
-        currentfont.lineSpacing = fontlist.get(font_index).lineSpacing;
+        var f = fontlist.get(font_index);
+        var metrics = f.metrics.get(font_scaling_index);
+        currentfont.source = f.source;
+        currentfont.pixelSize = metrics.px;
+        currentfont.lineSpacing = f.lineSpacing;
+        currentfont.virtualResolution = Qt.size(metrics.virtualWidth,
+                                                metrics.virtualHeight);
         terminalFontChanged();
     }
 
     FontLoader{
-        property int pixelSize: fontlist.get(font_index).pixelSize
-        property real lineSpacing: fontlist.get(font_index).lineSpacing
-        property real verticalPixelDensity: fontlist.get(font_index).verticalPixelDensity
-        property real horizontalPixelDensity: fontlist.get(font_index).horizontalPixelDensity
+        property int pixelSize
+        property real lineSpacing
+        property size virtualResolution
         id: currentfont
         source: fontlist.get(font_index).source
     }
@@ -113,63 +117,99 @@ Item{
         ListElement{text: "Rough black frame"; source: "./frames/BlackRoughFrame.qml"; reflections: true}
     }
 
+    property int font_scaling_index: 0
     ListModel{
         id: fontlist
         ListElement{
             text: "Terminus (Modern)"
             source: "fonts/modern-terminus/TerminusTTF-4.38.2.ttf"
-            pixelSize: 32
-            lineSpacing: 0.12
-            verticalPixelDensity: 12
-            horizontalPixelDensity: 12
+            lineSpacing: 1
+            metrics: [
+                ListElement{px: 18; virtualWidth: 3; virtualHeight: 6},
+                ListElement{px: 27; virtualWidth: 5; virtualHeight: 8},
+                ListElement{px: 36; virtualWidth: 6; virtualHeight: 11},
+                ListElement{px: 44; virtualWidth: 7; virtualHeight: 11},
+                ListElement{px: 54; virtualWidth: 7; virtualHeight: 11},
+                ListElement{px: 62; virtualWidth: 8; virtualHeight: 13},
+                ListElement{px: 71; virtualWidth: 7; virtualHeight: 13}]
         }
         ListElement{
             text: "Commodore PET (1977)"
             source: "fonts/1977-commodore-pet/COMMODORE_PET.ttf"
-            pixelSize: 25
-            lineSpacing: 0.1
-            verticalPixelDensity: 9
-            horizontalPixelDensity: 9
+            lineSpacing: 2
+            metrics: [
+                ListElement{px: 16; virtualWidth: 8; virtualHeight: 6},
+                ListElement{px: 20; virtualWidth: 7; virtualHeight: 6},
+                ListElement{px: 27; virtualWidth: 8; virtualHeight: 8},
+                ListElement{px: 34; virtualWidth: 8; virtualHeight: 8},
+                ListElement{px: 40; virtualWidth: 8; virtualHeight: 8},
+                ListElement{px: 44; virtualWidth: 8; virtualHeight: 8},
+                ListElement{px: 50; virtualWidth: 8; virtualHeight: 8}]
         }
         ListElement{
             text: "Apple ][ (1977)"
             source: "fonts/1977-apple2/PrintChar21.ttf"
-            pixelSize: 25
-            lineSpacing: 0.1
-            verticalPixelDensity: 9
-            horizontalPixelDensity: 10
+            lineSpacing: 2
+            metrics: [
+                ListElement{px: 15; virtualWidth: 6; virtualHeight: 5},
+                ListElement{px: 21; virtualWidth: 6; virtualHeight: 7},
+                ListElement{px: 27; virtualWidth: 7; virtualHeight: 8},
+                ListElement{px: 34; virtualWidth: 7; virtualHeight: 8},
+                ListElement{px: 40; virtualWidth: 7; virtualHeight: 8},
+                ListElement{px: 47; virtualWidth: 7; virtualHeight: 8},
+                ListElement{px: 54; virtualWidth: 7; virtualHeight: 8}]
         }
         ListElement{
             text: "Atari 400-800 (1979)"
             source: "fonts/1979-atari-400-800/ATARI400800_original.TTF"
-            pixelSize: 25
-            lineSpacing: 0.22
-            verticalPixelDensity: 10
-            horizontalPixelDensity: 10
+            lineSpacing: 3
+            metrics: [
+                ListElement{px: 16; virtualWidth: 8; virtualHeight: 8},
+                ListElement{px: 20; virtualWidth: 8; virtualHeight: 8},
+                ListElement{px: 25; virtualWidth: 8; virtualHeight: 8},
+                ListElement{px: 31; virtualWidth: 8; virtualHeight: 8},
+                ListElement{px: 38; virtualWidth: 8; virtualHeight: 8},
+                ListElement{px: 47; virtualWidth: 8; virtualHeight: 8},
+                ListElement{px: 54; virtualWidth: 8; virtualHeight: 8}]
         }
         ListElement{
             text: "Commodore 64 (1982)"
             source: "fonts/1982-commodore64/C64_User_Mono_v1.0-STYLE.ttf"
-            pixelSize: 25
-            lineSpacing: 0.22
-            verticalPixelDensity: 10
-            horizontalPixelDensity: 10
+            lineSpacing: 3
+            metrics: [
+                ListElement{px: 16; virtualWidth: 8; virtualHeight: 8},
+                ListElement{px: 20; virtualWidth: 8; virtualHeight: 8},
+                ListElement{px: 25; virtualWidth: 8; virtualHeight: 8},
+                ListElement{px: 31; virtualWidth: 8; virtualHeight: 8},
+                ListElement{px: 38; virtualWidth: 8; virtualHeight: 8},
+                ListElement{px: 47; virtualWidth: 8; virtualHeight: 8},
+                ListElement{px: 54; virtualWidth: 8; virtualHeight: 8}]
         }
         ListElement{
             text: "Atari ST (1985)"
             source: "fonts/1985-atari-st/AtariST8x16SystemFont.ttf"
-            pixelSize: 26
-            lineSpacing: 0.15
-            verticalPixelDensity: 11
-            horizontalPixelDensity: 12
+            lineSpacing: 4
+            metrics: [
+                ListElement{px: 16; virtualWidth: 3; virtualHeight: 5},
+                ListElement{px: 23; virtualWidth: 4; virtualHeight: 7},
+                ListElement{px: 30; virtualWidth: 4; virtualHeight: 10},
+                ListElement{px: 38; virtualWidth: 6; virtualHeight: 10},
+                ListElement{px: 44; virtualWidth: 7; virtualHeight: 14},
+                ListElement{px: 53; virtualWidth: 7; virtualHeight: 14},
+                ListElement{px: 58; virtualWidth: 7; virtualHeight: 14}]
         }
         ListElement{
             text: "IBM DOS (1985)"
             source: "fonts/1985-ibm-pc-vga/Perfect DOS VGA 437.ttf"
-            pixelSize: 32
-            lineSpacing: 0.17
-            verticalPixelDensity: 15
-            horizontalPixelDensity: 15
+            lineSpacing: 2
+            metrics: [
+                ListElement{px: 18; virtualWidth: 5; virtualHeight: 7},
+                ListElement{px: 25; virtualWidth: 5; virtualHeight: 9},
+                ListElement{px: 36; virtualWidth: 6; virtualHeight: 12},
+                ListElement{px: 45; virtualWidth: 7; virtualHeight: 15},
+                ListElement{px: 54; virtualWidth: 8; virtualHeight: 15},
+                ListElement{px: 62; virtualWidth: 8; virtualHeight: 15},
+                ListElement{px: 74; virtualWidth: 9; virtualHeight: 16}]
         }
     }
 
@@ -183,7 +223,7 @@ Item{
             brightness: brightness,
             contrast: contrast,
             ambient_light: ambient_light,
-            font_scaling: font_scaling,
+            font_scaling_index: font_scaling_index,
         }
         return JSON.stringify(settings);
     }
@@ -243,7 +283,7 @@ Item{
         fps = settings.fps !== undefined ? settings.fps: fps
         window_scaling = settings.window_scaling ? settings.window_scaling : window_scaling
 
-        font_scaling = settings.font_scaling !== undefined ? settings.font_scaling: font_scaling;
+        font_scaling_index = settings.font_scaling_index !== undefined ? settings.font_scaling_index: font_scaling_index;
     }
 
     function loadProfileString(profileString){

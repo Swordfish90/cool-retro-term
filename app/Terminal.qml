@@ -84,18 +84,27 @@ Item{
                 }
             }
 
+            Text{id: fontMetrics; text: "B"; visible: false}
+
             function handleFontChange(){
-                var scaling_factor = shadersettings.font_scaling * shadersettings.window_scaling;
-                var font_size = Math.ceil(shadersettings.font.pixelSize * scaling_factor);
-                var line_spacing = Math.ceil(shadersettings.font.lineSpacing * font_size);
+                var scaling_factor = shadersettings.window_scaling;
+                var font_size = shadersettings.font.pixelSize * scaling_factor;
                 font.pixelSize = font_size;
                 font.family = shadersettings.font.name;
+
+                fontMetrics.font = font;
+
+                var scanline_spacing = shadersettings.font.lineSpacing;
+                var scanline_height = fontMetrics.paintedHeight / shadersettings.font.virtualResolution.height;
+
+                var line_spacing = Math.round(scanline_spacing * scanline_height);
                 setLineSpacing(line_spacing);
             }
 
             onUpdatedImage: {blurredSource.live = true;livetimer.restart();}
             Component.onCompleted: {
                 shadersettings.terminalFontChanged.connect(handleFontChange);
+                handleFontChange();
                 forceActiveFocus();
             }
         }

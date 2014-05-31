@@ -26,16 +26,18 @@ ShaderEffect {
     property color background_color: shadersettings.background_color
     property variant source: theSource
     property variant bloomSource: bloomSource
-    property size txt_Size: Qt.size(width, height)
+    property size txt_Size: Qt.size(frame.sourceRect.width, frame.sourceRect.height)
     property real bloom: shadersettings.bloom_strength
 
     property int rasterization: shadersettings.rasterization
     property real rasterization_strength: shadersettings.rasterization_strength
     property real _lines: frame.sourceRect.height / terminal.paintedFontSize.height
-    property real _columns: frame.sourceRect.width / terminal.paintedFontSize.height
-    property real verticalPixelDensity: shadersettings.font.verticalPixelDensity
-    property real horizontalPixelDensity: shadersettings.font.horizontalPixelDensity
+    property real _columns: frame.sourceRect.width / terminal.paintedFontSize.width
+    property real verticalPixelDensity: shadersettings.font.virtualResolution.height + shadersettings.font.lineSpacing
+    property real horizontalPixelDensity: shadersettings.font.virtualResolution.width
     property size num_scanlines: Qt.size(_columns * horizontalPixelDensity, _lines * verticalPixelDensity)
+    property real scanlineHeight: frame.sourceRect.height / num_scanlines.height
+    property real scanlineWidth: frame.sourceRect.width / num_scanlines.width
 
     property real noise_strength: shadersettings.noise_strength
     property real screen_distorsion: shadersettings.screen_distortion
@@ -52,6 +54,9 @@ ShaderEffect {
     property real disp_right: frame.item.displacementRight * shadersettings.window_scaling
 
     property real brightness: shadersettings.brightness * 1.5 + 0.5
+
+    property real deltay: scanlineHeight / (frame.sourceRect.height)
+    property real deltax: scanlineWidth / (frame.sourceRect.width)
 
     property real time: timetimer.time
     property variant randomFunctionSource: randfuncsource
@@ -91,8 +96,8 @@ ShaderEffect {
                     "
                     void main() {
                         originalCoord = qt_MultiTexCoord0;
-                        qt_TexCoord0.x = -"+disp_left.toFixed(1)+"/txt_Size.x + qt_MultiTexCoord0.x / ((txt_Size.x -("+(disp_left+disp_right).toFixed(1)+")) / txt_Size.x);" +
-                        "qt_TexCoord0.y = -"+disp_top.toFixed(1)+"/txt_Size.y + qt_MultiTexCoord0.y / ((txt_Size.y -("+(disp_top+disp_bottom).toFixed(1)+")) / txt_Size.y);" +
+                        qt_TexCoord0.x = -"+disp_left.toFixed(8)+"/txt_Size.x + qt_MultiTexCoord0.x / ((txt_Size.x -("+(disp_left+disp_right).toFixed(8)+")) / txt_Size.x);" +
+                        "qt_TexCoord0.y = -"+disp_top.toFixed(8)+"/txt_Size.y + qt_MultiTexCoord0.y / ((txt_Size.y -("+(disp_top+disp_bottom).toFixed(8)+")) / txt_Size.y);" +
                         "vec2 coords = vec2(fract(time/(1024.0*2.0)), fract(time/(1024.0*1024.0)));" +
                         (brightness_flickering !== 0.0 ? "
                             brightness = 1.0 + (texture2D(randomFunctionSource, coords).g - 0.5) * "+brightness_flickering.toFixed(2)+";"
@@ -132,9 +137,9 @@ ShaderEffect {
 
     (rasterization !== shadersettings.no_rasterization ? "
     float getScanlineIntensity(vec2 coord){
-        float result = abs(sin(coord.y * "+(num_scanlines.height * Math.PI).toFixed(2)+"));" +
+        float result = abs(sin(coord.y * "+(num_scanlines.height * Math.PI).toFixed(8)+"));" +
         (rasterization === shadersettings.pixel_rasterization ? "
-            result *= abs(sin(coord.x * "+(num_scanlines.width * Math.PI).toFixed(2)+"));" : "") +
+            result *= abs(sin(coord.x * "+(num_scanlines.width * Math.PI).toFixed(8)+"));" : "") +
         "return result;
     }" : "") +
 
@@ -187,12 +192,12 @@ ShaderEffect {
 
         (rasterization !== shadersettings.no_rasterization ? "
             vec2 txt_coords = coords;
-            txt_coords.y = floor(coords.y * "+num_scanlines.height.toFixed(1)+") / "+num_scanlines.height.toFixed(1)+";" +
+            txt_coords.y = floor(coords.y * "+num_scanlines.height.toFixed(8)+") / "+num_scanlines.height.toFixed(8)+";" +
             (rasterization === shadersettings.pixel_rasterization ?
-                "txt_coords.x = floor(coords.x * "+num_scanlines.width.toFixed(1)+") / "+num_scanlines.width.toFixed(1)+";" : "")
+                "txt_coords.x = floor(coords.x * "+num_scanlines.width.toFixed(8)+") / "+num_scanlines.width.toFixed(8)+";" : "")
         : " vec2 txt_coords = coords;") +
 
-        "float color = texture2D(source, txt_coords).r;" +
+        "float color = texture2D(source, txt_coords + vec2("+(deltax * 0.5).toFixed(8)+", "+(deltay * 0.5).toFixed(8)+")).r;" +
 
         (noise_strength !== 0 ? "
             color += stepNoise(coords) * noise * (1.0 - distance * distance * 2.0);" : "") +
@@ -201,11 +206,11 @@ ShaderEffect {
             color += randomPass(txt_coords) * glowing_line_strength;" : "") +
 
         (rasterization !== shadersettings.no_rasterization ? "
-            color = mix(color, color * getScanlineIntensity(coords), "+ rasterization_strength.toFixed(1) +");"
+            color = mix(texture2D(source, coords).r, color * getScanlineIntensity(coords), "+ rasterization_strength.toFixed(8) +");"
         : "") +
 
         (bloom !== 0 ? "
-            color += texture2D(bloomSource, coords).r *" + (2.5 * bloom).toFixed(1) + ";" : "") +
+            color += texture2D(bloomSource, coords).r *" + (2.5 * bloom).toFixed(8) + ";" : "") +
 
         "vec3 finalColor = mix(background_color, font_color, color).rgb;" +
         "finalColor = mix(finalColor * 1.1, vec3(0.0), 1.2 * distance * distance);" +
@@ -213,7 +218,7 @@ ShaderEffect {
         (brightness_flickering !== 0 ? "
             finalColor *= brightness;" : "") +
 
-        "gl_FragColor = vec4(finalColor *"+brightness.toFixed(1)+", qt_Opacity);
+        "gl_FragColor = vec4(finalColor *"+brightness.toFixed(8)+", qt_Opacity);
     }"
 
      onStatusChanged: if (log) console.log(log) //Print warning messages
