@@ -24,19 +24,13 @@ import QtGraphicalEffects 1.0
 ShaderEffect {
     property color font_color: shadersettings.font_color
     property color background_color: shadersettings.background_color
-    property variant source: theSource
-    property variant bloomSource: bloomSource
+    property variant source: terminal.theSource
+    property variant bloomSource: terminal.bloomSource
+    property variant scanlineSource: terminal.scanlineSource
     property size txt_Size: Qt.size(frame.sourceRect.width, frame.sourceRect.height)
     property real bloom: shadersettings.bloom_strength
 
     property int rasterization: shadersettings.rasterization
-    property real _verticalResDensity: shadersettings.font.virtualResolution.height + shadersettings.font.lineSpacing
-    property real _horizontalResDensity: shadersettings.font.virtualResolution.width
-    property real _lines: frame.sourceRect.height / terminal.paintedFontSize.height
-    property real _columns: frame.sourceRect.width / terminal.paintedFontSize.width
-    property size virtual_resolution: Qt.size(_columns * _horizontalResDensity, _lines * _verticalResDensity)
-    property real scanlineHeight: frame.sourceRect.height / virtual_resolution.height
-    property real scanlineWidth: frame.sourceRect.width / virtual_resolution.width
 
     property real noise_strength: shadersettings.noise_strength
     property real screen_distorsion: shadersettings.screen_distortion
@@ -54,31 +48,11 @@ ShaderEffect {
 
     property real brightness: shadersettings.brightness * 1.5 + 0.5
 
-    property real deltay: scanlineHeight / (frame.sourceRect.height)
-    property real deltax: scanlineWidth / (frame.sourceRect.width)
-
     property real time: timetimer.time
     property variant randomFunctionSource: randfuncsource
 
     function str(num){
         return num.toFixed(8);
-    }
-
-    //Blurred texture used for bloom
-    Loader{
-        anchors.fill: parent
-        active: bloom !== 0
-        FastBlur{
-            radius: 32
-            anchors.fill: parent
-            source: theSource
-            transparentBorder: true
-            ShaderEffectSource{
-                id: bloomSource
-                sourceItem: parent
-                hideSource: true
-            }
-        }
     }
 
     vertexShader: "
@@ -122,9 +96,10 @@ ShaderEffect {
         varying highp vec2 qt_TexCoord0;
 
         uniform highp vec4 font_color;
-        uniform highp vec4 background_color;
+        uniform highp vec4 background_color;" +
 
-        uniform highp vec2 virtual_resolution;" +
+        (rasterization != shadersettings.no_rasterization ? "
+            uniform highp sampler2D scanlineSource;" : "") +
 
         (bloom !== 0 ? "
             uniform highp sampler2D bloomSource;" : "") +
@@ -139,14 +114,6 @@ ShaderEffect {
         (horizontal_sincronization !== 0 ? "
             varying lowp float horizontal_distortion;" : "") +
 
-        (rasterization !== shadersettings.no_rasterization ? "
-        float getScanlineIntensity(vec2 coord){
-            float result = abs(sin(coord.y * virtual_resolution.y * "+str(Math.PI)+" ));" +
-            (rasterization === shadersettings.pixel_rasterization ? "
-                result *= abs(sin(coord.x * virtual_resolution.x * "+str(Math.PI)+"));" : "") +
-            "return result;
-        }" : "") +
-
         "
         highp float rand(vec2 co)
         {
@@ -159,7 +126,7 @@ ShaderEffect {
         }
 
         float stepNoise(vec2 p){
-            vec2 newP = p * virtual_resolution;
+            vec2 newP = p * txt_Size * 0.5;
             return rand(floor(newP) + fract(time / 100.0));
         }" +
 
@@ -194,29 +161,22 @@ ShaderEffect {
                     noise += horizontal_distortion;" : "")
             : "") +
 
-            (rasterization !== shadersettings.no_rasterization ? "
-                vec2 txt_coords = coords;
-                txt_coords.y = floor(coords.y * virtual_resolution.y) / virtual_resolution.y;" +
-                (rasterization === shadersettings.pixel_rasterization ?
-                    "txt_coords.x = floor(coords.x * virtual_resolution.x) / virtual_resolution.x;" : "")
-            : " vec2 txt_coords = coords;") +
-
-            "float color = texture2D(source, txt_coords + vec2("+str(deltax * 0.5)+", "+str(deltay * 0.5)+")).r;" +
+            "float color = texture2D(source, coords).r;" +
 
             (noise_strength !== 0 ? "
                 color += stepNoise(coords) * noise * (1.0 - distance * distance * 2.0);" : "") +
 
-            (rasterization !== shadersettings.no_rasterization ? "
-                color = color * getScanlineIntensity(coords);" : "") +
-
             (glowing_line_strength !== 0 ? "
-                color += randomPass(txt_coords) * glowing_line_strength;" : "") +
+                color += randomPass(coords) * glowing_line_strength;" : "") +
 
             (bloom !== 0 ? "
                 color += texture2D(bloomSource, coords).r *" + str(2.5 * bloom) + ";" : "") +
 
             "vec3 finalColor = mix(background_color, font_color, color).rgb;" +
             "finalColor = mix(finalColor * 1.1, vec3(0.0), 1.2 * distance * distance);" +
+
+            (rasterization != shadersettings.no_rasterization ? "
+                finalColor *= texture2D(scanlineSource, coords).r;" : "") +
 
             (brightness_flickering !== 0 ? "
                 finalColor *= brightness;" : "") +

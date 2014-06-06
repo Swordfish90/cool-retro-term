@@ -133,16 +133,8 @@ ApplicationWindow{
         }
         Terminal{
             id: terminal
-            anchors.centerIn: parent
-            property int frameOffsetX: frame.item.addedWidth -  frame.item.borderLeft - frame.item.borderRight
-            property int frameOffsetY: frame.item.addedHeight - frame.item.borderTop  - frame.item.borderBottom
-            width: parent.width + frameOffsetX * shadersettings.window_scaling
-            height: parent.height + frameOffsetY * shadersettings.window_scaling
-        }
-        ShaderEffectSource{
-            id: theSource
-            sourceItem: terminal
-            sourceRect: frame.sourceRect
+            anchors.fill: parent
+            anchors.margins: 30
         }
         ShaderManager{
             id: shadercontainer

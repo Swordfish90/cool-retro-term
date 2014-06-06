@@ -94,7 +94,7 @@ Item{
         var f = fontlist.get(font_index);
         var metrics = f.metrics.get(font_scaling_index);
         currentfont.source = f.source;
-        currentfont.pixelSize = metrics.px;
+        currentfont.pixelSize = metrics.pixelSize;
         currentfont.lineSpacing = f.lineSpacing;
         currentfont.virtualResolution = Qt.size(metrics.virtualWidth,
                                                 metrics.virtualHeight);
@@ -121,94 +121,94 @@ Item{
         id: fontlist
         ListElement{
             text: "Terminus (Modern)"
-            source: "fonts/modern-terminus/TerminusTTF-4.38.2.ttf"
-            lineSpacing: 1
+            source: "fonts/modern-terminus/TerminusTTF-Bold-4.38.2.ttf"
+            lineSpacing: 2
             metrics: [
-                ListElement{px: 18; virtualWidth: 3; virtualHeight: 6},
-                ListElement{px: 27; virtualWidth: 5; virtualHeight: 8},
-                ListElement{px: 36; virtualWidth: 6; virtualHeight: 11},
-                ListElement{px: 44; virtualWidth: 7; virtualHeight: 11},
-                ListElement{px: 54; virtualWidth: 7; virtualHeight: 11},
-                ListElement{px: 62; virtualWidth: 8; virtualHeight: 13},
-                ListElement{px: 71; virtualWidth: 7; virtualHeight: 13}]
+                ListElement{pixelSize: 18; virtualWidth: 0; virtualHeight: 6},
+                ListElement{pixelSize: 24; virtualWidth: 0; virtualHeight: 8},
+                ListElement{pixelSize: 35; virtualWidth: 5; virtualHeight: 12},
+                ListElement{pixelSize: 47; virtualWidth: 6; virtualHeight: 11},
+                ListElement{pixelSize: 54; virtualWidth: 7; virtualHeight: 11},
+                ListElement{pixelSize: 64; virtualWidth: 8; virtualHeight: 11},
+                ListElement{pixelSize: 75; virtualWidth: 8; virtualHeight: 11}]
         }
         ListElement{
             text: "Commodore PET (1977)"
             source: "fonts/1977-commodore-pet/COMMODORE_PET.ttf"
             lineSpacing: 2
             metrics: [
-                ListElement{px: 16; virtualWidth: 8; virtualHeight: 6},
-                ListElement{px: 20; virtualWidth: 7; virtualHeight: 6},
-                ListElement{px: 27; virtualWidth: 8; virtualHeight: 8},
-                ListElement{px: 34; virtualWidth: 8; virtualHeight: 8},
-                ListElement{px: 40; virtualWidth: 8; virtualHeight: 8},
-                ListElement{px: 44; virtualWidth: 8; virtualHeight: 8},
-                ListElement{px: 50; virtualWidth: 8; virtualHeight: 8}]
+                ListElement{pixelSize: 11; virtualWidth: 0; virtualHeight: 0},
+                ListElement{pixelSize: 17; virtualWidth: 0; virtualHeight: 6},
+                ListElement{pixelSize: 24; virtualWidth: 8; virtualHeight: 8},
+                ListElement{pixelSize: 32; virtualWidth: 8; virtualHeight: 8},
+                ListElement{pixelSize: 40; virtualWidth: 8; virtualHeight: 8},
+                ListElement{pixelSize: 48; virtualWidth: 8; virtualHeight: 8},
+                ListElement{pixelSize: 56; virtualWidth: 8; virtualHeight: 8}]
         }
         ListElement{
             text: "Apple ][ (1977)"
             source: "fonts/1977-apple2/PrintChar21.ttf"
             lineSpacing: 2
             metrics: [
-                ListElement{px: 15; virtualWidth: 6; virtualHeight: 5},
-                ListElement{px: 21; virtualWidth: 6; virtualHeight: 7},
-                ListElement{px: 27; virtualWidth: 7; virtualHeight: 8},
-                ListElement{px: 34; virtualWidth: 7; virtualHeight: 8},
-                ListElement{px: 40; virtualWidth: 7; virtualHeight: 8},
-                ListElement{px: 47; virtualWidth: 7; virtualHeight: 8},
-                ListElement{px: 54; virtualWidth: 7; virtualHeight: 8}]
+                ListElement{pixelSize: 11; virtualWidth: 0; virtualHeight: 0},
+                ListElement{pixelSize: 17; virtualWidth: 0; virtualHeight: 6},
+                ListElement{pixelSize: 24; virtualWidth: 7; virtualHeight: 8},
+                ListElement{pixelSize: 32; virtualWidth: 7; virtualHeight: 8},
+                ListElement{pixelSize: 40; virtualWidth: 7; virtualHeight: 8},
+                ListElement{pixelSize: 48; virtualWidth: 7; virtualHeight: 8},
+                ListElement{pixelSize: 56; virtualWidth: 7; virtualHeight: 8}]
         }
         ListElement{
             text: "Atari 400-800 (1979)"
             source: "fonts/1979-atari-400-800/ATARI400800_original.TTF"
             lineSpacing: 3
             metrics: [
-                ListElement{px: 16; virtualWidth: 8; virtualHeight: 8},
-                ListElement{px: 20; virtualWidth: 8; virtualHeight: 8},
-                ListElement{px: 25; virtualWidth: 8; virtualHeight: 8},
-                ListElement{px: 31; virtualWidth: 8; virtualHeight: 8},
-                ListElement{px: 38; virtualWidth: 8; virtualHeight: 8},
-                ListElement{px: 47; virtualWidth: 8; virtualHeight: 8},
-                ListElement{px: 54; virtualWidth: 8; virtualHeight: 8}]
+                ListElement{pixelSize: 11; virtualWidth: 0; virtualHeight: 0},
+                ListElement{pixelSize: 17; virtualWidth: 0; virtualHeight: 6},
+                ListElement{pixelSize: 24; virtualWidth: 8; virtualHeight: 8},
+                ListElement{pixelSize: 32; virtualWidth: 8; virtualHeight: 8},
+                ListElement{pixelSize: 40; virtualWidth: 8; virtualHeight: 8},
+                ListElement{pixelSize: 48; virtualWidth: 8; virtualHeight: 8},
+                ListElement{pixelSize: 56; virtualWidth: 8; virtualHeight: 8}]
         }
         ListElement{
             text: "Commodore 64 (1982)"
             source: "fonts/1982-commodore64/C64_User_Mono_v1.0-STYLE.ttf"
             lineSpacing: 3
             metrics: [
-                ListElement{px: 16; virtualWidth: 8; virtualHeight: 8},
-                ListElement{px: 20; virtualWidth: 8; virtualHeight: 8},
-                ListElement{px: 25; virtualWidth: 8; virtualHeight: 8},
-                ListElement{px: 31; virtualWidth: 8; virtualHeight: 8},
-                ListElement{px: 38; virtualWidth: 8; virtualHeight: 8},
-                ListElement{px: 47; virtualWidth: 8; virtualHeight: 8},
-                ListElement{px: 54; virtualWidth: 8; virtualHeight: 8}]
+                ListElement{pixelSize: 11; virtualWidth: 0; virtualHeight: 0},
+                ListElement{pixelSize: 17; virtualWidth: 0; virtualHeight: 6},
+                ListElement{pixelSize: 24; virtualWidth: 8; virtualHeight: 8},
+                ListElement{pixelSize: 32; virtualWidth: 8; virtualHeight: 8},
+                ListElement{pixelSize: 40; virtualWidth: 8; virtualHeight: 8},
+                ListElement{pixelSize: 48; virtualWidth: 8; virtualHeight: 8},
+                ListElement{pixelSize: 56; virtualWidth: 8; virtualHeight: 8}]
         }
         ListElement{
             text: "Atari ST (1985)"
             source: "fonts/1985-atari-st/AtariST8x16SystemFont.ttf"
-            lineSpacing: 4
+            lineSpacing: 2
             metrics: [
-                ListElement{px: 16; virtualWidth: 3; virtualHeight: 5},
-                ListElement{px: 23; virtualWidth: 4; virtualHeight: 7},
-                ListElement{px: 30; virtualWidth: 4; virtualHeight: 10},
-                ListElement{px: 38; virtualWidth: 6; virtualHeight: 10},
-                ListElement{px: 44; virtualWidth: 7; virtualHeight: 14},
-                ListElement{px: 53; virtualWidth: 7; virtualHeight: 14},
-                ListElement{px: 58; virtualWidth: 7; virtualHeight: 14}]
+                ListElement{pixelSize: 16; virtualWidth: 0; virtualHeight: 0},
+                ListElement{pixelSize: 23; virtualWidth: 0; virtualHeight: 7},
+                ListElement{pixelSize: 32; virtualWidth: 4; virtualHeight: 8},
+                ListElement{pixelSize: 40; virtualWidth: 4; virtualHeight: 8},
+                ListElement{pixelSize: 48; virtualWidth: 4; virtualHeight: 8},
+                ListElement{pixelSize: 56; virtualWidth: 4; virtualHeight: 8},
+                ListElement{pixelSize: 64; virtualWidth: 8; virtualHeight: 16}]
         }
         ListElement{
             text: "IBM DOS (1985)"
             source: "fonts/1985-ibm-pc-vga/Perfect DOS VGA 437.ttf"
             lineSpacing: 2
             metrics: [
-                ListElement{px: 18; virtualWidth: 5; virtualHeight: 7},
-                ListElement{px: 25; virtualWidth: 5; virtualHeight: 9},
-                ListElement{px: 36; virtualWidth: 6; virtualHeight: 12},
-                ListElement{px: 45; virtualWidth: 7; virtualHeight: 15},
-                ListElement{px: 54; virtualWidth: 8; virtualHeight: 15},
-                ListElement{px: 62; virtualWidth: 8; virtualHeight: 15},
-                ListElement{px: 74; virtualWidth: 9; virtualHeight: 16}]
+                ListElement{pixelSize: 18; virtualWidth: 0; virtualHeight: 0},
+                ListElement{pixelSize: 25; virtualWidth: 0; virtualHeight: 0},
+                ListElement{pixelSize: 32; virtualWidth: 6; virtualHeight: 8},
+                ListElement{pixelSize: 36; virtualWidth: 6; virtualHeight: 12},
+                ListElement{pixelSize: 48; virtualWidth: 9; virtualHeight: 16},
+                ListElement{pixelSize: 56; virtualWidth: 9; virtualHeight: 16},
+                ListElement{pixelSize: 64; virtualWidth: 9; virtualHeight: 16}]
         }
     }
 
