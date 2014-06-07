@@ -30,6 +30,8 @@ Item{
     property variant bloomSource: bloomSourceLoader.item
     property variant scanlineSource: scanlineSourceLoader.item
 
+    property alias kterminal: kterminal
+
     //The blur effect has to take into account the framerate
     property real fpsAttenuation: 60 / shadersettings.fps
     property real mBlur: shadersettings.motion_blur
@@ -161,9 +163,18 @@ Item{
             }
         }
 
-        function correctDistortion(x, y){
+        //Frame displacement properties
+        property real dtop: frame.item.displacementTop
+        property real dleft:frame.item.displacementLeft
+        property real dright: frame.item.displacementRight
+        property real dbottom: frame.item.displacementBottom
+
+        function correctDistortion(x, y){            
             x = x / width;
             y = y / height;
+
+            x = (-dleft + x * (width + dleft + dright)) / width
+            y = (-dtop  + y * (height + dtop + dbottom)) / height
 
             var cc = Qt.size(0.5 - x, 0.5 - y);
             var distortion = (cc.height * cc.height + cc.width * cc.width) * shadersettings.screen_distortion;
