@@ -26,7 +26,7 @@ ShaderEffect {
     property color background_color: shadersettings.background_color
     property variant source: terminal.theSource
     property variant bloomSource: terminal.bloomSource
-    property variant scanlineSource: terminal.scanlineSource
+    property variant rasterizationSource: terminal.rasterizationSource
     property size txt_Size: Qt.size(frame.sourceRect.width, frame.sourceRect.height)
     property real bloom: shadersettings.bloom_strength
 
@@ -96,10 +96,8 @@ ShaderEffect {
         varying highp vec2 qt_TexCoord0;
 
         uniform highp vec4 font_color;
-        uniform highp vec4 background_color;" +
-
-        (rasterization != shadersettings.no_rasterization ? "
-            uniform highp sampler2D scanlineSource;" : "") +
+        uniform highp vec4 background_color;
+        uniform highp sampler2D rasterizationSource;" +
 
         (bloom !== 0 ? "
             uniform highp sampler2D bloomSource;" : "") +
@@ -174,9 +172,7 @@ ShaderEffect {
 
             "vec3 finalColor = mix(background_color, font_color, color).rgb;" +
             "finalColor = mix(finalColor * 1.1, vec3(0.0), 1.2 * distance * distance);" +
-
-            (rasterization != shadersettings.no_rasterization ? "
-                finalColor *= texture2D(scanlineSource, coords).r;" : "") +
+            "finalColor *= texture2D(rasterizationSource, coords).r;" +
 
             (brightness_flickering !== 0 ? "
                 finalColor *= brightness;" : "") +

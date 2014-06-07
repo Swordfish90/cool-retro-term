@@ -28,9 +28,13 @@ Item{
     id: terminalContainer
     property variant theSource: finalSource
     property variant bloomSource: bloomSourceLoader.item
-    property variant scanlineSource: scanlineSourceLoader.item
+    property variant rasterizationSource: rasterizationEffectSource
 
     property alias kterminal: kterminal
+
+    signal sizeChanged
+    onWidthChanged: sizeChanged()
+    onHeightChanged: sizeChanged()
 
     //The blur effect has to take into account the framerate
     property real fpsAttenuation: 60 / shadersettings.fps
@@ -106,9 +110,9 @@ Item{
             var scanline_spacing = shadersettings.font.lineSpacing;
             var line_spacing = Math.round(scanline_spacing * scanline_height);
 
-//            console.log("Font height: " + fontMetrics.paintedHeight)
-//            console.log("Scanline Height: " + scanline_height)
-//            console.log("Line Spacing: " + line_spacing)
+            //            console.log("Font height: " + fontMetrics.paintedHeight)
+            //            console.log("Scanline Height: " + scanline_height)
+            //            console.log("Line Spacing: " + line_spacing)
 
             terminalContainer.scanlineHeight = scanline_height;
             terminalContainer.scanlineWidth = scanline_width;
@@ -169,7 +173,7 @@ Item{
         property real dright: frame.item.displacementRight
         property real dbottom: frame.item.displacementBottom
 
-        function correctDistortion(x, y){            
+        function correctDistortion(x, y){
             x = x / width;
             y = y / height;
 
@@ -282,40 +286,36 @@ Item{
             smooth: false
         }
     }
-    //Scanlines
-    Loader{
-        id: scanlineEffectLoader
-        active: mScanlines != shadersettings.no_rasterization
+    //Rasterization mask
+    ShaderEffect {
+        id: rasterizationEffect
         anchors.fill: parent
-        sourceComponent: ShaderEffect {
-            property size virtual_resolution: terminalContainer.virtual_resolution
+        property size virtual_resolution: terminalContainer.virtual_resolution
 
-            fragmentShader:
-                "uniform lowp float qt_Opacity;" +
+        fragmentShader:
+            "uniform lowp float qt_Opacity;" +
 
-                "varying highp vec2 qt_TexCoord0;
+            "varying highp vec2 qt_TexCoord0;
                  uniform highp vec2 virtual_resolution;
 
                  float getScanlineIntensity(vec2 coords) {
-                    float result = abs(sin(coords.y * virtual_resolution.y * "+Math.PI+"));" +
-            (mScanlines == shadersettings.pixel_rasterization ?
-            "result *= abs(sin(coords.x * virtual_resolution.x * "+Math.PI+"));" : "") + "
+                    float result = 1.0;" +
+                    (mScanlines != shadersettings.no_rasterization ?
+                        "result *= abs(sin(coords.y * virtual_resolution.y * "+Math.PI+"));" : "") +
+                    (mScanlines == shadersettings.pixel_rasterization ?
+                        "result *= abs(sin(coords.x * virtual_resolution.x * "+Math.PI+"));" : "") + "
                     return result;
                  }" +
 
-            "void main() {" +
-                "gl_FragColor = vec4(getScanlineIntensity(qt_TexCoord0));" +
-            "}"
-        }
+        "void main() {" +
+            "gl_FragColor = vec4(getScanlineIntensity(qt_TexCoord0));" +
+        "}"
     }
-    Loader{
-        id: scanlineSourceLoader
-        active: mScanlines != shadersettings.no_rasterization
-        sourceComponent: ShaderEffectSource{
-            sourceItem: scanlineEffectLoader.item
-            sourceRect: frame.sourceRect
-            hideSource: true
-            smooth: true
-        }
+    ShaderEffectSource{
+        id: rasterizationEffectSource
+        sourceItem: rasterizationEffect
+        sourceRect: frame.sourceRect
+        hideSource: true
+        smooth: true
     }
 }
