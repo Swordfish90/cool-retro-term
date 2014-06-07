@@ -127,7 +127,7 @@ Item{
                 ListElement{pixelSize: 18; virtualWidth: 0; virtualHeight: 6},
                 ListElement{pixelSize: 24; virtualWidth: 0; virtualHeight: 8},
                 ListElement{pixelSize: 35; virtualWidth: 5; virtualHeight: 12},
-                ListElement{pixelSize: 47; virtualWidth: 6; virtualHeight: 11},
+                ListElement{pixelSize: 43; virtualWidth: 6; virtualHeight: 11},
                 ListElement{pixelSize: 54; virtualWidth: 7; virtualHeight: 11},
                 ListElement{pixelSize: 64; virtualWidth: 8; virtualHeight: 11},
                 ListElement{pixelSize: 75; virtualWidth: 8; virtualHeight: 11}]

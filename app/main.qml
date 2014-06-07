@@ -88,6 +88,10 @@ ApplicationWindow{
         }
     }
 
+    ShaderSettings{
+        id: shadersettings
+    }
+
     Loader{
         id: frame
         property rect sourceRect: Qt.rect(-item.rectX * shadersettings.window_scaling,
@@ -142,9 +146,6 @@ ApplicationWindow{
             z: 1.9
         }
     }
-    ShaderSettings{
-        id: shadersettings
-    }
     SettingsWindow{
         id: settingswindow
         visible: false
@@ -157,9 +158,5 @@ ApplicationWindow{
         sourceComponent: SizeOverlay{
             terminalSize: terminal.terminalSize
         }
-    }
-
-    Component.onCompleted: {
-        terminal.loadKTerminal();
     }
 }

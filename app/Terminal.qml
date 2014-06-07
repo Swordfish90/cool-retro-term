@@ -47,7 +47,7 @@ Item{
     property int mScanlines: shadersettings.rasterization
     onMScanlinesChanged: restartBlurredSource()
 
-    property size terminalSize
+    property size terminalSize: kterminal.terminalSize
     property size paintedTextSize
 
     onPaintedTextSizeChanged: console.log(paintedTextSize)
@@ -60,79 +60,64 @@ Item{
         blurredSource.live = true;
         livetimer.restart()
     }
-    function loadKTerminal(){
-        kterminal.active = true;
-    }
-    function unloadKTerminal(){
-        kterminal.active = false;
-    }
     function pasteClipboard(){
-        kterminal.item.pasteClipboard();
+        kterminal.pasteClipboard();
     }
     function copyClipboard(){
-        kterminal.item.copyClipboard();
+        kterminal.copyClipboard();
     }
 
-    Loader{
+
+    KTerminal {
         id: kterminal
-        active: false
         anchors.fill: parent
+        font.pixelSize: shadersettings.font.pixelSize
+        font.family: shadersettings.font.name
 
-        sourceComponent: KTerminal {
-            id: ktermitem
-            font.pixelSize: shadersettings.font.pixelSize
-            font.family: shadersettings.font.name
+        colorScheme: "MyWhiteOnBlack"
 
-            colorScheme: "MyWhiteOnBlack"
+        session: KSession {
+            id: ksession
+            kbScheme: "linux"
 
-            onTerminalSizeChanged: terminalContainer.terminalSize = ktermitem.terminalSize
-
-            session: KSession {
-                id: ksession
-                kbScheme: "linux"
-
-                onFinished: {
-                    Qt.quit()
-                }
+            onFinished: {
+                Qt.quit()
             }
+        }
 
-            Text{id: fontMetrics; text: "B"; visible: false}
+        Text{id: fontMetrics; text: "B"; visible: false}
 
-            function handleFontChange(){
-                var scaling_factor = shadersettings.window_scaling;
-                var font_size = shadersettings.font.pixelSize * scaling_factor;
-                font.pixelSize = font_size;
-                font.family = shadersettings.font.name;
+        function handleFontChange(){
+            var scaling_factor = shadersettings.window_scaling;
+            var font_size = shadersettings.font.pixelSize * scaling_factor;
+            font.pixelSize = font_size;
+            font.family = shadersettings.font.name;
 
-                fontMetrics.font = font;
+            fontMetrics.font = font;
 
-                var vertical_density = shadersettings.font.virtualResolution.height;
-                var horizontal_density = shadersettings.font.virtualResolution.width;
+            var vertical_density = shadersettings.font.virtualResolution.height;
+            var horizontal_density = shadersettings.font.virtualResolution.width;
 
-                var scanline_height = fontMetrics.paintedHeight / vertical_density;
-                var scanline_width = fontMetrics.paintedWidth / horizontal_density;
+            var scanline_height = fontMetrics.paintedHeight / vertical_density;
+            var scanline_width = fontMetrics.paintedWidth / horizontal_density;
 
-                console.log("Font height: " + fontMetrics.paintedHeight)
+            var scanline_spacing = shadersettings.font.lineSpacing;
+            var line_spacing = Math.round(scanline_spacing * scanline_height);
 
-                var scanline_spacing = shadersettings.font.lineSpacing;
-                var line_spacing = Math.round(scanline_spacing * scanline_height);
+//            console.log("Font height: " + fontMetrics.paintedHeight)
+//            console.log("Scanline Height: " + scanline_height)
+//            console.log("Line Spacing: " + line_spacing)
 
-                console.log("Scanline Height: " + scanline_height)
-                console.log("Line Spacing: " + line_spacing)
+            terminalContainer.scanlineHeight = scanline_height;
+            terminalContainer.scanlineWidth = scanline_width;
 
-                terminalContainer.scanlineHeight = scanline_height;
-                terminalContainer.scanlineWidth = scanline_width;
-
-                setLineSpacing(line_spacing);
-                restartBlurredSource();
-            }
-
-            onUpdatedImage: {blurredSource.live = true;livetimer.restart();}
-            Component.onCompleted: {
-                shadersettings.terminalFontChanged.connect(handleFontChange);
-                handleFontChange();
-                forceActiveFocus();
-            }
+            setLineSpacing(line_spacing);
+            restartBlurredSource();
+        }
+        Component.onCompleted: {
+            shadersettings.terminalFontChanged.connect(handleFontChange);
+            handleFontChange();
+            forceActiveFocus();
         }
     }
     Menu{
@@ -146,33 +131,33 @@ Item{
         acceptedButtons: Qt.LeftButton | Qt.MiddleButton | Qt.RightButton
         anchors.fill: parent
         onWheel:
-            wheel.angleDelta.y > 0 ? kterminal.item.scrollUp() : kterminal.item.scrollDown()
+            wheel.angleDelta.y > 0 ? kterminal.scrollUp() : kterminal.scrollDown()
         onClicked: {
             if (mouse.button == Qt.RightButton){
                 contextmenu.popup();
             } else if (mouse.button == Qt.MiddleButton){
-                kterminal.item.pasteSelection();
+                kterminal.pasteSelection();
             }
         }
         onDoubleClicked: {
             if (mouse.button == Qt.LeftButton){
                 var coord = correctDistortion(mouse.x, mouse.y);
-                kterminal.item.mouseDoubleClick(coord.width, coord.height);
+                kterminal.mouseDoubleClick(coord.width, coord.height);
             }
         }
         onPositionChanged: {
             var coord = correctDistortion(mouse.x, mouse.y);
-            kterminal.item.mouseMove(coord.width, coord.height);
+            kterminal.mouseMove(coord.width, coord.height);
         }
         onPressed: {
             if (mouse.button == Qt.LeftButton){
                 var coord = correctDistortion(mouse.x, mouse.y);
-                kterminal.item.mousePress(coord.width, coord.height);
+                kterminal.mousePress(coord.width, coord.height);
             }
         }
         onReleased: {
             if (mouse.button == Qt.LeftButton){
-                kterminal.item.mouseRelease(mouse.x, mouse.y);
+                kterminal.mouseRelease(mouse.x, mouse.y);
             }
         }
 
@@ -206,6 +191,12 @@ Item{
             id: livetimer
             running: true
             onTriggered: parent.live = false;
+
+            function updateImageHandler(){
+                livetimer.restart();
+                blurredSource.live = true;
+            }
+            Component.onCompleted: kterminal.updatedImage.connect(updateImageHandler);
         }
     }
     ShaderEffectSource{
@@ -220,7 +211,7 @@ Item{
         property variant blurredSource: (mBlur !== 0) ? blurredSource : undefined
         property size virtual_resolution: parent.virtual_resolution
         property size delta: Qt.size((mScanlines == shadersettings.pixel_rasterization ? deltax : 0),
-                                      mScanlines != shadersettings.no_rasterization ? deltay : 0)
+                                     mScanlines != shadersettings.no_rasterization ? deltay : 0)
         z: 2
 
         fragmentShader:
@@ -232,28 +223,28 @@ Item{
 
              uniform highp vec2 virtual_resolution;" +
 
-            (mBlur !== 0 ?
-                 "uniform lowp sampler2D blurredSource;"
-            : "") +
+        (mBlur !== 0 ?
+        "uniform lowp sampler2D blurredSource;"
+        : "") +
 
-            "void main() {" +
-                "vec2 coords = qt_TexCoord0;" +
-                (mScanlines != shadersettings.no_rasterization ? "
+        "void main() {" +
+        "vec2 coords = qt_TexCoord0;" +
+        (mScanlines != shadersettings.no_rasterization ? "
                     coords.y = floor(virtual_resolution.y * coords.y) / virtual_resolution.y;" +
-                    (mScanlines == shadersettings.pixel_rasterization ? "
+        (mScanlines == shadersettings.pixel_rasterization ? "
                         coords.x = floor(virtual_resolution.x * coords.x) / virtual_resolution.x;" : "")
-                : "") +
+        : "") +
 
-                "float color = texture2D(source, coords + delta).r * 256.0;" +
-                (mBlur !== 0 ?
-                     "float blurredSourceColor = texture2D(blurredSource, qt_TexCoord0).r * 256.0;" +
-                     "blurredSourceColor = blurredSourceColor - blurredSourceColor * " + (1.0 - motionBlurCoefficient) * fpsAttenuation+ ";" +
-                     "color = step(1.0, color) * color + step(color, 1.0) * blurredSourceColor;"
-                : "") +
+        "float color = texture2D(source, coords + delta).r * 256.0;" +
+        (mBlur !== 0 ?
+        "float blurredSourceColor = texture2D(blurredSource, qt_TexCoord0).r * 256.0;" +
+        "blurredSourceColor = blurredSourceColor - blurredSourceColor * " + (1.0 - motionBlurCoefficient) * fpsAttenuation+ ";" +
+        "color = step(1.0, color) * color + step(color, 1.0) * blurredSourceColor;"
+        : "") +
 
 
-                "gl_FragColor = vec4(vec3(floor(color) / 256.0), 1.0);" +
-            "}"
+        "gl_FragColor = vec4(vec3(floor(color) / 256.0), 1.0);" +
+        "}"
     }
     //////////////////////////////////////////////////////////////////////
     //EFFECTS
@@ -296,14 +287,14 @@ Item{
 
                  float getScanlineIntensity(vec2 coords) {
                     float result = abs(sin(coords.y * virtual_resolution.y * "+Math.PI+"));" +
-                    (mScanlines == shadersettings.pixel_rasterization ?
-                        "result *= abs(sin(coords.x * virtual_resolution.x * "+Math.PI+"));" : "") + "
+            (mScanlines == shadersettings.pixel_rasterization ?
+            "result *= abs(sin(coords.x * virtual_resolution.x * "+Math.PI+"));" : "") + "
                     return result;
                  }" +
 
-                "void main() {" +
-                    "gl_FragColor = vec4(getScanlineIntensity(qt_TexCoord0));" +
-                "}"
+            "void main() {" +
+                "gl_FragColor = vec4(getScanlineIntensity(qt_TexCoord0));" +
+            "}"
         }
     }
     Loader{
