@@ -73,7 +73,6 @@ Item{
         kterminal.copyClipboard();
     }
 
-
     KTerminal {
         id: kterminal
         anchors.fill: parent
@@ -218,6 +217,7 @@ Item{
         id: finalSource
         sourceItem: blurredterminal
         sourceRect: frame.sourceRect
+        format: ShaderEffectSource.Alpha
     }
     ShaderEffect {
         id: blurredterminal
@@ -252,13 +252,13 @@ Item{
 
         "float color = texture2D(source, coords + delta).r * 256.0;" +
         (mBlur !== 0 ?
-        "float blurredSourceColor = texture2D(blurredSource, qt_TexCoord0).r * 256.0;" +
+        "float blurredSourceColor = texture2D(blurredSource, qt_TexCoord0).a * 256.0;" +
         "blurredSourceColor = blurredSourceColor - blurredSourceColor * " + (1.0 - motionBlurCoefficient) * fpsAttenuation+ ";" +
         "color = step(1.0, color) * color + step(color, 1.0) * blurredSourceColor;"
         : "") +
 
 
-        "gl_FragColor = vec4(vec3(floor(color) / 256.0), 1.0);" +
+        "gl_FragColor.a = vec4(floor(color) / 256.0);" +
         "}"
     }
     //////////////////////////////////////////////////////////////////////
@@ -308,7 +308,7 @@ Item{
                  }" +
 
         "void main() {" +
-            "gl_FragColor = vec4(getScanlineIntensity(qt_TexCoord0));" +
+            "gl_FragColor.a = getScanlineIntensity(qt_TexCoord0);" +
         "}"
     }
     ShaderEffectSource{
@@ -317,5 +317,6 @@ Item{
         sourceRect: frame.sourceRect
         hideSource: true
         smooth: true
+        format: ShaderEffectSource.Alpha
     }
 }

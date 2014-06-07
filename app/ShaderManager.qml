@@ -159,7 +159,7 @@ ShaderEffect {
                     noise += horizontal_distortion;" : "")
             : "") +
 
-            "float color = texture2D(source, coords).r;" +
+            "float color = texture2D(source, coords).a;" +
 
             (noise_strength !== 0 ? "
                 color += stepNoise(coords) * noise * (1.0 - distance * distance * 2.0);" : "") +
@@ -172,7 +172,7 @@ ShaderEffect {
 
             "vec3 finalColor = mix(background_color, font_color, color).rgb;" +
             "finalColor = mix(finalColor * 1.1, vec3(0.0), 1.2 * distance * distance);" +
-            "finalColor *= texture2D(rasterizationSource, coords).r;" +
+            "finalColor *= texture2D(rasterizationSource, coords).a;" +
 
             (brightness_flickering !== 0 ? "
                 finalColor *= brightness;" : "") +
