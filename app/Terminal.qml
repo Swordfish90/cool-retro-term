@@ -29,6 +29,7 @@ Item{
     property variant theSource: finalSource
     property variant bloomSource: bloomSourceLoader.item
     property variant rasterizationSource: rasterizationEffectSource
+    property variant staticNoiseSource: staticNoiseSource
 
     property alias kterminal: kterminal
 
@@ -227,7 +228,7 @@ Item{
         property size virtual_resolution: parent.virtual_resolution
         property size delta: Qt.size((mScanlines == shadersettings.pixel_rasterization ? deltax : 0),
                                      mScanlines != shadersettings.no_rasterization ? deltay : 0)
-        z: 2
+        blending: false
 
         fragmentShader:
             "uniform lowp float qt_Opacity;" +
@@ -286,11 +287,56 @@ Item{
             smooth: false
         }
     }
+
+    //Rasterization mask
+    ShaderEffect {
+        id: staticNoiseEffect
+        anchors.fill: parent
+        property size virtual_resolution: terminalContainer.virtual_resolution
+
+        blending: false
+
+        fragmentShader:
+            "uniform lowp float qt_Opacity;
+             varying highp vec2 qt_TexCoord0;
+             uniform highp vec2 virtual_resolution;" +
+
+            "highp float rand(vec2 co)
+            {
+                highp float a = 12.9898;
+                highp float b = 78.233;
+                highp float c = 43758.5453;
+                highp float dt= dot(co.xy ,vec2(a,b));
+                highp float sn= mod(dt,3.14);
+                return fract(sin(sn) * c);
+            }
+
+            float stepNoise(vec2 p){
+                vec2 newP = p * virtual_resolution;
+                return rand(newP);
+            }" +
+
+        "void main() {" +
+            "gl_FragColor.a = stepNoise(qt_TexCoord0);" +
+        "}"
+    }
+    ShaderEffectSource{
+        id: staticNoiseSource
+        sourceItem: staticNoiseEffect
+        textureSize: Qt.size(parent.width, parent.height)
+        wrapMode: ShaderEffectSource.Repeat
+        smooth: true
+        hideSource: true
+        format: ShaderEffectSource.Alpha
+    }
+
     //Rasterization mask
     ShaderEffect {
         id: rasterizationEffect
         anchors.fill: parent
         property size virtual_resolution: terminalContainer.virtual_resolution
+
+        blending: false
 
         fragmentShader:
             "uniform lowp float qt_Opacity;" +
