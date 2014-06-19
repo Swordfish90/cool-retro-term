@@ -32,7 +32,6 @@ ShaderEffect {
     property real bloom: shadersettings.bloom_strength
 
     property int rasterization: shadersettings.rasterization
-    property real rasterization_strength: 0.5
 
     property real noise_strength: shadersettings.noise_strength
     property real screen_distorsion: shadersettings.screen_distortion
@@ -151,7 +150,8 @@ ShaderEffect {
             "float color = texture2D(source, coords).a;" +
 
             (noise_strength !== 0 ? "
-                color += texture2D(noiseSource, qt_TexCoord0 * 0.25 + fract(time / 100.0)).a * noise * (1.0 - distance * distance * 2.0);" : "") +
+                float noiseVal = texture2D(noiseSource, qt_TexCoord0 + vec2(fract(time / 51.0), fract(time / 237.0))).a;
+                color += noiseVal * noise * (1.0 - distance * 1.3);" : "") +
 
             (glowing_line_strength !== 0 ? "
                 color += randomPass(coords) * glowing_line_strength;" : "") +
@@ -161,7 +161,7 @@ ShaderEffect {
 
             "vec3 finalColor = mix(background_color, font_color, color).rgb;" +
             "finalColor = mix(finalColor * 1.1, vec3(0.0), 1.2 * distance * distance);" +
-            "finalColor *= (texture2D(rasterizationSource, coords).a) / "+rasterization_strength+";" +
+            "finalColor *= texture2D(rasterizationSource, coords).a;" +
 
             (brightness_flickering !== 0 ? "
                 finalColor *= brightness;" : "") +

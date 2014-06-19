@@ -250,16 +250,16 @@ Item{
         (mScanlines == shadersettings.pixel_rasterization ? "
                         coords.x = floor(virtual_resolution.x * coords.x) / virtual_resolution.x;" : "")
         : "") +
-
-        "float color = texture2D(source, coords + delta).r * 256.0;" +
+        "coords = coords + delta;" +
+        "float color = texture2D(source, coords).r * 256.0;" +
         (mBlur !== 0 ?
-        "float blurredSourceColor = texture2D(blurredSource, qt_TexCoord0).a * 256.0;" +
+        "float blurredSourceColor = texture2D(blurredSource, coords).a * 256.0;" +
         "blurredSourceColor = blurredSourceColor - blurredSourceColor * " + (1.0 - motionBlurCoefficient) * fpsAttenuation+ ";" +
         "color = step(1.0, color) * color + step(color, 1.0) * blurredSourceColor;"
         : "") +
 
 
-        "gl_FragColor.a = vec4(floor(color) / 256.0);" +
+        "gl_FragColor.a = floor(color) / 256.0;" +
         "}"
     }
     //////////////////////////////////////////////////////////////////////
@@ -301,7 +301,7 @@ Item{
              varying highp vec2 qt_TexCoord0;
              uniform highp vec2 virtual_resolution;" +
 
-            "highp float rand(vec2 co)
+            "highp float noise(vec2 co)
             {
                 highp float a = 12.9898;
                 highp float b = 78.233;
@@ -311,13 +311,20 @@ Item{
                 return fract(sin(sn) * c);
             }
 
-            float stepNoise(vec2 p){
-                vec2 newP = p * virtual_resolution;
-                return rand(newP);
+            vec2 sw(vec2 p) {return vec2( floor(p.x) , floor(p.y) );}
+            vec2 se(vec2 p) {return vec2( ceil(p.x)  , floor(p.y) );}
+            vec2 nw(vec2 p) {return vec2( floor(p.x) , ceil(p.y)  );}
+            vec2 ne(vec2 p) {return vec2( ceil(p.x)  , ceil(p.y)  );}
+
+            float smoothNoise(vec2 p) {
+                vec2 inter = smoothstep(0., 1., fract(p));
+                float s = mix(noise(sw(p)), noise(se(p)), inter.x);
+                float n = mix(noise(nw(p)), noise(ne(p)), inter.x);
+                return mix(s, n, inter.y);
             }" +
 
         "void main() {" +
-            "gl_FragColor.a = stepNoise(qt_TexCoord0);" +
+            "gl_FragColor.a = smoothNoise(qt_TexCoord0 * virtual_resolution);" +
         "}"
     }
     ShaderEffectSource{
