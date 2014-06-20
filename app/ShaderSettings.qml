@@ -60,6 +60,8 @@ Item{
     property real motion_blur: 0.65
     property real bloom_strength: 0.6
 
+    property real jitter: 0.15
+
     property real horizontal_sincronization: 0.1
     property real brightness_flickering: 0.12
 
@@ -240,7 +242,8 @@ Item{
             font_index: font_index,
             motion_blur: motion_blur,
             bloom_strength: bloom_strength,
-            rasterization: rasterization
+            rasterization: rasterization,
+            jitter: jitter
         }
         return JSON.stringify(settings);
     }
@@ -304,6 +307,8 @@ Item{
         font_index = settings.font_index !== undefined ? settings.font_index : font_index;
 
         rasterization = settings.rasterization !== undefined ? settings.rasterization : rasterization;
+
+        jitter = settings.jitter !== undefined ? settings.jitter : jitter
     }
 
     function storeCustomProfiles(){

@@ -33,6 +33,8 @@ ShaderEffect {
 
     property int rasterization: shadersettings.rasterization
 
+    property real jitter: shadersettings.jitter * 0.007
+
     property real noise_strength: shadersettings.noise_strength
     property real screen_distorsion: shadersettings.screen_distortion
     property real glowing_line_strength: shadersettings.glowing_line_strength
@@ -105,7 +107,8 @@ ShaderEffect {
         (bloom !== 0 ? "
             uniform highp sampler2D bloomSource;" : "") +
         (noise_strength !== 0 ? "
-            uniform highp float noise_strength;
+            uniform highp float noise_strength;" : "") +
+        (noise_strength !== 0 || jitter !== 0 ? "
             uniform lowp sampler2D noiseSource;" : "") +
         (screen_distorsion !== 0 ? "
             uniform highp float screen_distorsion;" : "")+
@@ -147,7 +150,13 @@ ShaderEffect {
                     noise += horizontal_distortion;" : "")
             : "") +
 
-            "float color = texture2D(source, coords).a;" +
+            (jitter !== 0 ? "
+                vec2 offset = vec2(texture2D(noiseSource, coords + fract(time / 57.0)).a,
+                                   texture2D(noiseSource, coords + fract(time / 251.0)).a) - 0.5;
+                vec2 txt_coords = coords + offset * "+str(jitter)+";"
+            :  "vec2 txt_coords = coords;") +
+
+            "float color = texture2D(source, txt_coords).a;" +
 
             (noise_strength !== 0 ? "
                 float noiseVal = texture2D(noiseSource, qt_TexCoord0 + vec2(fract(time / 51.0), fract(time / 237.0))).a;

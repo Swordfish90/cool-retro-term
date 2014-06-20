@@ -271,6 +271,11 @@ Window {
                             _value: shadersettings.noise_strength
                         }
                         SettingComponent{
+                            name: "Jitter"
+                            onValueChanged: shadersettings.jitter = value
+                            _value: shadersettings.jitter
+                        }
+                        SettingComponent{
                             name: "Glow"
                             onValueChanged: shadersettings.glowing_line_strength = value;
                             _value: shadersettings.glowing_line_strength
