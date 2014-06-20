@@ -148,6 +148,19 @@ Item{
                 ListElement{pixelSize: 56; virtualWidth: 8; virtualHeight: 8}]
         }
         ListElement{
+            text: "Commodore PET 2Y (1977)"
+            source: "fonts/1977-commodore-pet/COMMODORE_PET_2y.ttf"
+            lineSpacing: 2
+            metrics: [
+                ListElement{pixelSize: 11; virtualWidth: 0; virtualHeight: 0},
+                ListElement{pixelSize: 17; virtualWidth: 0; virtualHeight: 6},
+                ListElement{pixelSize: 32; virtualWidth: 4; virtualHeight: 8},
+                ListElement{pixelSize: 40; virtualWidth: 4; virtualHeight: 8},
+                ListElement{pixelSize: 48; virtualWidth: 4; virtualHeight: 8},
+                ListElement{pixelSize: 56; virtualWidth: 4; virtualHeight: 8},
+                ListElement{pixelSize: 64; virtualWidth: 4; virtualHeight: 8}]
+        }
+        ListElement{
             text: "Apple ][ (1977)"
             source: "fonts/1977-apple2/PrintChar21.ttf"
             lineSpacing: 2
