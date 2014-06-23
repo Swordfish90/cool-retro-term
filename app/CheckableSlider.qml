@@ -56,6 +56,14 @@ RowLayout {
     }
     Text{
         id: textfield
-        text: Math.round(((value - min_value) / (max_value - min_value)) * 100) + "%"
+        property string unformattedText: Math.round(((value - min_value) / (max_value - min_value)) * 100)
+        text: formatNumber(unformattedText)
+    }
+    function formatNumber(num) {
+        var n = "" + num;
+        while (n.length < 3) {
+            n = " " + n;
+        }
+        return n + "%";
     }
 }

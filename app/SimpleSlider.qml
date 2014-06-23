@@ -23,21 +23,28 @@ import QtQuick.Controls 1.1
 import QtQuick.Layouts 1.1
 
 RowLayout {
-    property string name
-    property double value: 0.0
-    property double stepSize: 0.01
+    property alias value: slider.value
+    property alias stepSize: slider.stepSize
+    property alias minimumValue: slider.minimumValue
+    property alias maximumValue: slider.maximumValue
+    property real maxMultiplier: 100
 
     id: setting_component
     spacing: 10
     Slider{
         id: slider
         stepSize: parent.stepSize
-        onValueChanged: setting_component.value = slider.value;
         Layout.fillWidth: true
-        value: setting_component.value
     }
     Text{
         id: textfield
-        text: Math.round(value * 100) + "%"
+        text: formatNumber(Math.round(value * maxMultiplier))
+    }
+    function formatNumber(num) {
+        var n = "" + num;
+        while (n.length < 3) {
+            n = " " + n;
+        }
+        return n + "%";
     }
 }

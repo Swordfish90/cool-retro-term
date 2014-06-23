@@ -121,7 +121,6 @@ Item{
         fontMetrics.font = currentfont.name;
         fontMetrics.font.pixelSize = currentfont.pixelSize;
         currentfont.paintedSize = Qt.size(fontMetrics.paintedWidth, fontMetrics.paintedHeight)
-        console.log(Qt.size(fontMetrics.paintedWidth, fontMetrics.paintedHeight))
         currentfont.virtualCharSize = fontManager.item.virtualCharSize !== undefined ?
                     fontManager.item.virtualCharSize :
                     Qt.size(currentfont.paintedSize.width * 0.5,
@@ -134,7 +133,6 @@ Item{
 
     property alias profiles_list: profileslist
     property int profiles_index: 0
-    onProfiles_indexChanged: loadProfile(profiles_index);
 
     ListModel{
         id: framelist
@@ -267,6 +265,10 @@ Item{
             customProfiles.push({text: profile.text, obj_string: profile.obj_string, builtin: false})
         }
         return JSON.stringify(customProfiles);
+    }
+
+    function loadCurrentProfile(){
+        loadProfile(profiles_index);
     }
 
     function loadProfile(index){
