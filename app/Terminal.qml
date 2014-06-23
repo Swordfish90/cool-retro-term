@@ -44,9 +44,8 @@ Item{
     property real _minBlurCoefficient: 0.75
     property real _maxBlurCoefficient: 0.95
 
-    property real scanlineWidth: 1
-    property real scanlineHeight: 1
-    property size virtual_resolution: Qt.size(width / scanlineWidth, height / scanlineHeight)
+    property size virtualPxSize: Qt.size(1,1)
+    property size virtual_resolution: Qt.size(width / virtualPxSize.width, height / virtualPxSize.height)
     property real deltay: 0.5 / virtual_resolution.height
     property real deltax: 0.5 / virtual_resolution.width
 
@@ -91,33 +90,28 @@ Item{
             }
         }
 
-        Text{id: fontMetrics; text: "B"; visible: false}
-
         function handleFontChange(){
-            var scaling_factor = shadersettings.window_scaling;
-            var font_size = shadersettings.font.pixelSize * scaling_factor;
+            var newFont = shadersettings.font;
+            var font_size = newFont.pixelSize * shadersettings.window_scaling;
             font.pixelSize = font_size;
-            font.family = shadersettings.font.name;
+            font.family = newFont.name;
 
-            fontMetrics.font = font;
-
-            var vertical_density = shadersettings.font.virtualResolution.height;
-            var horizontal_density = shadersettings.font.virtualResolution.width;
-
-            var scanline_height = fontMetrics.paintedHeight / vertical_density;
-            var scanline_width = fontMetrics.paintedWidth / horizontal_density;
+            var virtualCharSize = newFont.virtualCharSize;
+            var virtualPxSize = Qt.size(newFont.paintedSize.width  / virtualCharSize.width,
+                                        newFont.paintedSize.height / virtualCharSize.height)
 
             var scanline_spacing = shadersettings.font.lineSpacing;
-            var line_spacing = Math.round(scanline_spacing * scanline_height);
+            var line_spacing = Math.round(scanline_spacing);
+
+            console.log(kterminal.paintedFontSize)
 
             //            console.log("Font height: " + fontMetrics.paintedHeight)
             //            console.log("Scanline Height: " + scanline_height)
             //            console.log("Line Spacing: " + line_spacing)
 
-            terminalContainer.scanlineHeight = scanline_height;
-            terminalContainer.scanlineWidth = scanline_width;
+            terminalContainer.virtualPxSize = virtualPxSize;
 
-            setLineSpacing(line_spacing);
+            setLineSpacing(newFont.lineSpacing);
             restartBlurredSource();
         }
         Component.onCompleted: {

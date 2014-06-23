@@ -89,16 +89,16 @@ Window {
                         Text{text: qsTr("Font style:")}
                         ComboBox{
                             Layout.fillWidth: true
-                            model: shadersettings.fonts_list
-                            currentIndex: shadersettings.font_index
-                            onCurrentIndexChanged: shadersettings.font_index = currentIndex
+                            model: shadersettings.fontlist
+                            currentIndex: shadersettings.fontIndex
+                            onCurrentIndexChanged: shadersettings.fontIndex = currentIndex
                         }
                         Text{text: qsTr("Font scaling:")}
                         ComboBox{
                             Layout.fillWidth: true
-                            model: shadersettings._font_scalings
-                            currentIndex: shadersettings.font_scaling_index
-                            onCurrentIndexChanged: shadersettings.font_scaling_index = currentIndex
+                            model: shadersettings.fontScalingList
+                            currentIndex: shadersettings.fontScalingIndex
+                            onCurrentIndexChanged: shadersettings.fontScalingIndex = currentIndex
                         }
                         Item{Layout.fillHeight: true}
                         ColorButton{
