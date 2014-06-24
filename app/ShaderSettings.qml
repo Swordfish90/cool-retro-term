@@ -102,19 +102,19 @@ Item{
         property size paintedSize
         property size virtualCharSize
         id: currentfont
-        source: fontlist.get(fontIndex).source
     }
 
     property var fontlist: fontManager.item.fontlist
     property var fontScalingList: fontManager.item.fontScalingList
     property alias font: currentfont
-    property int fontIndex: 0
-    property int fontScalingIndex: 0
 
-    onFontIndexChanged: {fontManager.item.selectedFontIndex = fontIndex; handleFontChanged()}
-    onFontScalingIndexChanged: {fontManager.item.selectedScalingIndex = fontScalingIndex; handleFontChanged()}
+    property var fontIndexes: [0,1,1]
+    property var fontScalingIndexes: [5,1,1]
 
     function handleFontChanged(){
+        if(!fontManager.item) return;
+        fontManager.item.selectedFontIndex = fontIndexes[rasterization];
+        fontManager.item.selectedScalingIndex = fontScalingIndexes[rasterization];
         currentfont.source = fontManager.item.source;
         currentfont.pixelSize = fontManager.item.pixelSize;
         currentfont.lineSpacing = fontManager.item.lineSpacing;
