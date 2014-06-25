@@ -7,7 +7,7 @@ Item{
     property var _font: fontlist.get(selectedFontIndex)
     property var _scaling: fontScalingList[selectedScalingIndex]
     property var source: _font.source
-    property var fontScalingList: [0.75, 1.0, 1.25, 1.50, 1.75, 2.0]
+    property var fontScalingList: [0.75, 1.0, 1.25, 1.50, 1.75, 2.0, 2.25, 2.50]
     property int pixelSize: _font.pixelSize * _scaling
     property int lineSpacing: (_font.pixelSize / _font.virtualCharHeight) * _font.lineSpacing
     property size virtualCharSize: Qt.size(_font.virtualCharWidth,
@@ -16,16 +16,16 @@ Item{
     ListModel{
         id: fontlist
         ListElement{
-            text: "Commodore PET (1977)"
-            source: "fonts/1977-commodore-pet/COMMODORE_PET.ttf"
+            text: "Commodore PET 2Y (1977)"
+            source: "fonts/1977-commodore-pet/COMMODORE_PET_2y.ttf"
             lineSpacing: 2
             virtualCharWidth: 8
             virtualCharHeight: 8
             pixelSize: 32
         }
         ListElement{
-            text: "Commodore PET 2Y (1977)"
-            source: "fonts/1977-commodore-pet/COMMODORE_PET_2y.ttf"
+            text: "Commodore PET (1977)"
+            source: "fonts/1977-commodore-pet/COMMODORE_PET.ttf"
             lineSpacing: 2
             virtualCharWidth: 8
             virtualCharHeight: 8

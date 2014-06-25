@@ -7,7 +7,7 @@ Item{
     property var _font: fontlist.get(selectedFontIndex)
     property var _scaling: fontScalingList[selectedScalingIndex]
     property var source: _font.source
-    property var fontScalingList: [0.75, 1.0, 1.25, 1.50, 1.75, 2.0]
+    property var fontScalingList: [0.75, 1.0, 1.25, 1.50, 1.75, 2.0, 2.25, 2.5]
     property int pixelSize: _font.pixelSize * _scaling
     property int lineSpacing: (_font.pixelSize / _font.virtualCharHeight) * _font.lineSpacing
     property size virtualCharSize: Qt.size(_font.virtualCharWidth,
