@@ -70,17 +70,23 @@ Item{
     readonly property int pixel_rasterization: 2
 
     property int rasterization: no_rasterization
-    onRasterizationChanged: handleFontChanged()
+
+    ListModel{
+        id: framelist
+        ListElement{text: "No frame"; source: "./frames/NoFrame.qml"; reflections: false}
+        ListElement{text: "Simple white frame"; source: "./frames/WhiteSimpleFrame.qml"; reflections: true}
+        ListElement{text: "Rough black frame"; source: "./frames/BlackRoughFrame.qml"; reflections: true}
+    }
 
     property string frame_source: frames_list.get(frames_index).source
     property int frames_index: 1
     property var frames_list: framelist
 
-    signal terminalFontChanged
+
+    signal terminalFontChanged(string fontSource, int pixelSize, int lineSpacing, size virtualCharSize)
 
     Loader{
         id: fontManager
-        onSourceChanged: console.log(source)
 
         states: [
             State { when: rasterization == no_rasterization
@@ -94,38 +100,23 @@ Item{
         onLoaded: handleFontChanged()
     }
 
-    Text{id: fontMetrics; text: "B"; visible: false}
-
-    FontLoader{
-        property int pixelSize
-        property real lineSpacing
-        property size paintedSize
-        property size virtualCharSize
-        id: currentfont
-    }
-
     property var fontlist: fontManager.item.fontlist
     property var fontScalingList: fontManager.item.fontScalingList
-    property alias font: currentfont
 
-    property var fontIndexes: [0,1,1]
+    property var fontIndexes: [1,1,1]
     property var fontScalingIndexes: [5,1,1]
 
     function handleFontChanged(){
         if(!fontManager.item) return;
         fontManager.item.selectedFontIndex = fontIndexes[rasterization];
         fontManager.item.selectedScalingIndex = fontScalingIndexes[rasterization];
-        currentfont.source = fontManager.item.source;
-        currentfont.pixelSize = fontManager.item.pixelSize;
-        currentfont.lineSpacing = fontManager.item.lineSpacing;
-        fontMetrics.font = currentfont.name;
-        fontMetrics.font.pixelSize = currentfont.pixelSize;
-        currentfont.paintedSize = Qt.size(fontMetrics.paintedWidth, fontMetrics.paintedHeight)
-        currentfont.virtualCharSize = fontManager.item.virtualCharSize !== undefined ?
-                    fontManager.item.virtualCharSize :
-                    Qt.size(currentfont.paintedSize.width * 0.5,
-                            currentfont.paintedSize.height * 0.5);
-        terminalFontChanged();
+
+        var fontSource = fontManager.item.source;
+        var pixelSize = fontManager.item.pixelSize;
+        var lineSpacing = fontManager.item.lineSpacing;
+        var virtualCharSize = fontManager.item.virtualCharSize;
+
+        terminalFontChanged(fontSource, pixelSize, lineSpacing, virtualCharSize);
     }
 
     property bool frame_reflections: true
@@ -133,13 +124,6 @@ Item{
 
     property alias profiles_list: profileslist
     property int profiles_index: 0
-
-    ListModel{
-        id: framelist
-        ListElement{text: "No frame"; source: "./frames/NoFrame.qml"; reflections: false}
-        ListElement{text: "Simple white frame"; source: "./frames/WhiteSimpleFrame.qml"; reflections: true}
-        ListElement{text: "Rough black frame"; source: "./frames/BlackRoughFrame.qml"; reflections: true}
-    }
 
     Storage{id: storage}
 
@@ -151,7 +135,8 @@ Item{
             brightness: brightness,
             contrast: contrast,
             ambient_light: ambient_light,
-            font_scaling_index: font_scaling_index,
+            fontScalingIndexes: fontScalingIndexes,
+            fontIndexes: fontIndexes
         }
         return JSON.stringify(settings);
     }
@@ -166,11 +151,11 @@ Item{
             screen_distortion: screen_distortion,
             glowing_line_strength: glowing_line_strength,
             frames_index: frames_index,
-            font_index: font_index,
             motion_blur: motion_blur,
             bloom_strength: bloom_strength,
             rasterization: rasterization,
-            jitter: jitter
+            jitter: jitter,
+            fontIndex: fontIndexes[rasterization]
         }
         return JSON.stringify(settings);
     }
@@ -211,7 +196,8 @@ Item{
         fps = settings.fps !== undefined ? settings.fps: fps
         window_scaling = settings.window_scaling ? settings.window_scaling : window_scaling
 
-        //font_scaling_index = settings.font_scaling_index !== undefined ? settings.font_scaling_index: font_scaling_index;
+        fontIndexes = settings.fontIndexes ? settings.fontIndexes : fontIndexes
+        fontScalingIndexes = settings.fontScalingIndexes ? settings.fontScalingIndexes : fontScalingIndexes
     }
 
     function loadProfileString(profileString){
@@ -231,11 +217,11 @@ Item{
 
         frames_index = settings.frames_index !== undefined ? settings.frames_index : frames_index;
 
-        //font_index = settings.font_index !== undefined ? settings.font_index : font_index;
-
         rasterization = settings.rasterization !== undefined ? settings.rasterization : rasterization;
 
-        jitter = settings.jitter !== undefined ? settings.jitter : jitter
+        jitter = settings.jitter !== undefined ? settings.jitter : jitter;
+
+        fontIndexes[rasterization] = settings.fontIndex ? settings.fontIndex : fontIndexes[rasterization];
     }
 
     function storeCustomProfiles(){

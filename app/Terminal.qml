@@ -56,8 +56,6 @@ Item{
     property size terminalSize: kterminal.terminalSize
     property size paintedTextSize
 
-    onPaintedTextSizeChanged: console.log(paintedTextSize)
-
     //Force reload of the blursource when settings change
     onMBlurChanged: restartBlurredSource()
 
@@ -76,8 +74,6 @@ Item{
     KTerminal {
         id: kterminal
         anchors.fill: parent
-        font.pixelSize: shadersettings.font.pixelSize
-        font.family: shadersettings.font.name
 
         colorScheme: "MyWhiteOnBlack"
 
@@ -90,33 +86,38 @@ Item{
             }
         }
 
-        function handleFontChange(){
-            var newFont = shadersettings.font;
-            var font_size = newFont.pixelSize * shadersettings.window_scaling;
-            font.pixelSize = font_size;
-            font.family = newFont.name;
+        FontLoader{ id: fontLoader }
+        Text{id: fontMetrics; text: "B"; visible: false}
 
-            var virtualCharSize = newFont.virtualCharSize;
-            var virtualPxSize = Qt.size(newFont.paintedSize.width  / virtualCharSize.width,
-                                        newFont.paintedSize.height / virtualCharSize.height)
+        function getPaintedSize(pixelSize){
+            fontMetrics.font.family = fontLoader.name;
+            fontMetrics.font.pixelSize = pixelSize;
+            return Qt.size(fontMetrics.paintedWidth, fontMetrics.paintedHeight);
+        }
+        function isValid(size){
+            return size.width >= 0 && size.height >= 0;
+        }
 
-            var scanline_spacing = shadersettings.font.lineSpacing;
-            var line_spacing = Math.round(scanline_spacing);
+        function handleFontChange(fontSource, pixelSize, lineSpacing, virtualCharSize){
+            fontLoader.source = fontSource;
+            font.pixelSize = pixelSize * shadersettings.window_scaling;
+            font.family = fontLoader.name;
 
-            console.log(kterminal.paintedFontSize)
+            var paintedSize = getPaintedSize(pixelSize);
+            var charSize = isValid(virtualCharSize)
+                    ? virtualCharSize
+                    : Qt.size(paintedSize.width / 2, paintedSize.height / 2);
 
-            //            console.log("Font height: " + fontMetrics.paintedHeight)
-            //            console.log("Scanline Height: " + scanline_height)
-            //            console.log("Line Spacing: " + line_spacing)
+            var virtualPxSize = Qt.size(paintedSize.width  / charSize.width,
+                                        paintedSize.height / charSize.height)
 
             terminalContainer.virtualPxSize = virtualPxSize;
 
-            setLineSpacing(newFont.lineSpacing);
+            setLineSpacing(lineSpacing);
             restartBlurredSource();
         }
         Component.onCompleted: {
             shadersettings.terminalFontChanged.connect(handleFontChange);
-            handleFontChange();
             forceActiveFocus();
         }
     }

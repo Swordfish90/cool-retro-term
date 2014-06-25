@@ -10,27 +10,37 @@ Tab{
             Layout.fillWidth: true
             ComboBox {
                 id: rasterizationBox
+                property string selectedElement: model[currentIndex]
                 anchors.fill: parent
                 model: [qsTr("Default"), qsTr("Scanlines"), qsTr("Pixels")]
                 currentIndex: shadersettings.rasterization
-                onCurrentIndexChanged: shadersettings.rasterization = currentIndex
+                onCurrentIndexChanged: {
+                    scalingChanger.enabled = false;
+                    shadersettings.rasterization = currentIndex
+                    fontChanger.updateIndex();
+                    scalingChanger.updateIndex();
+                    scalingChanger.enabled = true;
+                }
             }
         }
         GroupBox{
-            title: qsTr("Font")
+            title: qsTr("Font") + " (" + rasterizationBox.selectedElement + ")"
             Layout.fillWidth: true
             GridLayout{
                 anchors.fill: parent
                 columns: 2
                 Text{ text: qsTr("Name") }
                 ComboBox{
-                    id: fontChanged
+                    id: fontChanger
                     Layout.fillWidth: true
                     model: shadersettings.fontlist
-                    currentIndex: shadersettings.fontIndexes[shadersettings.rasterization]
-                    onCurrentIndexChanged: {
-                        shadersettings.fontIndexes[shadersettings.rasterization] = currentIndex;
+                    currentIndex: updateIndex()
+                    onActivated: {
+                        shadersettings.fontIndexes[shadersettings.rasterization] = index;
                         shadersettings.handleFontChanged();
+                    }
+                    function updateIndex(){
+                        currentIndex = shadersettings.fontIndexes[shadersettings.rasterization];
                     }
                 }
                 Text{ text: qsTr("Scaling") }
@@ -42,11 +52,15 @@ Tab{
                         minimumValue: 0
                         maximumValue: shadersettings.fontScalingList.length - 1
                         stepSize: 1
-                        value: shadersettings.fontScalingIndexes[shadersettings.rasterization]
+                        tickmarksEnabled: true
+                        value: updateIndex()
                         onValueChanged: {
+                            if(!enabled) return; //Ugly and hacky solution. Look for a better solution.
                             shadersettings.fontScalingIndexes[shadersettings.rasterization] = value;
-                            console.log(shadersettings.fontScalingIndexes);
                             shadersettings.handleFontChanged();
+                        }
+                        function updateIndex(){
+                            value = shadersettings.fontScalingIndexes[shadersettings.rasterization];
                         }
                     }
                     Text{
