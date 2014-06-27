@@ -51,7 +51,7 @@ ShaderEffect {
 
     property real brightness: shadersettings.brightness * 1.5 + 0.5
 
-    property real time: timetimer.time
+    property real time: timeManager.time !== 0 ? timeManager.time : 1
     property variant randomFunctionSource: randfuncsource
 
     blending: false

@@ -81,15 +81,20 @@ Tab{
                 anchors.fill: parent
                 rows: 2
                 columns: 3
-                Text{text: qsTr("Animation FPS")}
+                CheckBox{
+                    property int fps: checked ? slider.value : 0
+                    onFpsChanged: shadersettings.fps = fps
+                    checked: shadersettings.fps !== 0
+                    text: qsTr("Limit FPS")
+                }
                 Slider{
-                    Layout.fillWidth: true
                     id: slider
+                    Layout.fillWidth: true
                     stepSize: 1
                     maximumValue: 60
-                    minimumValue: 0
-                    onValueChanged: shadersettings.fps = value;
-                    value: shadersettings.fps
+                    minimumValue: 1
+                    enabled: shadersettings.fps !== 0
+                    value: shadersettings.fps !== 0 ? shadersettings.fps : 60
                 }
                 Text{text: slider.value}
                 Text{text: qsTr("Texture quality")}

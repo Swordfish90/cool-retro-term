@@ -7,7 +7,7 @@ ShaderEffect{
     property real ambient_light: shadersettings.ambient_light
     property color font_color: shadersettings.font_color
     property color background_color: shadersettings.background_color
-    property real time: timetimer.time
+    property real time: timeManager.time
     property variant randomFunctionSource: randfuncsource
     property real brightness_flickering: shadersettings.brightness_flickering
     property real brightness: shadersettings.brightness * 1.5 + 0.5

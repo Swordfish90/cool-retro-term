@@ -127,13 +127,8 @@ ApplicationWindow{
             hideSource: true
             wrapMode: ShaderEffectSource.Repeat
         }
-        Timer{
-            id: timetimer
-            property real time: 0
-            onTriggered: time += interval
-            interval: Math.round(1000 / shadersettings.fps)
-            running: true
-            repeat: true
+        TimeManager{
+            id: timeManager
         }
         Terminal{
             id: terminal

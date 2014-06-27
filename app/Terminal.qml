@@ -38,7 +38,8 @@ Item{
     onHeightChanged: sizeChanged()
 
     //The blur effect has to take into account the framerate
-    property real fpsAttenuation: 60 / shadersettings.fps
+    property int fps: shadersettings.fps !== 0 ? shadersettings.fps : 60
+    property real fpsAttenuation: 60 / fps
     property real mBlur: shadersettings.motion_blur
     property real motionBlurCoefficient: (_maxBlurCoefficient * mBlur + _minBlurCoefficient * (1 - mBlur))
     property real _minBlurCoefficient: 0.75
