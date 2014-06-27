@@ -24,6 +24,7 @@ Tab{
                         onClicked: {
                             shadersettings.profiles_index = profilesbox.currentIndex
                             shadersettings.loadCurrentProfile();
+                            shadersettings.handleFontChanged();
                         }
                     }
                     Button{

@@ -19,7 +19,7 @@ Item{
             text: "Commodore PET 2Y (1977)"
             source: "fonts/1977-commodore-pet/COMMODORE_PET_2y.ttf"
             lineSpacing: 2
-            virtualCharWidth: 8
+            virtualCharWidth: 4
             virtualCharHeight: 8
             pixelSize: 32
         }

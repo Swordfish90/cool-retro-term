@@ -25,7 +25,7 @@ Item{
 
     property real ambient_light: 0.2
     property real contrast: 0.85
-    property real brightness: 0.75
+    property real brightness: 0.5
 
     //On resize shows an overlay with the current size
     property bool show_terminal_size: true
@@ -50,20 +50,20 @@ Item{
 
     //Probably there is a better way to cast string to colors.
     property string _background_color: "#000000"
-    property string _font_color: "#ff9400"
+    property string _font_color: "#ff8100"
     property color font_color: mix(strToColor(_font_color), strToColor(_background_color), 0.7 + (contrast * 0.3))
     property color background_color: mix(strToColor(_background_color), strToColor(_font_color), 0.7 + (contrast * 0.3))
 
     property real noise_strength: 0.1
-    property real screen_distortion: 0.15
-    property real glowing_line_strength: 0.4
-    property real motion_blur: 0.65
-    property real bloom_strength: 0.6
+    property real screen_distortion: 0.1
+    property real glowing_line_strength: 0.2
+    property real motion_blur: 0.40
+    property real bloom_strength: 0.65
 
-    property real jitter: 0.15
+    property real jitter: 0.18
 
-    property real horizontal_sincronization: 0.1
-    property real brightness_flickering: 0.12
+    property real horizontal_sincronization: 0.08
+    property real brightness_flickering: 0.1
 
     readonly property int no_rasterization: 0
     readonly property int scanline_rasterization: 1
@@ -103,7 +103,7 @@ Item{
     property var fontlist: fontManager.item.fontlist
     property var fontScalingList: fontManager.item.fontScalingList
 
-    property var fontIndexes: [1,1,1]
+    property var fontIndexes: [0,0,0]
     property var fontScalingIndexes: [5,1,1]
 
     function handleFontChanged(){
@@ -180,7 +180,8 @@ Item{
         storage.setSetting("_CURRENT_SETTINGS", settingsString);
         storage.setSetting("_CURRENT_PROFILE", profileString);
 
-        console.log("Storing settings :" + settingsString + profileString);
+        console.log("Storing settings: " + settingsString);
+        console.log("Storing profile: " + profileString);
     }
 
     function loadSettingsString(settingsString){
@@ -191,13 +192,13 @@ Item{
         contrast = settings.contrast !== undefined ? settings.contrast : contrast;
         brightness = settings.brightness !== undefined ? settings.brightness : brightness
 
-        show_terminal_size = settings.show_terminal_size ? settings.show_terminal_size : show_terminal_size
+        show_terminal_size = settings.show_terminal_size !== undefined ? settings.show_terminal_size : show_terminal_size
 
         fps = settings.fps !== undefined ? settings.fps: fps
-        window_scaling = settings.window_scaling ? settings.window_scaling : window_scaling
+        window_scaling = settings.window_scaling !== undefined ? settings.window_scaling : window_scaling
 
-        fontIndexes = settings.fontIndexes ? settings.fontIndexes : fontIndexes
-        fontScalingIndexes = settings.fontScalingIndexes ? settings.fontScalingIndexes : fontScalingIndexes
+        fontIndexes = settings.fontIndexes !== undefined ? settings.fontIndexes : fontIndexes
+        fontScalingIndexes = settings.fontScalingIndexes !== undefined ? settings.fontScalingIndexes : fontScalingIndexes
     }
 
     function loadProfileString(profileString){
@@ -221,7 +222,7 @@ Item{
 
         jitter = settings.jitter !== undefined ? settings.jitter : jitter;
 
-        fontIndexes[rasterization] = settings.fontIndex ? settings.fontIndex : fontIndexes[rasterization];
+        fontIndexes[rasterization] = settings.fontIndex !== undefined ? settings.fontIndex : fontIndexes[rasterization];
     }
 
     function storeCustomProfiles(){
@@ -280,18 +281,38 @@ Item{
     ListModel{
         id: profileslist
         ListElement{
-            text: "Default"
-            obj_string: '{"background_color":"#000000","bloom_strength":0.6,"brightness_flickering":0.12,"font_color":"#ff9400","font_index":0,"frames_index":1,"glowing_line_strength":0.4,"horizontal_sincronization":0.1,"motion_blur":0.65,"noise_strength":0.1,"rasterization":1,"screen_distortion":0.15}'
+            text: "Default Amber"
+            obj_string: '{"background_color":"#000000","bloom_strength":0.65,"brightness_flickering":0.1,"fontIndex":0,"font_color":"#ff8100","frames_index":1,"glowing_line_strength":0.2,"horizontal_sincronization":0.08,"jitter":0.18,"motion_blur":0.45,"noise_strength":0.1,"rasterization":0,"screen_distortion":0.1}'
             builtin: true
         }
         ListElement{
-            text: "Commodore 64"
-            obj_string: '{"ambient_light":0.2,"background_color":"#5048b2","font_color":"#8bcad1","font_index":2,"font_scaling":1,"frames_index":1,"glowing_line_strength":0.2,"noise_strength":0.05,"scanlines":0.0,"screen_distortion":0.1,"brightness_flickering":0.03}'
+            text: "Default Green"
+            obj_string: '{"background_color":"#000000","bloom_strength":0.4,"brightness_flickering":0.1,"fontIndex":0,"font_color":"#0ccc68","frames_index":1,"glowing_line_strength":0.2,"horizontal_sincronization":0.08,"jitter":0.18,"motion_blur":0.45,"noise_strength":0.1,"rasterization":0,"screen_distortion":0.1}'
+            builtin: true
+        }
+        ListElement{
+            text: "Default Scanlines"
+            obj_string: '{"background_color":"#000000","bloom_strength":0.4,"brightness_flickering":0.1,"fontIndex":0,"font_color":"#00ff5b","frames_index":1,"glowing_line_strength":0.2,"horizontal_sincronization":0.07,"jitter":0.11,"motion_blur":0.4,"noise_strength":0.05,"rasterization":1,"screen_distortion":0.1}'
+            builtin: true
+        }
+        ListElement{
+            text: "Default Pixelated"
+            obj_string: '{"background_color":"#000000","bloom_strength":0.65,"brightness_flickering":0.1,"fontIndex":0,"font_color":"#ff8100","frames_index":1,"glowing_line_strength":0.2,"horizontal_sincronization":0.1,"jitter":0,"motion_blur":0.45,"noise_strength":0.14,"rasterization":2,"screen_distortion":0.05}'
+            builtin: true
+        }
+        ListElement{
+            text: "Apple ]["
+            obj_string: '{"background_color":"#000000","bloom_strength":0.5,"brightness_flickering":0.2,"fontIndex":2,"font_color":"#2fff91","frames_index":1,"glowing_line_strength":0.22,"horizontal_sincronization":0.08,"jitter":0.1,"motion_blur":0.65,"noise_strength":0.08,"rasterization":1,"screen_distortion":0.18}'
+            builtin: true
+        }
+        ListElement{
+            text: "Vintage"
+            obj_string: '{"background_color":"#000000","bloom_strength":0.4,"brightness_flickering":0.54,"fontIndex":0,"font_color":"#00ff3e","frames_index":2,"glowing_line_strength":0.3,"horizontal_sincronization":0.2,"jitter":0.4,"motion_blur":0.75,"noise_strength":0.2,"rasterization":1,"screen_distortion":0.1}'
             builtin: true
         }
         ListElement{
             text: "IBM Dos"
-            obj_string: '{"ambient_light":0.4,"background_color":"#000000","font_color":"#ffffff","font_index":3,"font_scaling":1,"frames_index":1,"glowing_line_strength":0,"noise_strength":0,"scanlines":0.0,"screen_distortion":0.05,"brightness_flickering":0.00}'
+            obj_string: '{"background_color":"#000000","bloom_strength":0.4,"brightness_flickering":0.07,"fontIndex":7,"font_color":"#ffffff","frames_index":1,"glowing_line_strength":0.13,"horizontal_sincronization":0,"jitter":0.08,"motion_blur":0.3,"noise_strength":0.03,"rasterization":0,"screen_distortion":0.1}'
             builtin: true
         }
     }
