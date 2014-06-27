@@ -88,7 +88,7 @@ ApplicationWindow{
         }
     }
 
-    ShaderSettings{
+    ApplicationSettings{
         id: shadersettings
     }
 
@@ -110,7 +110,6 @@ ApplicationWindow{
         width: parent.width * shadersettings.window_scaling
         height: parent.height * shadersettings.window_scaling
         scale: 1.0 / shadersettings.window_scaling
-
         Image{
             id: randtexture
             source: "frames/images/randfunction.png"
@@ -130,12 +129,12 @@ ApplicationWindow{
         TimeManager{
             id: timeManager
         }
-        Terminal{
+        PreprocessedTerminal{
             id: terminal
             anchors.fill: parent
             anchors.margins: 30
         }
-        ShaderManager{
+        ShaderTerminal{
             id: shadercontainer
             anchors.fill: parent
             z: 1.9

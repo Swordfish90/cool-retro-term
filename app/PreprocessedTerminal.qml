@@ -57,7 +57,6 @@ Item{
     property size terminalSize: kterminal.terminalSize
     property size paintedTextSize
 
-    //Force reload of the blursource when settings change
     onMBlurChanged: restartBlurredSource()
 
     function restartBlurredSource(){
@@ -98,7 +97,6 @@ Item{
         function isValid(size){
             return size.width >= 0 && size.height >= 0;
         }
-
         function handleFontChange(fontSource, pixelSize, lineSpacing, virtualCharSize){
             fontLoader.source = fontSource;
             font.pixelSize = pixelSize * shadersettings.window_scaling;
@@ -258,10 +256,12 @@ Item{
         "gl_FragColor.a = floor(color) / 256.0;" +
         "}"
     }
-    //////////////////////////////////////////////////////////////////////
-    //EFFECTS
-    //////////////////////////////////////////////////////////////////////
-    //Bloom
+    ///////////////////////////////////////////////////////////////////////////
+    //  EFFECTS  //////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////
+
+    //  BLOOM  ////////////////////////////////////////////////////////////////
+
     Loader{
         id: bloomEffectLoader
         active: mBloom != 0
@@ -284,7 +284,8 @@ Item{
         }
     }
 
-    //Rasterization mask
+    //  NOISE  ////////////////////////////////////////////////////////////////
+
     ShaderEffect {
         id: staticNoiseEffect
         anchors.fill: parent
@@ -333,7 +334,8 @@ Item{
         format: ShaderEffectSource.Alpha
     }
 
-    //Rasterization mask
+    // RASTERIZATION //////////////////////////////////////////////////////////
+
     ShaderEffect {
         id: rasterizationEffect
         anchors.fill: parent

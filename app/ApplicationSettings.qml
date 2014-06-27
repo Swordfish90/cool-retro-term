@@ -20,14 +20,18 @@
 
 import QtQuick 2.2
 
+
+
 Item{
+
+    // GENERAL SETTINGS ///////////////////////////////////////////////////
+
     property bool fullscreen: false
 
     property real ambient_light: 0.2
     property real contrast: 0.85
     property real brightness: 0.5
 
-    //On resize shows an overlay with the current size
     property bool show_terminal_size: true
 
     property real window_scaling: 1.0
@@ -48,7 +52,8 @@ Item{
         return Qt.rgba(r, g, b, 1.0);
     }
 
-    //Probably there is a better way to cast string to colors.
+    // PROFILE SETTINGS ///////////////////////////////////////////////////////
+
     property string _background_color: "#000000"
     property string _font_color: "#ff8100"
     property color font_color: mix(strToColor(_font_color), strToColor(_background_color), 0.7 + (contrast * 0.3))
@@ -82,6 +87,8 @@ Item{
     property int frames_index: 1
     property var frames_list: framelist
 
+
+    // FONTS //////////////////////////////////////////////////////////////////
 
     signal terminalFontChanged(string fontSource, int pixelSize, int lineSpacing, size virtualCharSize)
 
@@ -119,11 +126,15 @@ Item{
         terminalFontChanged(fontSource, pixelSize, lineSpacing, virtualCharSize);
     }
 
+    // FRAMES /////////////////////////////////////////////////////////////////
+
     property bool frame_reflections: true
     property real frame_reflection_strength: ((frame_reflections && framelist.get(frames_index).reflections) ? 1.0 : 0.0) * 0.15
 
     property alias profiles_list: profileslist
     property int profiles_index: 0
+
+    // DB STORAGE /////////////////////////////////////////////////////////////
 
     Storage{id: storage}
 
@@ -268,15 +279,7 @@ Item{
         profileslist.append({text: name, obj_string: profileString, builtin: false});
     }
 
-    Component.onCompleted: {
-        loadSettings();
-        loadCustomProfiles();
-    }
-    Component.onDestruction: {
-        storeSettings();
-        storeCustomProfiles();
-        //storage.dropSettings(); //DROPS THE SETTINGS!.. REMEMBER TO DISABLE ONCE ENABLED!!
-    }
+    // PROFILES ///////////////////////////////////////////////////////////////
 
     ListModel{
         id: profileslist
@@ -315,5 +318,15 @@ Item{
             obj_string: '{"background_color":"#000000","bloom_strength":0.4,"brightness_flickering":0.07,"fontIndex":7,"font_color":"#ffffff","frames_index":1,"glowing_line_strength":0.13,"horizontal_sincronization":0,"jitter":0.08,"motion_blur":0.3,"noise_strength":0.03,"rasterization":0,"screen_distortion":0.1}'
             builtin: true
         }
+    }
+
+    Component.onCompleted: {
+        loadSettings();
+        loadCustomProfiles();
+    }
+    Component.onDestruction: {
+        storeSettings();
+        storeCustomProfiles();
+        //storage.dropSettings(); //DROPS THE SETTINGS!.. REMEMBER TO DISABLE ONCE ENABLED!!
     }
 }
