@@ -22,7 +22,8 @@ import QtQuick 2.2
 import QtQuick.Dialogs 1.1
 
 Item {
-    property color button_color;
+    property color button_color
+    property string name
 
     ColorDialog {
         id: colorDialog
@@ -35,25 +36,22 @@ Item {
         onAccepted: button_color = color;
     }
     Rectangle{
-        radius: 10
         anchors.fill: parent
+        radius: 10
         color: button_color
-
-        Text{
-            id: text_color
-            anchors.centerIn: parent
-            z: 1.1
-            text: button_color
-        }
-
-        Rectangle{
-            anchors.centerIn: parent
-            width: text_color.width * 1.4
-            height: text_color.height * 1.4
-            radius: 10
-            border.color: "black"
-            border.width: 2
+        border.color: "black"
+        Glossy {}
+        Rectangle {
+            anchors.fill: parent
+            anchors.margins: parent.height * 0.25
+            radius: parent.radius
             color: "white"
+            opacity: 0.5
+        }
+        Text{
+            anchors.centerIn: parent
+            z: parent.z + 1
+            text: name + ":  " + button_color
         }
     }
     MouseArea{

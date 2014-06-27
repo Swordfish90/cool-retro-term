@@ -25,7 +25,7 @@ Item{
 
     property real ambient_light: 0.2
     property real contrast: 0.85
-    property real brightness: 0.75
+    property real brightness: 0.5
 
     //On resize shows an overlay with the current size
     property bool show_terminal_size: true
@@ -50,64 +50,26 @@ Item{
 
     //Probably there is a better way to cast string to colors.
     property string _background_color: "#000000"
-    property string _font_color: "#ff9400"
+    property string _font_color: "#ff8100"
     property color font_color: mix(strToColor(_font_color), strToColor(_background_color), 0.7 + (contrast * 0.3))
     property color background_color: mix(strToColor(_background_color), strToColor(_font_color), 0.7 + (contrast * 0.3))
 
     property real noise_strength: 0.1
-    property real screen_distortion: 0.15
-    property real glowing_line_strength: 0.4
-    property real motion_blur: 0.65
-    property real bloom_strength: 0.6
+    property real screen_distortion: 0.1
+    property real glowing_line_strength: 0.2
+    property real motion_blur: 0.40
+    property real bloom_strength: 0.65
 
-    property real horizontal_sincronization: 0.1
-    property real brightness_flickering: 0.12
+    property real jitter: 0.18
+
+    property real horizontal_sincronization: 0.08
+    property real brightness_flickering: 0.1
 
     readonly property int no_rasterization: 0
     readonly property int scanline_rasterization: 1
     readonly property int pixel_rasterization: 2
 
     property int rasterization: no_rasterization
-
-    property string frame_source: frames_list.get(frames_index).source
-    property int frames_index: 1
-    property var frames_list: framelist
-
-    signal terminalFontChanged
-
-    property var _font_scalings: [0.5, 0.75, 1.0, 1.25, 1.50, 1.75, 2.0]
-    property var font: currentfont
-    property int font_index: 0
-    property var fonts_list: fontlist
-
-    property bool frame_reflections: true
-    property real frame_reflection_strength: ((frame_reflections && framelist.get(frames_index).reflections) ? 1.0 : 0.0) * 0.15
-
-    property alias profiles_list: profileslist
-    property int profiles_index: 0
-    onProfiles_indexChanged: loadProfile(profiles_index);
-
-    onFont_indexChanged: handleFontChanged();
-    onFont_scaling_indexChanged: handleFontChanged();
-
-    function handleFontChanged(){
-        var f = fontlist.get(font_index);
-        var metrics = f.metrics.get(font_scaling_index);
-        currentfont.source = f.source;
-        currentfont.pixelSize = metrics.pixelSize;
-        currentfont.lineSpacing = f.lineSpacing;
-        currentfont.virtualResolution = Qt.size(metrics.virtualWidth,
-                                                metrics.virtualHeight);
-        terminalFontChanged();
-    }
-
-    FontLoader{
-        property int pixelSize
-        property real lineSpacing
-        property size virtualResolution
-        id: currentfont
-        source: fontlist.get(font_index).source
-    }
 
     ListModel{
         id: framelist
@@ -116,101 +78,52 @@ Item{
         ListElement{text: "Rough black frame"; source: "./frames/BlackRoughFrame.qml"; reflections: true}
     }
 
-    property int font_scaling_index: 0
-    ListModel{
-        id: fontlist
-        ListElement{
-            text: "Terminus (Modern)"
-            source: "fonts/modern-terminus/TerminusTTF-Bold-4.38.2.ttf"
-            lineSpacing: 2
-            metrics: [
-                ListElement{pixelSize: 18; virtualWidth: 0; virtualHeight: 6},
-                ListElement{pixelSize: 24; virtualWidth: 0; virtualHeight: 8},
-                ListElement{pixelSize: 35; virtualWidth: 5; virtualHeight: 12},
-                ListElement{pixelSize: 43; virtualWidth: 6; virtualHeight: 11},
-                ListElement{pixelSize: 54; virtualWidth: 7; virtualHeight: 11},
-                ListElement{pixelSize: 64; virtualWidth: 8; virtualHeight: 11},
-                ListElement{pixelSize: 75; virtualWidth: 8; virtualHeight: 11}]
-        }
-        ListElement{
-            text: "Commodore PET (1977)"
-            source: "fonts/1977-commodore-pet/COMMODORE_PET.ttf"
-            lineSpacing: 2
-            metrics: [
-                ListElement{pixelSize: 11; virtualWidth: 0; virtualHeight: 0},
-                ListElement{pixelSize: 17; virtualWidth: 0; virtualHeight: 6},
-                ListElement{pixelSize: 24; virtualWidth: 8; virtualHeight: 8},
-                ListElement{pixelSize: 32; virtualWidth: 8; virtualHeight: 8},
-                ListElement{pixelSize: 40; virtualWidth: 8; virtualHeight: 8},
-                ListElement{pixelSize: 48; virtualWidth: 8; virtualHeight: 8},
-                ListElement{pixelSize: 56; virtualWidth: 8; virtualHeight: 8}]
-        }
-        ListElement{
-            text: "Apple ][ (1977)"
-            source: "fonts/1977-apple2/PrintChar21.ttf"
-            lineSpacing: 2
-            metrics: [
-                ListElement{pixelSize: 11; virtualWidth: 0; virtualHeight: 0},
-                ListElement{pixelSize: 17; virtualWidth: 0; virtualHeight: 6},
-                ListElement{pixelSize: 24; virtualWidth: 7; virtualHeight: 8},
-                ListElement{pixelSize: 32; virtualWidth: 7; virtualHeight: 8},
-                ListElement{pixelSize: 40; virtualWidth: 7; virtualHeight: 8},
-                ListElement{pixelSize: 48; virtualWidth: 7; virtualHeight: 8},
-                ListElement{pixelSize: 56; virtualWidth: 7; virtualHeight: 8}]
-        }
-        ListElement{
-            text: "Atari 400-800 (1979)"
-            source: "fonts/1979-atari-400-800/ATARI400800_original.TTF"
-            lineSpacing: 3
-            metrics: [
-                ListElement{pixelSize: 11; virtualWidth: 0; virtualHeight: 0},
-                ListElement{pixelSize: 17; virtualWidth: 0; virtualHeight: 6},
-                ListElement{pixelSize: 24; virtualWidth: 8; virtualHeight: 8},
-                ListElement{pixelSize: 32; virtualWidth: 8; virtualHeight: 8},
-                ListElement{pixelSize: 40; virtualWidth: 8; virtualHeight: 8},
-                ListElement{pixelSize: 48; virtualWidth: 8; virtualHeight: 8},
-                ListElement{pixelSize: 56; virtualWidth: 8; virtualHeight: 8}]
-        }
-        ListElement{
-            text: "Commodore 64 (1982)"
-            source: "fonts/1982-commodore64/C64_User_Mono_v1.0-STYLE.ttf"
-            lineSpacing: 3
-            metrics: [
-                ListElement{pixelSize: 11; virtualWidth: 0; virtualHeight: 0},
-                ListElement{pixelSize: 17; virtualWidth: 0; virtualHeight: 6},
-                ListElement{pixelSize: 24; virtualWidth: 8; virtualHeight: 8},
-                ListElement{pixelSize: 32; virtualWidth: 8; virtualHeight: 8},
-                ListElement{pixelSize: 40; virtualWidth: 8; virtualHeight: 8},
-                ListElement{pixelSize: 48; virtualWidth: 8; virtualHeight: 8},
-                ListElement{pixelSize: 56; virtualWidth: 8; virtualHeight: 8}]
-        }
-        ListElement{
-            text: "Atari ST (1985)"
-            source: "fonts/1985-atari-st/AtariST8x16SystemFont.ttf"
-            lineSpacing: 2
-            metrics: [
-                ListElement{pixelSize: 16; virtualWidth: 0; virtualHeight: 0},
-                ListElement{pixelSize: 23; virtualWidth: 0; virtualHeight: 7},
-                ListElement{pixelSize: 32; virtualWidth: 4; virtualHeight: 8},
-                ListElement{pixelSize: 40; virtualWidth: 4; virtualHeight: 8},
-                ListElement{pixelSize: 48; virtualWidth: 4; virtualHeight: 8},
-                ListElement{pixelSize: 56; virtualWidth: 4; virtualHeight: 8},
-                ListElement{pixelSize: 64; virtualWidth: 8; virtualHeight: 16}]
-        }
-        ListElement{
-            text: "IBM DOS (1985)"
-            source: "fonts/1985-ibm-pc-vga/Perfect DOS VGA 437.ttf"
-            lineSpacing: 2
-            metrics: [
-                ListElement{pixelSize: 18; virtualWidth: 0; virtualHeight: 0},
-                ListElement{pixelSize: 25; virtualWidth: 0; virtualHeight: 0},
-                ListElement{pixelSize: 32; virtualWidth: 6; virtualHeight: 8},
-                ListElement{pixelSize: 36; virtualWidth: 6; virtualHeight: 12},
-                ListElement{pixelSize: 48; virtualWidth: 9; virtualHeight: 16},
-                ListElement{pixelSize: 56; virtualWidth: 9; virtualHeight: 16},
-                ListElement{pixelSize: 64; virtualWidth: 9; virtualHeight: 16}]
-        }
+    property string frame_source: frames_list.get(frames_index).source
+    property int frames_index: 1
+    property var frames_list: framelist
+
+
+    signal terminalFontChanged(string fontSource, int pixelSize, int lineSpacing, size virtualCharSize)
+
+    Loader{
+        id: fontManager
+
+        states: [
+            State { when: rasterization == no_rasterization
+                PropertyChanges {target: fontManager; source: "Fonts.qml" } },
+            State { when: rasterization == scanline_rasterization
+                PropertyChanges {target: fontManager; source: "FontScanlines.qml" } },
+            State { when: rasterization == pixel_rasterization;
+                PropertyChanges {target: fontManager; source: "FontPixels.qml" } }
+        ]
+
+        onLoaded: handleFontChanged()
     }
+
+    property var fontlist: fontManager.item.fontlist
+    property var fontScalingList: fontManager.item.fontScalingList
+
+    property var fontIndexes: [0,0,0]
+    property var fontScalingIndexes: [5,1,1]
+
+    function handleFontChanged(){
+        if(!fontManager.item) return;
+        fontManager.item.selectedFontIndex = fontIndexes[rasterization];
+        fontManager.item.selectedScalingIndex = fontScalingIndexes[rasterization];
+
+        var fontSource = fontManager.item.source;
+        var pixelSize = fontManager.item.pixelSize;
+        var lineSpacing = fontManager.item.lineSpacing;
+        var virtualCharSize = fontManager.item.virtualCharSize;
+
+        terminalFontChanged(fontSource, pixelSize, lineSpacing, virtualCharSize);
+    }
+
+    property bool frame_reflections: true
+    property real frame_reflection_strength: ((frame_reflections && framelist.get(frames_index).reflections) ? 1.0 : 0.0) * 0.15
+
+    property alias profiles_list: profileslist
+    property int profiles_index: 0
 
     Storage{id: storage}
 
@@ -222,7 +135,8 @@ Item{
             brightness: brightness,
             contrast: contrast,
             ambient_light: ambient_light,
-            font_scaling_index: font_scaling_index,
+            fontScalingIndexes: fontScalingIndexes,
+            fontIndexes: fontIndexes
         }
         return JSON.stringify(settings);
     }
@@ -237,10 +151,11 @@ Item{
             screen_distortion: screen_distortion,
             glowing_line_strength: glowing_line_strength,
             frames_index: frames_index,
-            font_index: font_index,
             motion_blur: motion_blur,
             bloom_strength: bloom_strength,
-            rasterization: rasterization
+            rasterization: rasterization,
+            jitter: jitter,
+            fontIndex: fontIndexes[rasterization]
         }
         return JSON.stringify(settings);
     }
@@ -265,7 +180,8 @@ Item{
         storage.setSetting("_CURRENT_SETTINGS", settingsString);
         storage.setSetting("_CURRENT_PROFILE", profileString);
 
-        console.log("Storing settings :" + settingsString + profileString);
+        console.log("Storing settings: " + settingsString);
+        console.log("Storing profile: " + profileString);
     }
 
     function loadSettingsString(settingsString){
@@ -276,12 +192,13 @@ Item{
         contrast = settings.contrast !== undefined ? settings.contrast : contrast;
         brightness = settings.brightness !== undefined ? settings.brightness : brightness
 
-        show_terminal_size = settings.show_terminal_size ? settings.show_terminal_size : show_terminal_size
+        show_terminal_size = settings.show_terminal_size !== undefined ? settings.show_terminal_size : show_terminal_size
 
         fps = settings.fps !== undefined ? settings.fps: fps
-        window_scaling = settings.window_scaling ? settings.window_scaling : window_scaling
+        window_scaling = settings.window_scaling !== undefined ? settings.window_scaling : window_scaling
 
-        font_scaling_index = settings.font_scaling_index !== undefined ? settings.font_scaling_index: font_scaling_index;
+        fontIndexes = settings.fontIndexes !== undefined ? settings.fontIndexes : fontIndexes
+        fontScalingIndexes = settings.fontScalingIndexes !== undefined ? settings.fontScalingIndexes : fontScalingIndexes
     }
 
     function loadProfileString(profileString){
@@ -301,9 +218,11 @@ Item{
 
         frames_index = settings.frames_index !== undefined ? settings.frames_index : frames_index;
 
-        font_index = settings.font_index !== undefined ? settings.font_index : font_index;
-
         rasterization = settings.rasterization !== undefined ? settings.rasterization : rasterization;
+
+        jitter = settings.jitter !== undefined ? settings.jitter : jitter;
+
+        fontIndexes[rasterization] = settings.fontIndex !== undefined ? settings.fontIndex : fontIndexes[rasterization];
     }
 
     function storeCustomProfiles(){
@@ -335,6 +254,10 @@ Item{
         return JSON.stringify(customProfiles);
     }
 
+    function loadCurrentProfile(){
+        loadProfile(profiles_index);
+    }
+
     function loadProfile(index){
         var profile = profileslist.get(index);
         loadProfileString(profile.obj_string);
@@ -358,18 +281,38 @@ Item{
     ListModel{
         id: profileslist
         ListElement{
-            text: "Default"
-            obj_string: '{"background_color":"#000000","bloom_strength":0.6,"brightness_flickering":0.12,"font_color":"#ff9400","font_index":0,"frames_index":1,"glowing_line_strength":0.4,"horizontal_sincronization":0.1,"motion_blur":0.65,"noise_strength":0.1,"rasterization":1,"screen_distortion":0.15}'
+            text: "Default Amber"
+            obj_string: '{"background_color":"#000000","bloom_strength":0.65,"brightness_flickering":0.1,"fontIndex":0,"font_color":"#ff8100","frames_index":1,"glowing_line_strength":0.2,"horizontal_sincronization":0.08,"jitter":0.18,"motion_blur":0.45,"noise_strength":0.1,"rasterization":0,"screen_distortion":0.1}'
             builtin: true
         }
         ListElement{
-            text: "Commodore 64"
-            obj_string: '{"ambient_light":0.2,"background_color":"#5048b2","font_color":"#8bcad1","font_index":2,"font_scaling":1,"frames_index":1,"glowing_line_strength":0.2,"noise_strength":0.05,"scanlines":0.0,"screen_distortion":0.1,"brightness_flickering":0.03}'
+            text: "Default Green"
+            obj_string: '{"background_color":"#000000","bloom_strength":0.4,"brightness_flickering":0.1,"fontIndex":0,"font_color":"#0ccc68","frames_index":1,"glowing_line_strength":0.2,"horizontal_sincronization":0.08,"jitter":0.18,"motion_blur":0.45,"noise_strength":0.1,"rasterization":0,"screen_distortion":0.1}'
+            builtin: true
+        }
+        ListElement{
+            text: "Default Scanlines"
+            obj_string: '{"background_color":"#000000","bloom_strength":0.4,"brightness_flickering":0.1,"fontIndex":0,"font_color":"#00ff5b","frames_index":1,"glowing_line_strength":0.2,"horizontal_sincronization":0.07,"jitter":0.11,"motion_blur":0.4,"noise_strength":0.05,"rasterization":1,"screen_distortion":0.1}'
+            builtin: true
+        }
+        ListElement{
+            text: "Default Pixelated"
+            obj_string: '{"background_color":"#000000","bloom_strength":0.65,"brightness_flickering":0.1,"fontIndex":0,"font_color":"#ff8100","frames_index":1,"glowing_line_strength":0.2,"horizontal_sincronization":0.1,"jitter":0,"motion_blur":0.45,"noise_strength":0.14,"rasterization":2,"screen_distortion":0.05}'
+            builtin: true
+        }
+        ListElement{
+            text: "Apple ]["
+            obj_string: '{"background_color":"#000000","bloom_strength":0.5,"brightness_flickering":0.2,"fontIndex":2,"font_color":"#2fff91","frames_index":1,"glowing_line_strength":0.22,"horizontal_sincronization":0.08,"jitter":0.1,"motion_blur":0.65,"noise_strength":0.08,"rasterization":1,"screen_distortion":0.18}'
+            builtin: true
+        }
+        ListElement{
+            text: "Vintage"
+            obj_string: '{"background_color":"#000000","bloom_strength":0.4,"brightness_flickering":0.54,"fontIndex":0,"font_color":"#00ff3e","frames_index":2,"glowing_line_strength":0.3,"horizontal_sincronization":0.2,"jitter":0.4,"motion_blur":0.75,"noise_strength":0.2,"rasterization":1,"screen_distortion":0.1}'
             builtin: true
         }
         ListElement{
             text: "IBM Dos"
-            obj_string: '{"ambient_light":0.4,"background_color":"#000000","font_color":"#ffffff","font_index":3,"font_scaling":1,"frames_index":1,"glowing_line_strength":0,"noise_strength":0,"scanlines":0.0,"screen_distortion":0.05,"brightness_flickering":0.00}'
+            obj_string: '{"background_color":"#000000","bloom_strength":0.4,"brightness_flickering":0.07,"fontIndex":7,"font_color":"#ffffff","frames_index":1,"glowing_line_strength":0.13,"horizontal_sincronization":0,"jitter":0.08,"motion_blur":0.3,"noise_strength":0.03,"rasterization":0,"screen_distortion":0.1}'
             builtin: true
         }
     }

@@ -159,4 +159,5 @@ ApplicationWindow{
             terminalSize: terminal.terminalSize
         }
     }
+    Component.onCompleted: shadersettings.handleFontChanged();
 }
