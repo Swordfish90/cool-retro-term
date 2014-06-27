@@ -194,13 +194,13 @@ KTerminalDisplay::KTerminalDisplay(QQuickItem *parent) :
 
     setColorTable(base_color_table);
 
+    setRenderTarget(QQuickPaintedItem::FramebufferObject);
+
     //new AutoScrollHandler(this);
 
     setAcceptedMouseButtons(Qt::LeftButton);
     setFlags(ItemHasContents | ItemAcceptsInputMethod);
     //installEventFilter(this);
-
-    m_font.setStyleHint(QFont::TypeWriter);
 
     setVTFont(m_font);
 }
