@@ -359,7 +359,12 @@ Item{
                  }" +
 
         "void main() {" +
-            "gl_FragColor.a = getScanlineIntensity(qt_TexCoord0);" +
+            "float distance = length(vec2(0.5) - qt_TexCoord0);" +
+
+            "float color = getScanlineIntensity(qt_TexCoord0);" +
+            "color = mix(color, 0.0, 1.2 * distance * distance);" +
+
+            "gl_FragColor.a = color;" +
         "}"
     }
     ShaderEffectSource{

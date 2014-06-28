@@ -169,7 +169,6 @@ ShaderEffect {
                 color += texture2D(bloomSource, coords).r *" + str(2.5 * bloom) + ";" : "") +
 
             "vec3 finalColor = mix(background_color, font_color, color).rgb;" +
-            "finalColor = mix(finalColor * 1.1, vec3(0.0), 1.2 * distance * distance);" +
             "finalColor *= texture2D(rasterizationSource, coords).a;" +
 
             (brightness_flickering !== 0 ? "
