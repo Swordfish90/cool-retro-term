@@ -129,7 +129,7 @@ KTerminalDisplay::KTerminalDisplay(QQuickItem *parent) :
   ,_fontHeight(1)
   ,_fontWidth(1)
   ,_fontAscent(1)
-  ,_boldIntense(true)
+  ,_boldIntense(false)
   ,_lines(1)
   ,_columns(1)
   ,_usedLines(1)
@@ -1971,7 +1971,7 @@ void KTerminalDisplay::drawCharacters(QPainter* painter,
     if (    font.bold() != useBold
             || font.underline() != useUnderline )
     {
-        font.setBold(useBold);
+        //font.setBold(useBold);
         font.setUnderline(useUnderline);
     }
 

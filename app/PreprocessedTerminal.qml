@@ -75,7 +75,7 @@ Item{
         id: kterminal
         anchors.fill: parent
 
-        colorScheme: "MyWhiteOnBlack"
+        colorScheme: "cool-old-term"
 
         session: KSession {
             id: ksession
@@ -245,7 +245,8 @@ Item{
                         coords.x = floor(virtual_resolution.x * coords.x) / virtual_resolution.x;" : "")
         : "") +
         "coords = coords + delta;" +
-        "float color = texture2D(source, coords).r * 256.0;" +
+        "vec4 vcolor = texture2D(source, coords).r * 256.0;
+         float color = vcolor.r * 0.21 + vcolor.g * 0.72 + vcolor.b + 0.04;" +
         (mBlur !== 0 ?
         "float blurredSourceColor = texture2D(blurredSource, coords).a * 256.0;" +
         "blurredSourceColor = blurredSourceColor - blurredSourceColor * " + (1.0 - motionBlurCoefficient) * fpsAttenuation+ ";" +
@@ -267,7 +268,7 @@ Item{
         active: mBloom != 0
         anchors.fill: parent
         sourceComponent: FastBlur{
-            radius: 32
+            radius: 48
             source: kterminal
             transparentBorder: true
             smooth: false
