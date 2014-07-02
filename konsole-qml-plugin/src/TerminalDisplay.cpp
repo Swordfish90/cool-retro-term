@@ -158,6 +158,7 @@ KTerminalDisplay::KTerminalDisplay(QQuickItem *parent) :
   ,_lineSpacing(2)
   ,_colorsInverted(false)
   ,_cursorShape(BlockCursor)
+  ,_mouseMarks(false)
   ,m_session(0)
   ,m_focusOnClick(true)
   ,m_showVKBonClick(true)
@@ -183,6 +184,8 @@ KTerminalDisplay::KTerminalDisplay(QQuickItem *parent) :
     // konsole in opaque mode.
     _topMargin = DEFAULT_TOP_MARGIN;
     _leftMargin = DEFAULT_LEFT_MARGIN;
+
+    connect(this, SIGNAL(mouseSignal(int,int,int,int)), this, SLOT(banana(int,int,int,int)));
 
     // setup timers for blinking cursor and text
     _blinkTimer   = new QTimer(this);
@@ -213,6 +216,10 @@ KTerminalDisplay::~KTerminalDisplay()
     delete[] _image;
 }
 
+void KTerminalDisplay::banana(int x, int y, int z, int w){
+    qDebug() << "Called banana " << x << " " << y << " " << z << " " << w;
+}
+
 void KTerminalDisplay::setSession(KSession * session)
 {
     if (m_session != session) {
@@ -241,18 +248,6 @@ void KTerminalDisplay::setSession(KSession * session)
 ScreenWindow* KTerminalDisplay::screenWindow() const
 {
     return _screenWindow;
-}
-
-
-void KTerminalDisplay::scrollDown(){
-    _screenWindow->scrollBy( ScreenWindow::ScrollLines, +2 );
-    _screenWindow->scrollCount();
-    updateImage();
-}
-
-void KTerminalDisplay::scrollUp(){
-    _screenWindow->scrollBy( ScreenWindow::ScrollLines, -2 );
-    updateImage();
 }
 
 void KTerminalDisplay::forcedFocus()
@@ -416,8 +411,8 @@ void KTerminalDisplay::setVTFont(const QFont& f)
         // Disabling kerning saves some computation when rendering text.
         font.setKerning(false);
 
-	// Konsole cannot handle non-integer font metrics
-	font.setStyleStrategy(QFont::StyleStrategy(font.styleStrategy() | QFont::ForceIntegerMetrics));
+        // Konsole cannot handle non-integer font metrics
+        font.setStyleStrategy(QFont::StyleStrategy(font.styleStrategy() | QFont::ForceIntegerMetrics));
 
         //QWidget::setFont(font);
         m_font = font;
@@ -456,41 +451,107 @@ QStringList KTerminalDisplay::availableColorSchemes()
     return ret;
 }
 
+void KTerminalDisplay::scrollWheel(qreal x, qreal y, int lines){
+    if(_mouseMarks){
+        int charLine;
+        int charColumn;
+        getCharacterPosition(QPoint(x,y) , charLine , charColumn);
+
+        emit mouseSignal(lines > 0 ? 5 : 4,
+                         charColumn + 1,
+                         charLine + 1,
+                         0);
+    } else {
+        if(_screenWindow->lineCount() == _screenWindow->windowLines()){
+            const int keyCode = lines > 0 ? Qt::Key_Down : Qt::Key_Up;
+            QKeyEvent keyEvent(QEvent::KeyPress, keyCode, Qt::NoModifier);
+
+            emit keyPressedSignal(&keyEvent);
+            emit keyPressedSignal(&keyEvent);
+        } else {
+            _screenWindow->scrollBy( ScreenWindow::ScrollLines, lines );
+            _screenWindow->scrollCount();
+            updateImage();
+        }
+    }
+}
+
 void KTerminalDisplay::mousePress(qreal x, qreal y){
     if (m_focusOnClick) forcedFocus();
     if (m_showVKBonClick) ShowVKB(true);
 
-    emit clicked();
+    QPoint pos(x,y);
+    qDebug() << "Mousepress " <<pos;
 
     int charLine;
     int charColumn;
     getCharacterPosition(QPoint(x,y), charLine, charColumn);
 
-    QPoint pos = QPoint(charColumn, charLine);
-
     _wordSelectionMode = false;
     _lineSelectionMode = false;
 
-    _screenWindow->clearSelection();
-    _iPntSel = _pntSel = pos;
-    _actSel = 1; // left mouse button pressed but nothing selected yet.
+    if(_mouseMarks){
+        emit mouseSignal(0, charColumn + 1, charLine + 1, 0);
+        return;
+    } else {
+        QPoint pos = QPoint(charColumn, charLine);
+
+        _screenWindow->clearSelection();
+        _iPntSel = _pntSel = pos;
+        _actSel = 1; // left mouse button pressed but nothing selected yet.
+    }
 }
 
 void KTerminalDisplay::mouseMove(qreal x, qreal y){
     QPoint pos(x, y);
-    extendSelection(pos);
+
+    qDebug() << "Mouse move" << pos;
+
+    if(_mouseMarks){
+        int charLine;
+        int charColumn;
+        getCharacterPosition(pos, charLine, charColumn);
+
+        emit mouseSignal(0, charColumn + 1, charLine + 1, 1);
+    } else {
+        extendSelection(pos);
+    }
 }
 
 void KTerminalDisplay::mouseDoubleClick(qreal x, qreal y){
-    _wordSelectionMode = true;
     QPoint pos(x, y);
-    extendSelection(pos);
+
+    if(_mouseMarks){
+        int charLine;
+        int charColumn;
+        getCharacterPosition(pos, charLine, charColumn);
+
+        //emit mouseSignal(0, charColumn + 1, charLine + 1, 0);
+        //emit mouseSignal(0, charColumn + 1, charLine + 1, 0);
+    } else {
+        _wordSelectionMode = true;
+        extendSelection(pos);
+    }
 }
 
 void KTerminalDisplay::mouseRelease(qreal x, qreal y){
-    Q_UNUSED(x);
-    Q_UNUSED(y);
     _actSel = 0;
+
+    QPoint pos(x,y);
+
+    qDebug() << "Mousepress " << pos;
+
+    if(_mouseMarks){
+        int charLine;
+        int charColumn;
+        getCharacterPosition(QPoint(x,y), charLine, charColumn);
+
+        //emit mouseSignal(0, charColumn + 1, charLine + 1, 2);
+    }
+}
+
+void KTerminalDisplay::setUsesMouse(bool usesMouse){
+    _mouseMarks = !usesMouse;
 }
 
 void KTerminalDisplay::setAutoFocus(bool au)

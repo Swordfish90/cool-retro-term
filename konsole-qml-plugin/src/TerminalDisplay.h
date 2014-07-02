@@ -100,9 +100,6 @@ public:
     Q_INVOKABLE void setLineSpacing(uint);
     uint lineSpacing() const;
 
-    Q_INVOKABLE void scrollDown();
-    Q_INVOKABLE void scrollUp();
-
     void emitSelection(bool useXselection,bool appendReturn);
 
     /**
@@ -314,10 +311,13 @@ public slots:
     void setColorScheme(const QString &name);
     QStringList availableColorSchemes();
 
+    void scrollWheel(qreal x, qreal y, int lines);
     void mousePress(qreal x, qreal y);
     void mouseMove(qreal x, qreal y);
     void mouseDoubleClick(qreal x, qreal y);
     void mouseRelease(qreal x, qreal y);
+
+    void setUsesMouse(bool usesMouse);
 
     bool autoFocus() { return m_focusOnClick; }
     void setAutoFocus(bool au);
@@ -409,6 +409,8 @@ public slots:
     /////////////////////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////////////////////////
 
+    void banana(int x, int y, int z, int w);
+
     void setSession(KSession * session);
     KSession * getSession() const { return m_session; }
 
@@ -418,7 +420,8 @@ signals:
     void changedAutoFocus(bool au);
 
     void updatedImage();
-    void clicked();
+
+    void mouseSignal(int,int,int,int);
 
     void terminalSizeChanged();
     void paintedFontSizeChanged();
@@ -701,6 +704,8 @@ private:
     InputMethodData _inputMethodData;
 
     static bool _antialiasText;   // do we antialias or not
+
+    bool _mouseMarks;
 
     //the delay in milliseconds between redrawing blinking text
     static const int TEXT_BLINK_DELAY = 500;

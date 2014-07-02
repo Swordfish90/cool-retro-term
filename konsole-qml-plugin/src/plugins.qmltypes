@@ -74,7 +74,13 @@ Module {
             name: "changedAutoFocus"
             Parameter { name: "au"; type: "bool" }
         }
-        Signal { name: "clicked" }
+        Signal {
+            name: "mouseSignal"
+            Parameter { type: "int" }
+            Parameter { type: "int" }
+            Parameter { type: "int" }
+            Parameter { type: "int" }
+        }
         Signal {
             name: "keyPressedSignal"
             Parameter { name: "e"; type: "QKeyEvent"; isPointer: true }
@@ -121,6 +127,12 @@ Module {
             Parameter { name: "name"; type: "string" }
         }
         Method { name: "availableColorSchemes"; type: "QStringList" }
+        Method {
+            name: "scrollWheel"
+            Parameter { name: "x"; type: "double" }
+            Parameter { name: "y"; type: "double" }
+            Parameter { name: "lines"; type: "int" }
+        }
         Method {
             name: "mousePress"
             Parameter { name: "x"; type: "double" }
@@ -191,7 +203,9 @@ Module {
             name: "setLineSpacing"
             Parameter { name: "i"; type: "uint"}
         }
-        Method { name: "scrollUp" }
-        Method { name: "scrollDown" }
+        Method {
+            name: "setUsesMouse"
+            Parameter { name: "usesMouse"; type: "bool"}
+        }
     }
 }

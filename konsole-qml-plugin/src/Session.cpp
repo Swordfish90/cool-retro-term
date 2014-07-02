@@ -190,17 +190,17 @@ void Session::addView(KTerminalDisplay * widget)
 
     if ( _emulation != 0 ) {
         // connect emulation - view signals and slots
-        connect( widget , SIGNAL(keyPressedSignal(QKeyEvent *)) , _emulation ,
+        QObject::connect( widget , SIGNAL(keyPressedSignal(QKeyEvent *)) , _emulation ,
                  SLOT(sendKeyEvent(QKeyEvent *)) );
-//        connect( widget , SIGNAL(mouseSignal(int,int,int,int)) , _emulation ,
-//                 SLOT(sendMouseEvent(int,int,int,int)) );
+        connect( widget , SIGNAL(mouseSignal(int,int,int,int)) , _emulation ,
+                 SLOT(sendMouseEvent(int,int,int,int)) );
 //        connect( widget , SIGNAL(sendStringToEmu(const char *)) , _emulation ,
 //                 SLOT(sendString(const char *)) );
 
         // allow emulation to notify view when the foreground process
         // indicates whether or not it is interested in mouse signals
-//        connect( _emulation , SIGNAL(programUsesMouseChanged(bool)) , widget ,
-//                 SLOT(setUsesMouse(bool)) );
+        connect( _emulation , SIGNAL(programUsesMouseChanged(bool)) , widget ,
+                 SLOT(setUsesMouse(bool)) );
 
         //widget->setUsesMouse( _emulation->programUsesMouse() );
 

@@ -862,13 +862,13 @@ void Vt102Emulation::reportAnswerBack()
 */
 
 void Vt102Emulation::sendMouseEvent( int cb, int cx, int cy , int eventType )
-{ 
-  if (cx < 1 || cy < 1) 
+{
+  if (cx < 1 || cy < 1)
     return;
 
   // normal buttons are passed as 0x20 + button,
   // mouse wheel (buttons 4,5) as 0x5c + button
-  if (cb >= 4) 
+  if (cb >= 4)
     cb += 0x3c;
 
   //Mouse motion handling

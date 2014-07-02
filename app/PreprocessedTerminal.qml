@@ -130,8 +130,11 @@ Item{
     MouseArea{
         acceptedButtons: Qt.LeftButton | Qt.MiddleButton | Qt.RightButton
         anchors.fill: parent
-        onWheel:
-            wheel.angleDelta.y > 0 ? kterminal.scrollUp() : kterminal.scrollDown()
+        onWheel:{
+            var coord = correctDistortion(wheel.x, wheel.y);
+            var lines = wheel.angleDelta.y > 0 ? -2 : 2;
+            kterminal.scrollWheel(coord.width, coord.height, lines);
+        }
         onClicked: {
             if (mouse.button == Qt.RightButton){
                 contextmenu.popup();
@@ -157,7 +160,8 @@ Item{
         }
         onReleased: {
             if (mouse.button == Qt.LeftButton){
-                kterminal.mouseRelease(mouse.x, mouse.y);
+                var coord = correctDistortion(mouse.x, mouse.y);
+                kterminal.mouseRelease(coord.width, coord.height);
             }
         }
 
