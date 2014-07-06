@@ -30,6 +30,9 @@ ApplicationWindow{
     width: 1024
     height: 768
 
+    minimumWidth: 320
+    minimumHeight: 240
+
     title: qsTr("cool-old-term")
     visible: true
     visibility: shadersettings.fullscreen ? Window.FullScreen : Window.Windowed

@@ -393,7 +393,9 @@ void KTerminalDisplay::setVTFont(const QFont& f)
         qDebug() << "Using an unsupported variable-width font in the terminal.  This may produce display errors.";
     }
 
-    if ( metrics.height() < height() && metrics.maxWidth() < width() )
+    // TODO For some reasons this is bugged with Qt 5.3
+    //if ( metrics.height() < height() && metrics.maxWidth() < width() )
+    if (font.pixelSize() > 0)
     {
         // hint that text should be drawn without anti-aliasing.
         // depending on the user's font configuration, this may not be respected

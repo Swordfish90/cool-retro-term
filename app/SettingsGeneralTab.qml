@@ -133,9 +133,8 @@ Tab{
                     minimumValue: 0
                     onValueChanged: shadersettings.window_scaling = value;
                     value: shadersettings.window_scaling
-                    updateValueWhileDragging: false
                 }
-                Text{text: Math.round(txtslider.__handlePos * 100) + "%"}
+                Text{text: Math.round(txtslider.value * 100) + "%"}
             }
         }
     }
