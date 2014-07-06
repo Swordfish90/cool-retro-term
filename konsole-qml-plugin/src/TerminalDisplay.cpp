@@ -185,8 +185,6 @@ KTerminalDisplay::KTerminalDisplay(QQuickItem *parent) :
     _topMargin = DEFAULT_TOP_MARGIN;
     _leftMargin = DEFAULT_LEFT_MARGIN;
 
-    connect(this, SIGNAL(mouseSignal(int,int,int,int)), this, SLOT(banana(int,int,int,int)));
-
     // setup timers for blinking cursor and text
     _blinkTimer   = new QTimer(this);
     connect(_blinkTimer, SIGNAL(timeout()), this, SLOT(blinkEvent()));
@@ -214,10 +212,6 @@ KTerminalDisplay::~KTerminalDisplay()
     disconnect(_blinkCursorTimer);
 
     delete[] _image;
-}
-
-void KTerminalDisplay::banana(int x, int y, int z, int w){
-    qDebug() << "Called banana " << x << " " << y << " " << z << " " << w;
 }
 
 void KTerminalDisplay::setSession(KSession * session)
@@ -480,9 +474,6 @@ void KTerminalDisplay::mousePress(qreal x, qreal y){
     if (m_focusOnClick) forcedFocus();
     if (m_showVKBonClick) ShowVKB(true);
 
-    QPoint pos(x,y);
-    qDebug() << "Mousepress " <<pos;
-
     int charLine;
     int charColumn;
     getCharacterPosition(QPoint(x,y), charLine, charColumn);
@@ -492,7 +483,6 @@ void KTerminalDisplay::mousePress(qreal x, qreal y){
 
     if(_mouseMarks){
         emit mouseSignal(0, charColumn + 1, charLine + 1, 0);
-        return;
     } else {
         QPoint pos = QPoint(charColumn, charLine);
 
@@ -504,8 +494,6 @@ void KTerminalDisplay::mousePress(qreal x, qreal y){
 
 void KTerminalDisplay::mouseMove(qreal x, qreal y){
     QPoint pos(x, y);
-
-    qDebug() << "Mouse move" << pos;
 
     if(_mouseMarks){
         int charLine;
@@ -526,7 +514,7 @@ void KTerminalDisplay::mouseDoubleClick(qreal x, qreal y){
         int charColumn;
         getCharacterPosition(pos, charLine, charColumn);
 
-        //emit mouseSignal(0, charColumn + 1, charLine + 1, 0);
+        emit mouseSignal(0, charColumn + 1, charLine + 1, 0);
         //emit mouseSignal(0, charColumn + 1, charLine + 1, 0);
     } else {
         _wordSelectionMode = true;
@@ -537,16 +525,12 @@ void KTerminalDisplay::mouseDoubleClick(qreal x, qreal y){
 void KTerminalDisplay::mouseRelease(qreal x, qreal y){
     _actSel = 0;
 
-    QPoint pos(x,y);
-
-    qDebug() << "Mousepress " << pos;
-
     if(_mouseMarks){
         int charLine;
         int charColumn;
         getCharacterPosition(QPoint(x,y), charLine, charColumn);
 
-        //emit mouseSignal(0, charColumn + 1, charLine + 1, 2);
+        emit mouseSignal(0, charColumn + 1, charLine + 1, 2);
     }
 }
 

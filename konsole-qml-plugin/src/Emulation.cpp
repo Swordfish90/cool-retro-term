@@ -64,7 +64,7 @@ Emulation::Emulation() :
   QObject::connect(&_bulkTimer2, SIGNAL(timeout()), this, SLOT(showBulk()) );
    
   // listen for mouse status changes
-  connect( this , SIGNAL(programUsesMouseChanged(bool)) , 
+  connect( this , SIGNAL(programUsesMouseChanged(bool)) ,
            SLOT(usesMouseChanged(bool)) );
 }
 

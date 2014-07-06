@@ -149,8 +149,10 @@ Item{
             }
         }
         onPositionChanged: {
-            var coord = correctDistortion(mouse.x, mouse.y);
-            kterminal.mouseMove(coord.width, coord.height);
+            if (pressedButtons & Qt.LeftButton){
+                var coord = correctDistortion(mouse.x, mouse.y);
+                kterminal.mouseMove(coord.width, coord.height);
+            }
         }
         onPressed: {
             if (mouse.button == Qt.LeftButton){
