@@ -99,8 +99,15 @@ Tab{
             anchors.right: parent.right
             GridLayout{
                 anchors.fill: parent
-                rows: 2
+                rows: 3
                 columns: 3
+                CheckBox{
+                    Layout.columnSpan: 3
+                    checked: shadersettings._frameReflections
+                    text: qsTr("Frame reflections")
+                    onCheckedChanged: shadersettings._frameReflections = checked
+                    enabled: shadersettings.reflectionsAllowed
+                }
                 CheckBox{
                     property int fps: checked ? slider.value : 0
                     onFpsChanged: shadersettings.fps = fps

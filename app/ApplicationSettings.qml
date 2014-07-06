@@ -128,8 +128,9 @@ Item{
 
     // FRAMES /////////////////////////////////////////////////////////////////
 
-    property bool frame_reflections: true
-    property real frame_reflection_strength: ((frame_reflections && framelist.get(frames_index).reflections) ? 1.0 : 0.0) * 0.15
+    property bool _frameReflections: true
+    property bool reflectionsAllowed: framelist.get(frames_index).reflections
+    property bool frameReflections: _frameReflections && reflectionsAllowed
 
     property alias profiles_list: profileslist
     property int profiles_index: 0
@@ -147,7 +148,8 @@ Item{
             contrast: contrast,
             ambient_light: ambient_light,
             fontScalingIndexes: fontScalingIndexes,
-            fontIndexes: fontIndexes
+            fontIndexes: fontIndexes,
+            frameReflections: _frameReflections
         }
         return JSON.stringify(settings);
     }
@@ -210,6 +212,8 @@ Item{
 
         fontIndexes = settings.fontIndexes !== undefined ? settings.fontIndexes : fontIndexes
         fontScalingIndexes = settings.fontScalingIndexes !== undefined ? settings.fontScalingIndexes : fontScalingIndexes
+
+        _frameReflections = settings.frameReflections !== undefined ? settings.frameReflections : _frameReflections;
     }
 
     function loadProfileString(profileString){

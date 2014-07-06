@@ -42,7 +42,7 @@ ShaderEffect {
     property real brightness_flickering: shadersettings.brightness_flickering
     property real horizontal_sincronization: shadersettings.horizontal_sincronization
 
-    property bool frame_reflection_strength: shadersettings.frame_reflection_strength
+    property bool frameReflections: shadersettings.frameReflections
 
     property real disp_top: frame.item.displacementTop * shadersettings.window_scaling
     property real disp_bottom: frame.item.displacementBottom * shadersettings.window_scaling
@@ -51,7 +51,7 @@ ShaderEffect {
 
     property real brightness: shadersettings.brightness * 1.5 + 0.5
 
-    property real time: timeManager.time !== 0 ? timeManager.time : 1
+    property real time: timeManager.time
     property variant randomFunctionSource: randfuncsource
 
     blending: false
@@ -138,7 +138,7 @@ ShaderEffect {
             :"
                 vec2 coords = qt_TexCoord0;") +
 
-            (frame_reflection_strength ? "
+            (frameReflections ? "
                 vec2 inside = step(0.0, coords) - step(1.0, coords);
                 coords = abs(mod(floor(coords), 2.0) - fract(coords)) * clamp(inside.x + inside.y, 0.0, 1.0);" : "") +
 

@@ -122,12 +122,6 @@ Tab{
                     currentIndex: shadersettings.frames_index
                     onCurrentIndexChanged: shadersettings.frames_index = currentIndex
                 }
-                CheckBox{
-                    checked: shadersettings.frame_reflections
-                    text: qsTr("Reflections")
-                    onCheckedChanged: shadersettings.frame_reflections = checked
-                    enabled: framescombobox.model.get(framescombobox.currentIndex).reflections
-                }
             }
         }
     }

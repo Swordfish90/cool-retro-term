@@ -21,7 +21,7 @@
 import QtQuick 2.2
 
 Timer{
-    property int time
+    property real time
 
     NumberAnimation on time {
         from: 0

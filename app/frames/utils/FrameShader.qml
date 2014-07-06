@@ -1,4 +1,5 @@
 import QtQuick 2.2
+import QtGraphicalEffects 1.0
 
 ShaderEffect{
     property variant source: framesource
@@ -7,49 +8,50 @@ ShaderEffect{
     property real ambient_light: shadersettings.ambient_light
     property color font_color: shadersettings.font_color
     property color background_color: shadersettings.background_color
-    property real time: timeManager.time
-    property variant randomFunctionSource: randfuncsource
-    property real brightness_flickering: shadersettings.brightness_flickering
     property real brightness: shadersettings.brightness * 1.5 + 0.5
 
-    property real frame_reflection_strength: shadersettings.frame_reflection_strength
+    property bool frameReflections: shadersettings.frameReflections
+    property variant lightSource: reflectionEffectSourceLoader.item
 
-    property color reflection_color: Qt.rgba((font_color.r*0.3 + background_color.r*0.7),
-                                             (font_color.g*0.3 + background_color.g*0.7),
-                                             (font_color.b*0.3 + background_color.b*0.7),
-                                             1.0)
+    Loader{
+        id: reflectionEffectLoader
+        width: parent.width * 0.33
+        height: parent.height * 0.33
+        active: frameReflections
+
+        sourceComponent: FastBlur{
+            id: frameReflectionEffect
+            radius: 128
+            source: terminal.kterminal
+            smooth: false
+        }
+    }
+
+    Loader{
+        id: reflectionEffectSourceLoader
+        active: frameReflections
+        sourceComponent: ShaderEffectSource{
+            id: frameReflectionSource
+            sourceItem: reflectionEffectLoader.item
+            hideSource: true
+            smooth: true
+        }
+    }
 
     blending: true
-
-    vertexShader: "
-                    uniform highp mat4 qt_Matrix;
-                    uniform highp float time;
-                    uniform sampler2D randomFunctionSource;
-
-                    attribute highp vec4 qt_Vertex;
-                    attribute highp vec2 qt_MultiTexCoord0;
-
-                    varying highp vec2 qt_TexCoord0;
-                    varying lowp float brightness;
-
-                    void main() {
-                        qt_TexCoord0 = qt_MultiTexCoord0;
-                        brightness = "+brightness.toFixed(1)+";" +
-                        (brightness_flickering !== 0 ?
-                            "brightness -= texture2D(randomFunctionSource, vec2(fract(time/(1024.0*2.0)), fract(time/(1024.0*1024.0*2.0)))).r * "+brightness_flickering.toFixed(1)+";"
-                        : "") + "
-
-                        gl_Position = qt_Matrix * qt_Vertex;
-                    }"
 
     fragmentShader: "
                             uniform sampler2D source;
                             uniform sampler2D normals;
                             uniform highp float screen_distorsion;
                             uniform highp float ambient_light;
-                            uniform highp float qt_Opacity;
+                            uniform highp float qt_Opacity;" +
 
-                            uniform vec4 reflection_color;
+                            (frameReflections ?
+                                "uniform sampler2D lightSource;" : "") + "
+
+                            uniform vec4 font_color;
+                            uniform vec4 background_color;
                             varying lowp float brightness;
 
                             varying highp vec2 qt_TexCoord0;
@@ -65,11 +67,23 @@ ShaderEffect{
                                 vec4 txt_color = texture2D(source, coords);
                                 vec4 txt_normal = texture2D(normals, coords);
                                 vec3 normal = normalize(txt_normal.rgb * 2.0 - 1.0);
-                                vec3 light_dir = normalize(vec3(0.5,0.5, 0.0) - vec3(qt_TexCoord0, 0.0));
-                                float diffuse = dot(normal, light_dir);
-                                float reflection = (diffuse * 0.6 + 0.4) * txt_normal.a;
-                                float reflection_alpha = (1.0 - diffuse*"+frame_reflection_strength.toFixed(1)+");
-                                vec4 dark_color = vec4(reflection_color.rgb * reflection * 0.4, txt_normal.a * reflection_alpha);
+                                vec3 light_direction = normalize(vec3(0.5, 0.5, 0.0) - vec3(qt_TexCoord0, 0.0));
+
+                                float dotProd = dot(normal, light_direction);" +
+
+                                (frameReflections ? "
+                                    float screenLight = texture2D(lightSource, coords).r;
+                                    float clampedDotProd = clamp(dotProd, 0.05, 1.0);
+                                    float diffuseReflection = clamp(screenLight * 1.5 * clampedDotProd, 0.0, 0.35);
+                                    float reflectionAlpha = mix(1.0, 0.90, dotProd);"
+                                : "
+                                    float diffuseReflection = 0.0;
+                                    float reflectionAlpha = 1.0;") + "
+
+                                vec3 back_color = background_color.rgb * (0.2 + 0.5 * dotProd);
+                                vec3 front_color = font_color.rgb * (0.05 + diffuseReflection);
+
+                                vec4 dark_color = vec4((back_color + front_color) * txt_normal.a, txt_normal.a * reflectionAlpha);
                                 gl_FragColor = mix(dark_color, txt_color, ambient_light);
                             }"
 
