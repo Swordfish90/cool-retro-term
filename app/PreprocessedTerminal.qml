@@ -239,29 +239,31 @@ Item{
 
              uniform highp vec2 virtual_resolution;" +
 
-        (mBlur !== 0 ?
-        "uniform lowp sampler2D blurredSource;"
-        : "") +
+            (mBlur !== 0 ?
+            "uniform lowp sampler2D blurredSource;"
+            : "") +
 
-        "void main() {" +
-        "vec2 coords = qt_TexCoord0;" +
-        (mScanlines != shadersettings.no_rasterization ? "
-                    coords.y = floor(virtual_resolution.y * coords.y) / virtual_resolution.y;" +
-        (mScanlines == shadersettings.pixel_rasterization ? "
-                        coords.x = floor(virtual_resolution.x * coords.x) / virtual_resolution.x;" : "")
-        : "") +
-        "coords = coords + delta;" +
-        "vec4 vcolor = texture2D(source, coords).r * 256.0;
-         float color = vcolor.r * 0.21 + vcolor.g * 0.72 + vcolor.b + 0.04;" +
-        (mBlur !== 0 ?
-        "float blurredSourceColor = texture2D(blurredSource, coords).a * 256.0;" +
-        "blurredSourceColor = blurredSourceColor - blurredSourceColor * " + (1.0 - motionBlurCoefficient) * fpsAttenuation+ ";" +
-        "color = step(1.0, color) * color + step(color, 1.0) * blurredSourceColor;"
-        : "") +
+            "void main() {" +
+                "vec2 coords = qt_TexCoord0;" +
+                (mScanlines != shadersettings.no_rasterization ? "
+                            coords.y = floor(virtual_resolution.y * coords.y) / virtual_resolution.y;" +
+                (mScanlines == shadersettings.pixel_rasterization ? "
+                            coords.x = floor(virtual_resolution.x * coords.x) / virtual_resolution.x;" : "")
+                : "") +
+                "coords = coords + delta;" +
+                "vec4 vcolor = texture2D(source, coords) * 256.0;
+                 float color = vcolor.r * 0.21 + vcolor.g * 0.72 + vcolor.b + 0.04;" +
+                (mBlur !== 0 ?
+                    "float blurredSourceColor = texture2D(blurredSource, coords).a * 256.0;" +
+                    "blurredSourceColor = blurredSourceColor - blurredSourceColor * " + (1.0 - motionBlurCoefficient) * fpsAttenuation+ ";" +
+                    "color = step(1.0, color) * color + step(color, 1.0) * blurredSourceColor;"
+                : "") +
 
 
-        "gl_FragColor.a = floor(color) / 256.0;" +
-        "}"
+                "gl_FragColor.a = floor(color) / 256.0;" +
+            "}"
+
+        onStatusChanged: if (log) console.log(log) //Print warning messages
     }
     ///////////////////////////////////////////////////////////////////////////
     //  EFFECTS  //////////////////////////////////////////////////////////////
@@ -330,6 +332,8 @@ Item{
         "void main() {" +
             "gl_FragColor.a = smoothNoise(qt_TexCoord0 * virtual_resolution);" +
         "}"
+
+        onStatusChanged: if (log) console.log(log) //Print warning messages
     }
     ShaderEffectSource{
         id: staticNoiseSource
@@ -403,7 +407,10 @@ Item{
 
                 "gl_FragColor.a = color;" +
             "}"
+
+            onStatusChanged: if (log) console.log(log) //Print warning messages
         }
+        onStatusChanged: if (log) console.log(log) //Print warning messages
     }
     ShaderEffectSource{
         id: rasterizationEffectSource
