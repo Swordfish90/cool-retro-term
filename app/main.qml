@@ -95,24 +95,31 @@ ApplicationWindow{
         id: shadersettings
     }
 
-    Loader{
-        id: frame
-        property rect sourceRect: Qt.rect(-item.rectX * shadersettings.window_scaling,
-                                          -item.rectY * shadersettings.window_scaling,
-                                          terminal.width + 2*item.rectX * shadersettings.window_scaling,
-                                          terminal.height + 2*item.rectY * shadersettings.window_scaling)
-        anchors.fill: parent
-        z: 2.1
-        source: shadersettings.frame_source
-        opacity: 1.0
-    }
-
     Item{
         id: maincontainer
         anchors.centerIn: parent
         width: parent.width * shadersettings.window_scaling
         height: parent.height * shadersettings.window_scaling
         scale: 1.0 / shadersettings.window_scaling
+        smooth: false
+        antialiasing: false
+
+        Loader{
+            id: frame
+            property rect sourceRect: Qt.rect(-item.rectX * shadersettings.window_scaling,
+                                              -item.rectY * shadersettings.window_scaling,
+                                              terminal.width + 2*item.rectX * shadersettings.window_scaling,
+                                              terminal.height + 2*item.rectY * shadersettings.window_scaling)
+            anchors.fill: parent
+            z: 2.1
+            source: shadersettings.frame_source
+            opacity: 1.0
+            onLoaded: {
+                item.textureWidth = Qt.binding(function() { return terminalWindow.width;})
+                item.textureHeight = Qt.binding(function () {return terminalWindow.height;})
+                console.log(terminalWindow.width);
+            }
+        }
         Image{
             id: randtexture
             source: "frames/images/randfunction.png"

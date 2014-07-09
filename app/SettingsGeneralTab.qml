@@ -128,11 +128,12 @@ Tab{
                 Slider{
                     Layout.fillWidth: true
                     id: txtslider
-                    stepSize: 0.01
+                    stepSize: 0.25
                     maximumValue: 1
-                    minimumValue: 0
+                    minimumValue: 0.50
                     onValueChanged: shadersettings.window_scaling = value;
                     value: shadersettings.window_scaling
+                    tickmarksEnabled: true
                 }
                 Text{text: Math.round(txtslider.value * 100) + "%"}
             }
