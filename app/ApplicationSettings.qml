@@ -304,7 +304,7 @@ Item{
         }
         ListElement{
             text: "Default Pixelated"
-            obj_string: '{"background_color":"#000000","bloom_strength":0.65,"brightness_flickering":0.1,"fontIndex":0,"font_color":"#ff8100","frames_index":1,"glowing_line_strength":0.2,"horizontal_sincronization":0.1,"jitter":0,"motion_blur":0.45,"noise_strength":0.14,"rasterization":2,"screen_distortion":0.05}'
+            obj_string: '{"background_color":"#000000","bloom_strength":0.4,"brightness_flickering":0.1,"fontIndex":0,"font_color":"#ff8100","frames_index":1,"glowing_line_strength":0.2,"horizontal_sincronization":0.1,"jitter":0,"motion_blur":0.45,"noise_strength":0.14,"rasterization":2,"screen_distortion":0.05}'
             builtin: true
         }
         ListElement{

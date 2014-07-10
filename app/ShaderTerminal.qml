@@ -29,7 +29,7 @@ ShaderEffect {
     property variant rasterizationSource: terminal.rasterizationSource
     property variant noiseSource: terminal.staticNoiseSource
     property size txt_Size: Qt.size(frame.sourceRect.width, frame.sourceRect.height)
-    property real bloom: shadersettings.bloom_strength
+    property real bloom: shadersettings.bloom_strength * 2.5
 
     property int rasterization: shadersettings.rasterization
 
@@ -165,11 +165,11 @@ ShaderEffect {
             (glowing_line_strength !== 0 ? "
                 color += randomPass(coords) * glowing_line_strength;" : "") +
 
-            (bloom !== 0 ? "
-                color += texture2D(bloomSource, coords).r *" + str(2.5 * bloom) + ";" : "") +
-
             "vec3 finalColor = mix(background_color, font_color, color).rgb;" +
             "finalColor *= texture2D(rasterizationSource, coords).a;" +
+
+            (bloom !== 0 ? "
+                finalColor += font_color.rgb * texture2D(bloomSource, coords).r *" + str(bloom) + ";" : "") +
 
             (brightness_flickering !== 0 ? "
                 finalColor *= brightness;" : "") +
