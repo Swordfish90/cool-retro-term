@@ -2,6 +2,9 @@ import QtQuick 2.2
 
 Item{
     id: framecontainer
+    property int textureWidth
+    property int textureHeight
+
     property int addedWidth
     property int addedHeight
     property int borderLeft
@@ -28,8 +31,8 @@ Item{
     BorderImage{
         id: frameimage
         anchors.centerIn: parent
-        width: parent.width + addedWidth
-        height: parent.height + addedHeight
+        width: textureWidth + addedWidth
+        height: textureHeight + addedHeight
 
         border.bottom: borderBottom
         border.top: borderTop
@@ -57,14 +60,18 @@ Item{
         id: framesource
         sourceItem: frameimage
         hideSource: true
+        textureSize: Qt.size(parent.width, parent.height)
     }
     ShaderEffectSource{
         id: framesourcenormals
         sourceItem: framenormals
         hideSource: true
+        textureSize: Qt.size(parent.width, parent.height)
     }
     Loader{
-        anchors.fill: frameimage
+        anchors.centerIn: parent
+        width: parent.width + (addedWidth / textureWidth) * parent.width
+        height: parent.height + (addedHeight / textureHeight) * parent.height
         source: shaderString
     }
 }

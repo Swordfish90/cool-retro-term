@@ -107,12 +107,12 @@ Item{
                     ? virtualCharSize
                     : Qt.size(paintedSize.width / 2, paintedSize.height / 2);
 
-            var virtualPxSize = Qt.size(paintedSize.width  / charSize.width,
-                                        paintedSize.height / charSize.height)
+            var virtualPxSize = Qt.size((paintedSize.width  / charSize.width) * shadersettings.window_scaling,
+                                        (paintedSize.height / charSize.height) * shadersettings.window_scaling)
 
             terminalContainer.virtualPxSize = virtualPxSize;
 
-            setLineSpacing(lineSpacing);
+            setLineSpacing(lineSpacing * shadersettings.window_scaling);
             restartBlurredSource();
         }
         Component.onCompleted: {
