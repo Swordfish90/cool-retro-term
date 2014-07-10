@@ -32,8 +32,6 @@ Window {
 
     property int tabmargins: 15
 
-    modality: Qt.ApplicationModal
-
     TabView{
         anchors.fill: parent
         anchors.margins: 10
