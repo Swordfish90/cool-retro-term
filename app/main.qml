@@ -27,15 +27,16 @@ import org.kde.konsole 0.1
 
 ApplicationWindow{
     id: terminalWindow
+
     width: 1024
     height: 768
-
     minimumWidth: 320
     minimumHeight: 240
 
+    property bool fullscreen: shadersettings.fullscreen
+    onFullscreenChanged: visibility = (fullscreen ? Window.FullScreen : Window.Windowed)
+
     title: qsTr("cool-old-term")
-    visible: true
-    visibility: shadersettings.fullscreen ? Window.FullScreen : Window.Windowed
 
     Action {
         id: fullscreenAction
@@ -90,11 +91,13 @@ ApplicationWindow{
             MenuItem {action: fullscreenAction}
         }
     }
-
     ApplicationSettings{
         id: shadersettings
     }
-
+    TimeManager{
+        id: timeManager
+        enableTimer: terminalWindow.visible
+    }
     Item{
         id: maincontainer
         anchors.centerIn: parent
@@ -106,38 +109,12 @@ ApplicationWindow{
 
         Loader{
             id: frame
-            property rect sourceRect: Qt.rect(-item.rectX * shadersettings.window_scaling,
-                                              -item.rectY * shadersettings.window_scaling,
-                                              terminal.width + 2*item.rectX * shadersettings.window_scaling,
-                                              terminal.height + 2*item.rectY * shadersettings.window_scaling)
             anchors.fill: parent
+
+            property rect sourceRect: item.sourceRect
+
             z: 2.1
             source: shadersettings.frame_source
-            opacity: 1.0
-            onLoaded: {
-                item.textureWidth = Qt.binding(function() { return terminalWindow.width;})
-                item.textureHeight = Qt.binding(function () {return terminalWindow.height;})
-                console.log(terminalWindow.width);
-            }
-        }
-        Image{
-            id: randtexture
-            source: "frames/images/randfunction.png"
-            width: 512
-            height: 512
-            sourceSize.width: 512
-            sourceSize.height: 256
-            fillMode: Image.TileVertically
-        }
-        ShaderEffectSource{
-            id: randfuncsource
-            sourceItem: randtexture
-            live: false
-            hideSource: true
-            wrapMode: ShaderEffectSource.Repeat
-        }
-        TimeManager{
-            id: timeManager
         }
         PreprocessedTerminal{
             id: terminal

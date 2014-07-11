@@ -2,8 +2,8 @@ import QtQuick 2.2
 
 Item{
     id: framecontainer
-    property int textureWidth
-    property int textureHeight
+    property int textureWidth: terminalWindow.width
+    property int textureHeight: terminalWindow.height
 
     property int addedWidth
     property int addedHeight
@@ -13,7 +13,6 @@ Item{
     property int borderBottom
     property string imageSource
     property string normalsSource
-    property rect sourceRect
     property string shaderString
 
     //Value used to create the rect used to add the border to the texture
@@ -27,6 +26,11 @@ Item{
     property real displacementBottom
 
     property real distortionCoefficient
+
+    property rect sourceRect: Qt.rect(-rectX * shadersettings.window_scaling,
+                                      -rectY * shadersettings.window_scaling,
+                                      terminal.width + 2*rectX * shadersettings.window_scaling,
+                                      terminal.height + 2*rectY * shadersettings.window_scaling)
 
     BorderImage{
         id: frameimage

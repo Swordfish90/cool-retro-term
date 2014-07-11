@@ -346,6 +346,7 @@ Item{
     }
 
     // RASTERIZATION //////////////////////////////////////////////////////////
+
     ShaderEffect{
         id: rasterizationContainer
         width: frame.sourceRect.width

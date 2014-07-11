@@ -21,18 +21,19 @@
 import QtQuick 2.2
 
 Timer{
+    default property bool enableTimer: false
     property real time
 
     NumberAnimation on time {
         from: 0
         to: 100000
-        running: shadersettings.fps === 0
+        running: shadersettings.fps === 0 && enableTimer
         duration: 100000
         loops: Animation.Infinite
     }
 
     onTriggered: time += interval
-    running: shadersettings.fps !== 0
+    running: shadersettings.fps !== 0 && enableTimer
     interval: Math.round(1000 / shadersettings.fps)
     repeat: true
 }

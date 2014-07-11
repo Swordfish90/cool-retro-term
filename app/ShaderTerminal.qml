@@ -56,6 +56,25 @@ ShaderEffect {
 
     blending: false
 
+    //Smooth random texture used for flickering effect.
+    Image{
+        id: randtexture
+        source: "frames/images/randfunction.png"
+        width: 512
+        height: 512
+        sourceSize.width: 512
+        sourceSize.height: 256
+        fillMode: Image.TileVertically
+    }
+    ShaderEffectSource{
+        id: randfuncsource
+        sourceItem: randtexture
+        live: false
+        hideSource: true
+        wrapMode: ShaderEffectSource.Repeat
+    }
+
+    //Print the number with a reasonable precision for the shader.
     function str(num){
         return num.toFixed(8);
     }
