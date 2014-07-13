@@ -107,11 +107,22 @@ Item{
         onLoaded: handleFontChanged()
     }
 
-    property var fontlist: fontManager.item.fontlist
+    signal fontScalingChanged
     property var fontScalingList: fontManager.item.fontScalingList
+    property var fontScalingIndexes: [5,1,1]
+
+    function setScalingIndex(newScaling){
+        fontScalingIndexes[rasterization] = newScaling;
+        fontScalingChanged();
+        handleFontChanged();
+    }
+
+    function getScalingIndex(){
+        return fontScalingIndexes[rasterization];
+    }
 
     property var fontIndexes: [0,0,0]
-    property var fontScalingIndexes: [5,1,1]
+    property var fontlist: fontManager.item.fontlist
 
     function handleFontChanged(){
         if(!fontManager.item) return;

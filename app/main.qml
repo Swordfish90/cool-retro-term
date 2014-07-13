@@ -69,6 +69,25 @@ ApplicationWindow{
         shortcut: "Ctrl+Shift+V"
         onTriggered: terminal.pasteClipboard()
     }
+    Action{
+        id: zoomIn
+        text: qsTr("&Zoom In")
+        shortcut: "Ctrl++"
+        onTriggered: {
+            var oldScaling = shadersettings.fontScalingIndexes[shadersettings.rasterization];
+            var maxScalingIndex = shadersettings.fontScalingList.length - 1;
+            shadersettings.setScalingIndex(Math.min(oldScaling + 1, maxScalingIndex));
+        }
+    }
+    Action{
+        id: zoomOut
+        text: qsTr("&Zoom Out")
+        shortcut: "Ctrl+-"
+        onTriggered: {
+            var oldScaling = shadersettings.fontScalingIndexes[shadersettings.rasterization];
+            shadersettings.setScalingIndex(Math.max(oldScaling - 1, 0));
+        }
+    }
 
     menuBar: MenuBar {
         id: menubar
@@ -89,6 +108,9 @@ ApplicationWindow{
             title: qsTr("View")
             visible: shadersettings.fullscreen ? false : true
             MenuItem {action: fullscreenAction}
+            MenuSeparator{}
+            MenuItem {action: zoomIn}
+            MenuItem {action: zoomOut}
         }
     }
     ApplicationSettings{

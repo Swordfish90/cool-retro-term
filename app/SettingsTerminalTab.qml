@@ -76,12 +76,12 @@ Tab{
                         value: updateIndex()
                         onValueChanged: {
                             if(!enabled) return; //Ugly and hacky solution. Look for a better solution.
-                            shadersettings.fontScalingIndexes[shadersettings.rasterization] = value;
-                            shadersettings.handleFontChanged();
+                            shadersettings.setScalingIndex(value);
                         }
                         function updateIndex(){
-                            value = shadersettings.fontScalingIndexes[shadersettings.rasterization];
+                            value = shadersettings.getScalingIndex();
                         }
+                        Component.onCompleted: shadersettings.fontScalingChanged.connect(updateIndex);
                     }
                     Text{
                         text: shadersettings.fontScalingList[scalingChanger.value].toFixed(2)
