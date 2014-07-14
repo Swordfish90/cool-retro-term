@@ -36,6 +36,8 @@ ApplicationWindow{
     property bool fullscreen: shadersettings.fullscreen
     onFullscreenChanged: visibility = (fullscreen ? Window.FullScreen : Window.Windowed)
 
+    flags: Qt.WA_TranslucentBackground
+    color: "#00000000"
     title: qsTr("cool-old-term")
 
     Action {
@@ -128,6 +130,7 @@ ApplicationWindow{
         scale: 1.0 / shadersettings.window_scaling
         smooth: false
         antialiasing: false
+        opacity: shadersettings.windowOpacity * 0.3 + 0.7
 
         Loader{
             id: frame

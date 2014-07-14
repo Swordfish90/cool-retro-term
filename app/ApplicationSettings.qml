@@ -28,6 +28,7 @@ Item{
 
     property bool fullscreen: false
 
+    property real windowOpacity: 1.0
     property real ambient_light: 0.2
     property real contrast: 0.85
     property real brightness: 0.5
@@ -160,7 +161,8 @@ Item{
             ambient_light: ambient_light,
             fontScalingIndexes: fontScalingIndexes,
             fontIndexes: fontIndexes,
-            frameReflections: _frameReflections
+            frameReflections: _frameReflections,
+            windowOpacity: windowOpacity
         }
         return JSON.stringify(settings);
     }
@@ -225,6 +227,7 @@ Item{
         fontScalingIndexes = settings.fontScalingIndexes !== undefined ? settings.fontScalingIndexes : fontScalingIndexes
 
         _frameReflections = settings.frameReflections !== undefined ? settings.frameReflections : _frameReflections;
+        windowOpacity = settings.windowOpacity !== undefined ? settings.windowOpacity : windowOpacity;
     }
 
     function loadProfileString(profileString){

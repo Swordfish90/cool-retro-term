@@ -89,6 +89,11 @@ Tab{
                     onValueChanged: shadersettings.ambient_light = value;
                     value: shadersettings.ambient_light
                 }
+                Text{ text: qsTr("Opacity") }
+                SimpleSlider{
+                    onValueChanged: shadersettings.windowOpacity = value
+                    value: shadersettings.windowOpacity
+                }
             }
         }
         GroupBox{

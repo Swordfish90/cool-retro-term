@@ -197,7 +197,7 @@ Item{
         id: blurredSource
         sourceItem: blurredterminal
         recursive: true
-        live: true
+        live: false
 
         smooth: false
         antialiasing: false
@@ -205,13 +205,11 @@ Item{
         Timer{
             id: livetimer
             running: true
-            onTriggered: parent.live = false;
+            onRunningChanged: running ?
+                                  timeManager.onTimeChanged.connect(blurredSource.scheduleUpdate) :
+                                  timeManager.onTimeChanged.disconnect(blurredSource.scheduleUpdate)
 
-            function updateImageHandler(){
-                livetimer.restart();
-                blurredSource.live = true;
-            }
-            Component.onCompleted: kterminal.updatedImage.connect(updateImageHandler);
+            Component.onCompleted: kterminal.updatedImage.connect(restart);
         }
     }
     ShaderEffectSource{
@@ -219,6 +217,7 @@ Item{
         sourceItem: blurredterminal
         sourceRect: frame.sourceRect
         format: ShaderEffectSource.Alpha
+        hideSource: true
     }
     ShaderEffect {
         id: blurredterminal
