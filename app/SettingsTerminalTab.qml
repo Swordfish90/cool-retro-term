@@ -98,14 +98,14 @@ Tab{
                     name: qsTr("Font")
                     height: 50
                     Layout.fillWidth: true
-                    onButton_colorChanged: shadersettings._font_color = button_color
+                    onColorSelected: shadersettings._font_color = color;
                     button_color: shadersettings._font_color
                 }
                 ColorButton{
                     name: qsTr("Background")
                     height: 50
                     Layout.fillWidth: true
-                    onButton_colorChanged: shadersettings._background_color = button_color
+                    onColorSelected: shadersettings._background_color = color;
                     button_color: shadersettings._background_color
                 }
             }

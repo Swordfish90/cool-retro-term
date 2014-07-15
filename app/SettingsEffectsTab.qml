@@ -59,6 +59,12 @@ Tab{
                 _value: shadersettings.screen_distortion;
             }
             CheckableSlider{
+                name: qsTr("Ambient light")
+                onValueChanged: shadersettings.ambient_light = value;
+                _value: shadersettings.ambient_light
+                enabled: shadersettings.frames_index !== 0
+            }
+            CheckableSlider{
                 name: qsTr("Brightness flickering")
                 onValueChanged: shadersettings.brightness_flickering= value;
                 _value: shadersettings.brightness_flickering;

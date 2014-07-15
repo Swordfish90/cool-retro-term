@@ -23,6 +23,7 @@ import QtQuick.Controls 1.1
 import QtQuick.Layouts 1.1
 
 RowLayout {
+    property bool enabled: true
     property alias name: check.text
     property double value: (check.checked) ? _value : 0.0
     property alias _value: slider.value
@@ -39,12 +40,13 @@ RowLayout {
         id: check
         implicitWidth: 150
         Component.onCompleted: checked = (_value !== 0);
+        enabled: parent.enabled
     }
     Slider{
         id: slider
         stepSize: parent.stepSize
         Layout.fillWidth: true
-        enabled: check.checked
+        enabled: check.checked && parent.enabled
     }
     Text{
         id: textfield

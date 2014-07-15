@@ -156,13 +156,9 @@ Item{
             fps: fps,
             window_scaling: window_scaling,
             show_terminal_size: show_terminal_size,
-            brightness: brightness,
-            contrast: contrast,
-            ambient_light: ambient_light,
             fontScalingIndexes: fontScalingIndexes,
             fontIndexes: fontIndexes,
             frameReflections: _frameReflections,
-            windowOpacity: windowOpacity
         }
         return JSON.stringify(settings);
     }
@@ -181,6 +177,10 @@ Item{
             bloom_strength: bloom_strength,
             rasterization: rasterization,
             jitter: jitter,
+            brightness: brightness,
+            contrast: contrast,
+            ambient_light: ambient_light,
+            windowOpacity: windowOpacity,
             fontIndex: fontIndexes[rasterization]
         }
         return JSON.stringify(settings);
@@ -213,11 +213,6 @@ Item{
     function loadSettingsString(settingsString){
         var settings = JSON.parse(settingsString);
 
-        ambient_light = settings.ambient_light !== undefined ? settings.ambient_light : ambient_light;
-
-        contrast = settings.contrast !== undefined ? settings.contrast : contrast;
-        brightness = settings.brightness !== undefined ? settings.brightness : brightness
-
         show_terminal_size = settings.show_terminal_size !== undefined ? settings.show_terminal_size : show_terminal_size
 
         fps = settings.fps !== undefined ? settings.fps: fps
@@ -227,7 +222,6 @@ Item{
         fontScalingIndexes = settings.fontScalingIndexes !== undefined ? settings.fontScalingIndexes : fontScalingIndexes
 
         _frameReflections = settings.frameReflections !== undefined ? settings.frameReflections : _frameReflections;
-        windowOpacity = settings.windowOpacity !== undefined ? settings.windowOpacity : windowOpacity;
     }
 
     function loadProfileString(profileString){
@@ -250,6 +244,11 @@ Item{
         rasterization = settings.rasterization !== undefined ? settings.rasterization : rasterization;
 
         jitter = settings.jitter !== undefined ? settings.jitter : jitter;
+
+        ambient_light = settings.ambient_light !== undefined ? settings.ambient_light : ambient_light;
+        contrast = settings.contrast !== undefined ? settings.contrast : contrast;
+        brightness = settings.brightness !== undefined ? settings.brightness : brightness;
+        windowOpacity = settings.windowOpacity !== undefined ? settings.windowOpacity : windowOpacity;
 
         fontIndexes[rasterization] = settings.fontIndex !== undefined ? settings.fontIndex : fontIndexes[rasterization];
     }
@@ -303,37 +302,42 @@ Item{
         id: profileslist
         ListElement{
             text: "Default Amber"
-            obj_string: '{"background_color":"#000000","bloom_strength":0.65,"brightness_flickering":0.1,"fontIndex":0,"font_color":"#ff8100","frames_index":1,"glowing_line_strength":0.2,"horizontal_sincronization":0.08,"jitter":0.18,"motion_blur":0.45,"noise_strength":0.1,"rasterization":0,"screen_distortion":0.1}'
+            obj_string: '{"ambient_light":0.2,"background_color":"#000000","bloom_strength":0.65,"brightness":0.5,"brightness_flickering":0.1,"contrast":0.85,"fontIndex":0,"font_color":"#ff8100","frames_index":1,"glowing_line_strength":0.2,"horizontal_sincronization":0.08,"jitter":0.18,"motion_blur":0.4,"noise_strength":0.1,"rasterization":0,"screen_distortion":0.1,"windowOpacity":1}'
             builtin: true
         }
         ListElement{
             text: "Default Green"
-            obj_string: '{"background_color":"#000000","bloom_strength":0.4,"brightness_flickering":0.1,"fontIndex":0,"font_color":"#0ccc68","frames_index":1,"glowing_line_strength":0.2,"horizontal_sincronization":0.08,"jitter":0.18,"motion_blur":0.45,"noise_strength":0.1,"rasterization":0,"screen_distortion":0.1}'
+            obj_string: '{"ambient_light":0.2,"background_color":"#000000","bloom_strength":0.4,"brightness":0.5,"brightness_flickering":0.1,"contrast":0.85,"fontIndex":0,"font_color":"#0ccc68","frames_index":1,"glowing_line_strength":0.2,"horizontal_sincronization":0.08,"jitter":0.18,"motion_blur":0.45,"noise_strength":0.1,"rasterization":0,"screen_distortion":0.1,"windowOpacity":1}'
             builtin: true
         }
         ListElement{
             text: "Default Scanlines"
-            obj_string: '{"background_color":"#000000","bloom_strength":0.4,"brightness_flickering":0.1,"fontIndex":0,"font_color":"#00ff5b","frames_index":1,"glowing_line_strength":0.2,"horizontal_sincronization":0.07,"jitter":0.11,"motion_blur":0.4,"noise_strength":0.05,"rasterization":1,"screen_distortion":0.1}'
+            obj_string: '{"ambient_light":0.2,"background_color":"#000000","bloom_strength":0.4,"brightness":0.5,"brightness_flickering":0.1,"contrast":0.85,"fontIndex":0,"font_color":"#00ff5b","frames_index":1,"glowing_line_strength":0.2,"horizontal_sincronization":0.07,"jitter":0.11,"motion_blur":0.4,"noise_strength":0.05,"rasterization":1,"screen_distortion":0.1,"windowOpacity":1}'
             builtin: true
         }
         ListElement{
             text: "Default Pixelated"
-            obj_string: '{"background_color":"#000000","bloom_strength":0.4,"brightness_flickering":0.1,"fontIndex":0,"font_color":"#ff8100","frames_index":1,"glowing_line_strength":0.2,"horizontal_sincronization":0.1,"jitter":0,"motion_blur":0.45,"noise_strength":0.14,"rasterization":2,"screen_distortion":0.05}'
+            obj_string: '{"ambient_light":0.2,"background_color":"#000000","bloom_strength":0.4,"brightness":0.5,"brightness_flickering":0.1,"contrast":0.85,"fontIndex":0,"font_color":"#ff8100","frames_index":1,"glowing_line_strength":0.2,"horizontal_sincronization":0.1,"jitter":0,"motion_blur":0.45,"noise_strength":0.14,"rasterization":2,"screen_distortion":0.05,"windowOpacity":1}'
             builtin: true
         }
         ListElement{
             text: "Apple ]["
-            obj_string: '{"background_color":"#000000","bloom_strength":0.5,"brightness_flickering":0.2,"fontIndex":2,"font_color":"#2fff91","frames_index":1,"glowing_line_strength":0.22,"horizontal_sincronization":0.08,"jitter":0.1,"motion_blur":0.65,"noise_strength":0.08,"rasterization":1,"screen_distortion":0.18}'
+            obj_string: '{"ambient_light":0.2,"background_color":"#000000","bloom_strength":0.5,"brightness":0.5,"brightness_flickering":0.2,"contrast":0.85,"fontIndex":2,"font_color":"#2fff91","frames_index":1,"glowing_line_strength":0.22,"horizontal_sincronization":0.08,"jitter":0.1,"motion_blur":0.65,"noise_strength":0.08,"rasterization":1,"screen_distortion":0.18,"windowOpacity":1}'
             builtin: true
         }
         ListElement{
             text: "Vintage"
-            obj_string: '{"background_color":"#000000","bloom_strength":0.4,"brightness_flickering":0.54,"fontIndex":0,"font_color":"#00ff3e","frames_index":2,"glowing_line_strength":0.3,"horizontal_sincronization":0.2,"jitter":0.4,"motion_blur":0.75,"noise_strength":0.2,"rasterization":1,"screen_distortion":0.1}'
+            obj_string: '{"ambient_light":0.2,"background_color":"#000000","bloom_strength":0.4,"brightness":0.5,"brightness_flickering":0.54,"contrast":0.85,"fontIndex":0,"font_color":"#00ff3e","frames_index":2,"glowing_line_strength":0.3,"horizontal_sincronization":0.2,"jitter":0.4,"motion_blur":0.75,"noise_strength":0.2,"rasterization":1,"screen_distortion":0.1,"windowOpacity":1}'
             builtin: true
         }
         ListElement{
             text: "IBM Dos"
-            obj_string: '{"background_color":"#000000","bloom_strength":0.4,"brightness_flickering":0.07,"fontIndex":7,"font_color":"#ffffff","frames_index":1,"glowing_line_strength":0.13,"horizontal_sincronization":0,"jitter":0.08,"motion_blur":0.3,"noise_strength":0.03,"rasterization":0,"screen_distortion":0.1}'
+            obj_string: '{"ambient_light":0.2,"background_color":"#000000","bloom_strength":0.4,"brightness":0.5,"brightness_flickering":0.07,"contrast":0.85,"fontIndex":7,"font_color":"#ffffff","frames_index":1,"glowing_line_strength":0.13,"horizontal_sincronization":0,"jitter":0.08,"motion_blur":0.3,"noise_strength":0.03,"rasterization":0,"screen_distortion":0.1,"windowOpacity":1}'
+            builtin: true
+        }
+        ListElement{
+            text: "Transparent Green"
+            obj_string: '{"ambient_light":0.2,"background_color":"#000000","bloom_strength":0.4549689440993788,"brightness":0.5,"brightness_flickering":0.20341614906832298,"contrast":0.85,"fontIndex":0,"font_color":"#0ccc68","frames_index":0,"glowing_line_strength":0.15993788819875776,"horizontal_sincronization":0.05045871559633028,"jitter":0.20341614906832298,"motion_blur":0.24999999999999997,"noise_strength":0.20031055900621117,"rasterization":0,"screen_distortion":0.05045871559633028,"windowOpacity":0.5956221198156681}'
             builtin: true
         }
     }

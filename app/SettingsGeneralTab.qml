@@ -84,11 +84,6 @@ Tab{
                     onValueChanged: shadersettings.contrast = value
                     value: shadersettings.contrast
                 }
-                Text{ text: qsTr("Ambient") }
-                SimpleSlider{
-                    onValueChanged: shadersettings.ambient_light = value;
-                    value: shadersettings.ambient_light
-                }
                 Text{ text: qsTr("Opacity") }
                 SimpleSlider{
                     onValueChanged: shadersettings.windowOpacity = value
@@ -108,9 +103,9 @@ Tab{
                 columns: 3
                 CheckBox{
                     Layout.columnSpan: 3
-                    checked: shadersettings._frameReflections
-                    text: qsTr("Frame reflections")
-                    onCheckedChanged: shadersettings._frameReflections = checked
+                    checked: !shadersettings._frameReflections
+                    text: qsTr("Disable reflections")
+                    onCheckedChanged: shadersettings._frameReflections = !checked
                     enabled: shadersettings.reflectionsAllowed
                 }
                 CheckBox{
@@ -133,12 +128,11 @@ Tab{
                 Slider{
                     Layout.fillWidth: true
                     id: txtslider
-                    stepSize: 0.25
-                    maximumValue: 1
-                    minimumValue: 0.50
                     onValueChanged: shadersettings.window_scaling = value;
                     value: shadersettings.window_scaling
                     tickmarksEnabled: true
+                    stepSize: 0.25
+                    Component.onCompleted: minimumValue = 0.5 //Without this value gets set to 0.5
                 }
                 Text{text: Math.round(txtslider.value * 100) + "%"}
             }

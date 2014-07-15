@@ -22,6 +22,7 @@ import QtQuick 2.2
 import QtQuick.Dialogs 1.1
 
 Item {
+    signal colorSelected (color color)
     property color button_color
     property string name
 
@@ -33,7 +34,7 @@ Item {
 
         //This is a workaround to a Qt 5.2 bug.
         onCurrentColorChanged: colorDialog.color = colorDialog.currentColor;
-        onAccepted: button_color = color;
+        onAccepted: colorSelected(color)
     }
     Rectangle{
         anchors.fill: parent
