@@ -39,11 +39,11 @@ Item{
 
     //The blur effect has to take into account the framerate
     property int fps: shadersettings.fps !== 0 ? shadersettings.fps : 60
-    property real fpsAttenuation: 60 / fps
+    property real fpsAttenuation: Math.sqrt(60 / fps)
     property real mBlur: shadersettings.motion_blur
     property real motionBlurCoefficient: (_maxBlurCoefficient * mBlur + _minBlurCoefficient * (1 - mBlur))
-    property real _minBlurCoefficient: 0.75
-    property real _maxBlurCoefficient: 0.95
+    property real _minBlurCoefficient: 0.70
+    property real _maxBlurCoefficient: 0.90
 
     property size virtualPxSize: Qt.size(1,1)
     property size virtual_resolution: Qt.size(width / virtualPxSize.width, height / virtualPxSize.height)
@@ -198,6 +198,8 @@ Item{
         sourceItem: blurredterminal
         recursive: true
         live: false
+
+        hideSource: true
 
         smooth: false
         antialiasing: false
