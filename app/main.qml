@@ -90,6 +90,13 @@ ApplicationWindow{
             shadersettings.setScalingIndex(Math.max(oldScaling - 1, 0));
         }
     }
+    Action{
+        id: showAboutAction
+        text: qsTr("About")
+        onTriggered: {
+            aboutDialog.show();
+        }
+    }
 
     menuBar: MenuBar {
         id: menubar
@@ -113,6 +120,11 @@ ApplicationWindow{
             MenuSeparator{}
             MenuItem {action: zoomIn}
             MenuItem {action: zoomOut}
+        }
+        Menu{
+            title: qsTr("Help")
+            visible: shadersettings.fullscreen ? false : true
+            MenuItem {action: showAboutAction}
         }
     }
     ApplicationSettings{
@@ -154,6 +166,10 @@ ApplicationWindow{
     }
     SettingsWindow{
         id: settingswindow
+        visible: false
+    }
+    AboutDialog{
+        id: aboutDialog
         visible: false
     }
     Loader{

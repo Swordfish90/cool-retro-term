@@ -23,6 +23,7 @@ import QtQuick 2.2
 
 
 Item{
+    property string version: "0.9"
 
     // GENERAL SETTINGS ///////////////////////////////////////////////////
 
