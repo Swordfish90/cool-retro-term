@@ -38,7 +38,7 @@ class KSession : public QObject
 public:
     KSession(QObject *parent = 0);
     ~KSession();
-    
+
 public:
     //bool setup();
     void addView(KTerminalDisplay *displa);

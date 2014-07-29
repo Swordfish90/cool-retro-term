@@ -7,8 +7,8 @@
  */
 
 /*
-    This file is part of Konsole, KDE's terminal emulator. 
-    
+    This file is part of Konsole, KDE's terminal emulator.
+
     Copyright 2007-2008 by Robert Knight <robertknight@gmail.com>
     Copyright 1997,1998 by Lars Doelle <lars.doelle@on-line.de>
 
@@ -42,8 +42,8 @@
 
 
 /**
- * The Pty class is used to start the terminal process, 
- * send data to it, receive data from it and manipulate 
+ * The Pty class is used to start the terminal process,
+ * send data to it, receive data from it and manipulate
  * various properties of the pseudo-teletype interface
  * used to communicate with the process.
  *
@@ -52,26 +52,26 @@
  * send data to or receive data from the process.
  *
  * To start the terminal process, call the start() method
- * with the program name and appropriate arguments. 
+ * with the program name and appropriate arguments.
  */
 class Pty: public KPtyProcess
 {
 Q_OBJECT
 
   public:
-    
-    /** 
+
+    /**
      * Constructs a new Pty.
-     * 
+     *
      * Connect to the sendData() slot and receivedData() signal to prepare
      * for sending and receiving data from the terminal process.
      *
-     * To start the terminal process, call the run() method with the 
+     * To start the terminal process, call the run() method with the
      * name of the program to start and appropriate arguments.
      */
     explicit Pty(QObject* parent = 0);
 
-    /** 
+    /**
      * Construct a process using an open pty master.
      * See KPtyProcess::KPtyProcess()
      */
@@ -80,7 +80,7 @@ Q_OBJECT
     ~Pty();
 
     /**
-     * Starts the terminal process.  
+     * Starts the terminal process.
      *
      * Returns 0 if the process was started successfully or non-zero
      * otherwise.
@@ -93,23 +93,23 @@ Q_OBJECT
      * @param winid Specifies the value of the WINDOWID environment variable
      * in the process's environment.
      * @param addToUtmp Specifies whether a utmp entry should be created for
-     * the pty used.  See K3Process::setUsePty() 
-     * @param dbusService Specifies the value of the KONSOLE_DBUS_SERVICE 
+     * the pty used.  See K3Process::setUsePty()
+     * @param dbusService Specifies the value of the KONSOLE_DBUS_SERVICE
      * environment variable in the process's environment.
      * @param dbusSession Specifies the value of the KONSOLE_DBUS_SESSION
-     * environment variable in the process's environment. 
+     * environment variable in the process's environment.
      */
-    int start( const QString& program, 
-               const QStringList& arguments, 
-               const QStringList& environment, 
-               ulong winid, 
+    int start( const QString& program,
+               const QStringList& arguments,
+               const QStringList& environment,
+               ulong winid,
                bool addToUtmp
              );
 
     /** TODO: Document me */
     void setWriteable(bool writeable);
 
-    /** 
+    /**
      * Enables or disables Xon/Xoff flow control.  The flow control setting
      * may be changed later by a terminal application, so flowControlEnabled()
      * may not equal the value of @p on in the previous call to setFlowControlEnabled()
@@ -119,12 +119,12 @@ Q_OBJECT
     /** Queries the terminal state and returns true if Xon/Xoff flow control is enabled. */
     bool flowControlEnabled() const;
 
-    /** 
-     * Sets the size of the window (in lines and columns of characters) 
+    /**
+     * Sets the size of the window (in lines and columns of characters)
      * used by this teletype.
      */
     void setWindowSize(int lines, int cols);
-    
+
     /** Returns the size of the window used by this teletype.  See setWindowSize() */
     QSize windowSize() const;
 
@@ -143,7 +143,7 @@ Q_OBJECT
      * 0 will be returned.
      */
     int foregroundProcessGroup() const;
-   
+
   public slots:
 
     /**
@@ -152,7 +152,7 @@ Q_OBJECT
     void setUtf8Mode(bool on);
 
     /**
-     * Suspend or resume processing of data from the standard 
+     * Suspend or resume processing of data from the standard
      * output of the terminal process.
      *
      * See K3Process::suspend() and K3Process::resume()
@@ -161,9 +161,9 @@ Q_OBJECT
      * otherwise processing is resumed.
      */
     void lockPty(bool lock);
-    
-    /** 
-     * Sends data to the process currently controlling the 
+
+    /**
+     * Sends data to the process currently controlling the
      * teletype ( whose id is returned by foregroundProcessGroup() )
      *
      * @param buffer Pointer to the data to send.
@@ -181,14 +181,14 @@ Q_OBJECT
      * @param length Length of @p buffer
      */
     void receivedData(const char* buffer, int length);
-   
+
   protected:
       void setupChildProcess();
 
   private slots:
-    // called when data is received from the terminal process 
-    void dataReceived(); 
-    
+    // called when data is received from the terminal process
+    void dataReceived();
+
   private:
       void init();
 
@@ -196,7 +196,7 @@ Q_OBJECT
     // to the environment for the process
     void addEnvironmentVariables(const QStringList& environment);
 
-    int  _windowColumns; 
+    int  _windowColumns;
     int  _windowLines;
     char _eraseChar;
     bool _xonXoff;

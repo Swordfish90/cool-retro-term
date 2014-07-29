@@ -1,8 +1,8 @@
 /*
     This file is part of Konsole, an X terminal.
-    
+
     Copyright 2006-2008 by Robert Knight <robertknight@gmail.com>
-    
+
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
     the Free Software Foundation; either version 2 of the License, or
@@ -84,7 +84,7 @@ void PlainTextDecoder::decodeLine(const Character* const characters, int count, 
     //(since QTextStream always deals with QStrings internally anyway)
     QString plainText;
     plainText.reserve(count);
-   
+
     int outputCount = count;
 
     // if inclusion of trailing whitespace is disabled then find the end of the
@@ -99,7 +99,7 @@ void PlainTextDecoder::decodeLine(const Character* const characters, int count, 
                 outputCount--;
         }
     }
-    
+
     for (int i=0;i<outputCount;)
     {
         plainText.append( QChar(characters[i].character) );
@@ -114,7 +114,7 @@ HTMLDecoder::HTMLDecoder() :
        ,_innerSpanOpen(false)
        ,_lastRendition(DEFAULT_RENDITION)
 {
-    
+
 }
 
 void HTMLDecoder::begin(QTextStream* output)
@@ -152,7 +152,7 @@ void HTMLDecoder::decodeLine(const Character* const characters, int count, LineP
     QString text;
 
     int spaceCount = 0;
-        
+
     for (int i=0;i<count;i++)
     {
         QChar ch(characters[i].character);
@@ -168,7 +168,7 @@ void HTMLDecoder::decodeLine(const Character* const characters, int count, LineP
             _lastRendition = characters[i].rendition;
             _lastForeColor = characters[i].foregroundColor;
             _lastBackColor = characters[i].backgroundColor;
-            
+
             //build up style string
             QString style;
 
@@ -178,15 +178,15 @@ void HTMLDecoder::decodeLine(const Character* const characters, int count, LineP
                 useBold = _lastRendition & RE_BOLD;
             else
                 useBold = weight == ColorEntry::Bold;
-            
+
             if (useBold)
                 style.append("font-weight:bold;");
 
             if ( _lastRendition & RE_UNDERLINE )
                     style.append("font-decoration:underline;");
-        
+
             //colours - a colour table must have been defined first
-            if ( _colorTable )    
+            if ( _colorTable )
             {
                 style.append( QString("color:%1;").arg(_lastForeColor.color(_colorTable).name() ) );
 
@@ -195,8 +195,8 @@ void HTMLDecoder::decodeLine(const Character* const characters, int count, LineP
                     style.append( QString("background-color:%1;").arg(_lastBackColor.color(_colorTable).name() ) );
                 }
             }
-        
-            //open the span with the current style    
+
+            //open the span with the current style
             openSpan(text,style);
             _innerSpanOpen = true;
         }
@@ -206,7 +206,7 @@ void HTMLDecoder::decodeLine(const Character* const characters, int count, LineP
             spaceCount++;
         else
             spaceCount = 0;
-        
+
 
         //output current character
         if (spaceCount < 2)
@@ -216,14 +216,14 @@ void HTMLDecoder::decodeLine(const Character* const characters, int count, LineP
                 text.append("&lt;");
             else if (ch == '>')
                     text.append("&gt;");
-            else    
+            else
                     text.append(ch);
         }
         else
         {
             text.append("&nbsp;"); //HTML truncates multiple spaces, so use a space marker instead
         }
-        
+
     }
 
     //close any remaining open inner spans
@@ -232,7 +232,7 @@ void HTMLDecoder::decodeLine(const Character* const characters, int count, LineP
 
     //start new line
     text.append("<br>");
-    
+
     *_output << text;
 }
 void HTMLDecoder::openSpan(QString& text , const QString& style)
