@@ -68,7 +68,7 @@ private:
 
   //pointer to start of mmap'ed file data, or 0 if the file is not mmap'ed
   char* fileMap;
- 
+
   //incremented whenver 'add' is called and decremented whenever
   //'get' is called.
   //this is used to detect when a large number of lines are being read and processed from the history
@@ -179,7 +179,7 @@ public:
 
   void setMaxNbLines(unsigned int nbLines);
   unsigned int maxNbLines() { return _maxLineCount; }
-  
+
 
 private:
   int bufferIndex(int lineNumber);
@@ -187,9 +187,9 @@ private:
   HistoryLine* _historyBuffer;
   QBitArray _wrappedLine;
   int _maxLineCount;
-  int _usedLines;  
+  int _usedLines;
   int _head;
-  
+
   //QVector<histline*> m_histBuffer;
   //QBitArray m_wrappedLine;
   //unsigned int m_maxNbLines;
@@ -288,7 +288,7 @@ public:
 class CompactHistoryBlock
 {
 public:
-  
+
   CompactHistoryBlock(){
     blockLength = 4096*64; // 256kb
     head = (quint8*) mmap(0, blockLength, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANON, -1, 0);
@@ -297,12 +297,12 @@ public:
     tail = blockStart = head;
     allocCount=0;
   }
-  
+
   virtual ~CompactHistoryBlock(){
     //free(blockStart);
     munmap(blockStart, blockLength);
   }
-  
+
   virtual unsigned int remaining(){ return blockStart+blockLength-tail;}
   virtual unsigned  length() { return blockLength; }
   virtual void* allocate(size_t length);
@@ -379,7 +379,7 @@ private:
   bool hasDifferentColors(const TextLine& line) const;
   HistoryArray lines;
   CompactHistoryBlockList blockList;
-  
+
   unsigned int _maxLineCount;
 };
 
@@ -395,7 +395,7 @@ public:
 
   /**
    * Returns true if the history is enabled ( can store lines of output )
-   * or false otherwise. 
+   * or false otherwise.
    */
   virtual bool isEnabled()           const = 0;
   /**
@@ -426,7 +426,7 @@ class HistoryTypeBlockArray : public HistoryType
 {
 public:
   HistoryTypeBlockArray(size_t size);
-  
+
   virtual bool isEnabled() const;
   virtual int maximumLineCount() const;
 
@@ -436,7 +436,7 @@ protected:
   size_t m_size;
 };
 
-#if 1 
+#if 1
 class HistoryTypeFile : public HistoryType
 {
 public:
@@ -459,10 +459,10 @@ class HistoryTypeBuffer : public HistoryType
 
 public:
   HistoryTypeBuffer(unsigned int nbLines);
-   
+
   virtual bool isEnabled() const;
   virtual int maximumLineCount() const;
-  
+
   virtual HistoryScroll* scroll(HistoryScroll *) const;
 
 protected:
@@ -473,7 +473,7 @@ class CompactHistoryType : public HistoryType
 {
 public:
   CompactHistoryType(unsigned int size);
-  
+
   virtual bool isEnabled() const;
   virtual int maximumLineCount() const;
 
