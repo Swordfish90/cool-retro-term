@@ -1,4 +1,4 @@
 #!/bin/bash
 #This is a workaround for an ubuntu specific problem with appmenu-qt5.
 QT_QPA_PLATFORMTHEME=
-qmlscene -I imports app/main.qml
+qmlscene -I $(dirname $0)/imports $(dirname $0)/app/main.qml
