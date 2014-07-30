@@ -67,9 +67,14 @@ Session *KSession::createSession(QString name)
      * By setting it to $SHELL right away we actually make the first filecheck obsolete.
      * But as iam not sure if you want to do anything else ill just let both checks in and set this to $SHELL anyway.
      */
-    session->setProgram("/bin/bash");
 
-    //session->setProgram(getenv("SHELL"));
+    //cool-old-term: There is another check in the code. Not sure if useful.
+
+    QString envshell = getenv("SHELL");
+    QString shellProg = envshell != NULL ? envshell : "/bin/bash";
+    session->setProgram(shellProg);
+
+    //session->setProgram();
 
     QStringList args("");
     session->setArguments(args);
