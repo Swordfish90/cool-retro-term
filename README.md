@@ -19,6 +19,9 @@ First of all we need to retrieve the dependencies.
 ###Ubuntu 14.04
     sudo apt-get install build-essential qmlscene qt5-qmake qt5-default qtdeclarative5-dev qtdeclarative5-controls-plugin qtdeclarative5-qtquick2-plugin libqt5qml-graphicaleffects qtdeclarative5-dialogs-plugin qtdeclarative5-localstorage-plugin qtdeclarative5-window-plugin
 
+###Debian Jessie
+    sudo apt-get install build-essential qmlscene qt5-qmake qt5-default qtdeclarative5-dev qml-module-qtquick-controls qml-module-qtgraphicaleffects qml-module-qtquick-dialogs qml-module-qtquick-localstorage qml-module-qtquick-window2
+
 ###Arch Linux
     sudo pacman -S qt5-base qt5-declarative qt5-quickcontrols qt5-graphicaleffects
 
