@@ -24,6 +24,10 @@ First of all we need to retrieve the dependencies.
 
 ###Arch Linux
     sudo pacman -S qt5-base qt5-declarative qt5-quickcontrols qt5-graphicaleffects
+    
+You can also install this [package](https://aur.archlinux.org/packages/cool-old-term-git/) directly via the [AUR](https://aur.archlinux.org):
+
+    yaourt -S aur/cool-old-term-git
 
 ###Anyone else
 Install Qt directly from here http://qt-project.org/downloads . Once done export them in you path (replace "_/opt/Qt5.3.1/5.3/gcc_64/bin_" with your correct folder):
