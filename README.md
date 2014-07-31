@@ -51,9 +51,16 @@ Install Qt directly from here http://qt-project.org/downloads . Once done export
 ###Compile
 Once you installed all dependencies (Qt is installed and in your path) you need to compile and run the application: 
 
-    git clone https://github.com/Swordifish90/cool-old-term.git
-    cd cool-old-term
-    cd konsole-qml-plugin
-    qmake && make && make install
-    cd ..
-    ./cool-old-term
+```bash
+# Get it from GitHub
+git clone https://github.com/Swordifish90/cool-old-term.git
+
+# Build it
+cd cool-old-term
+cd konsole-qml-plugin
+qmake && make && make install
+cd ..
+
+# Have fun!
+./cool-old-term
+```
