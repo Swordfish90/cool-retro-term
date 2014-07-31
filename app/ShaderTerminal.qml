@@ -175,7 +175,7 @@ ShaderEffect {
                 vec2 txt_coords = coords + offset * "+str(jitter)+";"
             :  "vec2 txt_coords = coords;") +
 
-            "float color = texture2D(source, txt_coords).a;" +
+            "float color = 0.0;" +
 
             (noise_strength !== 0 ? "
                 float noiseVal = texture2D(noiseSource, qt_TexCoord0 + vec2(fract(time / 51.0), fract(time / 237.0))).a;
@@ -183,19 +183,22 @@ ShaderEffect {
 
             (glowing_line_strength !== 0 ? "
                 color += randomPass(coords) * glowing_line_strength;" : "") +
-            "vec4 new_font_color = mix(texture2D(source, txt_coords), font_color, 0.2);" +
-            "vec3 finalColor = mix(background_color, new_font_color, color).rgb;" +
+
+            "vec4 realBackColor = texture2D(source, txt_coords);" +
+            "vec4 mixedColor = mix(realBackColor * font_color, font_color, 0.0);" +
+            "vec4 finalBackColor = mix(background_color, mixedColor, realBackColor.a);" +
+            "vec3 finalColor = mix(finalBackColor, font_color, color).rgb;" +
             "finalColor *= texture2D(rasterizationSource, coords).a;" +
 
             (bloom !== 0 ? "
-                finalColor += font_color.rgb * texture2D(bloomSource, coords).r *" + str(bloom) + ";" : "") +
+                finalColor += font_color.rgb *" + 
+                "dot(texture2D(bloomSource, coords).rgb, vec3(0.299, 0.587, 0.114)) *" + str(bloom) + ";" : "") +
 
             (brightness_flickering !== 0 ? "
                 finalColor *= brightness;" : "") +
 
-            "gl_FragColor = vec4(finalColor *"+str(brightness)+", qt_Opacity);
-             //gl_FragColor = texture2D(source, txt_coords);
-        }"
+            "gl_FragColor = vec4(finalColor *"+str(brightness)+", qt_Opacity);" +
+        "}"
 
      onStatusChanged: if (log) console.log(log) //Print warning messages
 }
