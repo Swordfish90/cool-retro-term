@@ -220,7 +220,7 @@ Item{
         id: finalSource
         sourceItem: blurredterminal
         sourceRect: frame.sourceRect
-        format: ShaderEffectSource.Alpha
+        //format: ShaderEffectSource.Alpha
         hideSource: true
     }
     ShaderEffect {
@@ -345,7 +345,7 @@ Item{
         wrapMode: ShaderEffectSource.Repeat
         smooth: true
         hideSource: true
-        format: ShaderEffectSource.Alpha
+        //format: ShaderEffectSource.Alpha
     }
 
     // RASTERIZATION //////////////////////////////////////////////////////////
@@ -421,6 +421,6 @@ Item{
         sourceItem: rasterizationContainer
         hideSource: true
         smooth: true
-        format: ShaderEffectSource.Alpha
+        //format: ShaderEffectSource.Alpha
     }
 }
