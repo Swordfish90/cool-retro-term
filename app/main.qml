@@ -41,6 +41,13 @@ ApplicationWindow{
     title: qsTr("cool-old-term")
 
     Action {
+        id: showMenubarAction
+        text: qsTr("Show Menubar")
+        checkable: true
+        checked: shadersettings.showMenubar
+        onTriggered: shadersettings.showMenubar = !shadersettings.showMenubar
+    }
+    Action {
         id: fullscreenAction
         text: qsTr("&Fullscreen")
         shortcut: "Alt+F11"
@@ -102,12 +109,12 @@ ApplicationWindow{
         id: menubar
         Menu {
             title: qsTr("File")
-            visible: shadersettings.fullscreen ? false : true
+            visible: shadersettings.showMenubar
             MenuItem {action: quitAction}
         }
         Menu {
             title: qsTr("Edit")
-            visible: shadersettings.fullscreen ? false : true
+            visible: shadersettings.showMenubar
             MenuItem {action: copyAction}
             MenuItem {action: pasteAction}
             MenuSeparator{}
@@ -115,15 +122,16 @@ ApplicationWindow{
         }
         Menu{
             title: qsTr("View")
-            visible: shadersettings.fullscreen ? false : true
+            visible: shadersettings.showMenubar
             MenuItem {action: fullscreenAction}
+            MenuItem {action: showMenubarAction}
             MenuSeparator{}
             MenuItem {action: zoomIn}
             MenuItem {action: zoomOut}
         }
         Menu{
             title: qsTr("Help")
-            visible: shadersettings.fullscreen ? false : true
+            visible: shadersettings.showMenubar
             MenuItem {action: showAboutAction}
         }
     }

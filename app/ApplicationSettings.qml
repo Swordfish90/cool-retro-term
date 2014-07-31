@@ -28,6 +28,7 @@ Item{
     // GENERAL SETTINGS ///////////////////////////////////////////////////
 
     property bool fullscreen: false
+    property bool showMenubar: true
 
     property real windowOpacity: 1.0
     property real ambient_light: 0.2
@@ -160,6 +161,7 @@ Item{
             fontScalingIndexes: fontScalingIndexes,
             fontIndexes: fontIndexes,
             frameReflections: _frameReflections,
+            showMenubar: showMenubar
         }
         return JSON.stringify(settings);
     }
@@ -223,6 +225,8 @@ Item{
         fontScalingIndexes = settings.fontScalingIndexes !== undefined ? settings.fontScalingIndexes : fontScalingIndexes
 
         _frameReflections = settings.frameReflections !== undefined ? settings.frameReflections : _frameReflections;
+
+        showMenubar = settings.showMenubar !== undefined ? settings.showMenubar : showMenubar;
     }
 
     function loadProfileString(profileString){
