@@ -32,6 +32,27 @@ Make sure to install these first.
 
 ---
 
+**Fedora**
+This command should install the known fedora dependencies:
+```
+sudo yum -y install qt5-qtbase qt5-qtbase-devel qt5-qtdeclarative qt5-qtdeclarative-devel qt5-qtgraphicaleffects qt5-qtquickcontrols
+```
+or:
+```
+sudo dnf -y install qt5-qtbase qt5-qtbase-devel qt5-qtdeclarative qt5-qtdeclarative-devel qt5-qtgraphicaleffects qt5-qtquickcontrols
+```
+
+Compile using the following:
+```
+git clone https://github.com/Swordifish90/cool-old-term.git
+cd cool-old-term/konsole-qml-plugin
+qmake-qt5 && make && make install
+cd ..
+./cool-old-term
+```
+
+---
+
 **Arch Linux**
 
     sudo pacman -S qt5-base qt5-declarative qt5-quickcontrols qt5-graphicaleffects
