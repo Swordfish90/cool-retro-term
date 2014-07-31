@@ -67,6 +67,9 @@ Item{
     property real motion_blur: 0.40
     property real bloom_strength: 0.65
 
+    property real chroma_color: 0.0
+    property real saturation_color: 0.0
+
     property real jitter: 0.18
 
     property real horizontal_sincronization: 0.08
@@ -171,6 +174,8 @@ Item{
             brightness_flickering: brightness_flickering,
             horizontal_sincronization: horizontal_sincronization,
             noise_strength: noise_strength,
+            chroma_color: chroma_color,
+            saturation_color: saturation_color,
             screen_distortion: screen_distortion,
             glowing_line_strength: glowing_line_strength,
             frames_index: frames_index,
@@ -234,6 +239,8 @@ Item{
         horizontal_sincronization = settings.horizontal_sincronization !== undefined ? settings.horizontal_sincronization : horizontal_sincronization
         brightness_flickering = settings.brightness_flickering !== undefined ? settings.brightness_flickering : brightness_flickering;
         noise_strength = settings.noise_strength !== undefined ? settings.noise_strength : noise_strength;
+        chroma_color = settings.chroma_color !== undefined ? settings.chroma_color : chroma_color;
+        saturation_color = settings.saturation_color !== undefined ? settings.saturation_color : saturation_color;
         screen_distortion = settings.screen_distortion !== undefined ? settings.screen_distortion : screen_distortion;
         glowing_line_strength = settings.glowing_line_strength !== undefined ? settings.glowing_line_strength : glowing_line_strength;
 
@@ -333,7 +340,7 @@ Item{
         }
         ListElement{
             text: "IBM Dos"
-            obj_string: '{"ambient_light":0.2,"background_color":"#000000","bloom_strength":0.4,"brightness":0.5,"brightness_flickering":0.07,"contrast":0.85,"fontIndex":7,"font_color":"#ffffff","frames_index":1,"glowing_line_strength":0.13,"horizontal_sincronization":0,"jitter":0.08,"motion_blur":0.3,"noise_strength":0.03,"rasterization":0,"screen_distortion":0.1,"windowOpacity":1}'
+            obj_string: '{"ambient_light":0.2,"background_color":"#000000","bloom_strength":0.4,"brightness":0.5,"brightness_flickering":0.07,"contrast":0.85,"fontIndex":7,"font_color":"#ffffff","frames_index":1,"glowing_line_strength":0.13,"horizontal_sincronization":0,"jitter":0.08,"motion_blur":0.3,"noise_strength":0.03,"rasterization":0,"screen_distortion":0.1,"windowOpacity":1,"chroma_color":1}'
             builtin: true
         }
         ListElement{

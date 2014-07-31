@@ -39,6 +39,9 @@ ShaderEffect {
     property real screen_distorsion: shadersettings.screen_distortion
     property real glowing_line_strength: shadersettings.glowing_line_strength
 
+    property real chroma_color: shadersettings.chroma_color;
+    property real saturation_color: shadersettings.saturation_color;
+
     property real brightness_flickering: shadersettings.brightness_flickering
     property real horizontal_sincronization: shadersettings.horizontal_sincronization
 
@@ -184,10 +187,20 @@ ShaderEffect {
             (glowing_line_strength !== 0 ? "
                 color += randomPass(coords) * glowing_line_strength;" : "") +
 
-            "vec4 realBackColor = texture2D(source, txt_coords);" +
-            "vec4 mixedColor = mix(realBackColor * font_color, font_color, 0.0);" +
-            "vec4 finalBackColor = mix(background_color, mixedColor, realBackColor.a);" +
-            "vec3 finalColor = mix(finalBackColor, font_color, color).rgb;" +
+            (chroma_color !== 0 ? 
+                "vec4 realBackColor = texture2D(source, txt_coords);" +
+                (saturation_color !== 0 ?
+                    "vec4 satured_font_color = mix(font_color, vec4(1) , "+ str(saturation_color) + ");" +
+                    "vec4 mixedColor = mix(font_color, realBackColor * satured_font_color, "+ str(chroma_color) +");":
+                    "vec4 mixedColor = mix(font_color, realBackColor * font_color, "+ str(chroma_color) +");"
+                ) + 
+                
+                "vec4 finalBackColor = mix(background_color, mixedColor, realBackColor.a);" +
+                "vec3 finalColor = mix(finalBackColor, font_color, color).rgb;" :
+                "color += texture2D(source, txt_coords).a;" +
+                "vec3 finalColor = mix(background_color, font_color, color).rgb;"
+            ) +
+
             "finalColor *= texture2D(rasterizationSource, coords).a;" +
 
             (bloom !== 0 ? "
