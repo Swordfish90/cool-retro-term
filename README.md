@@ -65,9 +65,12 @@ You can also install this [package](https://aur.archlinux.org/packages/cool-old-
 
 **openSUSE**
 
-Install dependencies:
+Add repository with latest Qt 5 (this is only needed on openSUSE 13.1, Factory already has it):
 
     sudo zypper ar http://download.opensuse.org/repositories/KDE:/Qt5/openSUSE_13.1/ KDE:Qt5
+
+Install dependencies:
+
     sudo zypper install libqt5-qtbase-devel libqt5-qtdeclarative-devel libqt5-qtquickcontrols libqt5-qtgraphicaleffects
 
 Compile:
