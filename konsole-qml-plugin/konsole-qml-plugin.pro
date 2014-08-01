@@ -44,7 +44,7 @@ SOURCES += \
         $$PWD/src/ColorScheme.cpp \
         $$PWD/src/TerminalDisplay.cpp \
         $$PWD/src/ksession.cpp \
-    src/utmpmac.cpp
+        $$PWD/src/utmpmac.cpp
 
 HEADERS += \
         $$PWD/src/plugin.h \
@@ -76,6 +76,7 @@ HEADERS += \
         $$PWD/src/ColorScheme.h \
         $$PWD/src/TerminalDisplay.h \
         $$PWD/src/ksession.h
+        $$PWD/src/utmpmac.h
 
 OTHER_FILES += \
     $$PWD/src/qmldir \
