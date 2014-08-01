@@ -28,7 +28,7 @@ Group:      System/GUI/Other
 License:    GPLv3
 URL:        http://swordfishslabs.wordpress.com/
 
-# For this spec file to work, the ympd sources must be located in a directory
+# For this spec file to work, the cool-old-term sources must be located in a directory
 # named cool-old-term-0.9 (with "0.9" being the version number defined above).
 # If the sources are compressed in another format than ZIP, change the
 # file extension accordingly.
