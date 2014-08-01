@@ -135,6 +135,10 @@ extern "C" {
 # endif
 #endif
 
+#if defined (__APPLE__)
+#include "utmpmac.h"
+#endif
+
 //#include <kdebug.h>
 //#include <kstandarddirs.h>  // findExe
 
