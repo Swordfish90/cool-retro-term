@@ -675,10 +675,6 @@ static void drawLineChar(QPainter* paint, qreal x, qreal y, qreal w, qreal h, uc
 
 }
 
-void KTerminalDisplay::banana(int x, int y, int z, int w)
-{
-}
-
 void KTerminalDisplay::setKeyboardCursorShape(KeyboardCursorShape shape)
 {
     _cursorShape = shape;
