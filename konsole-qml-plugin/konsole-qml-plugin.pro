@@ -43,7 +43,8 @@ SOURCES += \
         $$PWD/src/Filter.cpp \
         $$PWD/src/ColorScheme.cpp \
         $$PWD/src/TerminalDisplay.cpp \
-        $$PWD/src/ksession.cpp
+        $$PWD/src/ksession.cpp \
+    src/utmpmac.cpp
 
 HEADERS += \
         $$PWD/src/plugin.h \
