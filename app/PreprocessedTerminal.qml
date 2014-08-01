@@ -263,7 +263,8 @@ Item{
                 : "") +
 
 
-                "gl_FragColor.a = floor(color) / 256.0;" +
+                "gl_FragColor = texture2D(source, coords);" +
+                "gl_FragColor.a = color / 256.0;" + 
             "}"
 
         onStatusChanged: if (log) console.log(log) //Print warning messages

@@ -39,6 +39,9 @@ ShaderEffect {
     property real screen_distorsion: shadersettings.screen_distortion
     property real glowing_line_strength: shadersettings.glowing_line_strength
 
+    property real chroma_color: shadersettings.chroma_color;
+    property real saturation_color: shadersettings.saturation_color;
+
     property real brightness_flickering: shadersettings.brightness_flickering
     property real horizontal_sincronization: shadersettings.horizontal_sincronization
 
@@ -175,7 +178,7 @@ ShaderEffect {
                 vec2 txt_coords = coords + offset * "+str(jitter)+";"
             :  "vec2 txt_coords = coords;") +
 
-            "float color = texture2D(source, txt_coords).a;" +
+            "float color = 0.0;" +
 
             (noise_strength !== 0 ? "
                 float noiseVal = texture2D(noiseSource, qt_TexCoord0 + vec2(fract(time / 51.0), fract(time / 237.0))).a;
@@ -184,17 +187,31 @@ ShaderEffect {
             (glowing_line_strength !== 0 ? "
                 color += randomPass(coords) * glowing_line_strength;" : "") +
 
-            "vec3 finalColor = mix(background_color, font_color, color).rgb;" +
+            (chroma_color !== 0 ? 
+                "vec4 realBackColor = texture2D(source, txt_coords);" +
+                (saturation_color !== 0 ?
+                    "vec4 satured_font_color = mix(font_color, vec4(1) , "+ str(saturation_color) + ");" +
+                    "vec4 mixedColor = mix(font_color, realBackColor * satured_font_color, "+ str(chroma_color) +");":
+                    "vec4 mixedColor = mix(font_color, realBackColor * font_color, "+ str(chroma_color) +");"
+                ) + 
+                
+                "vec4 finalBackColor = mix(background_color, mixedColor, realBackColor.a);" +
+                "vec3 finalColor = mix(finalBackColor, font_color, color).rgb;" :
+                "color += texture2D(source, txt_coords).a;" +
+                "vec3 finalColor = mix(background_color, font_color, color).rgb;"
+            ) +
+
             "finalColor *= texture2D(rasterizationSource, coords).a;" +
 
             (bloom !== 0 ? "
-                finalColor += font_color.rgb * texture2D(bloomSource, coords).r *" + str(bloom) + ";" : "") +
+                finalColor += font_color.rgb *" + 
+                "dot(texture2D(bloomSource, coords).rgb, vec3(0.299, 0.587, 0.114)) *" + str(bloom) + ";" : "") +
 
             (brightness_flickering !== 0 ? "
                 finalColor *= brightness;" : "") +
 
-            "gl_FragColor = vec4(finalColor *"+str(brightness)+", qt_Opacity);
-        }"
+            "gl_FragColor = vec4(finalColor *"+str(brightness)+", qt_Opacity);" +
+        "}"
 
      onStatusChanged: if (log) console.log(log) //Print warning messages
 }
