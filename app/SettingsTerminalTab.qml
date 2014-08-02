@@ -93,8 +93,9 @@ Tab{
             title: qsTr("Colors")
             Layout.fillWidth: true
             ColumnLayout{
+                anchors.fill: parent
                 RowLayout{
-                    anchors.fill: parent
+                    Layout.fillWidth: true
                     ColorButton{
                         name: qsTr("Font")
                         height: 50
@@ -111,6 +112,7 @@ Tab{
                     }
                 }
                 ColumnLayout{
+                    Layout.fillWidth: true
                     CheckableSlider{
                         name: qsTr("Chroma Color")
                         onValueChanged: shadersettings.chroma_color = value
