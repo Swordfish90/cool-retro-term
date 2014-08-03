@@ -49,7 +49,7 @@ Tab{
                     }
                     Button{
                         Layout.fillWidth: true
-                        text: qsTr("Store current")
+                        text: qsTr("Save New Profile")
                         onClicked: insertname.show()
                     }
                     Button{
