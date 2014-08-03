@@ -63,6 +63,28 @@ You can also install this [package](https://aur.archlinux.org/packages/cool-old-
 
 ---
 
+**openSUSE**
+
+Add repository with latest Qt 5 (this is only needed on openSUSE 13.1, Factory already has it):
+
+    sudo zypper ar http://download.opensuse.org/repositories/KDE:/Qt5/openSUSE_13.1/ KDE:Qt5
+
+Install dependencies:
+
+    sudo zypper install libqt5-qtbase-devel libqt5-qtdeclarative-devel libqt5-qtquickcontrols libqt5-qtgraphicaleffects
+
+Compile:
+
+```bash
+git clone https://github.com/Swordifish90/cool-old-term.git
+cd cool-old-term/konsole-qml-plugin
+qmake-qt5 && make && make install
+cd ..
+./cool-old-term
+```
+
+---
+
 **Anyone else**
 
 Install Qt directly from here http://qt-project.org/downloads . Once done export them in you path (replace "_/opt/Qt5.3.1/5.3/gcc_64/bin_" with your correct folder):
