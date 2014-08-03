@@ -22,15 +22,40 @@ import QtQuick 2.2
 import QtQuick.Window 2.0
 import QtQuick.Controls 1.1
 import QtQuick.Layouts 1.1
+import QtQuick.Dialogs 1.1
 
 Window{
     id: insertnamedialog
     width: 400
     height: 100
     modality: Qt.ApplicationModal
-    title: qsTr("Save current profile")
+    title: qsTr("Save new profile")
 
     signal nameSelected(string name)
+
+    MessageDialog {
+        id: errorDialog
+        title: qsTr("Error")
+        visible: false
+
+        function showError(message){
+            text = message;
+            open();
+        }
+    }
+
+    function validateName(name){
+        var profile_list = shadersettings.profiles_list;
+        if (name === "")
+            return 1;
+
+        for (var i = 0; i < profile_list.count; i++){
+            if(profile_list.get(i).text === name)
+                return 2;
+        }
+
+        return 0;
+    }
 
     ColumnLayout{
         anchors.margins: 10
@@ -41,16 +66,29 @@ Window{
                 id: namefield
                 Layout.fillWidth: true
                 Component.onCompleted: forceActiveFocus()
+                onAccepted: okbutton.clickAction()
             }
         }
         RowLayout{
             anchors.right: parent.right
             anchors.bottom: parent.bottom
             Button{
+                id: okbutton
                 text: qsTr("OK")
-                onClicked: {
-                    nameSelected(namefield.text);
-                    close();
+                onClicked: clickAction()
+                function clickAction(){
+                    var name = namefield.text;
+                    switch(validateName(name)){
+                    case 1:
+                        errorDialog.showError(qsTr("The name you inserted is empty. Please choose a different one."));
+                        break;
+                    case 2:
+                        errorDialog.showError(qsTr("The name you inserted already exists. Please choose a different one."));
+                        break;
+                    default:
+                        nameSelected(name);
+                        close();
+                    }
                 }
             }
             Button{
