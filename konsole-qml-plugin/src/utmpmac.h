@@ -1,5 +1,13 @@
 #if defined (__APPLE__)
-# include <utmp.h>
+#include <utmp.h>
+
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <unistd.h>
+#include <limits.h>
+#include <fcntl.h>
+#include <sys/stat.h>
 
 struct utmp *getutent();
 struct utmp *getutid( struct utmp * );
