@@ -38,11 +38,11 @@ color 2 0 0 0 0 0 # regular color 0 Black
 
 color 3 255 43 43 0 0 # regular color 1 Red
 
-color 4 0 28 172 120 0 0 # regular color 2 Green
+color 4 28 172 120 0 0 # regular color 2 Green
 
 color 5 248 213 104 0 0 # regular color 3 Yellow
 
-color 6 0 43 108 196 # regular color 4 Blue
+color 6 43 108 196 0 0 # regular color 4 Blue
 
 color 7 255 29 206 0 0 # regular color 5 Magenta
 
