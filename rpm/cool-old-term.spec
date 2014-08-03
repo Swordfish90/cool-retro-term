@@ -84,6 +84,7 @@ echo -e '#!/bin/bash\nqmlscene -I /usr/share/cool-old-term/{imports,app/main.qml
 chmod 755 "%{buildroot}/%{_bindir}/%{name}"
 
 %files
+%defattr(-,root,root,-)
 %doc gpl-2.0.txt gpl-3.0.txt README.md
 %{_bindir}/%{name}
 %{_datadir}/%{name}
