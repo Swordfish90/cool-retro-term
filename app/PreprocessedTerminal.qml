@@ -255,16 +255,18 @@ Item{
                 : "") +
                 "coords = coords + delta;" +
                 "vec4 vcolor = texture2D(source, coords) * 256.0;
-                 float color = vcolor.r * 0.21 + vcolor.g * 0.72 + vcolor.b + 0.04;" +
+                 float color = vcolor.r * 0.21 + vcolor.g * 0.72 + vcolor.b * 0.04;" +
                 (mBlur !== 0 ?
+                    "vec4 blurredVcolor = texture2D(blurredSource, coords) * 256.0;" +
                     "float blurredSourceColor = texture2D(blurredSource, coords).a * 256.0;" +
                     "blurredSourceColor = blurredSourceColor - blurredSourceColor * " + (1.0 - motionBlurCoefficient) * fpsAttenuation+ ";" +
+                    "vcolor = step(1.0, color) * vcolor + step(color, 1.0) * blurredVcolor;" +
                     "color = step(1.0, color) * color + step(color, 1.0) * blurredSourceColor;"
                 : "") +
 
 
-                "gl_FragColor = texture2D(source, coords);" +
-                "gl_FragColor.a = color / 256.0;" + 
+                "gl_FragColor = floor(vcolor) / 256.0;" +
+                "gl_FragColor.a = floor(color) / 256.0;" +
             "}"
 
         onStatusChanged: if (log) console.log(log) //Print warning messages
