@@ -146,6 +146,9 @@ ShaderEffect {
                 return fract(smoothstep(-0.2, 0.0, coords.y - 3.0 * fract(time * 0.0001))) * glowing_line_strength;
             }" : "") +
 
+        "float rgb2grey(vec3 v){
+            return dot(v, vec3(0.21, 0.72, 0.04));
+        }" +
 
         "void main() {" +
             "vec2 cc = vec2(0.5) - qt_TexCoord0;" +
@@ -187,26 +190,32 @@ ShaderEffect {
             (glowing_line_strength !== 0 ? "
                 color += randomPass(coords) * glowing_line_strength;" : "") +
 
-            (chroma_color !== 0 ? 
+            (chroma_color !== 0 ?
                 "vec4 realBackColor = texture2D(source, txt_coords);" +
                 (saturation_color !== 0 ?
                     "vec4 satured_font_color = mix(font_color, vec4(1) , "+ str(saturation_color) + ");" +
                     "vec4 mixedColor = mix(font_color, realBackColor * satured_font_color, "+ str(chroma_color) +");"
                 :
                     "vec4 mixedColor = mix(font_color, realBackColor * font_color, "+ str(chroma_color) +");"
-                ) + 
-                
+                ) +
+
                 "vec4 finalBackColor = mix(background_color, mixedColor, realBackColor.a);" +
-                "vec3 finalColor = mix(finalBackColor, font_color, color).rgb;" :
+                "vec3 finalColor = mix(finalBackColor, font_color, color).rgb;"
+            :
                 "color += texture2D(source, txt_coords).a;" +
                 "vec3 finalColor = mix(background_color, font_color, color).rgb;"
             ) +
 
             "finalColor *= texture2D(rasterizationSource, coords).a;" +
 
-            (bloom !== 0 ? "
-                finalColor += font_color.rgb *" + 
-                "dot(texture2D(bloomSource, coords).rgb, vec3(0.299, 0.587, 0.114)) *" + str(bloom) + ";" : "") +
+            (bloom !== 0 ?
+                "vec3 bloomColor = texture2D(bloomSource, coords).rgb;" +
+                (chroma_color !== 0 ?
+                    "bloomColor = font_color.rgb * mix(vec3(rgb2grey(bloomColor)), bloomColor, "+str(chroma_color)+");"
+                :
+                    "bloomColor = font_color.rgb * rgb2grey(bloomColor);") +
+                "finalColor += bloomColor * "+str(bloom)+";"
+            : "") +
 
             (brightness_flickering !== 0 ? "
                 finalColor *= brightness;" : "") +

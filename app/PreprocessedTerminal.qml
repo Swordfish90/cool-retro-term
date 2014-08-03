@@ -246,6 +246,10 @@ Item{
             "uniform lowp sampler2D blurredSource;"
             : "") +
 
+            "float rgb2grey(vec3 v){
+                return dot(v, vec3(0.21, 0.72, 0.04));
+            }" +
+
             "void main() {" +
                 "vec2 coords = qt_TexCoord0;" +
                 (mScanlines != shadersettings.no_rasterization ? "
@@ -255,7 +259,7 @@ Item{
                 : "") +
                 "coords = coords + delta;" +
                 "vec4 vcolor = texture2D(source, coords) * 256.0;
-                 float color = vcolor.r * 0.21 + vcolor.g * 0.72 + vcolor.b * 0.04;" +
+                 float color = rgb2grey(vcolor);" +
                 (mBlur !== 0 ?
                     "vec4 blurredVcolor = texture2D(blurredSource, coords) * 256.0;" +
                     "float blurredSourceColor = texture2D(blurredSource, coords).a * 256.0;" +
