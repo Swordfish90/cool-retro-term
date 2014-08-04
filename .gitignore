@@ -34,3 +34,5 @@ Makefile*
 # Others
 
 *.xcf
+
+/imports/

@@ -63,6 +63,16 @@ You can also install this [package](https://aur.archlinux.org/packages/cool-old-
 
 ---
 
+**OS X**
+
+    brew install qt5
+    export CPPFLAGS="-I/usr/local/opt/qt5/include"
+    export LDFLAGS="-L/usr/local/opt/qt5/lib"
+    export PATH=/usr/local/opt/qt5/bin:$PATH
+    qmake && make && make install
+
+---
+
 **Anyone else**
 
 Install Qt directly from here http://qt-project.org/downloads . Once done export them in you path (replace "_/opt/Qt5.3.1/5.3/gcc_64/bin_" with your correct folder):
