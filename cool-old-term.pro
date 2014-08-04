@@ -1,4 +1,3 @@
 TEMPLATE =subdirs
 CONFIG += ordered
-SUBDIRS= konsole-qml-plugin\
-         app
+SUBDIRS= konsole-qml-plugin
