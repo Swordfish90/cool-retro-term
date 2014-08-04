@@ -106,4 +106,10 @@ cd ..
 
 # Have fun!
 ./cool-old-term
+
+# Application menu shortcut
+cd
+sudo mv cool-old-term /opt
+wget https://www.dropbox.com/s/2ssvey53s7pfim5/coolterm.desktop
+sudo mv coolterm.desktop /usr/share/applications
 ```
