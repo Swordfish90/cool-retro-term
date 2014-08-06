@@ -59,7 +59,7 @@ Item{
 
     property string _background_color: "#000000"
     property string _font_color: "#ff8100"
-    property string saturated_color: mix(strToColor("#FFFFFF"), strToColor(_font_color), saturation_color)
+    property string saturated_color: mix(strToColor("#FFFFFF"), strToColor(_font_color), saturation_color * 0.5)
     property color font_color: mix(strToColor(saturated_color), strToColor(_background_color), 0.7 + (contrast * 0.3))
     property color background_color: mix(strToColor(_background_color), strToColor(saturated_color), 0.7 + (contrast * 0.3))
 
