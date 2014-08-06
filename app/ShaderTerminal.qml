@@ -192,12 +192,7 @@ ShaderEffect {
 
             (chroma_color !== 0 ?
                 "vec4 realBackColor = texture2D(source, txt_coords);" +
-                (saturation_color !== 0 ?
-                    "vec4 satured_font_color = mix(font_color, vec4(1) , "+ str(saturation_color) + ");" +
-                    "vec4 mixedColor = mix(font_color, realBackColor * satured_font_color, "+ str(chroma_color) +");"
-                :
-                    "vec4 mixedColor = mix(font_color, realBackColor * font_color, "+ str(chroma_color) +");"
-                ) +
+                "vec4 mixedColor = mix(font_color, realBackColor * font_color, "+ str(chroma_color) +");" +
 
                 "vec4 finalBackColor = mix(background_color, mixedColor, realBackColor.a);" +
                 "vec3 finalColor = mix(finalBackColor, font_color, color).rgb;"
