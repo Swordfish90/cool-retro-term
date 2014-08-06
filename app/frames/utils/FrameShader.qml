@@ -13,6 +13,8 @@ ShaderEffect{
     property bool frameReflections: shadersettings.frameReflections
     property variant lightSource: reflectionEffectSourceLoader.item
 
+    property real chroma_color: shadersettings.chroma_color
+
     Loader{
         id: reflectionEffectLoader
         width: parent.width * 0.33
@@ -62,6 +64,10 @@ ShaderEffect{
                                 return (coords + cc * (1.0 + dist) * dist);
                             }
 
+                            float rgb2grey(vec3 v){
+                                return dot(v, vec3(0.21, 0.72, 0.04));
+                            }
+
                             void main(){
                                 vec2 coords = distortCoordinates(qt_TexCoord0);
                                 vec4 txt_color = texture2D(source, coords);
@@ -72,16 +78,20 @@ ShaderEffect{
                                 float dotProd = dot(normal, light_direction);" +
 
                                 (frameReflections ? "
-                                    float screenLight = texture2D(lightSource, coords).r;
+                                    vec3 realLightColor = texture2D(lightSource, coords).rgb;
+                                    float screenLight = rgb2grey(realLightColor);
                                     float clampedDotProd = clamp(dotProd, 0.05, 1.0);
                                     float diffuseReflection = clamp(screenLight * 1.5 * clampedDotProd, 0.0, 0.35);
-                                    float reflectionAlpha = mix(1.0, 0.90, dotProd);"
+                                    float reflectionAlpha = mix(1.0, 0.90, dotProd);
+                                    vec3 lightColor = mix(font_color.rgb * screenLight, font_color.rgb * realLightColor, "+chroma_color.toFixed(2)+");"
                                 : "
                                     float diffuseReflection = 0.0;
-                                    float reflectionAlpha = 1.0;") + "
+                                    float reflectionAlpha = 1.0;
+                                    vec3 lightColor = font_color.rgb;") + "
+
 
                                 vec3 back_color = background_color.rgb * (0.2 + 0.5 * dotProd);
-                                vec3 front_color = font_color.rgb * (0.05 + diffuseReflection);
+                                vec3 front_color = lightColor * (0.05 + diffuseReflection);
 
                                 vec4 dark_color = vec4((back_color + front_color) * txt_normal.a, txt_normal.a * reflectionAlpha);
                                 gl_FragColor = mix(dark_color, txt_color, ambient_light);
