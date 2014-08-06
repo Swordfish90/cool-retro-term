@@ -58,7 +58,7 @@ ApplicationWindow{
     Action {
         id: quitAction
         text: qsTr("&Quit")
-        shortcut: "Ctrl+Q"
+        shortcut: "Ctrl+Shift+Q"
         onTriggered: terminalWindow.close();
     }
     Action{
