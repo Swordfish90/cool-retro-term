@@ -49,7 +49,7 @@ ApplicationWindow{
     }
     Action {
         id: fullscreenAction
-        text: qsTr("&Fullscreen")
+        text: qsTr("Fullscreen")
         shortcut: "Alt+F11"
         onTriggered: shadersettings.fullscreen = !shadersettings.fullscreen;
         checkable: true
@@ -57,30 +57,30 @@ ApplicationWindow{
     }
     Action {
         id: quitAction
-        text: qsTr("&Quit")
+        text: qsTr("Quit")
         shortcut: "Ctrl+Shift+Q"
         onTriggered: terminalWindow.close();
     }
     Action{
         id: showsettingsAction
-        text: qsTr("&Settings")
+        text: qsTr("Settings")
         onTriggered: settingswindow.show();
     }
     Action{
         id: copyAction
-        text: qsTr("&Copy")
+        text: qsTr("Copy")
         shortcut: "Ctrl+Shift+C"
         onTriggered: terminal.copyClipboard()
     }
     Action{
         id: pasteAction
-        text: qsTr("&Paste")
+        text: qsTr("Paste")
         shortcut: "Ctrl+Shift+V"
         onTriggered: terminal.pasteClipboard()
     }
     Action{
         id: zoomIn
-        text: qsTr("&Zoom In")
+        text: qsTr("Zoom In")
         shortcut: "Ctrl++"
         onTriggered: {
             var oldScaling = shadersettings.fontScalingIndexes[shadersettings.rasterization];
@@ -90,7 +90,7 @@ ApplicationWindow{
     }
     Action{
         id: zoomOut
-        text: qsTr("&Zoom Out")
+        text: qsTr("Zoom Out")
         shortcut: "Ctrl+-"
         onTriggered: {
             var oldScaling = shadersettings.fontScalingIndexes[shadersettings.rasterization];
