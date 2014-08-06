@@ -220,7 +220,6 @@ Item{
         id: finalSource
         sourceItem: blurredterminal
         sourceRect: frame.sourceRect
-        //format: ShaderEffectSource.Alpha
         hideSource: true
     }
     ShaderEffect {
@@ -246,6 +245,10 @@ Item{
             "uniform lowp sampler2D blurredSource;"
             : "") +
 
+            "float rgb2grey(vec3 v){
+                return dot(v, vec3(0.21, 0.72, 0.04));
+            }" +
+
             "void main() {" +
                 "vec2 coords = qt_TexCoord0;" +
                 (mScanlines != shadersettings.no_rasterization ? "
@@ -254,16 +257,18 @@ Item{
                             coords.x = floor(virtual_resolution.x * coords.x) / virtual_resolution.x;" : "")
                 : "") +
                 "coords = coords + delta;" +
-                "vec4 vcolor = texture2D(source, coords) * 256.0;
-                 float color = vcolor.r * 0.21 + vcolor.g * 0.72 + vcolor.b + 0.04;" +
+
+                "vec4 color = texture2D(source, coords) * 256.0;
+                 color.a = rgb2grey(color.rgb);" +
+
                 (mBlur !== 0 ?
-                    "float blurredSourceColor = texture2D(blurredSource, coords).a * 256.0;" +
-                    "blurredSourceColor = blurredSourceColor - blurredSourceColor * " + (1.0 - motionBlurCoefficient) * fpsAttenuation+ ";" +
-                    "color = step(1.0, color) * color + step(color, 1.0) * blurredSourceColor;"
+                    "vec4 blur_color = texture2D(blurredSource, coords) * 256.0;" +
+                    "blur_color.a = blur_color.a - blur_color.a * " + (1.0 - motionBlurCoefficient) * fpsAttenuation+ ";" +
+                    "color = step(1.0, color.a) * color + step(color.a, 1.0) * blur_color;"
                 : "") +
 
 
-                "gl_FragColor.a = floor(color) / 256.0;" +
+                "gl_FragColor = floor(color) / 256.0;" +
             "}"
 
         onStatusChanged: if (log) console.log(log) //Print warning messages

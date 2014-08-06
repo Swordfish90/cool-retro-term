@@ -92,21 +92,37 @@ Tab{
         GroupBox{
             title: qsTr("Colors")
             Layout.fillWidth: true
-            RowLayout{
+            ColumnLayout{
                 anchors.fill: parent
-                ColorButton{
-                    name: qsTr("Font")
-                    height: 50
+                RowLayout{
                     Layout.fillWidth: true
-                    onColorSelected: shadersettings._font_color = color;
-                    button_color: shadersettings._font_color
+                    ColorButton{
+                        name: qsTr("Font")
+                        height: 50
+                        Layout.fillWidth: true
+                        onColorSelected: shadersettings._font_color = color;
+                        button_color: shadersettings._font_color
+                    }
+                    ColorButton{
+                        name: qsTr("Background")
+                        height: 50
+                        Layout.fillWidth: true
+                        onColorSelected: shadersettings._background_color = color;
+                        button_color: shadersettings._background_color
+                    }
                 }
-                ColorButton{
-                    name: qsTr("Background")
-                    height: 50
+                ColumnLayout{
                     Layout.fillWidth: true
-                    onColorSelected: shadersettings._background_color = color;
-                    button_color: shadersettings._background_color
+                    CheckableSlider{
+                        name: qsTr("Chroma Color")
+                        onValueChanged: shadersettings.chroma_color = value
+                        _value: shadersettings.chroma_color
+                    }
+                    CheckableSlider{
+                        name: qsTr("Saturation Color")
+                        onValueChanged: shadersettings.saturation_color = value
+                        _value: shadersettings.saturation_color
+                    }
                 }
             }
         }

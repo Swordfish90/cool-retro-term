@@ -36,19 +36,20 @@ color 1 0 0 0 1 0 # regular background color (Black)
 
 color 2 0 0 0 0 0 # regular color 0 Black
 
-color 3 59 59 59 0 0 # regular color 1 Red
+color 3 255 43 43 0 0 # regular color 1 Red
 
-color 4 137 137 137 0 0 # regular color 2 Green
+color 4 28 172 120 0 0 # regular color 2 Green
 
-color 5 116 116 116 0 0 # regular color 3 Yellow
+color 5 248 213 104 0 0 # regular color 3 Yellow
 
-color 6 39 39 39 0 0 # regular color 4 Blue
+color 6 43 108 196 0 0 # regular color 4 Blue
 
-color 7 70 70 70 0 0 # regular color 5 Magenta
+color 7 255 29 206 0 0 # regular color 5 Magenta
 
-color 8 148 148 148 0 0 # regular color 6 Cyan
+color 8 24 167 181 0 0 # regular color 6 Cyan
 
 color 9 179 179 179 0 0 # regular color 7 White
+
 
 
 
@@ -68,17 +69,17 @@ color 11 0 0 0 1 0 # intensive background color
 
 color 12 106 106 106 0 0 # intensive color 0
 
-color 13 122 122 122 0 0 # intensive color 1
+color 13 253 94 83 0 0 # intensive color 1
 
-color 14 207 207 207 0 0 # intensive color 2
+color 14 168 228 160 0 0 # intensive color 2
 
-color 15 243 243 243 0 0 # intensive color 3
+color 15 254 254 34 0 0 # intensive color 3
 
-color 16 99 99 99 0 0 # intensive color 4
+color 16 154 206 235 0 0 # intensive color 4
 
-color 17 134 134 134 0 0 # intensive color 5
+color 17 252 116 253 0 0 # intensive color 5
 
-color 18 219 219 219 0 0 # intensive color 6
+color 18 236 234 190 0 0 # intensive color 6
 
 color 19 255 255 255 0 0 # intensive color 7
 
