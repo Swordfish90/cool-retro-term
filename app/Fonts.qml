@@ -83,5 +83,11 @@ Item{
             lineSpacing: 0.2
             pixelSize: 32
         }
+        ListElement{
+            text: "IBM 3278 (1971)"
+            source: "fonts/1971-ibm-3278/3270Medium.ttf"
+            lineSpacing: 0.2
+            pixelSize: 32
+        }
     }
 }

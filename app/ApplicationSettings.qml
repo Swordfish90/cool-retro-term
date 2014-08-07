@@ -341,6 +341,11 @@ Item{
             builtin: true
         }
         ListElement{
+            text: "IBM 3278"
+            obj_string: '{"ambient_light":0.1,"background_color":"#000000","bloom_strength":0.15,"brightness":0.5,"brightness_flickering":0,"contrast":0.95,"fontIndex":8,"font_color":"#0ccc68","frames_index":1,"glowing_line_strength":0,"horizontal_sincronization":0,"jitter":0,"motion_blur":0.6,"noise_strength":0,"rasterization":0,"screen_distortion":0.1,"windowOpacity":1}'
+            builtin: true
+        }
+        ListElement{
             text: "Transparent Green"
             obj_string: '{"ambient_light":0.2,"background_color":"#000000","bloom_strength":0.4549689440993788,"brightness":0.5,"brightness_flickering":0.20341614906832298,"contrast":0.85,"fontIndex":0,"font_color":"#0ccc68","frames_index":0,"glowing_line_strength":0.15993788819875776,"horizontal_sincronization":0.05045871559633028,"jitter":0.20341614906832298,"motion_blur":0.24999999999999997,"noise_strength":0.20031055900621117,"rasterization":0,"screen_distortion":0.05045871559633028,"windowOpacity":0.5956221198156681}'
             builtin: true
