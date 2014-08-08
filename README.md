@@ -41,16 +41,6 @@ or:
 ```
 sudo dnf -y install qt5-qtbase qt5-qtbase-devel qt5-qtdeclarative qt5-qtdeclarative-devel qt5-qtgraphicaleffects qt5-qtquickcontrols
 ```
-
-Compile using the following:
-```
-git clone https://github.com/Swordifish90/cool-old-term.git
-cd cool-old-term/konsole-qml-plugin
-qmake-qt5 && make && make install
-cd ..
-./cool-old-term
-```
-
 ---
 
 **Arch Linux**
@@ -73,16 +63,6 @@ Install dependencies:
 
     sudo zypper install libqt5-qtbase-devel libqt5-qtdeclarative-devel libqt5-qtquickcontrols libqt5-qtgraphicaleffects
 
-Compile:
-
-```bash
-git clone https://github.com/Swordifish90/cool-old-term.git
-cd cool-old-term/konsole-qml-plugin
-qmake-qt5 && make && make install
-cd ..
-./cool-old-term
-```
-
 ---
 
 **Anyone else**
@@ -101,7 +81,10 @@ git clone https://github.com/Swordifish90/cool-old-term.git
 # Build it
 cd cool-old-term
 cd konsole-qml-plugin
+
+# Compile (Fedora and OpenSUSE user should use qmake-qt5 instead of qmake)
 qmake && make && make install
+
 cd ..
 
 # Have fun!
