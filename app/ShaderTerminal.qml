@@ -29,7 +29,7 @@ ShaderEffect {
     property variant rasterizationSource: terminal.rasterizationSource
     property variant noiseSource: terminal.staticNoiseSource
     property size txt_Size: Qt.size(frame.sourceRect.width, frame.sourceRect.height)
-    property real bloom: shadersettings.bloom_strength * 2.5
+    property real bloom_strength: shadersettings.bloom_strength * 2.5
 
     property int rasterization: shadersettings.rasterization
 
@@ -52,7 +52,7 @@ ShaderEffect {
     property real disp_left: frame.item.displacementLeft * shadersettings.window_scaling
     property real disp_right: frame.item.displacementRight * shadersettings.window_scaling
 
-    property real brightness: shadersettings.brightness * 1.5 + 0.5
+    property real screen_brightness: shadersettings.brightness * 1.5 + 0.5
 
     property real time: timeManager.time
     property variant randomFunctionSource: randfuncsource
@@ -94,22 +94,24 @@ ShaderEffect {
         varying highp vec2 qt_TexCoord0;" +
 
         (brightness_flickering !== 0.0 ?"
-            varying lowp float brightness;" : "") +
+            varying lowp float brightness;
+            uniform lowp float brightness_flickering;" : "") +
         (horizontal_sincronization !== 0.0 ?"
-            varying lowp float horizontal_distortion;" : "") +
+            varying lowp float horizontal_distortion;
+            uniform lowp float horizontal_sincronization;" : "") +
         "
         void main() {
             qt_TexCoord0.x = -"+str(disp_left)+"/txt_Size.x + qt_MultiTexCoord0.x / ((txt_Size.x -("+str(disp_left+disp_right)+")) / txt_Size.x);" + "
             qt_TexCoord0.y = -"+str(disp_top)+"/txt_Size.y + qt_MultiTexCoord0.y / ((txt_Size.y -("+str(disp_top+disp_bottom)+")) / txt_Size.y);" + "
             vec2 coords = vec2(fract(time/(1024.0*2.0)), fract(time/(1024.0*1024.0)));" +
             (brightness_flickering !== 0.0 ? "
-                brightness = 1.0 + (texture2D(randomFunctionSource, coords).g - 0.5) * "+str(brightness_flickering)+";"
+                brightness = 1.0 + (texture2D(randomFunctionSource, coords).g - 0.5) * brightness_flickering;"
             :   "") +
 
             (horizontal_sincronization !== 0.0 ? "
                 float randval = 1.5 * texture2D(randomFunctionSource,(vec2(1.0) -coords) * 0.5).g;
-                float negsinc = 1.0 - "+str(0.6*horizontal_sincronization)+";
-                horizontal_distortion = step(negsinc, randval) * (randval - negsinc) * "+str(0.3*horizontal_sincronization)+";"
+                float negsinc = 1.0 - 0.6 * horizontal_sincronization;" + "
+                horizontal_distortion = step(negsinc, randval) * (randval - negsinc) * 0.3*horizontal_sincronization;"
             : "") +
 
             "gl_Position = qt_Matrix * qt_Vertex;
@@ -124,18 +126,24 @@ ShaderEffect {
 
         uniform highp vec4 font_color;
         uniform highp vec4 background_color;
-        uniform highp sampler2D rasterizationSource;" +
+        uniform highp sampler2D rasterizationSource;
+        uniform lowp float screen_brightness;" +
 
-        (bloom !== 0 ? "
-            uniform highp sampler2D bloomSource;" : "") +
+        (bloom_strength !== 0 ? "
+            uniform highp sampler2D bloomSource;
+            uniform lowp float bloom_strength;" : "") +
         (noise_strength !== 0 ? "
             uniform highp float noise_strength;" : "") +
         (noise_strength !== 0 || jitter !== 0 ? "
             uniform lowp sampler2D noiseSource;" : "") +
         (screen_distorsion !== 0 ? "
-            uniform highp float screen_distorsion;" : "")+
+            uniform highp float screen_distorsion;" : "") +
         (glowing_line_strength !== 0 ? "
-            uniform highp float glowing_line_strength;" : "")+
+            uniform highp float glowing_line_strength;" : "") +
+        (chroma_color !== 0 ? "
+            uniform lowp float chroma_color;" : "") +
+        (jitter !== 0 ? "
+            uniform lowp float jitter;" : "") +
         (brightness_flickering !== 0 ? "
             varying lowp float brightness;" : "") +
         (horizontal_sincronization !== 0 ? "
@@ -178,7 +186,7 @@ ShaderEffect {
             (jitter !== 0 ? "
                 vec2 offset = vec2(texture2D(noiseSource, coords + fract(time / 57.0)).a,
                                    texture2D(noiseSource, coords + fract(time / 251.0)).a) - 0.5;
-                vec2 txt_coords = coords + offset * "+str(jitter)+";"
+                vec2 txt_coords = coords + offset * jitter;"
             :  "vec2 txt_coords = coords;") +
 
             "float color = 0.0;" +
@@ -192,7 +200,7 @@ ShaderEffect {
 
             (chroma_color !== 0 ?
                 "vec4 realBackColor = texture2D(source, txt_coords);" +
-                "vec4 mixedColor = mix(font_color, realBackColor * font_color, "+ str(chroma_color) +");" +
+                "vec4 mixedColor = mix(font_color, realBackColor * font_color, chroma_color);" +
 
                 "vec4 finalBackColor = mix(background_color, mixedColor, realBackColor.a);" +
                 "vec3 finalColor = mix(finalBackColor, font_color, color).rgb;"
@@ -203,19 +211,19 @@ ShaderEffect {
 
             "finalColor *= texture2D(rasterizationSource, coords).a;" +
 
-            (bloom !== 0 ?
+            (bloom_strength !== 0 ?
                 "vec3 bloomColor = texture2D(bloomSource, coords).rgb;" +
                 (chroma_color !== 0 ?
-                    "bloomColor = font_color.rgb * mix(vec3(rgb2grey(bloomColor)), bloomColor, "+str(chroma_color)+");"
+                    "bloomColor = font_color.rgb * mix(vec3(rgb2grey(bloomColor)), bloomColor, chroma_color);"
                 :
                     "bloomColor = font_color.rgb * rgb2grey(bloomColor);") +
-                "finalColor += bloomColor * "+str(bloom)+";"
+                "finalColor += bloomColor * bloom_strength;"
             : "") +
 
             (brightness_flickering !== 0 ? "
                 finalColor *= brightness;" : "") +
 
-            "gl_FragColor = vec4(finalColor *"+str(brightness)+", qt_Opacity);" +
+            "gl_FragColor = vec4(finalColor * screen_brightness, qt_Opacity);" +
         "}"
 
      onStatusChanged: if (log) console.log(log) //Print warning messages

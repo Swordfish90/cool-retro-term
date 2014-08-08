@@ -227,6 +227,7 @@ Item{
         anchors.fill: parent
         property variant source: source
         property variant blurredSource: (mBlur !== 0) ? blurredSource : undefined
+        property real blurCoefficient: (1.0 - motionBlurCoefficient) * fpsAttenuation
         property size virtual_resolution: parent.virtual_resolution
         property size delta: Qt.size((mScanlines == shadersettings.pixel_rasterization ? deltax : 0),
                                      mScanlines != shadersettings.no_rasterization ? deltay : 0)
@@ -242,7 +243,8 @@ Item{
              uniform highp vec2 virtual_resolution;" +
 
             (mBlur !== 0 ?
-            "uniform lowp sampler2D blurredSource;"
+                "uniform lowp sampler2D blurredSource;
+                 uniform lowp float blurCoefficient;"
             : "") +
 
             "float rgb2grey(vec3 v){
@@ -263,7 +265,7 @@ Item{
 
                 (mBlur !== 0 ?
                     "vec4 blur_color = texture2D(blurredSource, coords) * 256.0;" +
-                    "blur_color.a = blur_color.a - blur_color.a * " + (1.0 - motionBlurCoefficient) * fpsAttenuation+ ";" +
+                    "blur_color.a = blur_color.a - blur_color.a * blurCoefficient;" +
                     "color = step(1.0, color.a) * color + step(color.a, 1.0) * blur_color;"
                 : "") +
 

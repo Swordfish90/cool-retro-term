@@ -47,7 +47,8 @@ ShaderEffect{
                             uniform sampler2D normals;
                             uniform highp float screen_distorsion;
                             uniform highp float ambient_light;
-                            uniform highp float qt_Opacity;" +
+                            uniform highp float qt_Opacity;
+                            uniform lowp float chroma_color;" +
 
                             (frameReflections ?
                                 "uniform sampler2D lightSource;" : "") + "
@@ -83,7 +84,7 @@ ShaderEffect{
                                     float clampedDotProd = clamp(dotProd, 0.05, 1.0);
                                     float diffuseReflection = clamp(screenLight * 1.5 * clampedDotProd, 0.0, 0.35);
                                     float reflectionAlpha = mix(1.0, 0.90, dotProd);
-                                    vec3 lightColor = mix(font_color.rgb * screenLight, font_color.rgb * realLightColor, "+chroma_color.toFixed(2)+");"
+                                    vec3 lightColor = mix(font_color.rgb * screenLight, font_color.rgb * realLightColor, chroma_color);"
                                 : "
                                     float diffuseReflection = 0.0;
                                     float reflectionAlpha = 1.0;
