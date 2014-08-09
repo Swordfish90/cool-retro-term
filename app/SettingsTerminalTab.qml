@@ -115,13 +115,14 @@ Tab{
                     Layout.fillWidth: true
                     CheckableSlider{
                         name: qsTr("Chroma Color")
-                        onValueChanged: shadersettings.chroma_color = value
-                        _value: shadersettings.chroma_color
+                        onNewValue: shadersettings.chroma_color = newValue
+                        value: shadersettings.chroma_color
                     }
                     CheckableSlider{
                         name: qsTr("Saturation Color")
-                        onValueChanged: shadersettings.saturation_color = value
-                        _value: shadersettings.saturation_color
+                        onNewValue: shadersettings.saturation_color = newValue
+                        value: shadersettings.saturation_color
+                        enabled: shadersettings.chroma_color !== 0
                     }
                 }
             }

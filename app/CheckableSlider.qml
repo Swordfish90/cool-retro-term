@@ -23,30 +23,48 @@ import QtQuick.Controls 1.1
 import QtQuick.Layouts 1.1
 
 RowLayout {
-    property bool enabled: true
     property alias name: check.text
-    property double value: (check.checked) ? _value : 0.0
-    property alias _value: slider.value
+
+    property double value
     property alias min_value: slider.minimumValue
     property alias max_value: slider.maximumValue
     property alias stepSize: slider.stepSize
+
+    signal newValue(real newValue);
 
     id: setting_component
     anchors.left: parent.left
     anchors.right: parent.right
     spacing: 25
 
+    onValueChanged: {
+        check.checked = !(value == 0);
+        if(check.checked)
+            slider.value = value;
+    }
+
     CheckBox{
         id: check
         implicitWidth: 150
-        Component.onCompleted: checked = (_value !== 0);
-        enabled: parent.enabled
+        onClicked: {
+            if(!checked){
+                checked = false;
+                slider.enabled = false;
+                newValue(0);
+            } else {
+                checked = true;
+                newValue(slider.value);
+                slider.enabled = true;
+            }
+        }
     }
     Slider{
         id: slider
         stepSize: parent.stepSize
         Layout.fillWidth: true
-        enabled: check.checked && parent.enabled
+        onValueChanged: {
+            newValue(value);
+        }
     }
     Text{
         id: textfield
