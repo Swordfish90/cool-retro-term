@@ -439,7 +439,7 @@ bool KeyboardTranslatorReader::parseAsStateFlag(const QString& item , KeyboardTr
 bool KeyboardTranslatorReader::parseAsKeyCode(const QString& item , int& keyCode)
 {
     QKeySequence sequence = QKeySequence::fromString(item);
-    if ( !sequence.isEmpty() )
+    if ( !sequence.isEmpty() && sequence[0] != Qt::Key_unknown )
     {
         keyCode = sequence[0];
 
@@ -453,6 +453,12 @@ bool KeyboardTranslatorReader::parseAsKeyCode(const QString& item , int& keyCode
         keyCode = Qt::Key_PageUp;
     else if ( item == "next" )
         keyCode = Qt::Key_PageDown;
+    else if ( item == "bracketleft" )
+        keyCode = Qt::Key_BracketLeft;
+    else if ( item == "backslash" )
+        keyCode = Qt::Key_Backslash;
+    else if ( item == "bracketright" )
+        keyCode = Qt::Key_BracketRight;
     else
         return false;
 
