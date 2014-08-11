@@ -42,6 +42,8 @@ ShaderEffect {
     property real chroma_color: shadersettings.chroma_color;
     property real saturation_color: shadersettings.saturation_color;
 
+    property real rgb_shift: shadersettings.rgb_shift * 0.2
+
     property real brightness_flickering: shadersettings.brightness_flickering
     property real horizontal_sincronization: shadersettings.horizontal_sincronization
 
@@ -144,6 +146,8 @@ ShaderEffect {
             uniform lowp float chroma_color;" : "") +
         (jitter !== 0 ? "
             uniform lowp float jitter;" : "") +
+        (rgb_shift !== 0 ? "
+            uniform lowp float rgb_shift;" : "") +
         (brightness_flickering !== 0 ? "
             varying lowp float brightness;" : "") +
         (horizontal_sincronization !== 0 ? "
@@ -199,7 +203,17 @@ ShaderEffect {
                 color += randomPass(coords) * glowing_line_strength;" : "") +
 
             (chroma_color !== 0 ?
-                "vec4 realBackColor = texture2D(source, txt_coords);" +
+                (rgb_shift !== 0 ? "
+                    float rgb_noise = abs(texture2D(noiseSource, vec2(fract(time/(1024.0 * 256.0)), fract(time/(1024.0*1024.0)))).a - 0.5);
+                    vec4 realBackColor = texture2D(source, txt_coords);
+                    vec2 rcolor = texture2D(source, txt_coords + vec2(0.1, 0.0) * rgb_shift * rgb_noise).ra;
+                    vec2 bcolor = texture2D(source, txt_coords - vec2(0.1, 0.0) * rgb_shift * rgb_noise).ba;
+                    realBackColor.r = rcolor.x;
+                    realBackColor.b = bcolor.x;
+                    realBackColor.a = 0.33 * (realBackColor.a + rcolor.y + bcolor.y);"
+                :
+                    "vec4 realBackColor = texture2D(source, txt_coords);") +
+
                 "vec4 mixedColor = mix(font_color, realBackColor * font_color, chroma_color);" +
 
                 "vec4 finalBackColor = mix(background_color, mixedColor, realBackColor.a);" +

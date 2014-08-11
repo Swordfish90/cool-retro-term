@@ -74,6 +74,12 @@ Tab{
                 onNewValue: shadersettings.horizontal_sincronization = newValue;
                 value: shadersettings.horizontal_sincronization;
             }
+            CheckableSlider{
+                name: qsTr("RGB shift")
+                onNewValue: shadersettings.rgb_shift = newValue;
+                value: shadersettings.rgb_shift;
+                enabled: shadersettings.chroma_color !== 0
+            }
         }
     }
 }
