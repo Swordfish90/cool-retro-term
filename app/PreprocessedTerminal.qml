@@ -79,7 +79,7 @@ Item{
 
         session: KSession {
             id: ksession
-            kbScheme: "default"
+            kbScheme: "linux"
 
             onFinished: {
                 Qt.quit()
