@@ -4,7 +4,7 @@
 cool-old-term is a terminal emulator which tries to mimic the look and feel of the old cathode tube screens.
 It has been designed to be eye-candy, customizable, and reasonably lightweight.
 
-It now uses the konsole engine which is powerful and mature.
+It now uses the Konsole engine which is powerful and mature.
 
 This terminal emulator requires Qt 5.2 or higher to run.
 
@@ -12,6 +12,15 @@ This terminal emulator requires Qt 5.2 or higher to run.
 ![Image](<http://i.imgur.com/NUfvnlu.png>)
 ![Image](<http://i.imgur.com/4LpfLF8.png>)
 ![Image](<http://i.imgur.com/MMmM6Ht.png>)
+
+## Get cool-old-term
+You can either build cool-old-term yourself (see below) or use walk the easy way and install one of these packages:
+
+Users of Fedora and openSUSE can grab a package from [Open Build Service](http://software.opensuse.org/package/cool-old-term).
+
+Arch users can install this [package](https://aur.archlinux.org/packages/cool-old-term-git/) directly via the [AUR](https://aur.archlinux.org):
+
+    yaourt -S aur/cool-old-term-git
 
 ##Build instructions
 
@@ -47,10 +56,6 @@ sudo dnf -y install qt5-qtbase qt5-qtbase-devel qt5-qtdeclarative qt5-qtdeclarat
 
     sudo pacman -S qt5-base qt5-declarative qt5-quickcontrols qt5-graphicaleffects
     
-You can also install this [package](https://aur.archlinux.org/packages/cool-old-term-git/) directly via the [AUR](https://aur.archlinux.org):
-
-    yaourt -S aur/cool-old-term-git
-
 ---
 
 **openSUSE**
