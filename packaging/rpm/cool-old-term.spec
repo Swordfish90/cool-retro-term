@@ -24,9 +24,9 @@ Name:       cool-old-term
 Summary:    Cool Old Terminal
 Version:    0.9
 Release:    0%{?dist}
-Group:      System/GUI/Other
+Group:      System/X11/Terminals
 License:    GPLv3
-URL:        http://swordfishslabs.wordpress.com/
+URL:        https://github.com/Swordifish90/cool-old-term
 
 # For this spec file to work, the cool-old-term sources must be located in a directory
 # named cool-old-term-0.9 (with "0.9" being the version number defined above).
