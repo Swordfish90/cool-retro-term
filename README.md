@@ -14,7 +14,7 @@ This terminal emulator requires Qt 5.2 or higher to run.
 ![Image](<http://i.imgur.com/MMmM6Ht.png>)
 
 ## Get cool-old-term
-You can either build cool-old-term yourself (see below) or use walk the easy way and install one of these packages:
+You can either build cool-old-term yourself (see below) or walk the easy way and install one of these packages:
 
 Users of Fedora and openSUSE can grab a package from [Open Build Service](http://software.opensuse.org/package/cool-old-term).
 
