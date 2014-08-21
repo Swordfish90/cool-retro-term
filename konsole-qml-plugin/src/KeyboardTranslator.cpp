@@ -453,12 +453,18 @@ bool KeyboardTranslatorReader::parseAsKeyCode(const QString& item , int& keyCode
         keyCode = Qt::Key_PageUp;
     else if ( item == "next" )
         keyCode = Qt::Key_PageDown;
+    else if ( item == "question" )
+        keyCode = Qt::Key_Question;
+    else if ( item == "at" )
+        keyCode = Qt::Key_At;
     else if ( item == "bracketleft" )
         keyCode = Qt::Key_BracketLeft;
     else if ( item == "backslash" )
         keyCode = Qt::Key_Backslash;
     else if ( item == "bracketright" )
         keyCode = Qt::Key_BracketRight;
+    else if ( item == "asciicircum" )
+        keyCode = Qt::Key_AsciiCircum;
     else
         return false;
 
