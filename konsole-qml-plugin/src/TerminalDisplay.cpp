@@ -536,6 +536,15 @@ void KTerminalDisplay::mouseRelease(qreal x, qreal y){
     }
 }
 
+void KTerminalDisplay::scrollScreenWindow(enum ScreenWindow::RelativeScrollMode mode, int amount)
+{
+    _screenWindow->scrollBy(mode, amount);
+    _screenWindow->setTrackOutput(_screenWindow->atEndOfOutput());
+    updateLineProperties();
+    updateImage();
+}
+
+
 void KTerminalDisplay::setUsesMouse(bool usesMouse){
     _mouseMarks = !usesMouse;
 }
@@ -2144,43 +2153,9 @@ void KTerminalDisplay::drawInputMethodPreeditString(QPainter *painter , const QR
 
 void KTerminalDisplay::keyPressEvent(QKeyEvent *event)
 {
+    _screenWindow->screen()->setCurrentTerminalDisplay(this);
+
     bool emitKeyPressSignal = true;
-
-    // Keyboard-based navigation
-    if ( event->modifiers() == Qt::ShiftModifier )
-    {
-        bool update = true;
-
-        if ( event->key() == Qt::Key_PageUp )
-        {
-            _screenWindow->scrollBy( ScreenWindow::ScrollPages , -1 );
-        }
-        else if ( event->key() == Qt::Key_PageDown )
-        {
-            _screenWindow->scrollBy( ScreenWindow::ScrollPages , 1 );
-        }
-        else if ( event->key() == Qt::Key_Up )
-        {
-            _screenWindow->scrollBy( ScreenWindow::ScrollLines , -1 );
-        }
-        else if ( event->key() == Qt::Key_Down )
-        {
-            _screenWindow->scrollBy( ScreenWindow::ScrollLines , 1 );
-        }
-        else
-            update = false;
-
-        if ( update )
-        {
-            _screenWindow->setTrackOutput( _screenWindow->atEndOfOutput() );
-
-            updateLineProperties();
-            updateImage();
-
-            // do not send key press to terminal
-            emitKeyPressSignal = false;
-        }
-    }
 
     _actSel=0; // Key stroke implies a screen update, so TerminalDisplay won't
     // know where the current selection is.

@@ -1358,3 +1358,13 @@ void Screen::fillWithDefaultChar(Character* dest, int count)
     for (int i=0;i<count;i++)
         dest[i] = defaultChar;
 }
+
+void Screen::setCurrentTerminalDisplay(KTerminalDisplay* display)
+{
+    _currentTerminalDisplay = display;
+}
+
+KTerminalDisplay* Screen::currentTerminalDisplay()
+{
+    return _currentTerminalDisplay;
+}

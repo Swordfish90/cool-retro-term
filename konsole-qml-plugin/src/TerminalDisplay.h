@@ -33,6 +33,8 @@
 #include "Filter.h"
 #include "Character.h"
 #include "ksession.h"
+#include "ScreenWindow.h"
+#include "Screen.h"
 //#include "konsole_export.h"
 #define KONSOLEPRIVATE_EXPORT
 
@@ -46,8 +48,6 @@ class QTimerEvent;
 //class KMenu;
 
 extern unsigned short vt100_graphics[32];
-
-class ScreenWindow;
 
 /**
  * A widget which displays output from a terminal emulation and sends input keypresses and mouse activity
@@ -316,6 +316,8 @@ public slots:
     void mouseMove(qreal x, qreal y);
     void mouseDoubleClick(qreal x, qreal y);
     void mouseRelease(qreal x, qreal y);
+
+    void scrollScreenWindow(enum ScreenWindow::RelativeScrollMode mode, int amount);
 
     void setUsesMouse(bool usesMouse);
 

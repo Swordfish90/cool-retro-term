@@ -940,8 +940,17 @@ void Vt102Emulation::sendKeyEvent( QKeyEvent* event )
 
         if ( entry.command() != KeyboardTranslator::NoCommand )
         {
+            KTerminalDisplay* currentView = _currentScreen->currentTerminalDisplay();
             if (entry.command() & KeyboardTranslator::EraseCommand)
                 textToSend += eraseChar();
+            else if (entry.command() & KeyboardTranslator::ScrollPageUpCommand)
+                currentView->scrollScreenWindow(ScreenWindow::ScrollPages, -1);
+            else if (entry.command() & KeyboardTranslator::ScrollPageDownCommand)
+                currentView->scrollScreenWindow(ScreenWindow::ScrollPages, 1);
+            else if (entry.command() & KeyboardTranslator::ScrollLineUpCommand)
+                currentView->scrollScreenWindow(ScreenWindow::ScrollLines, -1);
+            else if (entry.command() & KeyboardTranslator::ScrollLineDownCommand)
+                currentView->scrollScreenWindow(ScreenWindow::ScrollLines, 1);
 
             // TODO command handling
         }

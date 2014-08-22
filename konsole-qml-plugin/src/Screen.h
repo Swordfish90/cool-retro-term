@@ -42,6 +42,7 @@
 
 
 class TerminalCharacterDecoder;
+class KTerminalDisplay;
 
 /**
     \brief An image of characters with associated attributes.
@@ -543,6 +544,11 @@ public:
       */
     static void fillWithDefaultChar(Character* dest, int count);
 
+    //cool-old-term: added to allow scrolling from commands
+    void setCurrentTerminalDisplay(KTerminalDisplay* display);
+    KTerminalDisplay* currentTerminalDisplay();
+
+
 private: 
 
     //copies a line of text from the screen or history into a stream using a 
@@ -666,6 +672,8 @@ private:
     int lastPos;
 
     static Character defaultChar;
+
+    KTerminalDisplay* _currentTerminalDisplay;
 };
 
 
