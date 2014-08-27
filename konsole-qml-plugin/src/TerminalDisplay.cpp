@@ -866,10 +866,10 @@ void KTerminalDisplay::mouseDoubleClickEvent(QPoint position, int but, int mod)
     Qt::KeyboardModifier modifiers = (Qt::KeyboardModifier) mod;
 
     // Yes, successive middle click can trigger this event
-    if (button == Qt::MidButton) {
-        processMidButtonClick(position, modifiers);
-        return;
-    }
+//    if (button == Qt::MidButton) {
+//        processMidButtonClick(position, modifiers);
+//        return;
+//    }
 
     if (button != Qt::LeftButton) return;
     if (!_screenWindow) return;
@@ -881,11 +881,7 @@ void KTerminalDisplay::mouseDoubleClickEvent(QPoint position, int but, int mod)
 
     // pass on double click as two clicks.
     if (!_mouseMarks && !(modifiers & Qt::ShiftModifier)) {
-        // Send just _ONE_ click event, since the first click of the double click
-        // was already sent by the click handler
-        emit mouseSignal(0, charColumn + 1,
-                         charLine + 1,
-                         0);
+        // There is no need to pass other events.
         /*emit mouseSignal(0, charColumn + 1,
                          charLine + 1 + _scrollBar->value() - _scrollBar->maximum(),
                          0); */ // left button
@@ -906,6 +902,7 @@ void KTerminalDisplay::mouseDoubleClickEvent(QPoint position, int but, int mod)
     _screenWindow->setSelectionEnd(endSel.x() , endSel.y());
     copyToX11Selection();
 
+    //TODO implement triple click.
 //    _possibleTripleClick = true;
 
 //    QTimer::singleShot(QApplication::doubleClickInterval(), this,
