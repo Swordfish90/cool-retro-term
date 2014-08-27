@@ -312,8 +312,6 @@ public slots:
     void setColorScheme(const QString &name);
     QStringList availableColorSchemes();
 
-    void scrollWheel(qreal x, qreal y, int lines);
-
     void scrollScreenWindow(enum ScreenWindow::RelativeScrollMode mode, int amount);
 
     void setUsesMouse(bool usesMouse);
@@ -481,6 +479,7 @@ protected:
     Q_INVOKABLE void mouseReleaseEvent(QPoint position, int but, int mod);
     Q_INVOKABLE void mouseDoubleClickEvent(QPoint position, int but, int mod);
     Q_INVOKABLE void mouseMoveEvent(QPoint position, int but, int buts, int mod);
+    Q_INVOKABLE void scrollWheelEvent(QPoint position, int lines);
     //void mouseReleaseEvent( QMouseEvent* );
     //void mouseMoveEvent( QMouseEvent* );
 

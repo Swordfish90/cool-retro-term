@@ -447,28 +447,27 @@ QStringList KTerminalDisplay::availableColorSchemes()
     return ret;
 }
 
-void KTerminalDisplay::scrollWheel(qreal x, qreal y, int lines){
+void KTerminalDisplay::scrollWheelEvent(QPoint position, int lines){
     if(_mouseMarks){
-        int charLine;
-        int charColumn;
-        getCharacterPosition(QPoint(x,y) , charLine , charColumn);
-
-        emit mouseSignal(lines > 0 ? 5 : 4,
-                         charColumn + 1,
-                         charLine + 1,
-                         0);
-    } else {
         if(_screenWindow->lineCount() == _screenWindow->windowLines()){
             const int keyCode = lines > 0 ? Qt::Key_Down : Qt::Key_Up;
             QKeyEvent keyEvent(QEvent::KeyPress, keyCode, Qt::NoModifier);
 
-            emit keyPressedSignal(&keyEvent);
             emit keyPressedSignal(&keyEvent);
         } else {
             _screenWindow->scrollBy( ScreenWindow::ScrollLines, lines );
             _screenWindow->scrollCount();
             updateImage();
         }
+    } else {
+        int charLine;
+        int charColumn;
+        getCharacterPosition(position, charLine, charColumn);
+
+        emit mouseSignal(lines > 0 ? 5 : 4,
+                         charColumn + 1,
+                         charLine + 1,
+                         0);
     }
 }
 

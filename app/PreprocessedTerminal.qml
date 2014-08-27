@@ -134,8 +134,8 @@ Item{
         anchors.fill: parent
         onWheel:{
             var coord = correctDistortion(wheel.x, wheel.y);
-            var lines = wheel.angleDelta.y > 0 ? -2 : 2;
-            kterminal.scrollWheel(coord.width, coord.height, lines);
+            var lines = wheel.angleDelta.y > 0 ? -1 : 1;
+            kterminal.scrollWheelEvent(coord, lines);
         }
         //onClicked: {
         //    if (mouse.button == Qt.RightButton){
