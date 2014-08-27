@@ -133,31 +133,25 @@ Item{
         acceptedButtons: Qt.LeftButton | Qt.MiddleButton | Qt.RightButton
         anchors.fill: parent
         onWheel:{
-            var coord = correctDistortion(wheel.x, wheel.y);
-            var lines = wheel.angleDelta.y > 0 ? -1 : 1;
-            kterminal.scrollWheelEvent(coord, lines);
+            if(wheel.modifiers & Qt.ControlModifier){
+               wheel.angleDelta.y > 0 ? zoomIn.trigger() : zoomOut.trigger(); 
+            } else {
+                var coord = correctDistortion(wheel.x, wheel.y);
+                var lines = wheel.angleDelta.y > 0 ? -1 : 1;
+                kterminal.scrollWheelEvent(coord, lines);
+            }
         }
-        //onClicked: {
-        //    if (mouse.button == Qt.RightButton){
-        //        contextmenu.popup();
-        //    } else if (mouse.button == Qt.MiddleButton){
-        //        kterminal.pasteSelection();
-        //    }
-        //}
         onDoubleClicked: {
             var coord = correctDistortion(mouse.x, mouse.y);
-            console.log("Double click");
             kterminal.mouseDoubleClickEvent(coord, mouse.button, mouse.modifiers);
         }
-        //onPositionChanged: {
-        //    if (pressedButtons & Qt.LeftButton){
-        //        var coord = correctDistortion(mouse.x, mouse.y);
-        //        kterminal.mouseMove(coord.width, coord.height);
-        //    }
-        //}
         onPressed: {
-            var coord = correctDistortion(mouse.x, mouse.y);
-            kterminal.mousePressEvent(coord, mouse.button, mouse.modifiers)
+	    if((!kterminal.usesMouse || mouse.modifiers & Qt.ShiftModifier) && mouse.button == Qt.RightButton) {
+                contextmenu.popup();
+            } else {
+                var coord = correctDistortion(mouse.x, mouse.y);
+                kterminal.mousePressEvent(coord, mouse.button, mouse.modifiers)
+            }
         }
         onReleased: {
             var coord = correctDistortion(mouse.x, mouse.y);

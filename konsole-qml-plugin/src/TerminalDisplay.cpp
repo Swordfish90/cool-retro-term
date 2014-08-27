@@ -614,9 +614,7 @@ void KTerminalDisplay::mousePressEvent(QPoint position, int but, int mod)
     } else if (button == Qt::MidButton) {
         processMidButtonClick(position, modifiers);
     } else if (button == Qt::RightButton) {
-        if (_mouseMarks || (modifiers & Qt::ShiftModifier))
-            ;//emit configureRequest(ev->pos());
-        else
+        if (!_mouseMarks)
             emit mouseSignal(2, charColumn + 1, charLine + 1, 0);
             //emit mouseSignal(2, charColumn + 1, charLine + 1 + _scrollBar->value() - _scrollBar->maximum() , 0);
     }
