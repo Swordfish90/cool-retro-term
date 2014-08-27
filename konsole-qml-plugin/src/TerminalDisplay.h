@@ -70,6 +70,7 @@ class KONSOLEPRIVATE_EXPORT KTerminalDisplay : public QQuickPaintedItem
     Q_PROPERTY(bool ShowIMEOnClick     READ autoVKB         WRITE setAutoVKB     NOTIFY changedAutoVKB)
     Q_PROPERTY(QSize terminalSize      READ getTerminalSize                      NOTIFY terminalSizeChanged)
     Q_PROPERTY(QSize paintedFontSize   READ getFontSize                          NOTIFY paintedFontSizeChanged)
+    Q_PROPERTY(bool usesMouse          READ getUsesMouse                         NOTIFY usesMouseChanged)
 
 
 public:
@@ -316,6 +317,7 @@ public slots:
     void scrollScreenWindow(enum ScreenWindow::RelativeScrollMode mode, int amount);
 
     void setUsesMouse(bool usesMouse);
+    bool getUsesMouse(void);
 
     bool autoFocus() { return m_focusOnClick; }
     void setAutoFocus(bool au);
@@ -420,6 +422,8 @@ signals:
     void updatedImage();
 
     void mouseSignal(int,int,int,int);
+
+    void usesMouseChanged();
 
     void terminalSizeChanged();
     void paintedFontSizeChanged();
