@@ -48,8 +48,9 @@
 #include "ShellCommand.h" // REUSE THIS
 #include "Vt102Emulation.h" // REUSE THIS
 
-
 int Session::lastSessionId = 0;
+
+using namespace Konsole;
 
 Session::Session() :
         _shellProcess(0)
