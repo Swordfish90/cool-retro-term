@@ -992,7 +992,7 @@ void KTerminalDisplay::scrollScreenWindow(enum ScreenWindow::RelativeScrollMode 
 
 
 void KTerminalDisplay::setUsesMouse(bool usesMouse){
-    _mouseMarks = !usesMouse;
+    _mouseMarks = usesMouse;
 }
 
 void KTerminalDisplay::setAutoFocus(bool au)
