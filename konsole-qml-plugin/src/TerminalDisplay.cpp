@@ -479,18 +479,6 @@ void KTerminalDisplay::doPaste(QString text, bool appendReturn)
     if (appendReturn)
         text.append("\r");
 
-//    if (text.length() > 8000) {
-//        if (KMessageBox::warningContinueCancel(window(),
-//                        i18np("Are you sure you want to paste %1 character?",
-//                              "Are you sure you want to paste %1 characters?",
-//                              text.length()),
-//                        i18n("Confirm Paste"),
-//                        KStandardGuiItem::cont(),
-//                        KStandardGuiItem::cancel(),
-//                        "ShowPasteHugeTextWarning") == KMessageBox::Cancel)
-//            return;
-//    }
-
     if (!text.isEmpty()) {
         text.replace('\n', '\r');
 //        if (bracketedPasteMode()) {
@@ -549,8 +537,6 @@ void KTerminalDisplay::mousePressEvent(QPoint position, int but, int mod)
 //        return;
 //    }
 
-    //if (!contentsRect().contains(ev->pos())) return;
-
     if (!_screenWindow) return;
 
     int charLine;
@@ -559,64 +545,31 @@ void KTerminalDisplay::mousePressEvent(QPoint position, int but, int mod)
     QPoint pos = QPoint(charColumn, charLine);
 
     if (button == Qt::LeftButton) {
-        // request the software keyboard, if any
-//        if (qApp->autoSipEnabled()) {
-//            QStyle::RequestSoftwareInputPanel behavior = QStyle::RequestSoftwareInputPanel(
-//                        style()->styleHint(QStyle::SH_RequestSoftwareInputPanel));
-//            if (hasFocus() || behavior == QStyle::RSIP_OnMouseClick) {
-//                QEvent event(QEvent::RequestSoftwareInputPanel);
-//                QApplication::sendEvent(this, &event);
-//            }
-//        }
-
         _lineSelectionMode = false;
         _wordSelectionMode = false;
 
-        // The user clicked inside selected text
-        //bool selected =  _screenWindow->isSelected(pos.x(), pos.y());
+        _preserveLineBreaks = !((modifiers & Qt::ControlModifier) && !(modifiers & Qt::AltModifier));
+        _columnSelectionMode = (modifiers & Qt::AltModifier) && (modifiers & Qt::ControlModifier);
 
-        // Drag only when the Control key is held
-//        if ((!_ctrlRequiredForDrag || ev->modifiers() & Qt::ControlModifier) && selected) {
-//            _dragInfo.state = diPending;
-//            _dragInfo.start = ev->pos();
-//        } else {
-            // No reason to ever start a drag event
-            //_dragInfo.state = diNone;
-
-            _preserveLineBreaks = !((modifiers & Qt::ControlModifier) && !(modifiers & Qt::AltModifier));
-            _columnSelectionMode = (modifiers & Qt::AltModifier) && (modifiers & Qt::ControlModifier);
-
-            if (_mouseMarks || (modifiers == Qt::ShiftModifier)) {
-                // Only extend selection for programs not interested in mouse
-                if (_mouseMarks && (modifiers == Qt::ShiftModifier)) {
-                    extendSelection(position);
-                } else {
-                    _screenWindow->clearSelection();
-
-                    //pos.ry() += _scrollBar->value();
-                    _iPntSel = _pntSel = pos;
-                    _actSel = 1; // left mouse button pressed but nothing selected yet.
-                }
+        if (_mouseMarks || (modifiers == Qt::ShiftModifier)) {
+            // Only extend selection for programs not interested in mouse
+            if (_mouseMarks && (modifiers == Qt::ShiftModifier)) {
+                extendSelection(position);
             } else {
-                emit mouseSignal(0, charColumn + 1, charLine + 1, 0);
-                //emit mouseSignal(0, charColumn + 1, charLine + 1 + _scrollBar->value() - _scrollBar->maximum() , 0);
+                _screenWindow->clearSelection();
+
+                //pos.ry() += _scrollBar->value();
+                _iPntSel = _pntSel = pos;
+                _actSel = 1; // left mouse button pressed but nothing selected yet.
             }
-
-//            if (_underlineLinks && (_openLinksByDirectClick || (ev->modifiers() & Qt::ControlModifier))) {
-//                Filter::HotSpot* spot = _filterChain->hotSpotAt(charLine, charColumn);
-//                if (spot && spot->type() == Filter::HotSpot::Link) {
-//                    QObject action;
-//                    action.setObjectName("open-action");
-//                    spot->activate(&action);
-//                }
-//            }
-
+        } else {
+            emit mouseSignal(0, charColumn + 1, charLine + 1, 0);
+        }
     } else if (button == Qt::MidButton) {
         processMidButtonClick(position, modifiers);
     } else if (button == Qt::RightButton) {
         if (!_mouseMarks)
             emit mouseSignal(2, charColumn + 1, charLine + 1, 0);
-            //emit mouseSignal(2, charColumn + 1, charLine + 1 + _scrollBar->value() - _scrollBar->maximum() , 0);
     }
 }
 
@@ -629,54 +582,6 @@ void KTerminalDisplay::mouseMoveEvent(QPoint position, int but, int buts, int mo
     int charLine = 0;
     int charColumn = 0;
     getCharacterPosition(position, charLine, charColumn);
-
-    // handle filters
-    // change link hot-spot appearance on mouse-over
-//    Filter::HotSpot* spot = _filterChain->hotSpotAt(charLine, charColumn);
-//    if (spot && spot->type() == Filter::HotSpot::Link) {
-//        if (_underlineLinks) {
-//            QRegion previousHotspotArea = _mouseOverHotspotArea;
-//            _mouseOverHotspotArea = QRegion();
-//            QRect r;
-//            if (spot->startLine() == spot->endLine()) {
-//                r.setCoords(spot->startColumn()*_fontWidth + _contentRect.left(),
-//                            spot->startLine()*_fontHeight + _contentRect.top(),
-//                            (spot->endColumn())*_fontWidth + _contentRect.left() - 1,
-//                            (spot->endLine() + 1)*_fontHeight + _contentRect.top() - 1);
-//                _mouseOverHotspotArea |= r;
-//            } else {
-//                r.setCoords(spot->startColumn()*_fontWidth + _contentRect.left(),
-//                            spot->startLine()*_fontHeight + _contentRect.top(),
-//                            (_columns)*_fontWidth + _contentRect.left() - 1,
-//                            (spot->startLine() + 1)*_fontHeight + _contentRect.top() - 1);
-//                _mouseOverHotspotArea |= r;
-//                for (int line = spot->startLine() + 1 ; line < spot->endLine() ; line++) {
-//                    r.setCoords(0 * _fontWidth + _contentRect.left(),
-//                                line * _fontHeight + _contentRect.top(),
-//                                (_columns)*_fontWidth + _contentRect.left() - 1,
-//                                (line + 1)*_fontHeight + _contentRect.top() - 1);
-//                    _mouseOverHotspotArea |= r;
-//                }
-//                r.setCoords(0 * _fontWidth + _contentRect.left(),
-//                            spot->endLine()*_fontHeight + _contentRect.top(),
-//                            (spot->endColumn())*_fontWidth + _contentRect.left() - 1,
-//                            (spot->endLine() + 1)*_fontHeight + _contentRect.top() - 1);
-//                _mouseOverHotspotArea |= r;
-//            }
-
-//            if ((_openLinksByDirectClick || (ev->modifiers() & Qt::ControlModifier)) && (cursor().shape() != Qt::PointingHandCursor))
-//                setCursor(Qt::PointingHandCursor);
-
-//            update(_mouseOverHotspotArea | previousHotspotArea);
-//        }
-//    } else if (!_mouseOverHotspotArea.isEmpty()) {
-//        if ((_underlineLinks && (_openLinksByDirectClick || (ev->modifiers() & Qt::ControlModifier))) || (cursor().shape() == Qt::PointingHandCursor))
-//            setCursor(_mouseMarks ? Qt::IBeamCursor : Qt::ArrowCursor);
-
-//        update(_mouseOverHotspotArea);
-//        // set hotspot area to an invalid rectangle
-//        _mouseOverHotspotArea = QRegion();
-//    }
 
     // for auto-hiding the cursor, we need mouseTracking
     if (buttons == Qt::NoButton) return;
@@ -693,40 +598,13 @@ void KTerminalDisplay::mouseMoveEvent(QPoint position, int but, int buts, int mo
         if (buttons & Qt::RightButton)
             button = 2;
 
-        emit mouseSignal(button,
-                         charColumn + 1,
-                         charLine + 1,
-                         1);
-//        emit mouseSignal(button,
-//                         charColumn + 1,
-//                         charLine + 1 + _scrollBar->value() - _scrollBar->maximum(),
-//                         1);
-
+        emit mouseSignal(button, charColumn + 1, charLine + 1, 1);
         return;
     }
 
-//    if (_dragInfo.state == diPending) {
-//        // we had a mouse down, but haven't confirmed a drag yet
-//        // if the mouse has moved sufficiently, we will confirm
-
-//        const int distance = KGlobalSettings::dndEventDelay();
-//        if (ev->x() > _dragInfo.start.x() + distance || ev->x() < _dragInfo.start.x() - distance ||
-//                ev->y() > _dragInfo.start.y() + distance || ev->y() < _dragInfo.start.y() - distance) {
-//            // we've left the drag square, we can start a real drag operation now
-
-//            _screenWindow->clearSelection();
-//            doDrag();
-//        }
-//        return;
-//    } else if (_dragInfo.state == diDragging) {
-//        // this isn't technically needed because mouseMoveEvent is suppressed during
-//        // Qt drag operations, replaced by dragMoveEvent
-//        return;
-//    }
-
     if (_actSel == 0) return;
 
-// don't extend selection while pasting
+    // don't extend selection while pasting
     if (buttons & Qt::MidButton) return;
 
     extendSelection(position);
@@ -863,12 +741,6 @@ void KTerminalDisplay::mouseDoubleClickEvent(QPoint position, int but, int mod)
     Qt::MouseButton button = (Qt::MouseButton) but;
     Qt::KeyboardModifier modifiers = (Qt::KeyboardModifier) mod;
 
-    // Yes, successive middle click can trigger this event
-//    if (button == Qt::MidButton) {
-//        processMidButtonClick(position, modifiers);
-//        return;
-//    }
-
     if (button != Qt::LeftButton) return;
     if (!_screenWindow) return;
 
@@ -877,14 +749,9 @@ void KTerminalDisplay::mouseDoubleClickEvent(QPoint position, int but, int mod)
 
     getCharacterPosition(position, charLine, charColumn);
 
-    // pass on double click as two clicks.
-    if (!_mouseMarks && !(modifiers & Qt::ShiftModifier)) {
-        // There is no need to pass other events.
-        /*emit mouseSignal(0, charColumn + 1,
-                         charLine + 1 + _scrollBar->value() - _scrollBar->maximum(),
-                         0); */ // left button
+    // If the application is interested in mouse events. They have already been forwarded.
+    if (!_mouseMarks && !(modifiers & Qt::ShiftModifier))
         return;
-    }
 
     _screenWindow->clearSelection();
 
@@ -894,7 +761,6 @@ void KTerminalDisplay::mouseDoubleClickEvent(QPoint position, int but, int mod)
     _iPntSel = QPoint(charColumn, charLine);
     const QPoint bgnSel = findWordStart(_iPntSel);
     const QPoint endSel = findWordEnd(_iPntSel);
-    //_iPntSel.ry() += _scrollBar->value();
 
     _screenWindow->setSelectionStart(bgnSel.x() , bgnSel.y() , false);
     _screenWindow->setSelectionEnd(endSel.x() , endSel.y());
@@ -918,9 +784,6 @@ void KTerminalDisplay::copyToX11Selection()
         return;
 
     QGuiApplication::clipboard()->setText(text, QClipboard::Selection);
-
-//    if (_autoCopySelectedText)
-//        QApplication::clipboard()->setText(text, QClipboard::Clipboard);
 }
 
 
@@ -937,42 +800,24 @@ void KTerminalDisplay::mouseReleaseEvent(QPoint position, int but, int mod)
     getCharacterPosition(position, charLine, charColumn);
 
     if (button == Qt::LeftButton) {
-//        if (_dragInfo.state == diPending) {
-            // We had a drag event pending but never confirmed.  Kill selection
-//            _screenWindow->clearSelection();
-//        } else {
-            if (_actSel > 1) {
-                copyToX11Selection();
-            }
+        if (_actSel > 1) {
+            copyToX11Selection();
+        }
 
-            _actSel = 0;
+        _actSel = 0;
 
-            //FIXME: emits a release event even if the mouse is
-            //       outside the range. The procedure used in `mouseMoveEvent'
-            //       applies here, too.
+        //FIXME: emits a release event even if the mouse is
+        //       outside the range. The procedure used in `mouseMoveEvent'
+        //       applies here, too.
 
-            if (!_mouseMarks && !(modifiers & Qt::ShiftModifier))
-                emit mouseSignal(0,
-                                 charColumn + 1,
-                                 charLine + 1 , 2);
-//                emit mouseSignal(0,
-//                                 charColumn + 1,
-//                                 charLine + 1 + _scrollBar->value() - _scrollBar->maximum() , 2);
-//        }
-//        _dragInfo.state = diNone;
+        if (!_mouseMarks && !(modifiers & Qt::ShiftModifier))
+            emit mouseSignal(0, charColumn + 1, charLine + 1 , 2);
     }
 
     if (!_mouseMarks &&
             (button == Qt::RightButton || button == Qt::MidButton) &&
             !(modifiers & Qt::ShiftModifier)) {
-        emit mouseSignal(button == Qt::MidButton ? 1 : 2,
-                         charColumn + 1,
-                         charLine + 1,
-                         2);
-//        emit mouseSignal(ev->button() == Qt::MidButton ? 1 : 2,
-//                         charColumn + 1,
-//                         charLine + 1 + _scrollBar->value() - _scrollBar->maximum() ,
-//                         2);
+        emit mouseSignal(button == Qt::MidButton ? 1 : 2, charColumn + 1, charLine + 1, 2);
     }
 }
 
