@@ -124,6 +124,10 @@ const QChar LTR_OVERRIDE_CHAR( 0x202D );
 /* ------------------------------------------------------------------------- */
 KTerminalDisplay::KTerminalDisplay(QQuickItem *parent) :
     QQuickPaintedItem(parent)
+  ,m_session(0)
+  ,m_focusOnClick(true)
+  ,m_showVKBonClick(true)
+  ,m_parent(parent)
   ,_screenWindow(0)
   ,_allowBell(true)
   ,_fontHeight(1)
@@ -159,10 +163,6 @@ KTerminalDisplay::KTerminalDisplay(QQuickItem *parent) :
   ,_colorsInverted(false)
   ,_cursorShape(BlockCursor)
   ,_mouseMarks(false)
-  ,m_session(0)
-  ,m_focusOnClick(true)
-  ,m_showVKBonClick(true)
-  ,m_parent(parent)
 {
     _blendColor  = qRgba(0,0,0,0xff);
     m_widgetRect = QRectF(0,0,1,1);
