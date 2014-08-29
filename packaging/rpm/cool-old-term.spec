@@ -28,34 +28,38 @@ Group:      System/X11/Terminals
 License:    GPLv3
 URL:        https://github.com/Swordifish90/cool-old-term
 
-# For this spec file to work, the cool-old-term sources must be located in a directory
-# named cool-old-term-0.9 (with "0.9" being the version number defined above).
-# If the sources are compressed in another format than ZIP, change the
+# For this spec file to work, the cool-old-term sources must be located
+# in a directory named cool-old-term-0.9 (with "0.9" being the version
+# number defined above).
+# If the sources are compressed in another format than tar.xz, change the
 # file extension accordingly.
-Source0:    %{name}-%{version}.zip
+Source0:    %{name}-%{version}.tar.xz
+
+BuildRequires: pkgconfig(Qt5Core)
+BuildRequires: pkgconfig(Qt5Declarative)
+BuildRequires: pkgconfig(Qt5Gui)
+BuildRequires: pkgconfig(Qt5Quick)
 
 # Package names only verified with Fedora and openSUSE.
 # Should the packages in your distro be named dirrerently,
 # see http://en.opensuse.org/openSUSE:Build_Service_cross_distribution_howto
+#
+# QtDeclarative-devel required for "qmlscene" binary
 %if 0%{?fedora}
-BuildRequires: qt5-qtbase-devel
-BuildRequires: qt5-qtdeclarative-devel
-BuildRequires: unzip
 Requires:      qt5-qtbase
 Requires:      qt5-qtbase-gui
 Requires:      qt5-qtdeclarative
+Requires:      qt5-qtdeclarative-devel
 Requires:      qt5-qtgraphicaleffects
 Requires:      qt5-qtquickcontrols
 %endif
 
 %if 0%{?suse_version}
-BuildRequires: libqt5-qtbase-devel
-BuildRequires: libqt5-qtdeclarative-devel
-BuildRequires: unzip
 Requires:      libqt5-qtquickcontrols
 Requires:      libqt5-qtbase
 Requires:      libQt5Gui5
 Requires:      libqt5-qtdeclarative
+Requires:      libqt5-qtdeclarative-devel
 Requires:      libqt5-qtgraphicaleffects
 %endif
 
