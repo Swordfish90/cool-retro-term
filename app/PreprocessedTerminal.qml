@@ -133,41 +133,34 @@ Item{
         acceptedButtons: Qt.LeftButton | Qt.MiddleButton | Qt.RightButton
         anchors.fill: parent
         onWheel:{
-            var coord = correctDistortion(wheel.x, wheel.y);
-            var lines = wheel.angleDelta.y > 0 ? -2 : 2;
-            kterminal.scrollWheel(coord.width, coord.height, lines);
-        }
-        onClicked: {
-            if (mouse.button == Qt.RightButton){
-                contextmenu.popup();
-            } else if (mouse.button == Qt.MiddleButton){
-                kterminal.pasteSelection();
+            if(wheel.modifiers & Qt.ControlModifier){
+               wheel.angleDelta.y > 0 ? zoomIn.trigger() : zoomOut.trigger(); 
+            } else {
+                var coord = correctDistortion(wheel.x, wheel.y);
+                var lines = wheel.angleDelta.y > 0 ? -1 : 1;
+                kterminal.scrollWheelEvent(coord, lines);
             }
         }
         onDoubleClicked: {
-            if (mouse.button == Qt.LeftButton){
-                var coord = correctDistortion(mouse.x, mouse.y);
-                kterminal.mouseDoubleClick(coord.width, coord.height);
-            }
-        }
-        onPositionChanged: {
-            if (pressedButtons & Qt.LeftButton){
-                var coord = correctDistortion(mouse.x, mouse.y);
-                kterminal.mouseMove(coord.width, coord.height);
-            }
+            var coord = correctDistortion(mouse.x, mouse.y);
+            kterminal.mouseDoubleClickEvent(coord, mouse.button, mouse.modifiers);
         }
         onPressed: {
-            if (mouse.button == Qt.LeftButton){
+	    if((!kterminal.usesMouse || mouse.modifiers & Qt.ShiftModifier) && mouse.button == Qt.RightButton) {
+                contextmenu.popup();
+            } else {
                 var coord = correctDistortion(mouse.x, mouse.y);
-                kterminal.mousePress(coord.width, coord.height);
+                kterminal.mousePressEvent(coord, mouse.button, mouse.modifiers)
             }
         }
         onReleased: {
-            if (mouse.button == Qt.LeftButton){
-                var coord = correctDistortion(mouse.x, mouse.y);
-                kterminal.mouseRelease(coord.width, coord.height);
-            }
+            var coord = correctDistortion(mouse.x, mouse.y);
+            kterminal.mouseReleaseEvent(coord, mouse.button, mouse.modifiers);
         }
+	onPositionChanged: {
+	    var coord = correctDistortion(mouse.x, mouse.y);
+	    kterminal.mouseMoveEvent(coord, mouse.button, mouse.buttons, mouse.modifiers);
+	}
 
         //Frame displacement properties
         property real dtop: frame.item.displacementTop
@@ -185,7 +178,7 @@ Item{
             var cc = Qt.size(0.5 - x, 0.5 - y);
             var distortion = (cc.height * cc.height + cc.width * cc.width) * shadersettings.screen_distortion;
 
-            return Qt.size((x - cc.width  * (1+distortion) * distortion) * width,
+            return Qt.point((x - cc.width  * (1+distortion) * distortion) * width,
                            (y - cc.height * (1+distortion) * distortion) * height)
         }
     }

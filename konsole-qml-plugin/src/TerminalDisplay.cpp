@@ -447,92 +447,377 @@ QStringList KTerminalDisplay::availableColorSchemes()
     return ret;
 }
 
-void KTerminalDisplay::scrollWheel(qreal x, qreal y, int lines){
+void KTerminalDisplay::scrollWheelEvent(QPoint position, int lines){
     if(_mouseMarks){
-        int charLine;
-        int charColumn;
-        getCharacterPosition(QPoint(x,y) , charLine , charColumn);
-
-        emit mouseSignal(lines > 0 ? 5 : 4,
-                         charColumn + 1,
-                         charLine + 1,
-                         0);
-    } else {
         if(_screenWindow->lineCount() == _screenWindow->windowLines()){
             const int keyCode = lines > 0 ? Qt::Key_Down : Qt::Key_Up;
             QKeyEvent keyEvent(QEvent::KeyPress, keyCode, Qt::NoModifier);
 
-            emit keyPressedSignal(&keyEvent);
             emit keyPressedSignal(&keyEvent);
         } else {
             _screenWindow->scrollBy( ScreenWindow::ScrollLines, lines );
             _screenWindow->scrollCount();
             updateImage();
         }
+    } else {
+        int charLine;
+        int charColumn;
+        getCharacterPosition(position, charLine, charColumn);
+
+        emit mouseSignal(lines > 0 ? 5 : 4,
+                         charColumn + 1,
+                         charLine + 1,
+                         0);
     }
 }
 
-void KTerminalDisplay::mousePress(qreal x, qreal y){
-    if (m_focusOnClick) forcedFocus();
-    if (m_showVKBonClick) ShowVKB(true);
+void KTerminalDisplay::doPaste(QString text, bool appendReturn)
+{
+    if (!_screenWindow)
+        return;
+
+    if (appendReturn)
+        text.append("\r");
+
+    if (!text.isEmpty()) {
+        text.replace('\n', '\r');
+//        if (bracketedPasteMode()) {
+//            text.prepend("\e[200~");
+//            text.append("\e[201~");
+//        }
+        // perform paste by simulating keypress events
+        QKeyEvent e(QEvent::KeyPress, 0, Qt::NoModifier, text);
+        emit keyPressedSignal(&e);
+    }
+}
+
+
+void KTerminalDisplay::pasteFromClipboard(bool appendEnter)
+{
+    QString text = QGuiApplication::clipboard()->text(QClipboard::Clipboard);
+    doPaste(text, appendEnter);
+}
+
+void KTerminalDisplay::pasteFromX11Selection(bool appendEnter)
+{
+    QString text = QGuiApplication::clipboard()->text(QClipboard::Selection);
+    doPaste(text, appendEnter);
+}
+
+
+void KTerminalDisplay::processMidButtonClick(QPoint &position, Qt::KeyboardModifier modifiers)
+{
+    if (_mouseMarks || (modifiers & Qt::ShiftModifier)) {
+        const bool appendEnter = modifiers & Qt::ControlModifier;
+
+        if (true /*_middleClickPasteMode == Enum::PasteFromX11Selection*/) {
+            pasteFromX11Selection(appendEnter);
+        } else if (false /*_middleClickPasteMode == Enum::PasteFromClipboard*/) {
+            pasteFromClipboard(appendEnter);
+        } else {
+            Q_ASSERT(false);
+        }
+    } else {
+        int charLine = 0;
+        int charColumn = 0;
+        getCharacterPosition(position, charLine, charColumn);
+
+        emit mouseSignal(1, charColumn + 1, charLine + 1, 0);
+        //emit mouseSignal(1, charColumn + 1, charLine + 1 + _scrollBar->value() - _scrollBar->maximum() , 0);
+    }
+}
+
+
+void KTerminalDisplay::mousePressEvent(QPoint position, int but, int mod)
+{
+    Qt::MouseButton button = (Qt::MouseButton) but;
+    Qt::KeyboardModifier modifiers = (Qt::KeyboardModifier) mod;
+//    if (_possibleTripleClick && (ev->button() == Qt::LeftButton)) {
+//        mouseTripleClickEvent(ev);
+//        return;
+//    }
+
+    if (!_screenWindow) return;
 
     int charLine;
     int charColumn;
-    getCharacterPosition(QPoint(x,y), charLine, charColumn);
+    getCharacterPosition(position, charLine, charColumn);
+    QPoint pos = QPoint(charColumn, charLine);
 
-    _wordSelectionMode = false;
-    _lineSelectionMode = false;
+    if (button == Qt::LeftButton) {
+        _lineSelectionMode = false;
+        _wordSelectionMode = false;
 
-    if(_mouseMarks){
-        emit mouseSignal(0, charColumn + 1, charLine + 1, 0);
-    } else {
-        QPoint pos = QPoint(charColumn, charLine);
+        _preserveLineBreaks = !((modifiers & Qt::ControlModifier) && !(modifiers & Qt::AltModifier));
+        _columnSelectionMode = (modifiers & Qt::AltModifier) && (modifiers & Qt::ControlModifier);
 
-        _screenWindow->clearSelection();
-        _iPntSel = _pntSel = pos;
-        _actSel = 1; // left mouse button pressed but nothing selected yet.
+        if (_mouseMarks || (modifiers == Qt::ShiftModifier)) {
+            // Only extend selection for programs not interested in mouse
+            if (_mouseMarks && (modifiers == Qt::ShiftModifier)) {
+                extendSelection(position);
+            } else {
+                _screenWindow->clearSelection();
+
+                //pos.ry() += _scrollBar->value();
+                _iPntSel = _pntSel = pos;
+                _actSel = 1; // left mouse button pressed but nothing selected yet.
+            }
+        } else {
+            emit mouseSignal(0, charColumn + 1, charLine + 1, 0);
+        }
+    } else if (button == Qt::MidButton) {
+        processMidButtonClick(position, modifiers);
+    } else if (button == Qt::RightButton) {
+        if (!_mouseMarks)
+            emit mouseSignal(2, charColumn + 1, charLine + 1, 0);
     }
 }
 
-void KTerminalDisplay::mouseMove(qreal x, qreal y){
-    QPoint pos(x, y);
+void KTerminalDisplay::mouseMoveEvent(QPoint position, int but, int buts, int mod)
+{
+    Qt::MouseButton button = (Qt::MouseButton) but;
+    Qt::KeyboardModifier modifiers = (Qt::KeyboardModifier) mod;
+    Qt::MouseButtons buttons = (Qt::MouseButtons) buts;
 
-    if(_mouseMarks){
-        int charLine;
-        int charColumn;
-        getCharacterPosition(pos, charLine, charColumn);
+    int charLine = 0;
+    int charColumn = 0;
+    getCharacterPosition(position, charLine, charColumn);
 
-        emit mouseSignal(0, charColumn + 1, charLine + 1, 1);
-    } else {
-        extendSelection(pos);
+    // for auto-hiding the cursor, we need mouseTracking
+    if (buttons == Qt::NoButton) return;
+
+    // if the terminal is interested in mouse movements
+    // then emit a mouse movement signal, unless the shift
+    // key is being held down, which overrides this.
+    if (!_mouseMarks && !(modifiers & Qt::ShiftModifier)) {
+        int button = 3;
+        if (buttons & Qt::LeftButton)
+            button = 0;
+        if (buttons & Qt::MidButton)
+            button = 1;
+        if (buttons & Qt::RightButton)
+            button = 2;
+
+        emit mouseSignal(button, charColumn + 1, charLine + 1, 1);
+        return;
     }
+
+    if (_actSel == 0) return;
+
+    // don't extend selection while pasting
+    if (buttons & Qt::MidButton) return;
+
+    extendSelection(position);
 }
 
-void KTerminalDisplay::mouseDoubleClick(qreal x, qreal y){
-    QPoint pos(x, y);
 
-    if(_mouseMarks){
-        int charLine;
-        int charColumn;
-        getCharacterPosition(pos, charLine, charColumn);
+QPoint KTerminalDisplay::findWordEnd(const QPoint &pnt)
+{
+    const int regSize = qMax(_screenWindow->windowLines(), 10);
+    const int curLine = _screenWindow->currentLine();
+    int i = pnt.y();
+    int x = pnt.x();
+    int y = i + curLine;
+    int j = loc(x, i);
+    QVector<LineProperty> lineProperties = _lineProperties;
+    Screen *screen = _screenWindow->screen();
+    Character *image = _image;
+    Character *tmp_image = NULL;
+    const QChar selClass = charClass(image[j]);
+    const int imageSize = regSize * _columns;
+    const int maxY = _screenWindow->lineCount() - 1;
+    const int maxX = _columns - 1;
 
-        emit mouseSignal(0, charColumn + 1, charLine + 1, 0);
-        //emit mouseSignal(0, charColumn + 1, charLine + 1, 0);
-    } else {
-        _wordSelectionMode = true;
-        extendSelection(pos);
+    while (true) {
+        const int lineCount = lineProperties.count();
+        for (;;j++, x++) {
+            if (x < maxX) {
+                if (charClass(image[j + 1]) == selClass)
+                    continue;
+                goto out;
+            } else if (i < lineCount - 1) {
+                if (lineProperties[i] & LINE_WRAPPED &&
+                    charClass(image[j + 1]) == selClass) {
+                    x = -1;
+                    i++;
+                    y++;
+                    continue;
+                }
+                goto out;
+            } else if (y < maxY) {
+                if (i < lineCount && !(lineProperties[i] & LINE_WRAPPED))
+                    goto out;
+                break;
+            } else {
+                goto out;
+            }
+        }
+        int newRegEnd = qMin(y + regSize - 1, maxY);
+        lineProperties = screen->getLineProperties(y, newRegEnd);
+        i = 0;
+        if (!tmp_image) {
+            tmp_image = new Character[imageSize];
+            image = tmp_image;
+        }
+        screen->getImage(tmp_image, imageSize, y, newRegEnd);
+        x--;
+        j = loc(x, i);
     }
+out:
+    y -= curLine;
+    // In word selection mode don't select @ (64) if at end of word.
+    if (((image[j].rendition & RE_EXTENDED_CHAR) == 0) &&
+        (QChar(image[j].character) == '@') &&
+        (y > pnt.y() || x > pnt.x())) {
+        if (x > 0) {
+            x--;
+        } else {
+            y--;
+        }
+    }
+    if (tmp_image) {
+        delete[] tmp_image;
+    }
+    return QPoint(x, y);
 }
 
-void KTerminalDisplay::mouseRelease(qreal x, qreal y){
-    _actSel = 0;
+QPoint KTerminalDisplay::findWordStart(const QPoint &pnt)
+{
+    const int regSize = qMax(_screenWindow->windowLines(), 10);
+    const int curLine = _screenWindow->currentLine();
+    int i = pnt.y();
+    int x = pnt.x();
+    int y = i + curLine;
+    int j = loc(x, i);
+    QVector<LineProperty> lineProperties = _lineProperties;
+    Screen *screen = _screenWindow->screen();
+    Character *image = _image;
+    Character *tmp_image = NULL;
+    const QChar selClass = charClass(image[j]);
+    const int imageSize = regSize * _columns;
 
-    if(_mouseMarks){
-        int charLine;
-        int charColumn;
-        getCharacterPosition(QPoint(x,y), charLine, charColumn);
+    while (true) {
+        for (;;j--, x--) {
+            if (x > 0) {
+                if (charClass(image[j - 1]) == selClass)
+                    continue;
+                goto out;
+            } else if (i > 0) {
+                if (lineProperties[i - 1] & LINE_WRAPPED &&
+                    charClass(image[j - 1]) == selClass) {
+                    x = _columns;
+                    i--;
+                    y--;
+                    continue;
+                }
+                goto out;
+            } else if (y > 0) {
+                break;
+            } else {
+                goto out;
+            }
+        }
+        int newRegStart = qMax(0, y - regSize);
+        lineProperties = screen->getLineProperties(newRegStart, y - 1);
+        i = y - newRegStart;
+        if (!tmp_image) {
+            tmp_image = new Character[imageSize];
+            image = tmp_image;
+        }
+        screen->getImage(tmp_image, imageSize, newRegStart, y - 1);
+        j = loc(x, i);
+    }
+out:
+    if (tmp_image) {
+        delete[] tmp_image;
+    }
+    return QPoint(x, y - curLine);
+}
 
-        emit mouseSignal(0, charColumn + 1, charLine + 1, 2);
+
+
+void KTerminalDisplay::mouseDoubleClickEvent(QPoint position, int but, int mod)
+{
+    Qt::MouseButton button = (Qt::MouseButton) but;
+    Qt::KeyboardModifier modifiers = (Qt::KeyboardModifier) mod;
+
+    if (button != Qt::LeftButton) return;
+    if (!_screenWindow) return;
+
+    int charLine = 0;
+    int charColumn = 0;
+
+    getCharacterPosition(position, charLine, charColumn);
+
+    // If the application is interested in mouse events. They have already been forwarded.
+    if (!_mouseMarks && !(modifiers & Qt::ShiftModifier))
+        return;
+
+    _screenWindow->clearSelection();
+
+    _wordSelectionMode = true;
+    _actSel = 2; // within selection
+
+    _iPntSel = QPoint(charColumn, charLine);
+    const QPoint bgnSel = findWordStart(_iPntSel);
+    const QPoint endSel = findWordEnd(_iPntSel);
+
+    _screenWindow->setSelectionStart(bgnSel.x() , bgnSel.y() , false);
+    _screenWindow->setSelectionEnd(endSel.x() , endSel.y());
+    copyToX11Selection();
+
+    //TODO implement triple click.
+//    _possibleTripleClick = true;
+
+//    QTimer::singleShot(QApplication::doubleClickInterval(), this,
+//                       SLOT(tripleClickTimeout()));
+}
+
+
+void KTerminalDisplay::copyToX11Selection()
+{
+    if (!_screenWindow)
+        return;
+
+    QString text = _screenWindow->selectedText(_preserveLineBreaks);
+    if (text.isEmpty())
+        return;
+
+    QGuiApplication::clipboard()->setText(text, QClipboard::Selection);
+}
+
+
+void KTerminalDisplay::mouseReleaseEvent(QPoint position, int but, int mod)
+{
+    Qt::MouseButton button = (Qt::MouseButton) but;
+    Qt::KeyboardModifier modifiers = (Qt::KeyboardModifier) mod;
+
+    if (!_screenWindow)
+        return;
+
+    int charLine;
+    int charColumn;
+    getCharacterPosition(position, charLine, charColumn);
+
+    if (button == Qt::LeftButton) {
+        if (_actSel > 1) {
+            copyToX11Selection();
+        }
+
+        _actSel = 0;
+
+        //FIXME: emits a release event even if the mouse is
+        //       outside the range. The procedure used in `mouseMoveEvent'
+        //       applies here, too.
+
+        if (!_mouseMarks && !(modifiers & Qt::ShiftModifier))
+            emit mouseSignal(0, charColumn + 1, charLine + 1 , 2);
+    }
+
+    if (!_mouseMarks &&
+            (button == Qt::RightButton || button == Qt::MidButton) &&
+            !(modifiers & Qt::ShiftModifier)) {
+        emit mouseSignal(button == Qt::MidButton ? 1 : 2, charColumn + 1, charLine + 1, 2);
     }
 }
 
@@ -546,7 +831,12 @@ void KTerminalDisplay::scrollScreenWindow(enum ScreenWindow::RelativeScrollMode 
 
 
 void KTerminalDisplay::setUsesMouse(bool usesMouse){
-    _mouseMarks = !usesMouse;
+    _mouseMarks = usesMouse;
+    emit usesMouseChanged();
+}
+
+bool KTerminalDisplay::getUsesMouse(){
+    return !_mouseMarks;
 }
 
 void KTerminalDisplay::setAutoFocus(bool au)
@@ -1361,15 +1651,32 @@ void KTerminalDisplay::updateLineProperties()
     _lineProperties = _screenWindow->getLineProperties();
 }
 
-QChar KTerminalDisplay::charClass(QChar qch) const
+QChar KTerminalDisplay::charClass(const Character& ch) const
 {
-    if ( qch.isSpace() ) return ' ';
+    if (ch.rendition & RE_EXTENDED_CHAR) {
+        ushort extendedCharLength = 0;
+        const ushort* chars = ExtendedCharTable::instance.lookupExtendedChar(ch.character, extendedCharLength);
+        if (chars && extendedCharLength > 0) {
+            const QString s = QString::fromUtf16(chars, extendedCharLength);
+            if (_wordCharacters.contains(s, Qt::CaseInsensitive))
+                return 'a';
+            bool allLetterOrNumber = true;
+            for (int i = 0; allLetterOrNumber && i < s.size(); ++i)
+                allLetterOrNumber = s.at(i).isLetterOrNumber();
+            return allLetterOrNumber ? 'a' : s.at(0);
+        }
+        return 0;
+    } else {
+        const QChar qch(ch.character);
+        if (qch.isSpace()) return ' ';
 
-    if ( qch.isLetterOrNumber() || _wordCharacters.contains(qch, Qt::CaseInsensitive ) )
-        return 'a';
+        if (qch.isLetterOrNumber() || _wordCharacters.contains(qch, Qt::CaseInsensitive))
+            return 'a';
 
-    return qch;
+        return qch;
+    }
 }
+
 
 void KTerminalDisplay::setWordCharacters(const QString& wc)
 {

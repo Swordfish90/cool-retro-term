@@ -48,8 +48,9 @@
 #include "ShellCommand.h" // REUSE THIS
 #include "Vt102Emulation.h" // REUSE THIS
 
-
 int Session::lastSessionId = 0;
+
+using namespace Konsole;
 
 Session::Session() :
         _shellProcess(0)
@@ -199,14 +200,9 @@ void Session::addView(KTerminalDisplay * widget)
 
         // allow emulation to notify view when the foreground process
         // indicates whether or not it is interested in mouse signals
-
-        // TODO Disabled since at the moment it is not working properly.
-        // Remember to reenable that once it' is's working.
-
-        //connect( _emulation , SIGNAL(programUsesMouseChanged(bool)) , widget ,
-        //         SLOT(setUsesMouse(bool)) );
-
-        //widget->setUsesMouse( _emulation->programUsesMouse() );
+        connect( _emulation , SIGNAL(programUsesMouseChanged(bool)) , widget ,
+                 SLOT(setUsesMouse(bool)) );
+        widget->setUsesMouse( _emulation->programUsesMouse() );
 
         widget->setScreenWindow(_emulation->createWindow());
     }
