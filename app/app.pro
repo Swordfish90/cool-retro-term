@@ -6,3 +6,10 @@ SOURCES = main.cpp
 
 RESOURCES += qml/resources.qrc
 
+#########################################
+##              INTALLS
+#########################################
+
+target.path += /usr/bin/
+
+INSTALLS += target

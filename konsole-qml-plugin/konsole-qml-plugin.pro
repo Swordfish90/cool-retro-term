@@ -17,6 +17,8 @@ PLUGIN_ASSETS = $$PWD/assets/*
 
 DESTDIR = $$OUT_PWD/../imports/$$PLUGIN_IMPORT_PATH
 
+INSTALL_DIR = $$[QT_INSTALL_QML]
+
 # Copy additional plugin files
 QMAKE_COPY = "cp -r"
 
