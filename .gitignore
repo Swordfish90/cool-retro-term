@@ -34,3 +34,7 @@ Makefile*
 # Others
 
 *.xcf
+
+# Ubuntu SDk
+*.excludes
+*.json

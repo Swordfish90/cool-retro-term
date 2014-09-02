@@ -1,4 +1,4 @@
-TEMPLATE =subdirs
-CONFIG += ordered
-SUBDIRS= konsole-qml-plugin\
-         app
+TEMPLATE = subdirs
+
+SUBDIRS += app
+SUBDIRS += konsole-qml-plugin

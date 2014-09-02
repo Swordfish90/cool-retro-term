@@ -15,7 +15,29 @@ TARGET = kdekonsole
 PLUGIN_IMPORT_PATH = org/kde/konsole
 PLUGIN_ASSETS = $$PWD/assets/*
 
-INSTALL_DIR = ../imports
+DESTDIR = $$OUT_PWD/../imports/$$PLUGIN_IMPORT_PATH
+
+# Copy additional plugin files
+QMAKE_COPY = "cp -r"
+
+defineTest(copyToDestdir) {
+    files = $$1
+
+    for(FILE, files) {
+        DDIR = $$DESTDIR
+
+        # Replace slashes in paths with backslashes for Windows
+        win32:FILE ~= s,/,\\,g
+        win32:DDIR ~= s,/,\\,g
+
+        QMAKE_POST_LINK += $$QMAKE_COPY $$quote($$FILE) $$quote($$DDIR) $$escape_expand(\\n\\t)
+    }
+
+    export(QMAKE_POST_LINK)
+}
+
+copyToDestdir($$PLUGIN_ASSETS)
+copyToDestdir($$PWD/src/qmldir)
 
 #########################################
 ##              SOURCES

@@ -1,0 +1,68 @@
+<RCC>
+    <qresource prefix="/">
+        <file>frames/BlackRoughFrame.qml</file>
+        <file>frames/NoFrame.qml</file>
+        <file>frames/images/black-frame.png</file>
+        <file>frames/images/screen-frame-normals.png</file>
+        <file>frames/images/black-frame-normals.png</file>
+        <file>frames/images/screen-frame.png</file>
+        <file>frames/images/black-frame-original.png</file>
+        <file>frames/images/randfunction.png</file>
+        <file>frames/images/screen-frame-original.png</file>
+        <file>frames/WhiteSimpleFrame.qml</file>
+        <file>frames/utils/FrameShader.qml</file>
+        <file>frames/utils/NoFrameShader.qml</file>
+        <file>frames/utils/TerminalFrame.qml</file>
+        <file>SizeOverlay.qml</file>
+        <file>ShaderTerminal.qml</file>
+        <file>CheckableSlider.qml</file>
+        <file>ApplicationSettings.qml</file>
+        <file>SettingsWindow.qml</file>
+        <file>Fonts.qml</file>
+        <file>FontPixels.qml</file>
+        <file>SettingsGeneralTab.qml</file>
+        <file>PreprocessedTerminal.qml</file>
+        <file>TimeManager.qml</file>
+        <file>SimpleSlider.qml</file>
+        <file>ColorButton.qml</file>
+        <file>Glossy.qml</file>
+        <file>AboutDialog.qml</file>
+        <file>InsertNameDialog.qml</file>
+        <file>SettingsEffectsTab.qml</file>
+        <file>main.qml</file>
+        <file>SettingsTerminalTab.qml</file>
+        <file>FontScanlines.qml</file>
+        <file>fonts/1982-commodore64/C64_Pro_v1.0-STYLE.ttf</file>
+        <file>fonts/1982-commodore64/license.txt</file>
+        <file>fonts/1982-commodore64/C64_Pro_Mono_v1.0-STYLE.ttf</file>
+        <file>fonts/1982-commodore64/C64_Elite_Mono_v1.0-STYLE.ttf</file>
+        <file>fonts/1982-commodore64/C64_User_Mono_v1.0-STYLE.ttf</file>
+        <file>fonts/1982-commodore64/C64_User_v1.0-STYLE.ttf</file>
+        <file>fonts/1977-apple2/FreeLicense.txt</file>
+        <file>fonts/1977-apple2/PRNumber3.ttf</file>
+        <file>fonts/1977-apple2/PrintChar21.ttf</file>
+        <file>fonts/1971-ibm-3278/README.md</file>
+        <file>fonts/1971-ibm-3278/LICENSE.txt</file>
+        <file>fonts/1971-ibm-3278/3270Medium.ttf</file>
+        <file>fonts/1985-atari-st/AtariST8x16SystemFont.ttf</file>
+        <file>fonts/modern-terminus/TerminusTTF-Bold-4.38.2.ttf</file>
+        <file>fonts/modern-terminus/TerminusTTF-4.38.2.ttf</file>
+        <file>fonts/1977-commodore-pet/FreeLicense.txt</file>
+        <file>fonts/1977-commodore-pet/COMMODORE_PET_128_2y.ttf</file>
+        <file>fonts/1977-commodore-pet/COMMODORE_PET.ttf</file>
+        <file>fonts/1977-commodore-pet/COMMODORE_PET_64_2y.ttf</file>
+        <file>fonts/1977-commodore-pet/COMMODORE_PET_2y.ttf</file>
+        <file>fonts/1977-commodore-pet/COMMODORE_PET_64.ttf</file>
+        <file>fonts/1977-commodore-pet/COMMODORE_PET_128.ttf</file>
+        <file>fonts/1977-commodore-pet/COMMODORE_PET_2x.ttf</file>
+        <file>fonts/1979-atari-400-800/ReadMe.rtf</file>
+        <file>fonts/1979-atari-400-800/ATARI400800_original.TTF</file>
+        <file>fonts/1979-atari-400-800/ATARI400800_squared.TTF</file>
+        <file>fonts/1979-atari-400-800/ATARI400800_rounded.TTF</file>
+        <file>fonts/1985-ibm-pc-vga/Perfect DOS VGA 437 Win.ttf</file>
+        <file>fonts/1985-ibm-pc-vga/Perfect DOS VGA 437.ttf</file>
+        <file>fonts/1985-ibm-pc-vga/dos437.txt</file>
+        <file>Storage.qml</file>
+    </qresource>
+</RCC>
+

@@ -33,6 +33,8 @@ ApplicationWindow{
     minimumWidth: 320
     minimumHeight: 240
 
+    visible: true
+
     property bool fullscreen: shadersettings.fullscreen
     onFullscreenChanged: visibility = (fullscreen ? Window.FullScreen : Window.Windowed)
 
