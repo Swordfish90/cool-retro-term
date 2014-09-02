@@ -33,7 +33,7 @@ KonsoleKterminalPlugin::~KonsoleKterminalPlugin() { }
 
 void KonsoleKterminalPlugin::initializeEngine(QQmlEngine *engine, const char *uri)
 {
-    Q_ASSERT(uri == QLatin1String("org.kde.konsole"));
+    Q_ASSERT(uri == QLatin1String("org.crt.konsole"));
 
     QQmlExtensionPlugin::initializeEngine(engine, uri);
 
@@ -44,8 +44,8 @@ void KonsoleKterminalPlugin::initializeEngine(QQmlEngine *engine, const char *ur
         QString cs, kbl;
 
         foreach (QString pwd, pwds) {
-            cs  = pwd + "/org/kde/konsole/color-schemes";
-            kbl = pwd + "/org/kde/konsole/kb-layouts";
+            cs  = pwd + "/org/crt/konsole/color-schemes";
+            kbl = pwd + "/org/crt/konsole/kb-layouts";
             if (QDir(cs).exists()) break;
         }
 
@@ -56,7 +56,7 @@ void KonsoleKterminalPlugin::initializeEngine(QQmlEngine *engine, const char *ur
 
 void KonsoleKterminalPlugin::registerTypes(const char *uri)
 {
-    Q_ASSERT(uri == QLatin1String("org.kde.konsole"));
+    Q_ASSERT(uri == QLatin1String("org.crt.konsole"));
 
     qmlRegisterType<KTerminalDisplay>(uri, 0, 1, "KTerminal");
     qmlRegisterType<KSession>(uri, 0, 1, "KSession");

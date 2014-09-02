@@ -22,7 +22,7 @@ import QtQuick 2.2
 import QtGraphicalEffects 1.0
 import QtQuick.Controls 1.1
 
-import org.kde.konsole 0.1
+import org.crt.konsole 0.1
 
 Item{
     id: terminalContainer
