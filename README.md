@@ -1,10 +1,10 @@
-#cool-old-term
+#cool-retro-term
 
 ##Description
-cool-old-term is a terminal emulator which tries to mimic the look and feel of the old cathode tube screens.
+cool-retro-term is a terminal emulator which mimics the look and feel of the old cathode tube screens.
 It has been designed to be eye-candy, customizable, and reasonably lightweight.
 
-It now uses the Konsole engine which is powerful and mature.
+It uses the Konsole engine which is powerful and mature.
 
 This terminal emulator requires Qt 5.2 or higher to run.
 
@@ -13,14 +13,14 @@ This terminal emulator requires Qt 5.2 or higher to run.
 ![Image](<http://i.imgur.com/4LpfLF8.png>)
 ![Image](<http://i.imgur.com/MMmM6Ht.png>)
 
-## Get cool-old-term
-You can either build cool-old-term yourself (see below) or walk the easy way and install one of these packages:
+## Get cool-retro-term
+You can either build cool-retro-term yourself (see below) or walk the easy way and install one of these packages:
 
-Users of Fedora and openSUSE can grab a package from [Open Build Service](http://software.opensuse.org/package/cool-old-term).
+Users of Fedora and openSUSE can grab a package from [Open Build Service](http://software.opensuse.org/package/cool-retro-term).
 
-Arch users can install this [package](https://aur.archlinux.org/packages/cool-old-term-git/) directly via the [AUR](https://aur.archlinux.org):
+Arch users can install this [package](https://aur.archlinux.org/packages/cool-retro-term-git/) directly via the [AUR](https://aur.archlinux.org):
 
-    yaourt -S aur/cool-old-term-git
+    yaourt -S aur/cool-retro-term-git
 
 ##Build instructions
 
@@ -81,17 +81,14 @@ Once you installed all dependencies (Qt is installed and in your path) you need 
 
 ```bash
 # Get it from GitHub
-git clone https://github.com/Swordifish90/cool-old-term.git
+git clone https://github.com/Swordfish90/cool-retro-term.git
 
 # Build it
-cd cool-old-term
-cd konsole-qml-plugin
+cd cool-retro-term
 
 # Compile (Fedora and OpenSUSE user should use qmake-qt5 instead of qmake)
-qmake && make && make install
-
-cd ..
+qmake && make
 
 # Have fun!
-./cool-old-term
+./cool-retro-term
 ```

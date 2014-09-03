@@ -1,10 +1,10 @@
 /*******************************************************************************
 * Copyright (c) 2013 "Filippo Scognamiglio"
-* https://github.com/Swordifish90/cool-old-term
+* https://github.com/Swordfish90/cool-retro-term
 *
-* This file is part of cool-old-term.
+* This file is part of cool-retro-term.
 *
-* cool-old-term is free software: you can redistribute it and/or modify
+* cool-retro-term is free software: you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
 * the Free Software Foundation, either version 3 of the License, or
 * (at your option) any later version.
@@ -20,35 +20,31 @@
 
 import QtQuick 2.2
 import QtQuick.Controls 1.1
-import QtQuick.Window 2.1
 import QtQuick.Layouts 1.1
-import QtQuick.Dialogs 1.1
 
-Window {
-    id: settings_window
-    title: qsTr("Settings")
-    width: 640
-    height: 450
+RowLayout {
+    property alias value: slider.value
+    property alias stepSize: slider.stepSize
+    property alias minimumValue: slider.minimumValue
+    property alias maximumValue: slider.maximumValue
+    property real maxMultiplier: 100
 
-    property int tabmargins: 15
-
-    TabView{
-        anchors.fill: parent
-        anchors.margins: 10
-        SettingsGeneralTab{
-            title: qsTr("General")
-            anchors.fill: parent
-            anchors.margins: tabmargins
+    id: setting_component
+    spacing: 10
+    Slider{
+        id: slider
+        stepSize: parent.stepSize
+        Layout.fillWidth: true
+    }
+    Text{
+        id: textfield
+        text: formatNumber(Math.round(value * maxMultiplier))
+    }
+    function formatNumber(num) {
+        var n = "" + num;
+        while (n.length < 3) {
+            n = " " + n;
         }
-        SettingsTerminalTab{
-            title: qsTr("Terminal")
-            anchors.fill: parent
-            anchors.margins: tabmargins
-        }
-        SettingsEffectsTab{
-            title: qsTr("Effects")
-            anchors.fill: parent
-            anchors.margins: tabmargins
-        }
+        return n + "%";
     }
 }

@@ -1,10 +1,10 @@
 /*******************************************************************************
 * Copyright (c) 2013 "Filippo Scognamiglio"
-* https://github.com/Swordifish90/cool-old-term
+* https://github.com/Swordfish90/cool-retro-term
 *
-* This file is part of cool-old-term.
+* This file is part of cool-retro-term.
 *
-* cool-old-term is free software: you can redistribute it and/or modify
+* cool-retro-term is free software: you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
 * the Free Software Foundation, either version 3 of the License, or
 * (at your option) any later version.
@@ -23,8 +23,6 @@ import QtQuick.Window 2.1
 import QtQuick.Controls 1.1
 import QtGraphicalEffects 1.0
 
-import org.kde.konsole 0.1
-
 ApplicationWindow{
     id: terminalWindow
 
@@ -33,12 +31,14 @@ ApplicationWindow{
     minimumWidth: 320
     minimumHeight: 240
 
+    visible: true
+
     property bool fullscreen: shadersettings.fullscreen
     onFullscreenChanged: visibility = (fullscreen ? Window.FullScreen : Window.Windowed)
 
     flags: Qt.WA_TranslucentBackground
     color: "#00000000"
-    title: qsTr("cool-old-term")
+    title: qsTr("cool-retro-term")
 
     Action {
         id: showMenubarAction

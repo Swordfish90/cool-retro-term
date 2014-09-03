@@ -1,10 +1,10 @@
 /*******************************************************************************
 * Copyright (c) 2013 "Filippo Scognamiglio"
-* https://github.com/Swordifish90/cool-old-term
+* https://github.com/Swordfish90/cool-retro-term
 *
-* This file is part of cool-old-term.
+* This file is part of cool-retro-term.
 *
-* cool-old-term is free software: you can redistribute it and/or modify
+* cool-retro-term is free software: you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
 * the Free Software Foundation, either version 3 of the License, or
 * (at your option) any later version.
@@ -20,30 +20,20 @@
 
 import QtQuick 2.2
 
-Rectangle{
-    property size terminalSize
-    property real topOpacity: 0.6
-    width: textSize.width * 2
-    height: textSize.height * 2
-    radius: 5
-    border.width: 2
-    border.color: "white"
-    color: "black"
-    opacity: sizetimer.running ? 0.6 : 0.0
+Timer{
+    default property bool enableTimer: false
+    property real time
 
-    Behavior on opacity{NumberAnimation{duration: 200}}
-
-    onTerminalSizeChanged: sizetimer.restart()
-
-    Text{
-        id: textSize
-        anchors.centerIn: parent
-        color: "white"
-        text: terminalSize.width + "x" + terminalSize.height
+    NumberAnimation on time {
+        from: 0
+        to: 100000
+        running: shadersettings.fps === 0 && enableTimer
+        duration: 100000
+        loops: Animation.Infinite
     }
-    Timer{
-        id: sizetimer
-        interval: 1000
-        running: false
-    }
+
+    onTriggered: time += interval
+    running: shadersettings.fps !== 0 && enableTimer
+    interval: Math.round(1000 / shadersettings.fps)
+    repeat: true
 }
