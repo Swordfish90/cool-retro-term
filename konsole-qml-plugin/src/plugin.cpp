@@ -49,8 +49,8 @@ void KonsoleKterminalPlugin::initializeEngine(QQmlEngine *engine, const char *ur
             if (QDir(cs).exists()) break;
         }
 
-        setenv("KB_LAYOUT_DIR",kbl.toLatin1().constData(),1);
-        setenv("COLORSCHEMES_DIR",cs.toLatin1().constData(),1);
+        setenv("KB_LAYOUT_DIR",kbl.toUtf8().constData(),1);
+        setenv("COLORSCHEMES_DIR",cs.toUtf8().constData(),1);
     }
 }
 
