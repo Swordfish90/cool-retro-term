@@ -1,10 +1,10 @@
 #cool-old-term
 
 ##Description
-cool-old-term is a terminal emulator which tries to mimic the look and feel of the old cathode tube screens.
+cool-old-term is a terminal emulator which mimics the look and feel of the old cathode tube screens.
 It has been designed to be eye-candy, customizable, and reasonably lightweight.
 
-It now uses the Konsole engine which is powerful and mature.
+It uses the Konsole engine which is powerful and mature.
 
 This terminal emulator requires Qt 5.2 or higher to run.
 
@@ -85,12 +85,9 @@ git clone https://github.com/Swordifish90/cool-old-term.git
 
 # Build it
 cd cool-old-term
-cd konsole-qml-plugin
 
 # Compile (Fedora and OpenSUSE user should use qmake-qt5 instead of qmake)
-qmake && make && make install
-
-cd ..
+qmake && make
 
 # Have fun!
 ./cool-old-term
