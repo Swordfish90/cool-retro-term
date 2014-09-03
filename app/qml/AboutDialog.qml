@@ -15,7 +15,7 @@ Window{
         spacing: 15
         Text {
             anchors.horizontalCenter: parent.horizontalCenter
-            text: "cool-old-term"
+            text: "cool-retro-term"
             font {bold: true; pointSize: 18}
         }
         Loader{
@@ -74,7 +74,7 @@ Window{
                 text: shadersettings.version + "\n" +
                       qsTr("Author: ") + "Filippo Scognamiglio\n" +
                       qsTr("Email: ") + "flscogna@gmail.com\n" +
-                      qsTr("Source: ") + "https://github.com/Swordifish90/cool-old-term\n"
+                      qsTr("Source: ") + "https://github.com/Swordfish90/cool-retro-term\n"
             }
         }
     }
@@ -84,9 +84,9 @@ Window{
             anchors.fill: parent
             readOnly: true
             text: "Copyright (c) 2013 Filippo Scognamiglio <flscogna@gmail.com>\n\n" +
-                  "https://github.com/Swordifish90/cool-old-term\n\n" +
+                  "https://github.com/Swordfish90/cool-retro-term\n\n" +
 
-                  "cool-old-term is free software: you can redistribute it and/or modify " +
+                  "cool-retro-term is free software: you can redistribute it and/or modify " +
                   "it under the terms of the GNU General Public License as published by " +
                   "the Free Software Foundation, either version 3 of the License, or " +
                   "(at your option) any later version.\n\n" +

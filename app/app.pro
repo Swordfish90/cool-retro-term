@@ -1,5 +1,5 @@
 QT += qml quick widgets
-TARGET = cool-old-term 
+TARGET = cool-retro-term 
 
 DESTDIR = $$OUT_PWD/../
 SOURCES = main.cpp
