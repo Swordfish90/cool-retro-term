@@ -1,0 +1,13 @@
+[Desktop Entry]
+Comment=
+Exec=qmlscene -I /usr/share/cool-old-term/{imports,app/main.qml}
+GenericName=Terminal emulator
+Icon=utilities-terminal
+MimeType=
+Name=Cool Old Term
+Path=
+Categories=Qt;System;TerminalEmulator;
+StartupNotify=true
+Terminal=false
+TerminalOptions=
+Type=Application
