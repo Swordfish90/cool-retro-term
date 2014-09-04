@@ -1,0 +1,11 @@
+[Desktop Entry]
+Comment=Use the command line the old way
+Exec=cool-retro-term
+GenericName=Terminal emulator
+Icon=utilities-terminal
+MimeType=
+Name=Cool Retro Term
+Categories=Qt;System;Utility;TerminalEmulator;
+StartupNotify=true
+Terminal=false
+Type=Application
