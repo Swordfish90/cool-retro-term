@@ -1,11 +1,7 @@
 #
-# spec file for package cool-old-term
+# spec file for package cool-retro-term
 #
 # Copyright © 2014 Markus S. <kamikazow@web.de>
-#
-# Contains snippets from https://aur.archlinux.org/packages/cool-old-term-git
-# by Glen Oakley <goakley123@gmail.com>
-# and Doug Newgard <scimmia at archlinux dot info>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -20,18 +16,18 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-Name:       cool-old-term
-Summary:    Cool Old Terminal
+Name:       cool-retro-term
+Summary:    Cool Retro Terminal
 Version:    0.9
 Release:    0%{?dist}
 Group:      System/X11/Terminals
 License:    GPLv3
-URL:        https://github.com/Swordifish90/cool-old-term
+URL:        https://github.com/Swordifish90/cool-retro-term
 
-# For this spec file to work, the cool-old-term sources must be located
-# in a directory named cool-old-term-0.9 (with "0.9" being the version
+# For this spec file to work, the cool-retro-term sources must be located
+# in a directory named cool-retro-term-0.9 (with "0.9" being the version
 # number defined above).
-# If the sources are compressed in another format than tar.xz, change the
+# If the sources are compressed in another format than .tar.xz, change the
 # file extension accordingly.
 Source0:    %{name}-%{version}.tar.xz
 
@@ -39,17 +35,15 @@ BuildRequires: pkgconfig(Qt5Core)
 BuildRequires: pkgconfig(Qt5Declarative)
 BuildRequires: pkgconfig(Qt5Gui)
 BuildRequires: pkgconfig(Qt5Quick)
+BuildRequires: desktop-file-utils
 
 # Package names only verified with Fedora and openSUSE.
 # Should the packages in your distro be named dirrerently,
 # see http://en.opensuse.org/openSUSE:Build_Service_cross_distribution_howto
-#
-# QtDeclarative-devel required for "qmlscene" binary
 %if 0%{?fedora}
 Requires:      qt5-qtbase
 Requires:      qt5-qtbase-gui
 Requires:      qt5-qtdeclarative
-Requires:      qt5-qtdeclarative-devel
 Requires:      qt5-qtgraphicaleffects
 Requires:      qt5-qtquickcontrols
 %endif
@@ -59,12 +53,11 @@ Requires:      libqt5-qtquickcontrols
 Requires:      libqt5-qtbase
 Requires:      libQt5Gui5
 Requires:      libqt5-qtdeclarative
-Requires:      libqt5-qtdeclarative-devel
 Requires:      libqt5-qtgraphicaleffects
 %endif
 
 %description
-cool-old-term is a terminal emulator which tries to mimic the look and feel
+cool-retro-term is a terminal emulator which tries to mimic the look and feel
 of the old cathode tube screens. It has been designed to be eye-candy,
 customizable, and reasonably lightweight.
 
@@ -72,30 +65,38 @@ customizable, and reasonably lightweight.
 %setup -q
 
 %build
-pushd konsole-qml-plugin
-qmake-qt5 -o Makefile konsole-qml-plugin.pro
+qmake-qt5
 make %{?_smp_mflags}
-popd
 
 %install
-pushd konsole-qml-plugin
-%{make_install}
-popd
+# Work around weird qmake behaviour: http://davmac.wordpress.com/2007/02/21/qts-qmake/
+make INSTALL_ROOT=%{buildroot} install
 
-install -d "%{buildroot}/%{_datadir}/%{name}/" "%{buildroot}/%{_bindir}"
-cp -a app imports "%{buildroot}/%{_datadir}/%{name}/"
-echo -e '#!/bin/bash\nqmlscene -I /usr/share/cool-old-term/{imports,app/main.qml}' > "%{buildroot}/%{_bindir}/%{name}"
-chmod 755 "%{buildroot}/%{_bindir}/%{name}"
+desktop-file-install                                    \
+--dir=${RPM_BUILD_ROOT}%{_datadir}/applications         \
+%{name}.desktop
 
 %files
 %defattr(-,root,root,-)
 %doc gpl-2.0.txt gpl-3.0.txt README.md
 %{_bindir}/%{name}
-%{_datadir}/%{name}
-# FIXME: Icon and Desktop files
-# %{_datadir}/applications/%{name}.desktop
+%{_libdir}/qt5/qml/
+%{_datadir}/applications/%{name}.desktop
+# FIXME: Icon
 # %{_datadir}/pixmaps/%{name}.png
 # %{_datadir}/icons/hicolor/*/*/*
 
 %clean
 rm -rf %{buildroot}
+
+%changelog
+* Sun Sep  7 14:03:35 UTC 2014 - kamikazow@web.de
+- cool-old-term has been renamed to cool-retro-term
+- Ported the spec file to CRT's new, way nicer build system <https://github.com/Swordfish90/cool-retro-term/pull/105>
+
+* Fri Aug 29 20:56:20 UTC 2014 - kamikazow@web.de
+- Fixed: QtDeclarative-devel is required for "qmlscene" binary
+
+* Fri Aug  1 14:09:35 UTC 2014 - kamikazow@web.de
+- First build
+- cool-old-term 0.9
