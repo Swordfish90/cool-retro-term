@@ -80,16 +80,11 @@ desktop-file-install                                    \
 %defattr(-,root,root,-)
 %doc gpl-2.0.txt gpl-3.0.txt README.md
 %{_bindir}/%{name}
+%{_libdir}/qt5/qml/
 %{_datadir}/applications/%{name}.desktop
 # FIXME: Icon
 # %{_datadir}/pixmaps/%{name}.png
 # %{_datadir}/icons/hicolor/*/*/*
-
-%if 0%{?suse_version}
-%{_libqt5_archdatadir}/qml
-%else
-%{_libdir}/qt5/qml/org/crt
-%endif
 
 %clean
 rm -rf %{buildroot}
