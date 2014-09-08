@@ -18,7 +18,7 @@
 
 Name:       cool-retro-term
 Summary:    Cool Retro Terminal
-Version:    0.9.20140905
+Version:    0.9
 Release:    0%{?dist}
 Group:      System/X11/Terminals
 License:    GPLv3
