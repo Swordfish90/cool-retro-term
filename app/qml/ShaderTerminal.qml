@@ -21,6 +21,7 @@
 import QtQuick 2.2
 import QtGraphicalEffects 1.0
 
+
 ShaderEffect {
     property color font_color: shadersettings.font_color
     property color background_color: shadersettings.background_color
@@ -103,8 +104,7 @@ ShaderEffect {
             uniform lowp float horizontal_sincronization;" : "") +
         "
         void main() {
-            qt_TexCoord0.x = -"+str(disp_left)+"/txt_Size.x + qt_MultiTexCoord0.x / ((txt_Size.x -("+str(disp_left+disp_right)+")) / txt_Size.x);" + "
-            qt_TexCoord0.y = -"+str(disp_top)+"/txt_Size.y + qt_MultiTexCoord0.y / ((txt_Size.y -("+str(disp_top+disp_bottom)+")) / txt_Size.y);" + "
+            qt_TexCoord0 = qt_MultiTexCoord0;
             vec2 coords = vec2(fract(time/(1024.0*2.0)), fract(time/(1024.0*1024.0)));" +
             (brightness_flickering !== 0.0 ? "
                 brightness = 1.0 + (texture2D(randomFunctionSource, coords).g - 0.5) * brightness_flickering;"

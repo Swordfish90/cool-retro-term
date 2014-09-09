@@ -46,9 +46,6 @@ Item{
     property real _maxBlurCoefficient: 0.90
 
     property size virtualPxSize: Qt.size(1,1)
-    property size virtual_resolution: Qt.size(width / virtualPxSize.width, height / virtualPxSize.height)
-    property real deltay: 0.5 / virtual_resolution.height
-    property real deltax: 0.5 / virtual_resolution.width
 
     property real mBloom: shadersettings.bloom_strength
     property int mScanlines: shadersettings.rasterization
@@ -73,8 +70,10 @@ Item{
 
     KTerminal {
         id: kterminal
-        anchors.fill: parent
+        width: parent.width
+        height: parent.height
 
+        smooth: false
         colorScheme: "cool-retro-term"
 
         session: KSession {
@@ -89,30 +88,15 @@ Item{
         FontLoader{ id: fontLoader }
         Text{id: fontMetrics; text: "B"; visible: false}
 
-        function getPaintedSize(pixelSize){
-            fontMetrics.font.family = fontLoader.name;
-            fontMetrics.font.pixelSize = pixelSize;
-            return Qt.size(fontMetrics.paintedWidth, fontMetrics.paintedHeight);
-        }
-        function isValid(size){
-            return size.width >= 0 && size.height >= 0;
-        }
-        function handleFontChange(fontSource, pixelSize, lineSpacing, virtualCharSize){
+        function handleFontChange(fontSource, pixelSize, lineSpacing, screenScaling){
             fontLoader.source = fontSource;
-            font.pixelSize = pixelSize * shadersettings.window_scaling;
+            font.pixelSize = pixelSize;
             font.family = fontLoader.name;
 
-            var paintedSize = getPaintedSize(pixelSize);
-            var charSize = isValid(virtualCharSize)
-                    ? virtualCharSize
-                    : Qt.size(paintedSize.width / 2, paintedSize.height / 2);
+            width = Qt.binding(function() {return Math.floor(terminalContainer.width / screenScaling);});
+            height = Qt.binding(function() {return Math.floor(terminalContainer.height / screenScaling);});
 
-            var virtualPxSize = Qt.size((paintedSize.width  / charSize.width) * shadersettings.window_scaling,
-                                        (paintedSize.height / charSize.height) * shadersettings.window_scaling)
-
-            terminalContainer.virtualPxSize = virtualPxSize;
-
-            setLineSpacing(lineSpacing * shadersettings.window_scaling);
+            setLineSpacing(lineSpacing);
             restartBlurredSource();
         }
         Component.onCompleted: {
@@ -157,10 +141,10 @@ Item{
             var coord = correctDistortion(mouse.x, mouse.y);
             kterminal.mouseReleaseEvent(coord, mouse.button, mouse.modifiers);
         }
-	onPositionChanged: {
-	    var coord = correctDistortion(mouse.x, mouse.y);
-	    kterminal.mouseMoveEvent(coord, mouse.button, mouse.buttons, mouse.modifiers);
-	}
+        onPositionChanged: {
+            var coord = correctDistortion(mouse.x, mouse.y);
+            kterminal.mouseMoveEvent(coord, mouse.button, mouse.buttons, mouse.modifiers);
+        }
 
         //Frame displacement properties
         property real dtop: frame.item.displacementTop
@@ -178,8 +162,8 @@ Item{
             var cc = Qt.size(0.5 - x, 0.5 - y);
             var distortion = (cc.height * cc.height + cc.width * cc.width) * shadersettings.screen_distortion;
 
-            return Qt.point((x - cc.width  * (1+distortion) * distortion) * width,
-                           (y - cc.height * (1+distortion) * distortion) * height)
+            return Qt.point((x - cc.width  * (1+distortion) * distortion) * kterminal.width,
+                           (y - cc.height * (1+distortion) * distortion) * kterminal.height)
         }
     }
     ShaderEffectSource{
@@ -212,24 +196,24 @@ Item{
     ShaderEffectSource{
         id: finalSource
         sourceItem: blurredterminal
-        sourceRect: frame.sourceRect
+        //sourceRect: frame.sourceRect
         hideSource: true
+        //Smooth looks ugly when rasterization is used.
+        smooth: shadersettings.rasterization == shadersettings.no_rasterization
     }
     ShaderEffect {
         id: blurredterminal
-        anchors.fill: parent
+        anchors.fill: kterminal
         property variant source: source
         property variant blurredSource: (mBlur !== 0) ? blurredSource : undefined
         property real blurCoefficient: (1.0 - motionBlurCoefficient) * fpsAttenuation
-        property size virtual_resolution: parent.virtual_resolution
-        property size delta: Qt.size((mScanlines == shadersettings.pixel_rasterization ? deltax : 0),
-                                     mScanlines != shadersettings.no_rasterization ? deltay : 0)
+        property size virtual_resolution: Qt.size(kterminal.width, kterminal.height)
+
         blending: false
 
         fragmentShader:
             "uniform lowp float qt_Opacity;" +
             "uniform lowp sampler2D source;" +
-            "uniform highp vec2 delta;" +
 
             "varying highp vec2 qt_TexCoord0;
 
@@ -246,13 +230,6 @@ Item{
 
             "void main() {" +
                 "vec2 coords = qt_TexCoord0;" +
-                (mScanlines != shadersettings.no_rasterization ? "
-                            coords.y = floor(virtual_resolution.y * coords.y) / virtual_resolution.y;" +
-                (mScanlines == shadersettings.pixel_rasterization ? "
-                            coords.x = floor(virtual_resolution.x * coords.x) / virtual_resolution.x;" : "")
-                : "") +
-                "coords = coords + delta;" +
-
                 "vec4 color = texture2D(source, coords) * 256.0;
                  color.a = rgb2grey(color.rgb);" +
 
@@ -291,7 +268,7 @@ Item{
         sourceComponent: ShaderEffectSource{
             sourceItem: bloomEffectLoader.item
             hideSource: true
-            sourceRect: frame.sourceRect
+            //sourceRect: frame.sourceRect
             smooth: false
         }
     }
@@ -301,7 +278,7 @@ Item{
     ShaderEffect {
         id: staticNoiseEffect
         anchors.fill: parent
-        property size virtual_resolution: terminalContainer.virtual_resolution
+        property size virtual_resolution: Qt.size(kterminal.width, kterminal.height)
 
         blending: false
 
@@ -332,9 +309,9 @@ Item{
                 return mix(s, n, inter.y);
             }" +
 
-        "void main() {" +
-            "gl_FragColor.a = smoothNoise(qt_TexCoord0 * virtual_resolution);" +
-        "}"
+            "void main() {" +
+                "gl_FragColor.a = smoothNoise(qt_TexCoord0 * virtual_resolution);" +
+            "}"
 
         onStatusChanged: if (log) console.log(log) //Print warning messages
     }
@@ -350,77 +327,117 @@ Item{
 
     // RASTERIZATION //////////////////////////////////////////////////////////
 
-    ShaderEffect{
-        id: rasterizationContainer
-        width: frame.sourceRect.width
-        height: frame.sourceRect.height
-        property size offset: Qt.size(width - rasterizationEffect.width, height - rasterizationEffect.height)
-        property size txtRes: Qt.size(width, height)
+//    ShaderEffect{
+//        id: rasterizationContainer
+//        width: frame.sourceRect.width
+//        height: frame.sourceRect.height
+//        property size offset: Qt.size(width - rasterizationEffect.width, height - rasterizationEffect.height)
+//        property size txtRes: Qt.size(width, height)
+
+//        blending: false
+
+//        fragmentShader:
+//            "uniform lowp float qt_Opacity;
+//             uniform highp vec2 offset;
+//             uniform highp vec2 txtRes;" +
+
+//            "varying highp vec2 qt_TexCoord0;" +
+
+//            "void main() {" +
+//                "float color = 1.0;
+//                 color *= smoothstep(0.0, offset.x / txtRes.x, qt_TexCoord0.x);
+//                 color *= smoothstep(0.0, offset.y / txtRes.y, qt_TexCoord0.y);
+//                 color *= smoothstep(0.0, offset.x / txtRes.x, 1.0 - qt_TexCoord0.x);
+//                 color *= smoothstep(0.0, offset.y / txtRes.y, 1.0 - qt_TexCoord0.y);" +
+
+//                "float distance = length(vec2(0.5) - qt_TexCoord0);" +
+//                "color = mix(color, 0.0, 1.2 * distance * distance);" +
+
+//                "gl_FragColor.a = color;" +
+//            "}"
+
+//        ShaderEffect {
+//            id: rasterizationEffect
+//            width: terminalContainer.width
+//            height: terminalContainer.height
+//            anchors.centerIn: parent
+//            property size virtual_resolution: Qt.size(kterminal.width, kterminal.height)
+
+//            blending: false
+
+//            fragmentShader:
+//                "uniform lowp float qt_Opacity;" +
+
+//                "varying highp vec2 qt_TexCoord0;
+//                     uniform highp vec2 virtual_resolution;
+
+//                     float getScanlineIntensity(vec2 coords) {
+//                        float result = 1.0;" +
+//                        (mScanlines != shadersettings.no_rasterization ?
+//                            "result *= abs(sin(coords.y * virtual_resolution.y * "+Math.PI+"));" : "") +
+//                        (mScanlines == shadersettings.pixel_rasterization ?
+//                            "result *= abs(sin(coords.x * virtual_resolution.x * "+Math.PI+"));" : "") + "
+//                        return result;
+//                     }" +
+
+//            "void main() {" +
+//                "float color = getScanlineIntensity(qt_TexCoord0);" +
+
+//                "float distance = length(vec2(0.5) - qt_TexCoord0);" +
+//                "color = mix(color, 0.0, 1.2 * distance * distance);" +
+
+//                "gl_FragColor.a = color;" +
+//            "}"
+
+//            onStatusChanged: if (log) console.log(log) //Print warning messages
+//        }
+//        onStatusChanged: if (log) console.log(log) //Print warning messages
+//    }
+//    ShaderEffectSource{
+//        id: rasterizationEffectSource
+//        sourceItem: rasterizationContainer
+//        hideSource: true
+//        smooth: true
+//        //format: ShaderEffectSource.Alpha
+//    }
+    ShaderEffect {
+        id: rasterizationEffect
+        width: parent.width * 2
+        height: parent.height * 2
+        property size virtual_resolution: Qt.size(kterminal.width, kterminal.height)
 
         blending: false
 
         fragmentShader:
-            "uniform lowp float qt_Opacity;
-             uniform highp vec2 offset;
-             uniform highp vec2 txtRes;" +
+            "uniform lowp float qt_Opacity;" +
 
-            "varying highp vec2 qt_TexCoord0;" +
+            "varying highp vec2 qt_TexCoord0;
+                 uniform highp vec2 virtual_resolution;
 
-            "void main() {" +
-                "float color = 1.0;
-                 color *= smoothstep(0.0, offset.x / txtRes.x, qt_TexCoord0.x);
-                 color *= smoothstep(0.0, offset.y / txtRes.y, qt_TexCoord0.y);
-                 color *= smoothstep(0.0, offset.x / txtRes.x, 1.0 - qt_TexCoord0.x);
-                 color *= smoothstep(0.0, offset.y / txtRes.y, 1.0 - qt_TexCoord0.y);" +
+                 highp float getScanlineIntensity(vec2 coords) {
+                    highp float result = 1.0;" +
+                    (mScanlines != shadersettings.no_rasterization ?
+                        "result *= abs(sin(coords.y * virtual_resolution.y * "+Math.PI+"));" : "") +
+                    (mScanlines == shadersettings.pixel_rasterization ?
+                        "result *= abs(sin(coords.x * virtual_resolution.x * "+Math.PI+"));" : "") + "
+                    return result;
+                 }" +
 
-                "float distance = length(vec2(0.5) - qt_TexCoord0);" +
-                "color = mix(color, 0.0, 1.2 * distance * distance);" +
+        "void main() {" +
+            "highp float color = getScanlineIntensity(qt_TexCoord0);" +
 
-                "gl_FragColor.a = color;" +
-            "}"
+            "float distance = length(vec2(0.5) - qt_TexCoord0);" +
+            "color = mix(color, 0.0, 1.2 * distance * distance);" +
 
-        ShaderEffect {
-            id: rasterizationEffect
-            width: terminalContainer.width
-            height: terminalContainer.height
-            anchors.centerIn: parent
-            property size virtual_resolution: terminalContainer.virtual_resolution
+            "gl_FragColor.a = color;" +
+        "}"
 
-            blending: false
-
-            fragmentShader:
-                "uniform lowp float qt_Opacity;" +
-
-                "varying highp vec2 qt_TexCoord0;
-                     uniform highp vec2 virtual_resolution;
-
-                     float getScanlineIntensity(vec2 coords) {
-                        float result = 1.0;" +
-                        (mScanlines != shadersettings.no_rasterization ?
-                            "result *= abs(sin(coords.y * virtual_resolution.y * "+Math.PI+"));" : "") +
-                        (mScanlines == shadersettings.pixel_rasterization ?
-                            "result *= abs(sin(coords.x * virtual_resolution.x * "+Math.PI+"));" : "") + "
-                        return result;
-                     }" +
-
-            "void main() {" +
-                "float color = getScanlineIntensity(qt_TexCoord0);" +
-
-                "float distance = length(vec2(0.5) - qt_TexCoord0);" +
-                "color = mix(color, 0.0, 1.2 * distance * distance);" +
-
-                "gl_FragColor.a = color;" +
-            "}"
-
-            onStatusChanged: if (log) console.log(log) //Print warning messages
-        }
         onStatusChanged: if (log) console.log(log) //Print warning messages
     }
     ShaderEffectSource{
         id: rasterizationEffectSource
-        sourceItem: rasterizationContainer
+        sourceItem: rasterizationEffect
         hideSource: true
         smooth: true
-        //format: ShaderEffectSource.Alpha
     }
 }

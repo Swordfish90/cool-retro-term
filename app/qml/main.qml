@@ -148,8 +148,6 @@ ApplicationWindow{
         width: parent.width * shadersettings.window_scaling
         height: parent.height * shadersettings.window_scaling
         scale: 1.0 / shadersettings.window_scaling
-        smooth: false
-        antialiasing: false
         opacity: shadersettings.windowOpacity * 0.3 + 0.7
 
         Loader{
@@ -164,7 +162,6 @@ ApplicationWindow{
         PreprocessedTerminal{
             id: terminal
             anchors.fill: parent
-            anchors.margins: 30
         }
         ShaderTerminal{
             id: shadercontainer

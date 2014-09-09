@@ -99,7 +99,7 @@ Item{
 
     // FONTS //////////////////////////////////////////////////////////////////
 
-    signal terminalFontChanged(string fontSource, int pixelSize, int lineSpacing, size virtualCharSize)
+    signal terminalFontChanged(string fontSource, int pixelSize, int lineSpacing, real screenScaling)
 
     Loader{
         id: fontManager
@@ -141,9 +141,9 @@ Item{
         var fontSource = fontManager.item.source;
         var pixelSize = fontManager.item.pixelSize;
         var lineSpacing = fontManager.item.lineSpacing;
-        var virtualCharSize = fontManager.item.virtualCharSize;
+        var screenScaling = fontManager.item.screenScaling;
 
-        terminalFontChanged(fontSource, pixelSize, lineSpacing, virtualCharSize);
+        terminalFontChanged(fontSource, pixelSize, lineSpacing, screenScaling);
     }
 
     // FRAMES /////////////////////////////////////////////////////////////////

@@ -87,7 +87,7 @@ const ColorEntry base_color_table[TABLE_COLORS] =
 // scroll increment used when dragging selection at top/bottom of window.
 
 // static
-bool KTerminalDisplay::_antialiasText = true;
+bool KTerminalDisplay::_antialiasText = false;
 bool KTerminalDisplay::HAVE_TRANSPARENCY = true;
 
 // we use this to force QPainter to display text in LTR mode
