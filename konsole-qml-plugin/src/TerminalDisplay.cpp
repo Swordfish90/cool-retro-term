@@ -2265,7 +2265,7 @@ void KTerminalDisplay::drawCursor(QPainter* painter,
                                   bool& invertCharacterColor)
 {
     QRectF cursorRect = rect;
-    cursorRect.setHeight(_fontHeight - _lineSpacing - 1);
+    cursorRect.setHeight(_fontHeight - _lineSpacing);
 
     if (!_cursorBlinking)
     {
@@ -2280,8 +2280,8 @@ void KTerminalDisplay::drawCursor(QPainter* painter,
             // it is draw entirely inside 'rect'
             int penWidth = qMax(1,painter->pen().width());
 
-            painter->drawRect(cursorRect.adjusted( penWidth/2,
-                                                   penWidth/2,
+            painter->drawRect(cursorRect.adjusted( penWidth/2 + penWidth%2,
+                                                   penWidth/2 + penWidth%2,
                                                    - penWidth/2 - penWidth%2,
                                                    - penWidth/2 - penWidth%2));
             if ( hasFocus() )
