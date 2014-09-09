@@ -117,17 +117,17 @@ Item{
     }
 
     signal fontScalingChanged
-    property var fontScalingList: fontManager.item.fontScalingList
-    property var fontScalingIndexes: [5,1,1]
+    property var fontScalingList: [0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2.0, 2.1, 2.2, 2.3, 2.4, 2.5]
+    property int fontScalingIndex: 5
 
     function setScalingIndex(newScaling){
-        fontScalingIndexes[rasterization] = newScaling;
+        fontScalingIndex = newScaling;
         fontScalingChanged();
         handleFontChanged();
     }
 
     function getScalingIndex(){
-        return fontScalingIndexes[rasterization];
+        return fontScalingIndex;
     }
 
     property var fontIndexes: [0,0,0]
@@ -136,7 +136,7 @@ Item{
     function handleFontChanged(){
         if(!fontManager.item) return;
         fontManager.item.selectedFontIndex = fontIndexes[rasterization];
-        fontManager.item.selectedScalingIndex = fontScalingIndexes[rasterization];
+        fontManager.item.scaling = fontScalingList[fontScalingIndex];
 
         var fontSource = fontManager.item.source;
         var pixelSize = fontManager.item.pixelSize;
@@ -164,7 +164,7 @@ Item{
             fps: fps,
             window_scaling: window_scaling,
             show_terminal_size: show_terminal_size,
-            fontScalingIndexes: fontScalingIndexes,
+            fontScalingIndex: fontScalingIndex,
             fontIndexes: fontIndexes,
             frameReflections: _frameReflections,
             showMenubar: showMenubar
@@ -231,7 +231,7 @@ Item{
         window_scaling = settings.window_scaling !== undefined ? settings.window_scaling : window_scaling
 
         fontIndexes = settings.fontIndexes !== undefined ? settings.fontIndexes : fontIndexes
-        fontScalingIndexes = settings.fontScalingIndexes !== undefined ? settings.fontScalingIndexes : fontScalingIndexes
+        fontScalingIndex = settings.fontScalingIndex !== undefined ? settings.fontScalingIndex : fontScalingIndex
 
         _frameReflections = settings.frameReflections !== undefined ? settings.frameReflections : _frameReflections;
 

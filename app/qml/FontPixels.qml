@@ -22,15 +22,13 @@ import QtQuick 2.2
 
 Item{
     property int selectedFontIndex
-    property int selectedScalingIndex
+    property real scaling
     property alias fontlist: fontlist
     property var _font: fontlist.get(selectedFontIndex)
-    property var _scaling: fontScalingList[selectedScalingIndex]
     property var source: _font.source
-    property var fontScalingList: [0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2.0, 2.1, 2.2, 2.3, 2.4, 2.5]
     property int pixelSize: _font.pixelSize
     property int lineSpacing: _font.lineSpacing
-    property real screenScaling: _scaling * _font.baseScaling
+    property real screenScaling: scaling * _font.baseScaling
 
     ListModel{
         id: fontlist
