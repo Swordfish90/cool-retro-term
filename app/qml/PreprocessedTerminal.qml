@@ -278,7 +278,8 @@ Item{
     ShaderEffect {
         id: staticNoiseEffect
         anchors.fill: parent
-        property size virtual_resolution: Qt.size(kterminal.width, kterminal.height)
+        property real element_size: shadersettings.rasterization == shadersettings.no_rasterization ? 2 : 1
+        property size virtual_resolution: Qt.size(kterminal.width / element_size, kterminal.height / element_size)
 
         blending: false
 
