@@ -1996,7 +1996,7 @@ void KTerminalDisplay::calcGeometry()
     _contentHeight = height() - 2 * DEFAULT_TOP_MARGIN + /* mysterious */ 1;
 
     // ensure that display is always at least one column wide
-    _columns     = qMax(1, qRound(_contentWidth / _fontWidth));
+    _columns     = qMax(1, qFloor(_contentWidth / _fontWidth));
     _usedColumns = qMin(_usedColumns,_columns);
 
     // ensure that display is always at least one line high
