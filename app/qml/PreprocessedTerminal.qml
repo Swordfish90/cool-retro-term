@@ -278,6 +278,8 @@ Item{
             hideSource: true
             smooth: false
             wrapMode: ShaderEffectSource.ClampToEdge
+            //sourceRect is needed because FastBlur expands slightly outside the rectangle
+            sourceRect: Qt.rect(-1, -1, sourceItem.width + 2, sourceItem.height + 2)
         }
     }
 

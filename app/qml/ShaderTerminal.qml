@@ -224,12 +224,14 @@ ShaderEffect {
             "finalColor *= texture2D(rasterizationSource, coords).a;" +
 
             (bloom_strength !== 0 ?
-                "vec3 bloomColor = texture2D(bloomSource, coords).rgb;" +
+                "vec4 bloomFullColor = texture2D(bloomSource, coords);
+                 vec3 bloomColor = bloomFullColor.rgb;
+                 float bloomAlpha = bloomFullColor.a;" +
                 (chroma_color !== 0 ?
                     "bloomColor = font_color.rgb * mix(vec3(rgb2grey(bloomColor)), bloomColor, chroma_color);"
                 :
                     "bloomColor = font_color.rgb * rgb2grey(bloomColor);") +
-                "finalColor += bloomColor * bloom_strength;"
+                "finalColor += bloomColor * bloom_strength * bloomAlpha;"
             : "") +
 
             (brightness_flickering !== 0 ? "
