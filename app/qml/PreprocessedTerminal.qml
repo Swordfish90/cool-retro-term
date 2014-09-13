@@ -45,8 +45,6 @@ Item{
     property real _minBlurCoefficient: 0.70
     property real _maxBlurCoefficient: 0.90
 
-    property size virtualPxSize: Qt.size(1,1)
-
     property real mBloom: shadersettings.bloom_strength
     property int mScanlines: shadersettings.rasterization
     onMScanlinesChanged: restartBlurredSource()
@@ -168,7 +166,7 @@ Item{
         id: kterminalSource
         sourceItem: kterminal
         hideSource: true
-        smooth: false
+        smooth: mScanlines == shadersettings.no_rasterization
     }
     Loader{
         id: blurredSourceLoader
@@ -180,7 +178,8 @@ Item{
             recursive: true
             live: false
             hideSource: true
-            smooth: false
+
+            smooth: mScanlines == shadersettings.no_rasterization
 
             function restartBlurSource(){
                 livetimer.restart();

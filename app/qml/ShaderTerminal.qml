@@ -32,8 +32,6 @@ ShaderEffect {
     property size txt_Size: Qt.size(frame.sourceRect.width, frame.sourceRect.height)
     property real bloom_strength: shadersettings.bloom_strength * 2.5
 
-    property int rasterization: shadersettings.rasterization
-
     property real jitter: shadersettings.jitter * 0.007
 
     property real noise_strength: shadersettings.noise_strength
