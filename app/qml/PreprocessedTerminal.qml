@@ -333,84 +333,10 @@ Item{
         wrapMode: ShaderEffectSource.Repeat
         smooth: true
         hideSource: true
-        //format: ShaderEffectSource.Alpha
     }
 
     // RASTERIZATION //////////////////////////////////////////////////////////
 
-//    ShaderEffect{
-//        id: rasterizationContainer
-//        width: frame.sourceRect.width
-//        height: frame.sourceRect.height
-//        property size offset: Qt.size(width - rasterizationEffect.width, height - rasterizationEffect.height)
-//        property size txtRes: Qt.size(width, height)
-
-//        blending: false
-
-//        fragmentShader:
-//            "uniform lowp float qt_Opacity;
-//             uniform highp vec2 offset;
-//             uniform highp vec2 txtRes;" +
-
-//            "varying highp vec2 qt_TexCoord0;" +
-
-//            "void main() {" +
-//                "float color = 1.0;
-//                 color *= smoothstep(0.0, offset.x / txtRes.x, qt_TexCoord0.x);
-//                 color *= smoothstep(0.0, offset.y / txtRes.y, qt_TexCoord0.y);
-//                 color *= smoothstep(0.0, offset.x / txtRes.x, 1.0 - qt_TexCoord0.x);
-//                 color *= smoothstep(0.0, offset.y / txtRes.y, 1.0 - qt_TexCoord0.y);" +
-
-//                "float distance = length(vec2(0.5) - qt_TexCoord0);" +
-//                "color = mix(color, 0.0, 1.2 * distance * distance);" +
-
-//                "gl_FragColor.a = color;" +
-//            "}"
-
-//        ShaderEffect {
-//            id: rasterizationEffect
-//            width: terminalContainer.width
-//            height: terminalContainer.height
-//            anchors.centerIn: parent
-//            property size virtual_resolution: Qt.size(kterminal.width, kterminal.height)
-
-//            blending: false
-
-//            fragmentShader:
-//                "uniform lowp float qt_Opacity;" +
-
-//                "varying highp vec2 qt_TexCoord0;
-//                     uniform highp vec2 virtual_resolution;
-
-//                     float getScanlineIntensity(vec2 coords) {
-//                        float result = 1.0;" +
-//                        (mScanlines != shadersettings.no_rasterization ?
-//                            "result *= abs(sin(coords.y * virtual_resolution.y * "+Math.PI+"));" : "") +
-//                        (mScanlines == shadersettings.pixel_rasterization ?
-//                            "result *= abs(sin(coords.x * virtual_resolution.x * "+Math.PI+"));" : "") + "
-//                        return result;
-//                     }" +
-
-//            "void main() {" +
-//                "float color = getScanlineIntensity(qt_TexCoord0);" +
-
-//                "float distance = length(vec2(0.5) - qt_TexCoord0);" +
-//                "color = mix(color, 0.0, 1.2 * distance * distance);" +
-
-//                "gl_FragColor.a = color;" +
-//            "}"
-
-//            onStatusChanged: if (log) console.log(log) //Print warning messages
-//        }
-//        onStatusChanged: if (log) console.log(log) //Print warning messages
-//    }
-//    ShaderEffectSource{
-//        id: rasterizationEffectSource
-//        sourceItem: rasterizationContainer
-//        hideSource: true
-//        smooth: true
-//        //format: ShaderEffectSource.Alpha
-//    }
     ShaderEffect {
         id: rasterizationEffect
         width: parent.width
@@ -423,25 +349,27 @@ Item{
             "uniform lowp float qt_Opacity;" +
 
             "varying highp vec2 qt_TexCoord0;
-                 uniform highp vec2 virtual_resolution;
+             uniform highp vec2 virtual_resolution;
 
-                 highp float getScanlineIntensity(vec2 coords) {
-                    highp float result = 1.0;" +
-                    (mScanlines != shadersettings.no_rasterization ?
-                        "result *= abs(sin(coords.y * virtual_resolution.y * "+Math.PI+"));" : "") +
-                    (mScanlines == shadersettings.pixel_rasterization ?
-                        "result *= abs(sin(coords.x * virtual_resolution.x * "+Math.PI+"));" : "") + "
-                    return result;
-                 }" +
+             highp float getScanlineIntensity(vec2 coords) {
+                 highp float result = 1.0;" +
 
-        "void main() {" +
-            "highp float color = getScanlineIntensity(qt_TexCoord0);" +
+                (mScanlines != shadersettings.no_rasterization ?
+                    "result *= abs(sin(coords.y * virtual_resolution.y * "+Math.PI+"));" : "") +
+                (mScanlines == shadersettings.pixel_rasterization ?
+                    "result *= abs(sin(coords.x * virtual_resolution.x * "+Math.PI+"));" : "") + "
 
-            "float distance = length(vec2(0.5) - qt_TexCoord0);" +
-            "color = mix(color, 0.0, 1.2 * distance * distance);" +
+                return result;
+             }" +
 
-            "gl_FragColor.a = color;" +
-        "}"
+            "void main() {" +
+                "highp float color = getScanlineIntensity(qt_TexCoord0);" +
+
+                "float distance = length(vec2(0.5) - qt_TexCoord0);" +
+                "color = mix(color, 0.0, 1.2 * distance * distance);" +
+
+                "gl_FragColor.a = color;" +
+            "}"
 
         onStatusChanged: if (log) console.log(log) //Print warning messages
     }
