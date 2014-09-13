@@ -26,7 +26,7 @@ import org.crt.konsole 0.1
 
 Item{
     id: terminalContainer
-    property variant theSource: finalSource
+    property variant theSource: mBlur !== 0 ? blurredSourceLoader.item : kterminalSource
     property variant bloomSource: bloomSourceLoader.item
     property variant rasterizationSource: rasterizationEffectSource
     property variant staticNoiseSource: staticNoiseSource
@@ -57,9 +57,8 @@ Item{
     onMBlurChanged: restartBlurredSource()
 
     function restartBlurredSource(){
-        if(!blurredSource) return;
-        blurredSource.live = true;
-        livetimer.restart()
+        if(!blurredSourceLoader.item) return;
+        blurredSourceLoader.item.restartBlurSource();
     }
     function pasteClipboard(){
         kterminal.pasteClipboard();
@@ -73,7 +72,6 @@ Item{
         width: parent.width
         height: parent.height
 
-        smooth: false
         colorScheme: "cool-retro-term"
 
         session: KSession {
@@ -167,83 +165,92 @@ Item{
         }
     }
     ShaderEffectSource{
-        id: source
+        id: kterminalSource
         sourceItem: kterminal
         hideSource: true
         smooth: false
     }
-    ShaderEffectSource{
-        id: blurredSource
-        sourceItem: blurredterminal
-        recursive: true
-        live: false
+    Loader{
+        id: blurredSourceLoader
+        active: mBlur !== 0
 
-        hideSource: true
+        sourceComponent: ShaderEffectSource{
+            id: _blurredSourceEffect
+            sourceItem: blurredTerminalLoader.item
+            recursive: true
+            live: false
+            hideSource: true
+            smooth: false
 
-        smooth: false
-        antialiasing: false
+            function restartBlurSource(){
+                livetimer.restart();
+            }
 
-        Timer{
-            id: livetimer
-            running: true
-            onRunningChanged: running ?
-                                  timeManager.onTimeChanged.connect(blurredSource.scheduleUpdate) :
-                                  timeManager.onTimeChanged.disconnect(blurredSource.scheduleUpdate)
+            Timer{
+                id: livetimer
+                running: true
+                onRunningChanged: {
+                    running ?
+                        timeBinding.target = timeManager :
+                        timeBinding.target = null
+                }
+            }
 
-            Component.onCompleted: kterminal.updatedImage.connect(restart);
+            Connections{
+                id: timeBinding
+                target: timeManager
+                onTimeChanged: {
+                    _blurredSourceEffect.scheduleUpdate();
+                }
+            }
+
+            Connections{
+                target: kterminal
+                onUpdatedImage:{
+                    livetimer.restart();
+                }
+            }
         }
     }
-    ShaderEffectSource{
-        id: finalSource
-        sourceItem: blurredterminal
-        //sourceRect: frame.sourceRect
-        hideSource: true
-        //Smooth looks ugly when rasterization is used.
-        smooth: shadersettings.rasterization == shadersettings.no_rasterization
-    }
-    ShaderEffect {
-        id: blurredterminal
+
+    Loader{
+        id: blurredTerminalLoader
         anchors.fill: kterminal
-        property variant source: source
-        property variant blurredSource: (mBlur !== 0) ? blurredSource : undefined
-        property real blurCoefficient: (1.0 - motionBlurCoefficient) * fpsAttenuation
-        property size virtual_resolution: Qt.size(kterminal.width, kterminal.height)
+        active: mBlur !== 0
 
-        blending: false
+        sourceComponent: ShaderEffect {
+            property variant txt_source: kterminalSource
+            property variant blurredSource: blurredSourceLoader.item
+            property real blurCoefficient: (1.0 - motionBlurCoefficient) * fpsAttenuation
 
-        fragmentShader:
-            "uniform lowp float qt_Opacity;" +
-            "uniform lowp sampler2D source;" +
+            blending: false
 
-            "varying highp vec2 qt_TexCoord0;
+            fragmentShader:
+                "uniform lowp float qt_Opacity;" +
+                "uniform lowp sampler2D txt_source;" +
 
-             uniform highp vec2 virtual_resolution;" +
+                "varying highp vec2 qt_TexCoord0;
 
-            (mBlur !== 0 ?
-                "uniform lowp sampler2D blurredSource;
-                 uniform lowp float blurCoefficient;"
-            : "") +
+                 uniform lowp sampler2D blurredSource;
+                 uniform highp float blurCoefficient;" +
 
-            "float rgb2grey(vec3 v){
-                return dot(v, vec3(0.21, 0.72, 0.04));
-            }" +
+                "float rgb2grey(vec3 v){
+                    return dot(v, vec3(0.21, 0.72, 0.04));
+                }" +
 
-            "void main() {" +
-                "vec2 coords = qt_TexCoord0;" +
-                "vec4 color = texture2D(source, coords) * 256.0;
-                 color.a = rgb2grey(color.rgb);" +
+                "void main() {" +
+                    "vec2 coords = qt_TexCoord0;" +
+                    "vec3 color = texture2D(txt_source, coords).rgb * 256.0;" +
 
-                (mBlur !== 0 ?
-                    "vec4 blur_color = texture2D(blurredSource, coords) * 256.0;" +
-                    "blur_color.a = blur_color.a - blur_color.a * blurCoefficient;" +
-                    "color = step(1.0, color.a) * color + step(color.a, 1.0) * blur_color;"
-                : "") +
+                    "vec3 blur_color = texture2D(blurredSource, coords).rgb * 256.0;" +
+                    "blur_color = blur_color - blur_color * blurCoefficient;" +
+                    "color = step(vec3(1.0), color) * color + step(color, vec3(1.0)) * blur_color;" +
 
+                    "gl_FragColor = vec4(floor(color) / 256.0, 1.0);" +
+                "}"
 
-                "gl_FragColor = floor(color) / 256.0;" +
-            "}"
-
-        onStatusChanged: if (log) console.log(log) //Print warning messages
+            onStatusChanged: if (log) console.log(log) //Print warning messages
+        }
     }
     ///////////////////////////////////////////////////////////////////////////
     //  EFFECTS  //////////////////////////////////////////////////////////////
@@ -268,7 +275,6 @@ Item{
         sourceComponent: ShaderEffectSource{
             sourceItem: bloomEffectLoader.item
             hideSource: true
-            //sourceRect: frame.sourceRect
             smooth: false
         }
     }
@@ -403,8 +409,8 @@ Item{
 //    }
     ShaderEffect {
         id: rasterizationEffect
-        width: parent.width * 2
-        height: parent.height * 2
+        width: parent.width
+        height: parent.height
         property size virtual_resolution: Qt.size(kterminal.width, kterminal.height)
 
         blending: false

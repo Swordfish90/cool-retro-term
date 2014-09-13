@@ -41,7 +41,6 @@ ShaderEffect {
     property real glowing_line_strength: shadersettings.glowing_line_strength
 
     property real chroma_color: shadersettings.chroma_color;
-    property real saturation_color: shadersettings.saturation_color;
 
     property real rgb_shift: shadersettings.rgb_shift * 0.2
 
@@ -136,7 +135,7 @@ ShaderEffect {
             uniform lowp float bloom_strength;" : "") +
         (noise_strength !== 0 ? "
             uniform highp float noise_strength;" : "") +
-        (noise_strength !== 0 || jitter !== 0 ? "
+        (noise_strength !== 0 || jitter !== 0 || rgb_shift ? "
             uniform lowp sampler2D noiseSource;" : "") +
         (screen_distorsion !== 0 ? "
             uniform highp float screen_distorsion;" : "") +
@@ -202,26 +201,24 @@ ShaderEffect {
             (glowing_line_strength !== 0 ? "
                 color += randomPass(coords) * glowing_line_strength;" : "") +
 
+
+            "vec3 txt_color = texture2D(source, txt_coords).rgb;
+             float greyscale_color = rgb2grey(txt_color) + color;" +
+
             (chroma_color !== 0 ?
                 (rgb_shift !== 0 ? "
                     float rgb_noise = abs(texture2D(noiseSource, vec2(fract(time/(1024.0 * 256.0)), fract(time/(1024.0*1024.0)))).a - 0.5);
-                    vec4 realBackColor = texture2D(source, txt_coords);
-                    vec2 rcolor = texture2D(source, txt_coords + vec2(0.1, 0.0) * rgb_shift * rgb_noise).ra;
-                    vec2 bcolor = texture2D(source, txt_coords - vec2(0.1, 0.0) * rgb_shift * rgb_noise).ba;
-                    realBackColor.r = rcolor.x;
-                    realBackColor.b = bcolor.x;
-                    realBackColor.a = 0.33 * (realBackColor.a + rcolor.y + bcolor.y);"
-                :
-                    "vec4 realBackColor = texture2D(source, txt_coords);") +
+                    float rcolor = texture2D(source, txt_coords + vec2(0.1, 0.0) * rgb_shift * rgb_noise).r;
+                    float bcolor = texture2D(source, txt_coords - vec2(0.1, 0.0) * rgb_shift * rgb_noise).b;
+                    txt_color.r = rcolor;
+                    txt_color.b = bcolor;
+                    greyscale_color = 0.33 * (rcolor + bcolor);" : "") +
 
-                "vec4 mixedColor = mix(font_color, realBackColor * font_color, chroma_color);" +
-
-                "vec4 finalBackColor = mix(background_color, mixedColor, realBackColor.a);" +
-                "vec3 finalColor = mix(finalBackColor, font_color, color).rgb;"
+                "vec3 mixedColor = mix(font_color.rgb, txt_color * font_color.rgb, chroma_color);
+                 vec3 finalBackColor = mix(background_color.rgb, mixedColor, greyscale_color);
+                 vec3 finalColor = mix(finalBackColor, font_color.rgb, color).rgb;"
             :
-                "color += texture2D(source, txt_coords).a;" +
-                "vec3 finalColor = mix(background_color, font_color, color).rgb;"
-            ) +
+                "vec3 finalColor = mix(background_color.rgb, font_color.rgb, greyscale_color);") +
 
             "finalColor *= texture2D(rasterizationSource, coords).a;" +
 
