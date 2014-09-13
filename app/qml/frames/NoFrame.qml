@@ -12,9 +12,6 @@ TerminalFrame{
     borderTop: 0
     borderBottom: 0
 
-    rectX: 15
-    rectY: 15
-
     displacementLeft: 0
     displacementTop: 0
     displacementRight: 0

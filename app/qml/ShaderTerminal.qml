@@ -29,7 +29,6 @@ ShaderEffect {
     property variant bloomSource: terminal.bloomSource
     property variant rasterizationSource: terminal.rasterizationSource
     property variant noiseSource: terminal.staticNoiseSource
-    property size txt_Size: Qt.size(frame.sourceRect.width, frame.sourceRect.height)
     property real bloom_strength: shadersettings.bloom_strength * 2.5
 
     property real jitter: shadersettings.jitter * 0.007
@@ -47,10 +46,10 @@ ShaderEffect {
 
     property bool frameReflections: shadersettings.frameReflections
 
-    property real disp_top: frame.item.displacementTop * shadersettings.window_scaling
-    property real disp_bottom: frame.item.displacementBottom * shadersettings.window_scaling
-    property real disp_left: frame.item.displacementLeft * shadersettings.window_scaling
-    property real disp_right: frame.item.displacementRight * shadersettings.window_scaling
+    property real disp_top: frame.item.displacementTop / height
+    property real disp_bottom: frame.item.displacementBottom / height
+    property real disp_left: frame.item.displacementLeft / width
+    property real disp_right: frame.item.displacementRight / width
 
     property real screen_brightness: shadersettings.brightness * 1.5 + 0.5
 
@@ -86,7 +85,11 @@ ShaderEffect {
         uniform highp mat4 qt_Matrix;
         uniform highp float time;
         uniform sampler2D randomFunctionSource;
-        uniform highp vec2 txt_Size;
+
+        uniform highp float disp_left;
+        uniform highp float disp_right;
+        uniform highp float disp_top;
+        uniform highp float disp_bottom;
 
         attribute highp vec4 qt_Vertex;
         attribute highp vec2 qt_MultiTexCoord0;
@@ -101,7 +104,8 @@ ShaderEffect {
             uniform lowp float horizontal_sincronization;" : "") +
         "
         void main() {
-            qt_TexCoord0 = qt_MultiTexCoord0;
+            qt_TexCoord0.x = -disp_left + qt_MultiTexCoord0.x * (1.0 + disp_left + disp_right);
+            qt_TexCoord0.y = -disp_top + qt_MultiTexCoord0.y * (1.0 + disp_top + disp_bottom);
             vec2 coords = vec2(fract(time/(1024.0*2.0)), fract(time/(1024.0*1024.0)));" +
             (brightness_flickering !== 0.0 ? "
                 brightness = 1.0 + (texture2D(randomFunctionSource, coords).g - 0.5) * brightness_flickering;"
@@ -120,7 +124,6 @@ ShaderEffect {
         uniform sampler2D source;
         uniform highp float qt_Opacity;
         uniform highp float time;
-        uniform highp vec2 txt_Size;
         varying highp vec2 qt_TexCoord0;
 
         uniform highp vec4 font_color;
@@ -172,9 +175,9 @@ ShaderEffect {
             :"
                 vec2 coords = qt_TexCoord0;") +
 
-            (frameReflections ? "
-                vec2 inside = step(0.0, coords) - step(1.0, coords);
-                coords = abs(mod(floor(coords), 2.0) - fract(coords)) * clamp(inside.x + inside.y, 0.0, 1.0);" : "") +
+//            (frameReflections ? "
+//                vec2 inside = step(0.0, coords) - step(1.0, coords);
+//                coords = abs(mod(floor(coords), 2.0) - fract(coords)) * clamp(inside.x + inside.y, 0.0, 1.0);" : "") +
 
             (horizontal_sincronization !== 0 ? "
                 float h_distortion = 0.5 * sin(time*0.001 + coords.y*10.0*fract(time/10.0));

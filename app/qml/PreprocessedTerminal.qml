@@ -167,6 +167,7 @@ Item{
         sourceItem: kterminal
         hideSource: true
         smooth: mScanlines == shadersettings.no_rasterization
+        wrapMode: ShaderEffectSource.ClampToEdge
     }
     Loader{
         id: blurredSourceLoader
@@ -178,6 +179,7 @@ Item{
             recursive: true
             live: false
             hideSource: true
+            wrapMode: kterminalSource.wrapMode
 
             smooth: mScanlines == shadersettings.no_rasterization
 
@@ -275,6 +277,7 @@ Item{
             sourceItem: bloomEffectLoader.item
             hideSource: true
             smooth: false
+            wrapMode: ShaderEffectSource.ClampToEdge
         }
     }
 
@@ -445,5 +448,6 @@ Item{
         sourceItem: rasterizationEffect
         hideSource: true
         smooth: true
+        wrapMode: ShaderEffectSource.Repeat
     }
 }

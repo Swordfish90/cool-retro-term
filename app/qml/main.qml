@@ -153,9 +153,6 @@ ApplicationWindow{
         Loader{
             id: frame
             anchors.fill: parent
-
-            property rect sourceRect: item.sourceRect
-
             z: 2.1
             source: shadersettings.frame_source
         }

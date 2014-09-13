@@ -15,10 +15,6 @@ Item{
     property string normalsSource
     property string shaderString
 
-    //Value used to create the rect used to add the border to the texture
-    property real rectX
-    property real rectY
-
     //Values used to displace the texture in the screen. Used to make reflections correct.
     property real displacementLeft
     property real displacementTop
@@ -26,11 +22,6 @@ Item{
     property real displacementBottom
 
     property real distortionCoefficient
-
-    property rect sourceRect: Qt.rect(-rectX * shadersettings.window_scaling,
-                                      -rectY * shadersettings.window_scaling,
-                                      terminal.width + 2*rectX * shadersettings.window_scaling,
-                                      terminal.height + 2*rectY * shadersettings.window_scaling)
 
     BorderImage{
         id: frameimage
