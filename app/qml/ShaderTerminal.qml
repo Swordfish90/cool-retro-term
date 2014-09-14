@@ -104,8 +104,8 @@ ShaderEffect {
             uniform lowp float horizontal_sincronization;" : "") +
         "
         void main() {
-            qt_TexCoord0.x = -disp_left + qt_MultiTexCoord0.x * (1.0 + disp_left + disp_right);
-            qt_TexCoord0.y = -disp_top + qt_MultiTexCoord0.y * (1.0 + disp_top + disp_bottom);
+            qt_TexCoord0.x = (qt_MultiTexCoord0.x - disp_left) / (1.0 - disp_left - disp_right);
+            qt_TexCoord0.y = (qt_MultiTexCoord0.y - disp_top) / (1.0 - disp_top - disp_bottom);
             vec2 coords = vec2(fract(time/(1024.0*2.0)), fract(time/(1024.0*1024.0)));" +
             (brightness_flickering !== 0.0 ? "
                 brightness = 1.0 + (texture2D(randomFunctionSource, coords).g - 0.5) * brightness_flickering;"

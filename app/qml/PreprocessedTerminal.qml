@@ -26,6 +26,18 @@ import org.crt.konsole 0.1
 
 Item{
     id: terminalContainer
+
+    //Frame displacement properties. This makes the terminal the same size of the texture.
+    property real dtop: frame.item.displacementTop
+    property real dleft:frame.item.displacementLeft
+    property real dright: frame.item.displacementRight
+    property real dbottom: frame.item.displacementBottom
+
+    anchors.leftMargin: dleft
+    anchors.rightMargin: dright
+    anchors.topMargin: dtop
+    anchors.bottomMargin: dbottom
+
     property variant theSource: mBlur !== 0 ? blurredSourceLoader.item : kterminalSource
     property variant bloomSource: bloomSourceLoader.item
     property variant rasterizationSource: rasterizationEffectSource
@@ -142,18 +154,9 @@ Item{
             kterminal.mouseMoveEvent(coord, mouse.button, mouse.buttons, mouse.modifiers);
         }
 
-        //Frame displacement properties
-        property real dtop: frame.item.displacementTop
-        property real dleft:frame.item.displacementLeft
-        property real dright: frame.item.displacementRight
-        property real dbottom: frame.item.displacementBottom
-
         function correctDistortion(x, y){
             x = x / width;
             y = y / height;
-
-            x = (-dleft + x * (width + dleft + dright)) / width
-            y = (-dtop  + y * (height + dtop + dbottom)) / height
 
             var cc = Qt.size(0.5 - x, 0.5 - y);
             var distortion = (cc.height * cc.height + cc.width * cc.width) * shadersettings.screen_distortion;
