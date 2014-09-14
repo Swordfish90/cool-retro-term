@@ -171,6 +171,17 @@ Item{
         hideSource: true
         smooth: mScanlines == shadersettings.no_rasterization
         wrapMode: ShaderEffectSource.ClampToEdge
+        live: false
+
+        signal sourceUpdate
+
+        Connections{
+            target: kterminal
+            onUpdatedImage:{
+                kterminalSource.scheduleUpdate();
+                kterminalSource.sourceUpdate();
+            }
+        }
     }
     Loader{
         id: blurredSourceLoader
@@ -199,7 +210,6 @@ Item{
                         timeBinding.target = null
                 }
             }
-
             Connections{
                 id: timeBinding
                 target: timeManager
@@ -207,10 +217,9 @@ Item{
                     _blurredSourceEffect.scheduleUpdate();
                 }
             }
-
             Connections{
-                target: kterminal
-                onUpdatedImage:{
+                target: kterminalSource
+                onSourceUpdate:{
                     livetimer.restart();
                 }
             }
@@ -280,9 +289,6 @@ Item{
             sourceItem: bloomEffectLoader.item
             hideSource: true
             smooth: false
-            wrapMode: ShaderEffectSource.ClampToEdge
-            //sourceRect is needed because FastBlur expands slightly outside the rectangle
-            sourceRect: Qt.rect(-1, -1, sourceItem.width + 2, sourceItem.height + 2)
         }
     }
 

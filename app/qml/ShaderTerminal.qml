@@ -222,7 +222,9 @@ ShaderEffect {
             (bloom_strength !== 0 ?
                 "vec4 bloomFullColor = texture2D(bloomSource, coords);
                  vec3 bloomColor = bloomFullColor.rgb;
-                 float bloomAlpha = bloomFullColor.a;" +
+                 vec2 minBound = step(vec2(0.0), coords);
+                 vec2 maxBound = step(coords, vec2(1.0));
+                 float bloomAlpha = bloomFullColor.a * minBound.x * minBound.y * maxBound.x * maxBound.y;" +
                 (chroma_color !== 0 ?
                     "bloomColor = font_color.rgb * mix(vec3(rgb2grey(bloomColor)), bloomColor, chroma_color);"
                 :
