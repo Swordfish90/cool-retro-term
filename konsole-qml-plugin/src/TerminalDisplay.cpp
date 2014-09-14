@@ -1996,7 +1996,7 @@ void KTerminalDisplay::calcGeometry()
     _contentHeight = height() - 2 * DEFAULT_TOP_MARGIN + /* mysterious */ 1;
 
     // ensure that display is always at least one column wide
-    _columns     = qMax(1, qRound(_contentWidth / _fontWidth));
+    _columns     = qMax(1, qFloor(_contentWidth / _fontWidth));
     _usedColumns = qMin(_usedColumns,_columns);
 
     // ensure that display is always at least one line high
@@ -2265,7 +2265,7 @@ void KTerminalDisplay::drawCursor(QPainter* painter,
                                   bool& invertCharacterColor)
 {
     QRectF cursorRect = rect;
-    cursorRect.setHeight(_fontHeight - _lineSpacing - 1);
+    cursorRect.setHeight(_fontHeight - _lineSpacing);
 
     if (!_cursorBlinking)
     {
@@ -2280,8 +2280,8 @@ void KTerminalDisplay::drawCursor(QPainter* painter,
             // it is draw entirely inside 'rect'
             int penWidth = qMax(1,painter->pen().width());
 
-            painter->drawRect(cursorRect.adjusted( penWidth/2,
-                                                   penWidth/2,
+            painter->drawRect(cursorRect.adjusted( penWidth/2 + penWidth%2,
+                                                   penWidth/2 + penWidth%2,
                                                    - penWidth/2 - penWidth%2,
                                                    - penWidth/2 - penWidth%2));
             if ( hasFocus() )

@@ -83,7 +83,7 @@ ApplicationWindow{
         text: qsTr("Zoom In")
         shortcut: "Ctrl++"
         onTriggered: {
-            var oldScaling = shadersettings.fontScalingIndexes[shadersettings.rasterization];
+            var oldScaling = shadersettings.fontScalingIndex;
             var maxScalingIndex = shadersettings.fontScalingList.length - 1;
             shadersettings.setScalingIndex(Math.min(oldScaling + 1, maxScalingIndex));
         }
@@ -93,7 +93,7 @@ ApplicationWindow{
         text: qsTr("Zoom Out")
         shortcut: "Ctrl+-"
         onTriggered: {
-            var oldScaling = shadersettings.fontScalingIndexes[shadersettings.rasterization];
+            var oldScaling = shadersettings.fontScalingIndex;
             shadersettings.setScalingIndex(Math.max(oldScaling - 1, 0));
         }
     }
@@ -148,23 +148,17 @@ ApplicationWindow{
         width: parent.width * shadersettings.window_scaling
         height: parent.height * shadersettings.window_scaling
         scale: 1.0 / shadersettings.window_scaling
-        smooth: false
-        antialiasing: false
         opacity: shadersettings.windowOpacity * 0.3 + 0.7
 
         Loader{
             id: frame
             anchors.fill: parent
-
-            property rect sourceRect: item.sourceRect
-
             z: 2.1
             source: shadersettings.frame_source
         }
         PreprocessedTerminal{
             id: terminal
             anchors.fill: parent
-            anchors.margins: 30
         }
         ShaderTerminal{
             id: shadercontainer

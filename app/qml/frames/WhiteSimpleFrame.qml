@@ -14,15 +14,12 @@ TerminalFrame{
     imageSource: "../images/screen-frame.png"
     normalsSource: "../images/screen-frame-normals.png"
 
-    rectX: 15
-    rectY: 15
-
     distortionCoefficient: 1.5
 
-    displacementLeft: 45
-    displacementTop: 40
-    displacementRight: 38.0
-    displacementBottom: 28.0
+    displacementLeft: 55
+    displacementTop: 50
+    displacementRight: 55
+    displacementBottom: 50
 
     shaderString: "FrameShader.qml"
 }

@@ -7,22 +7,19 @@ TerminalFrame{
     anchors.fill: parent
     addedWidth: 200
     addedHeight: 370
-    borderLeft: 148
-    borderRight: 148
-    borderTop: 232
-    borderBottom: 232
+    borderLeft: 170
+    borderRight: 170
+    borderTop: 250
+    borderBottom: 250
     imageSource: "../images/black-frame.png"
     normalsSource: "../images/black-frame-normals.png"
 
-    rectX: 20
-    rectY: 20
-
     distortionCoefficient: 1.9
 
-    displacementLeft: 70.0
-    displacementTop: 55.0
-    displacementRight: 50.0
-    displacementBottom: 38.0
+    displacementLeft: 80.0
+    displacementTop: 65.0
+    displacementRight: 80.0
+    displacementBottom: 65.0
 
     shaderString: "FrameShader.qml"
 }
