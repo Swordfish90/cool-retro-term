@@ -36,6 +36,9 @@ ApplicationWindow{
     property bool fullscreen: shadersettings.fullscreen
     onFullscreenChanged: visibility = (fullscreen ? Window.FullScreen : Window.Windowed)
 
+    //Workaround: if menubar is assigned ugly margins are visible.
+    menuBar: shadersettings.showMenubar ? defaultMenuBar : null
+
     flags: Qt.WA_TranslucentBackground
     color: "#00000000"
     title: qsTr("cool-retro-term")
@@ -104,9 +107,8 @@ ApplicationWindow{
             aboutDialog.show();
         }
     }
-
-    menuBar: MenuBar {
-        id: menubar
+    MenuBar {
+        id: defaultMenuBar
         Menu {
             title: qsTr("File")
             visible: shadersettings.showMenubar
