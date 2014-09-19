@@ -132,6 +132,22 @@ ApplicationWindow{
             MenuItem {action: zoomOut}
         }
         Menu{
+            id: profilesMenu
+            title: qsTr("Profiles")
+            Instantiator{
+                model: shadersettings.profiles_list
+                delegate: MenuItem {
+                    text: model.text
+                    onTriggered: {
+                        shadersettings.loadProfileString(obj_string);
+                        shadersettings.handleFontChanged();
+                    }
+                }
+                onObjectAdded: profilesMenu.insertItem(index, object)
+                onObjectRemoved: profilesMenu.removeItem(object)
+            }
+        }
+        Menu{
             title: qsTr("Help")
             visible: shadersettings.showMenubar
             MenuItem {action: showAboutAction}
