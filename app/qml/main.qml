@@ -107,51 +107,8 @@ ApplicationWindow{
             aboutDialog.show();
         }
     }
-    MenuBar {
+    CRTMainMenuBar{
         id: defaultMenuBar
-        Menu {
-            title: qsTr("File")
-            visible: shadersettings.showMenubar
-            MenuItem {action: quitAction}
-        }
-        Menu {
-            title: qsTr("Edit")
-            visible: shadersettings.showMenubar
-            MenuItem {action: copyAction}
-            MenuItem {action: pasteAction}
-            MenuSeparator{}
-            MenuItem {action: showsettingsAction}
-        }
-        Menu{
-            title: qsTr("View")
-            visible: shadersettings.showMenubar
-            MenuItem {action: fullscreenAction}
-            MenuItem {action: showMenubarAction}
-            MenuSeparator{}
-            MenuItem {action: zoomIn}
-            MenuItem {action: zoomOut}
-        }
-        Menu{
-            id: profilesMenu
-            title: qsTr("Profiles")
-            Instantiator{
-                model: shadersettings.profiles_list
-                delegate: MenuItem {
-                    text: model.text
-                    onTriggered: {
-                        shadersettings.loadProfileString(obj_string);
-                        shadersettings.handleFontChanged();
-                    }
-                }
-                onObjectAdded: profilesMenu.insertItem(index, object)
-                onObjectRemoved: profilesMenu.removeItem(object)
-            }
-        }
-        Menu{
-            title: qsTr("Help")
-            visible: shadersettings.showMenubar
-            MenuItem {action: showAboutAction}
-        }
     }
     ApplicationSettings{
         id: shadersettings

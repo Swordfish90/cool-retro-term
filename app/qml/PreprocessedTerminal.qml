@@ -114,12 +114,13 @@ Item{
     }
     Menu{
         id: contextmenu
-
         MenuItem{action: copyAction}
         MenuItem{action: pasteAction}
         MenuSeparator{}
         MenuItem{action: fullscreenAction}
         MenuItem{action: showMenubarAction}
+        MenuSeparator{visible: !shadersettings.showMenubar}
+        CRTMainMenuBar{visible: !shadersettings.showMenubar}
     }
     MouseArea{
         acceptedButtons: Qt.LeftButton | Qt.MiddleButton | Qt.RightButton

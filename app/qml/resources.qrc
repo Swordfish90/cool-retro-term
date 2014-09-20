@@ -63,6 +63,6 @@
         <file>fonts/1985-ibm-pc-vga/Perfect DOS VGA 437.ttf</file>
         <file>fonts/1985-ibm-pc-vga/dos437.txt</file>
         <file>Storage.qml</file>
+        <file>CRTMainMenuBar.qml</file>
     </qresource>
 </RCC>
-
