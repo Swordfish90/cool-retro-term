@@ -93,6 +93,9 @@ Item{
             }
         }
 
+        onWidthChanged: update();
+        onHeightChanged: update();
+
         FontLoader{ id: fontLoader }
         Text{id: fontMetrics; text: "B"; visible: false}
 
@@ -105,6 +108,7 @@ Item{
             height = Qt.binding(function() {return Math.floor(terminalContainer.height / screenScaling);});
 
             setLineSpacing(lineSpacing);
+            update();
             restartBlurredSource();
         }
         Component.onCompleted: {
