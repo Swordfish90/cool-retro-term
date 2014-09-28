@@ -87,6 +87,21 @@ Tab{
                         text: shadersettings.fontScalingList[scalingChanger.value].toFixed(2)
                     }
                 }
+                Text{ text: qsTr("Font Width") }
+                RowLayout{
+                    Layout.fillWidth: true
+                    Slider{
+                        Layout.fillWidth: true
+                        id: widthChanger
+                        onValueChanged: shadersettings.fontWidth = value;
+                        value: shadersettings.fontWidth
+                        stepSize: 0.05
+                        Component.onCompleted: minimumValue = 0.5 //Without this value gets set to 0.5
+                    }
+                    Text{
+                        text: Math.round(widthChanger.value * 100) + "%"
+                    }
+                }
             }
         }
         GroupBox{

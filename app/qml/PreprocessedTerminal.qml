@@ -104,7 +104,9 @@ Item{
             font.pixelSize = pixelSize;
             font.family = fontLoader.name;
 
-            width = Qt.binding(function() {return Math.floor(terminalContainer.width / screenScaling);});
+            var fontWidth = 1.0 / shadersettings.fontWidth;
+
+            width = Qt.binding(function() {return Math.floor(fontWidth * terminalContainer.width / screenScaling);});
             height = Qt.binding(function() {return Math.floor(terminalContainer.height / screenScaling);});
 
             setLineSpacing(lineSpacing);
