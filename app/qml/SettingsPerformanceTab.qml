@@ -50,7 +50,7 @@ Tab{
                     value: shadersettings.fps !== 0 ? shadersettings.fps : 60
                 }
                 Text{text: slider.value}
-                Text{text: qsTr("Texture quality")}
+                Text{text: qsTr("Texture Quality")}
                 Slider{
                     Layout.fillWidth: true
                     id: txtslider
@@ -77,13 +77,12 @@ Tab{
                 property var valsStrings: [
                     qsTr("Low"),
                     qsTr("Medium"),
-                    qsTr("High"),
-                    qsTr("Very high")
+                    qsTr("High")
                 ]
 
                 onValsIndexChanged: shadersettings.scanline_quality = vals[valsIndex];
 
-                Text{text: qsTr("Scanline quality")}
+                Text{text: qsTr("Scanlines Quality")}
                 Slider{
                     id: scanlineQualitySlider
                     Layout.fillWidth: true
@@ -106,15 +105,55 @@ Tab{
             }
         }
         GroupBox{
+            title: qsTr("Bloom")
+            Layout.fillWidth: true
+            anchors.left: parent.left
+            anchors.right: parent.right
+            GridLayout{
+                id: bloomQualityContainer
+                anchors.fill: parent
+                columns: 3
+                property alias valsIndex: bloomQualitySlider.value
+                property var vals: [0.25, 0.50, 1.00]
+                property var valsStrings: [
+                    qsTr("Low"),
+                    qsTr("Medium"),
+                    qsTr("High")
+                ]
+
+                onValsIndexChanged: shadersettings.bloom_quality = vals[valsIndex];
+
+                Text{text: qsTr("Bloom Quality")}
+                Slider{
+                    id: bloomQualitySlider
+                    Layout.fillWidth: true
+                    onValueChanged: parent.valsIndex = value;
+                    stepSize: 1
+                    Component.onCompleted: {
+                        minimumValue = 0;
+                        maximumValue = 2;
+                        value = parent.vals.indexOf(shadersettings.bloom_quality);
+                    }
+                    Connections{
+                        target: shadersettings
+                        onBloom_qualityChanged:
+                            bloomQualityContainer.valsIndex = bloomQualityContainer.vals.indexOf(shadersettings.bloom_quality);
+                    }
+                }
+                Text{
+                    text: parent.valsStrings[parent.valsIndex];
+                }
+            }
+        }
+        GroupBox{
             title: qsTr("Frame")
             Layout.fillWidth: true
             anchors.left: parent.left
             anchors.right: parent.right
             CheckBox{
-                checked: !shadersettings._frameReflections
-                text: qsTr("Disable reflections")
-                onCheckedChanged: shadersettings._frameReflections = !checked
-                enabled: shadersettings.reflectionsAllowed
+                checked: shadersettings._frameReflections
+                text: qsTr("Frame Reflections")
+                onCheckedChanged: shadersettings._frameReflections = checked
             }
         }
     }

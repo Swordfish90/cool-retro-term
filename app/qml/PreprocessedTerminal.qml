@@ -303,14 +303,15 @@ Item{
     //  BLOOM  ////////////////////////////////////////////////////////////////
 
     Loader{
+        property real scaling: shadersettings.bloom_quality
         id: bloomEffectLoader
         active: mBloom != 0
-        anchors.fill: parent
+        width: parent.width * scaling
+        height: parent.height * scaling
         sourceComponent: FastBlur{
-            radius: 48
+            radius: 48 * scaling
             source: kterminal
             transparentBorder: true
-            smooth: false
         }
     }
     Loader{
@@ -319,7 +320,7 @@ Item{
         sourceComponent: ShaderEffectSource{
             sourceItem: bloomEffectLoader.item
             hideSource: true
-            smooth: false
+            smooth: true
         }
     }
 

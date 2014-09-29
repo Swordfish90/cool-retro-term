@@ -69,6 +69,8 @@ Item{
     property real motion_blur: 0.40
     property real bloom_strength: 0.65
 
+    property real bloom_quality: 1.0
+
     property real chroma_color: 0.0
     property real saturation_color: 0.0
 
@@ -173,7 +175,8 @@ Item{
             fontIndexes: fontIndexes,
             frameReflections: _frameReflections,
             showMenubar: showMenubar,
-            scanline_quality: scanline_quality
+            scanline_quality: scanline_quality,
+            bloom_quality: bloom_quality
         }
         return JSON.stringify(settings);
     }
@@ -245,6 +248,7 @@ Item{
         showMenubar = settings.showMenubar !== undefined ? settings.showMenubar : showMenubar;
 
         scanline_quality = settings.scanline_quality !== undefined ? settings.scanline_quality : scanline_quality;
+        bloom_quality = settings.bloom_quality !== undefined ? settings.bloom_quality : bloom_quality;
     }
 
     function loadProfileString(profileString){
