@@ -35,11 +35,8 @@ Tab{
                 model: [qsTr("Default"), qsTr("Scanlines"), qsTr("Pixels")]
                 currentIndex: shadersettings.rasterization
                 onCurrentIndexChanged: {
-                    scalingChanger.enabled = false;
                     shadersettings.rasterization = currentIndex
                     fontChanger.updateIndex();
-                    scalingChanger.updateIndex();
-                    scalingChanger.enabled = true;
                 }
             }
         }
@@ -67,24 +64,24 @@ Tab{
                 RowLayout{
                     Layout.fillWidth: true
                     Slider{
-                        id: scalingChanger
                         Layout.fillWidth: true
-                        minimumValue: 0
-                        maximumValue: shadersettings.fontScalingList.length - 1
-                        stepSize: 1
-                        tickmarksEnabled: true
-                        value: updateIndex()
-                        onValueChanged: {
-                            if(!enabled) return; //Ugly and hacky solution. Look for a better solution.
-                            shadersettings.setScalingIndex(value);
+                        id: fontScalingChanger
+                        onValueChanged: if(enabled) shadersettings.fontScaling = value
+                        stepSize: 0.05
+                        enabled: false // Another trick to fix initial bad behavior.
+                        Component.onCompleted: {
+                            minimumValue = 0.5;
+                            maximumValue = 2.5;
+                            value = shadersettings.fontScaling;
+                            enabled = true;
                         }
-                        function updateIndex(){
-                            value = shadersettings.getScalingIndex();
+                        Connections{
+                            target: shadersettings
+                            onFontScalingChanged: fontScalingChanger.value = shadersettings.fontScaling;
                         }
-                        Component.onCompleted: shadersettings.fontScalingChanged.connect(updateIndex);
                     }
                     Text{
-                        text: shadersettings.fontScalingList[scalingChanger.value].toFixed(2)
+                        text: Math.round(fontScalingChanger.value * 100) + "%"
                     }
                 }
                 Text{ text: qsTr("Font Width") }

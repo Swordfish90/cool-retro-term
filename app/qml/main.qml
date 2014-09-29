@@ -85,20 +85,13 @@ ApplicationWindow{
         id: zoomIn
         text: qsTr("Zoom In")
         shortcut: "Ctrl++"
-        onTriggered: {
-            var oldScaling = shadersettings.fontScalingIndex;
-            var maxScalingIndex = shadersettings.fontScalingList.length - 1;
-            shadersettings.setScalingIndex(Math.min(oldScaling + 1, maxScalingIndex));
-        }
+        onTriggered: shadersettings.incrementScaling();
     }
     Action{
         id: zoomOut
         text: qsTr("Zoom Out")
         shortcut: "Ctrl+-"
-        onTriggered: {
-            var oldScaling = shadersettings.fontScalingIndex;
-            shadersettings.setScalingIndex(Math.max(oldScaling - 1, 0));
-        }
+        onTriggered: shadersettings.decrementScaling();
     }
     Action{
         id: showAboutAction

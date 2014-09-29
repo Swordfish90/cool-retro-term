@@ -119,22 +119,21 @@ Item{
         onLoaded: handleFontChanged()
     }
 
-    signal fontScalingChanged
-    property var fontScalingList: [0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2.0, 2.1, 2.2, 2.3, 2.4, 2.5]
-    property int fontScalingIndex: 5
+    property real fontScaling: 1.0
+    onFontScalingChanged: handleFontChanged();
 
-    property real fontWidth: 1.0
-    onFontWidthChanged: handleFontChanged();
-
-    function setScalingIndex(newScaling){
-        fontScalingIndex = newScaling;
-        fontScalingChanged();
+    function incrementScaling(){
+        fontScaling = Math.min(fontScaling + 0.05, 2.50);
         handleFontChanged();
     }
 
-    function getScalingIndex(){
-        return fontScalingIndex;
+    function decrementScaling(){
+        fontScaling = Math.max(fontScaling - 0.05, 0.50);
+        handleFontChanged();
     }
+
+    property real fontWidth: 1.0
+    onFontWidthChanged: handleFontChanged();
 
     property var fontIndexes: [0,0,0]
     property var fontlist: fontManager.item.fontlist
@@ -142,7 +141,7 @@ Item{
     function handleFontChanged(){
         if(!fontManager.item) return;
         fontManager.item.selectedFontIndex = fontIndexes[rasterization];
-        fontManager.item.scaling = fontScalingList[fontScalingIndex];
+        fontManager.item.scaling = fontScaling;
 
         var fontSource = fontManager.item.source;
         var pixelSize = fontManager.item.pixelSize;
@@ -170,7 +169,7 @@ Item{
             fps: fps,
             window_scaling: window_scaling,
             show_terminal_size: show_terminal_size,
-            fontScalingIndex: fontScalingIndex,
+            fontScaling: fontScaling,
             fontIndexes: fontIndexes,
             frameReflections: _frameReflections,
             showMenubar: showMenubar,
@@ -239,7 +238,7 @@ Item{
         window_scaling = settings.window_scaling !== undefined ? settings.window_scaling : window_scaling
 
         fontIndexes = settings.fontIndexes !== undefined ? settings.fontIndexes : fontIndexes
-        fontScalingIndex = settings.fontScalingIndex !== undefined ? settings.fontScalingIndex : fontScalingIndex
+        fontScaling = settings.fontScaling !== undefined ? settings.fontScaling : fontScaling
 
         _frameReflections = settings.frameReflections !== undefined ? settings.frameReflections : _frameReflections;
 
