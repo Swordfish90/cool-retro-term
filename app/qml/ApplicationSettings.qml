@@ -85,6 +85,9 @@ Item{
 
     property int rasterization: no_rasterization
 
+    property int scanline_quality: 3
+    onScanline_qualityChanged: handleFontChanged();
+
     ListModel{
         id: framelist
         ListElement{text: "No frame"; source: "./frames/NoFrame.qml"; reflections: false}
@@ -170,7 +173,8 @@ Item{
             fontScalingIndex: fontScalingIndex,
             fontIndexes: fontIndexes,
             frameReflections: _frameReflections,
-            showMenubar: showMenubar
+            showMenubar: showMenubar,
+            scanline_quality: scanline_quality
         }
         return JSON.stringify(settings);
     }
@@ -240,6 +244,8 @@ Item{
         _frameReflections = settings.frameReflections !== undefined ? settings.frameReflections : _frameReflections;
 
         showMenubar = settings.showMenubar !== undefined ? settings.showMenubar : showMenubar;
+
+        scanline_quality = settings.scanline_quality !== undefined ? settings.scanline_quality : scanline_quality;
     }
 
     function loadProfileString(profileString){

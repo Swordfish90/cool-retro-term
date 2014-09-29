@@ -28,7 +28,6 @@ Tab{
         GroupBox{
             title: qsTr("General")
             Layout.fillWidth: true
-            Layout.columnSpan: 2
             anchors.left: parent.left
             anchors.right: parent.right
             GridLayout{
@@ -65,13 +64,53 @@ Tab{
             }
         }
         GroupBox{
+            title: qsTr("Rasterization")
+            Layout.fillWidth: true
+            anchors.left: parent.left
+            anchors.right: parent.right
+            GridLayout{
+                id: scanlineQualityContainer
+                anchors.fill: parent
+                columns: 3
+                property alias valsIndex: scanlineQualitySlider.value
+                property var vals: [4,3,2]
+                property var valsStrings: [
+                    qsTr("Low"),
+                    qsTr("Medium"),
+                    qsTr("High"),
+                    qsTr("Very high")
+                ]
+
+                onValsIndexChanged: shadersettings.scanline_quality = vals[valsIndex];
+
+                Text{text: qsTr("Scanline quality")}
+                Slider{
+                    id: scanlineQualitySlider
+                    Layout.fillWidth: true
+                    onValueChanged: parent.valsIndex = value;
+                    stepSize: 1
+                    Component.onCompleted: {
+                        minimumValue = 0;
+                        maximumValue = 2;
+                        value = parent.vals.indexOf(shadersettings.scanline_quality);
+                    }
+                    Connections{
+                        target: shadersettings
+                        onScanline_qualityChanged:
+                            scanlineQualityContainer.valsIndex = scanlineQualityContainer.vals.indexOf(shadersettings.scanline_quality);
+                    }
+                }
+                Text{
+                    text: parent.valsStrings[parent.valsIndex];
+                }
+            }
+        }
+        GroupBox{
             title: qsTr("Frame")
             Layout.fillWidth: true
-            Layout.columnSpan: 2
             anchors.left: parent.left
             anchors.right: parent.right
             CheckBox{
-                Layout.columnSpan: 3
                 checked: !shadersettings._frameReflections
                 text: qsTr("Disable reflections")
                 onCheckedChanged: shadersettings._frameReflections = !checked

@@ -84,6 +84,8 @@ Item{
 
         colorScheme: "cool-retro-term"
 
+        smooth: false
+
         session: KSession {
             id: ksession
             kbScheme: "xterm"
@@ -108,6 +110,12 @@ Item{
 
             width = Qt.binding(function() {return Math.floor(fontWidth * terminalContainer.width / screenScaling);});
             height = Qt.binding(function() {return Math.floor(terminalContainer.height / screenScaling);});
+
+            var scaleTexture = Math.max(Math.round(screenScaling / shadersettings.scanline_quality), 1.0);
+
+            kterminalSource.textureSize = Qt.binding(function () {
+                return Qt.size(kterminal.width * scaleTexture, kterminal.height * scaleTexture);
+            });
 
             setLineSpacing(lineSpacing);
             update();
@@ -176,7 +184,6 @@ Item{
         id: kterminalSource
         sourceItem: kterminal
         hideSource: true
-        smooth: mScanlines == shadersettings.no_rasterization
         wrapMode: ShaderEffectSource.ClampToEdge
         live: false
 
@@ -201,8 +208,6 @@ Item{
             live: false
             hideSource: true
             wrapMode: kterminalSource.wrapMode
-
-            smooth: mScanlines == shadersettings.no_rasterization
 
             function restartBlurSource(){
                 livetimer.restart();
@@ -230,12 +235,17 @@ Item{
                     livetimer.restart();
                 }
             }
+            Connections{
+                target: shadersettings
+                onScanline_qualityChanged: restartBlurredSource();
+            }
         }
     }
 
     Loader{
         id: blurredTerminalLoader
-        anchors.fill: kterminal
+        width: kterminalSource.textureSize.width
+        height: kterminalSource.textureSize.height
         active: mBlur !== 0
 
         sourceComponent: ShaderEffect {
