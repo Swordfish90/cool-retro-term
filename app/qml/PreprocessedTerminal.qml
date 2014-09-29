@@ -77,6 +77,23 @@ Item{
         kterminal.copyClipboard();
     }
 
+    //When settings are updated sources need to be redrawn.
+    Connections{
+        target: shadersettings
+        onFontScalingChanged: terminalContainer.updateSources();
+        onFontWidthChanged: terminalContainer.updateSources();
+    }
+    Connections{
+        target: terminalContainer
+        onWidthChanged: terminalContainer.updateSources();
+        onHeightChanged: terminalContainer.updateSources();
+    }
+    function updateSources() {
+        kterminal.update();
+        kterminal.updateImage();
+    }
+
+
     KTerminal {
         id: kterminal
         width: parent.width
@@ -94,9 +111,6 @@ Item{
                 Qt.quit()
             }
         }
-
-        onWidthChanged: update();
-        onHeightChanged: update();
 
         FontLoader{ id: fontLoader }
         Text{id: fontMetrics; text: "B"; visible: false}
