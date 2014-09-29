@@ -142,19 +142,5 @@ Tab{
                 }
             }
         }
-        GroupBox{
-            title: qsTr("Frame")
-            Layout.fillWidth: true
-            RowLayout{
-                anchors.fill: parent
-                ComboBox{
-                    id: framescombobox
-                    Layout.fillWidth: true
-                    model: shadersettings.frames_list
-                    currentIndex: shadersettings.frames_index
-                    onCurrentIndexChanged: shadersettings.frames_index = currentIndex
-                }
-            }
-        }
     }
 }

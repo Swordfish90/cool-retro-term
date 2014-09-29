@@ -92,49 +92,17 @@ Tab{
             }
         }
         GroupBox{
-            title: qsTr("Performace")
+            title: qsTr("Frame")
             Layout.fillWidth: true
-            Layout.columnSpan: 2
-            anchors.left: parent.left
-            anchors.right: parent.right
-            GridLayout{
+            RowLayout{
                 anchors.fill: parent
-                rows: 3
-                columns: 3
-                CheckBox{
-                    Layout.columnSpan: 3
-                    checked: !shadersettings._frameReflections
-                    text: qsTr("Disable reflections")
-                    onCheckedChanged: shadersettings._frameReflections = !checked
-                    enabled: shadersettings.reflectionsAllowed
-                }
-                CheckBox{
-                    property int fps: checked ? slider.value : 0
-                    onFpsChanged: shadersettings.fps = fps
-                    checked: shadersettings.fps !== 0
-                    text: qsTr("Limit FPS")
-                }
-                Slider{
-                    id: slider
+                ComboBox{
+                    id: framescombobox
                     Layout.fillWidth: true
-                    stepSize: 1
-                    maximumValue: 60
-                    minimumValue: 1
-                    enabled: shadersettings.fps !== 0
-                    value: shadersettings.fps !== 0 ? shadersettings.fps : 60
+                    model: shadersettings.frames_list
+                    currentIndex: shadersettings.frames_index
+                    onCurrentIndexChanged: shadersettings.frames_index = currentIndex
                 }
-                Text{text: slider.value}
-                Text{text: qsTr("Texture quality")}
-                Slider{
-                    Layout.fillWidth: true
-                    id: txtslider
-                    onValueChanged: shadersettings.window_scaling = value;
-                    value: shadersettings.window_scaling
-                    tickmarksEnabled: true
-                    stepSize: 0.25
-                    Component.onCompleted: minimumValue = 0.5 //Without this value gets set to 0.5
-                }
-                Text{text: Math.round(txtslider.value * 100) + "%"}
             }
         }
     }
