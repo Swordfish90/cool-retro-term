@@ -322,9 +322,15 @@ Item{
         active: mBloom != 0
         asynchronous: true
         sourceComponent: ShaderEffectSource{
+            id: _bloomEffectSource
             sourceItem: bloomEffectLoader.item
             hideSource: true
+            live: false
             smooth: true
+            Connections{
+                target: kterminalSource
+                onSourceUpdate: _bloomEffectSource.scheduleUpdate();
+            }
         }
     }
 
