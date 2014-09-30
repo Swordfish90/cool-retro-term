@@ -77,12 +77,31 @@ Item{
         kterminal.copyClipboard();
     }
 
+    //When settings are updated sources need to be redrawn.
+    Connections{
+        target: shadersettings
+        onFontScalingChanged: terminalContainer.updateSources();
+        onFontWidthChanged: terminalContainer.updateSources();
+    }
+    Connections{
+        target: terminalContainer
+        onWidthChanged: terminalContainer.updateSources();
+        onHeightChanged: terminalContainer.updateSources();
+    }
+    function updateSources() {
+        kterminal.update();
+        kterminal.updateImage();
+    }
+
+
     KTerminal {
         id: kterminal
         width: parent.width
         height: parent.height
 
         colorScheme: "cool-retro-term"
+
+        smooth: false
 
         session: KSession {
             id: ksession
@@ -93,9 +112,6 @@ Item{
             }
         }
 
-        onWidthChanged: update();
-        onHeightChanged: update();
-
         FontLoader{ id: fontLoader }
         Text{id: fontMetrics; text: "B"; visible: false}
 
@@ -104,8 +120,16 @@ Item{
             font.pixelSize = pixelSize;
             font.family = fontLoader.name;
 
-            width = Qt.binding(function() {return Math.floor(terminalContainer.width / screenScaling);});
+            var fontWidth = 1.0 / shadersettings.fontWidth;
+
+            width = Qt.binding(function() {return Math.floor(fontWidth * terminalContainer.width / screenScaling);});
             height = Qt.binding(function() {return Math.floor(terminalContainer.height / screenScaling);});
+
+            var scaleTexture = Math.max(Math.round(screenScaling / shadersettings.scanline_quality), 1.0);
+
+            kterminalSource.textureSize = Qt.binding(function () {
+                return Qt.size(kterminal.width * scaleTexture, kterminal.height * scaleTexture);
+            });
 
             setLineSpacing(lineSpacing);
             update();
@@ -174,7 +198,6 @@ Item{
         id: kterminalSource
         sourceItem: kterminal
         hideSource: true
-        smooth: mScanlines == shadersettings.no_rasterization
         wrapMode: ShaderEffectSource.ClampToEdge
         live: false
 
@@ -190,6 +213,7 @@ Item{
     }
     Loader{
         id: blurredSourceLoader
+        asynchronous: true
         active: mBlur !== 0
 
         sourceComponent: ShaderEffectSource{
@@ -199,8 +223,6 @@ Item{
             live: false
             hideSource: true
             wrapMode: kterminalSource.wrapMode
-
-            smooth: mScanlines == shadersettings.no_rasterization
 
             function restartBlurSource(){
                 livetimer.restart();
@@ -228,13 +250,19 @@ Item{
                     livetimer.restart();
                 }
             }
+            Connections{
+                target: shadersettings
+                onScanline_qualityChanged: restartBlurredSource();
+            }
         }
     }
 
     Loader{
         id: blurredTerminalLoader
-        anchors.fill: kterminal
+        width: kterminalSource.textureSize.width
+        height: kterminalSource.textureSize.height
         active: mBlur !== 0
+        asynchronous: true
 
         sourceComponent: ShaderEffect {
             property variant txt_source: kterminalSource
@@ -277,23 +305,32 @@ Item{
     //  BLOOM  ////////////////////////////////////////////////////////////////
 
     Loader{
+        property real scaling: shadersettings.bloom_quality
         id: bloomEffectLoader
         active: mBloom != 0
-        anchors.fill: parent
+        asynchronous: true
+        width: parent.width * scaling
+        height: parent.height * scaling
         sourceComponent: FastBlur{
-            radius: 48
+            radius: 48 * scaling
             source: kterminal
             transparentBorder: true
-            smooth: false
         }
     }
     Loader{
         id: bloomSourceLoader
         active: mBloom != 0
+        asynchronous: true
         sourceComponent: ShaderEffectSource{
+            id: _bloomEffectSource
             sourceItem: bloomEffectLoader.item
             hideSource: true
-            smooth: false
+            live: false
+            smooth: true
+            Connections{
+                target: kterminalSource
+                onSourceUpdate: _bloomEffectSource.scheduleUpdate();
+            }
         }
     }
 

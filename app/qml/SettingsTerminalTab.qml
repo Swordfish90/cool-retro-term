@@ -35,11 +35,8 @@ Tab{
                 model: [qsTr("Default"), qsTr("Scanlines"), qsTr("Pixels")]
                 currentIndex: shadersettings.rasterization
                 onCurrentIndexChanged: {
-                    scalingChanger.enabled = false;
                     shadersettings.rasterization = currentIndex
                     fontChanger.updateIndex();
-                    scalingChanger.updateIndex();
-                    scalingChanger.enabled = true;
                 }
             }
         }
@@ -67,24 +64,39 @@ Tab{
                 RowLayout{
                     Layout.fillWidth: true
                     Slider{
-                        id: scalingChanger
                         Layout.fillWidth: true
-                        minimumValue: 0
-                        maximumValue: shadersettings.fontScalingList.length - 1
-                        stepSize: 1
-                        tickmarksEnabled: true
-                        value: updateIndex()
-                        onValueChanged: {
-                            if(!enabled) return; //Ugly and hacky solution. Look for a better solution.
-                            shadersettings.setScalingIndex(value);
+                        id: fontScalingChanger
+                        onValueChanged: if(enabled) shadersettings.fontScaling = value
+                        stepSize: 0.05
+                        enabled: false // Another trick to fix initial bad behavior.
+                        Component.onCompleted: {
+                            minimumValue = 0.5;
+                            maximumValue = 2.5;
+                            value = shadersettings.fontScaling;
+                            enabled = true;
                         }
-                        function updateIndex(){
-                            value = shadersettings.getScalingIndex();
+                        Connections{
+                            target: shadersettings
+                            onFontScalingChanged: fontScalingChanger.value = shadersettings.fontScaling;
                         }
-                        Component.onCompleted: shadersettings.fontScalingChanged.connect(updateIndex);
                     }
                     Text{
-                        text: shadersettings.fontScalingList[scalingChanger.value].toFixed(2)
+                        text: Math.round(fontScalingChanger.value * 100) + "%"
+                    }
+                }
+                Text{ text: qsTr("Font Width") }
+                RowLayout{
+                    Layout.fillWidth: true
+                    Slider{
+                        Layout.fillWidth: true
+                        id: widthChanger
+                        onValueChanged: shadersettings.fontWidth = value;
+                        value: shadersettings.fontWidth
+                        stepSize: 0.05
+                        Component.onCompleted: minimumValue = 0.5 //Without this value gets set to 0.5
+                    }
+                    Text{
+                        text: Math.round(widthChanger.value * 100) + "%"
                     }
                 }
             }
@@ -124,20 +136,6 @@ Tab{
                         value: shadersettings.saturation_color
                         enabled: shadersettings.chroma_color !== 0
                     }
-                }
-            }
-        }
-        GroupBox{
-            title: qsTr("Frame")
-            Layout.fillWidth: true
-            RowLayout{
-                anchors.fill: parent
-                ComboBox{
-                    id: framescombobox
-                    Layout.fillWidth: true
-                    model: shadersettings.frames_list
-                    currentIndex: shadersettings.frames_index
-                    onCurrentIndexChanged: shadersettings.frames_index = currentIndex
                 }
             }
         }

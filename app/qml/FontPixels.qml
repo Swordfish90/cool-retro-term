@@ -33,13 +33,6 @@ Item{
     ListModel{
         id: fontlist
         ListElement{
-            text: "Commodore PET 2Y (1977)"
-            source: "fonts/1977-commodore-pet/COMMODORE_PET_2y.ttf"
-            lineSpacing: 2
-            pixelSize: 16
-            baseScaling: 3.0
-        }
-        ListElement{
             text: "Commodore PET (1977)"
             source: "fonts/1977-commodore-pet/COMMODORE_PET.ttf"
             lineSpacing: 2
