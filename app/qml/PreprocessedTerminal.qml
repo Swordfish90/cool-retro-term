@@ -213,6 +213,7 @@ Item{
     }
     Loader{
         id: blurredSourceLoader
+        asynchronous: true
         active: mBlur !== 0
 
         sourceComponent: ShaderEffectSource{
@@ -261,6 +262,7 @@ Item{
         width: kterminalSource.textureSize.width
         height: kterminalSource.textureSize.height
         active: mBlur !== 0
+        asynchronous: true
 
         sourceComponent: ShaderEffect {
             property variant txt_source: kterminalSource
@@ -306,6 +308,7 @@ Item{
         property real scaling: shadersettings.bloom_quality
         id: bloomEffectLoader
         active: mBloom != 0
+        asynchronous: true
         width: parent.width * scaling
         height: parent.height * scaling
         sourceComponent: FastBlur{
@@ -317,6 +320,7 @@ Item{
     Loader{
         id: bloomSourceLoader
         active: mBloom != 0
+        asynchronous: true
         sourceComponent: ShaderEffectSource{
             sourceItem: bloomEffectLoader.item
             hideSource: true
