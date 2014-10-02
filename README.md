@@ -69,7 +69,11 @@ You can also install this [package](https://aur.archlinux.org/packages/cool-old-
     export CPPFLAGS="-I/usr/local/opt/qt5/include"
     export LDFLAGS="-L/usr/local/opt/qt5/lib"
     export PATH=/usr/local/opt/qt5/bin:$PATH
+    git clone https://github.com/Swordifish90/cool-old-term.git
+    git checkout osx
     qmake && make && make install
+    # Have fun!
+    ./cool-old-term
 
 ---
 
