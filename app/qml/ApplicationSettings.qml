@@ -379,9 +379,31 @@ Item{
         }
     }
 
+    function getProfileIndexByName(name) {
+        for (var i = 0; i < profileslist.count; i++) {
+            if(profileslist.get(i).text === name)
+                return i;
+        }
+        return -1;
+    }
+
     Component.onCompleted: {
-        loadSettings();
+        // Manage the arguments from the QML side.
+        var args = Qt.application.arguments;
+        if (args.indexOf("--default-settings") === -1) {
+            loadSettings();
+        }
+
         loadCustomProfiles();
+
+        var profileArgPosition = args.indexOf("--profile");
+        if (profileArgPosition !== -1) {
+            var profileIndex = getProfileIndexByName(args[profileArgPosition + 1]);
+            if (profileIndex !== -1)
+                loadProfile(profileIndex);
+            else
+                console.log("Warning: selected profile is not valid; ignoring it");
+        }
     }
     Component.onDestruction: {
         storeSettings();

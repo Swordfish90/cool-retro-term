@@ -13,7 +13,15 @@ int main(int argc, char *argv[])
     QApplication app(argc, argv);
     QQmlApplicationEngine engine;
 
-    // Managing some env variables
+    // Manage command line arguments from the cpp side
+    QStringList args = app.arguments();
+    if (args.contains("-h") || args.contains("--help")) {
+        qDebug() << "Usage: " + args.at(0) + " [--default-settings] [-h|--help]";
+        qDebug() << "    --default-settings  Run cool-old-term with the default settings";
+        qDebug() << "    -p|--profile        Run cool-old-term with the given profile.";
+        qDebug() << "    -h|--help           Print this help.";
+        return 0;
+    }
 
     // Manage import paths
     QStringList importPathList = engine.importPathList();
