@@ -52,9 +52,6 @@ public:
     //environment
     void setEnvironment(const QStringList & environment);
 
-    //  Shell program, default is /bin/bash
-    void setShellProgram(const QString & progname);
-
     //Initial working directory
     void setInitialWorkingDirectory(const QString & dir);
     QString getInitialWorkingDirectory();
@@ -106,6 +103,9 @@ public slots:
     void setTitle(QString name);
 
     void startShellProgram();
+
+    //  Shell program, default is /bin/bash
+    void setShellProgram(const QString & progname);
 
     int getShellPID();
     void changeDir(const QString & dir);
