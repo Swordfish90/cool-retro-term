@@ -137,6 +137,7 @@ Item{
         }
         Component.onCompleted: {
             shadersettings.terminalFontChanged.connect(handleFontChange);
+            ksession.startShellProgram();
             forceActiveFocus();
         }
     }
