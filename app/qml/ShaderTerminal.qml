@@ -56,6 +56,9 @@ ShaderEffect {
     property real time: timeManager.time
     property variant randomFunctionSource: randfuncsource
 
+    // If something goes wrong activate the fallback version of the shader.
+    property bool fallBack: false
+
     blending: false
 
     //Smooth random texture used for flickering effect.
@@ -84,7 +87,6 @@ ShaderEffect {
     vertexShader: "
         uniform highp mat4 qt_Matrix;
         uniform highp float time;
-        uniform sampler2D randomFunctionSource;
 
         uniform highp float disp_left;
         uniform highp float disp_right;
@@ -96,10 +98,13 @@ ShaderEffect {
 
         varying highp vec2 qt_TexCoord0;" +
 
-        (brightness_flickering !== 0.0 ?"
+        (!fallBack ? "
+            uniform sampler2D randomFunctionSource;" : "") +
+
+        (!fallBack && brightness_flickering !== 0.0 ?"
             varying lowp float brightness;
             uniform lowp float brightness_flickering;" : "") +
-        (horizontal_sincronization !== 0.0 ?"
+        (!fallBack && horizontal_sincronization !== 0.0 ?"
             varying lowp float horizontal_distortion;
             uniform lowp float horizontal_sincronization;" : "") +
         "
@@ -107,11 +112,11 @@ ShaderEffect {
             qt_TexCoord0.x = (qt_MultiTexCoord0.x - disp_left) / (1.0 - disp_left - disp_right);
             qt_TexCoord0.y = (qt_MultiTexCoord0.y - disp_top) / (1.0 - disp_top - disp_bottom);
             vec2 coords = vec2(fract(time/(1024.0*2.0)), fract(time/(1024.0*1024.0)));" +
-            (brightness_flickering !== 0.0 ? "
+            (!fallBack && brightness_flickering !== 0.0 ? "
                 brightness = 1.0 + (texture2D(randomFunctionSource, coords).g - 0.5) * brightness_flickering;"
             :   "") +
 
-            (horizontal_sincronization !== 0.0 ? "
+            (!fallBack && horizontal_sincronization !== 0.0 ? "
                 float randval = 1.5 * texture2D(randomFunctionSource,(vec2(1.0) -coords) * 0.5).g;
                 float negsinc = 1.0 - 0.6 * horizontal_sincronization;" + "
                 horizontal_distortion = step(negsinc, randval) * (randval - negsinc) * 0.3*horizontal_sincronization;"
@@ -148,9 +153,16 @@ ShaderEffect {
             uniform lowp float jitter;" : "") +
         (rgb_shift !== 0 ? "
             uniform lowp float rgb_shift;" : "") +
-        (brightness_flickering !== 0 ? "
+
+        (fallBack && (brightness_flickering || horizontal_sincronization) ? "
+            uniform lowp sampler2D randomFunctionSource;" : "") +
+        (fallBack && horizontal_sincronization !== 0 ? "
+            uniform lowp float horizontal_sincronization;" : "") +
+        (fallBack && brightness_flickering !== 0.0 ?"
+            uniform lowp float brightness_flickering;" : "") +
+        (!fallBack && brightness_flickering !== 0 ? "
             varying lowp float brightness;" : "") +
-        (horizontal_sincronization !== 0 ? "
+        (!fallBack && horizontal_sincronization !== 0 ? "
             varying lowp float horizontal_distortion;" : "") +
 
         (glowing_line_strength !== 0 ? "
@@ -165,6 +177,20 @@ ShaderEffect {
         "void main() {" +
             "vec2 cc = vec2(0.5) - qt_TexCoord0;" +
             "float distance = length(cc);" +
+
+            //FallBack if there are problem
+            (fallBack && (brightness_flickering || horizontal_sincronization) ? "
+                vec2 randCoords = vec2(fract(time/(1024.0*2.0)), fract(time/(1024.0*1024.0)));" : "") +
+
+            (fallBack && brightness_flickering !== 0.0 ? "
+                float brightness = 1.0 + (texture2D(randomFunctionSource, randCoords).g - 0.5) * brightness_flickering;"
+            :   "") +
+
+            (fallBack && horizontal_sincronization !== 0.0 ? "
+                float randval = 1.5 * texture2D(randomFunctionSource,(vec2(1.0) - randCoords) * 0.5).g;
+                float negsinc = 1.0 - 0.6 * horizontal_sincronization;" + "
+                float horizontal_distortion = step(negsinc, randval) * (randval - negsinc) * 0.3*horizontal_sincronization;"
+            : "") +
 
             (noise_strength ? "
                 float noise = noise_strength;" : "") +
@@ -238,5 +264,14 @@ ShaderEffect {
             "gl_FragColor = vec4(finalColor * screen_brightness, qt_Opacity);" +
         "}"
 
-     onStatusChanged: if (log) console.log(log) //Print warning messages
+     onStatusChanged: {
+         // Print warning messages
+         if (log)
+             console.log(log);
+
+         // Activate fallback mode
+         if (status == ShaderEffect.Error) {
+            fallBack = true;
+         }
+     }
 }

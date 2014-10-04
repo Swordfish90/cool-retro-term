@@ -34,6 +34,7 @@ class KSession : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QString  kbScheme  READ  getKeyBindings WRITE setKeyBindings NOTIFY changedKeyBindings)
+    Q_PROPERTY(QString  initialWorkingDirectory READ getInitialWorkingDirectory WRITE setInitialWorkingDirectory)
 
 public:
     KSession(QObject *parent = 0);
@@ -43,9 +44,6 @@ public:
     //bool setup();
     void addView(KTerminalDisplay *displa);
 
-    //start shell program if it was not started in constructor
-    void startShellProgram();
-
     int getRandomSeed();
     QString getKeyBindings();
 
@@ -54,11 +52,9 @@ public:
     //environment
     void setEnvironment(const QStringList & environment);
 
-    //  Shell program, default is /bin/bash
-    void setShellProgram(const QString & progname);
-
-    //working directory
-    void setWorkingDirectory(const QString & dir);
+    //Initial working directory
+    void setInitialWorkingDirectory(const QString & dir);
+    QString getInitialWorkingDirectory();
 
     // Shell program args, default is none
     void setArgs(QStringList & args);
@@ -106,6 +102,11 @@ public slots:
     void setKeyBindings(const QString & kb);
     void setTitle(QString name);
 
+    void startShellProgram();
+
+    //  Shell program, default is /bin/bash
+    void setShellProgram(const QString & progname);
+
     int getShellPID();
     void changeDir(const QString & dir);
 
@@ -125,6 +126,7 @@ private slots:
 
 private:
     //Konsole::KTerminalDisplay *m_terminalDisplay;
+    QString _initialWorkingDirectory;
     Session *m_session;
 
 };

@@ -35,8 +35,6 @@ KSession::KSession(QObject *parent) :
     QObject(parent), m_session(createSession("KSession"))
 {
     connect(m_session, SIGNAL(finished()), this, SLOT(sessionFinished()));
-
-    m_session->run();
 }
 
 KSession::~KSession()
@@ -159,33 +157,27 @@ void KSession::setEnvironment(const QStringList &environment)
 
 void KSession::setShellProgram(const QString &progname)
 {
-    if (!m_session)
-        return;
-
     m_session->setProgram(progname);
 }
 
-void KSession::setWorkingDirectory(const QString &dir)
+void KSession::setInitialWorkingDirectory(const QString &dir)
 {
-    if (!m_session)
-        return;
-
+    _initialWorkingDirectory = dir;
     m_session->setInitialWorkingDirectory(dir);
+}
+
+QString KSession::getInitialWorkingDirectory()
+{
+    return _initialWorkingDirectory;
 }
 
 void KSession::setArgs(QStringList &args)
 {
-    if (!m_session)
-        return;
-
     m_session->setArguments(args);
 }
 
 void KSession::setTextCodec(QTextCodec *codec)
 {
-    if (!m_session)
-        return;
-
     m_session->setCodec(codec);
 }
 

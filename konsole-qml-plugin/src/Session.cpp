@@ -31,8 +31,7 @@
 #include <stdlib.h>
 
 // Qt
-#include <QGuiApplication>
-#include <QtGui/QWindow>
+#include <QQuickWindow>
 
 #include <QtCore/QByteRef>
 #include <QtCore/QDir>
@@ -143,7 +142,12 @@ WId Session::windowId() const
 //            window = window->parentWidget();
 //        }
 
-        return QGuiApplication::focusWindow()->winId();
+        //return QGuiApplication::focusWindow()->winId();
+
+        //There is an issue here! Probably this always returns zero.
+        //but I try to preseve the behavior there was before.
+        QQuickWindow * window = _views.first()->window();
+        return (window ? window->winId() : 0);
     }
 }
 
