@@ -1,11 +1,19 @@
 #include <QtQml/QQmlApplicationEngine>
 #include <QtGui/QGuiApplication>
 
+#include <QQmlContext>
+#include <QStringList>
+
 #include <QtWidgets/QApplication>
 
 #include <QDebug>
 #include <stdlib.h>
 
+
+QString getNamedArgument(QStringList args, QString name) {
+    int index = args.indexOf(name);
+    return (index != -1) ? args[index + 1] : QString("");
+}
 
 int main(int argc, char *argv[])
 {
@@ -16,12 +24,17 @@ int main(int argc, char *argv[])
     // Manage command line arguments from the cpp side
     QStringList args = app.arguments();
     if (args.contains("-h") || args.contains("--help")) {
-        qDebug() << "Usage: " + args.at(0) + " [--default-settings] [-h|--help]";
+        qDebug() << "Usage: " + args.at(0) + " [--default-settings] [--workdir <dir>] [--program <prog>] [-h|--help]";
         qDebug() << "    --default-settings  Run cool-old-term with the default settings";
+        qDebug() << "    --workdir <dir>     Change working directory to 'dir'";
+        qDebug() << "    --program <prog>    Run the 'prog' in the new terminal.";
         qDebug() << "    -p|--profile        Run cool-old-term with the given profile.";
         qDebug() << "    -h|--help           Print this help.";
         return 0;
     }
+
+    engine.rootContext()->setContextProperty("workdir", getNamedArgument(args, "--workdir"));
+    engine.rootContext()->setContextProperty("shellProgram", getNamedArgument(args, "--program"));
 
     // Manage import paths
     QStringList importPathList = engine.importPathList();
@@ -32,4 +45,3 @@ int main(int argc, char *argv[])
 
     return app.exec();
 }
-

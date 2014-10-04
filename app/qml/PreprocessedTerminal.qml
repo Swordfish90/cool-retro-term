@@ -137,6 +137,13 @@ Item{
         }
         Component.onCompleted: {
             shadersettings.terminalFontChanged.connect(handleFontChange);
+
+            // Retrieve the variable set in main.cpp if arguments are passed.
+            if (shellProgram)
+                ksession.setShellProgram(shellProgram);
+            if (workdir)
+                ksession.initialWorkingDirectory = workdir;
+
             ksession.startShellProgram();
             forceActiveFocus();
         }
