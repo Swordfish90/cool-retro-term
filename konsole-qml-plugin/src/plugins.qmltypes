@@ -179,13 +179,6 @@ Module {
         }
         Method { name: "selectionChanged" }
         Method {
-            name: "banana"
-            Parameter { name: "x"; type: "int" }
-            Parameter { name: "y"; type: "int" }
-            Parameter { name: "z"; type: "int" }
-            Parameter { name: "w"; type: "int" }
-        }
-        Method {
             name: "setSession"
             Parameter { name: "session"; type: "KSession"; isPointer: true }
         }
