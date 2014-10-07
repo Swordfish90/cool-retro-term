@@ -39,7 +39,6 @@ ApplicationWindow{
     //Workaround: if menubar is assigned ugly margins are visible.
     menuBar: shadersettings.showMenubar ? defaultMenuBar : null
 
-    flags: Qt.WA_TranslucentBackground
     color: "#00000000"
     title: qsTr("cool-retro-term")
 
