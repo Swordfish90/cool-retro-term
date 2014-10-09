@@ -404,6 +404,11 @@ Item{
             else
                 console.log("Warning: selected profile is not valid; ignoring it");
         }
+
+        if (args.indexOf("--fullscreen") !== -1) {
+            fullscreen = true;
+            showMenubar = false;
+        }
     }
     Component.onDestruction: {
         storeSettings();

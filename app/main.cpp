@@ -24,11 +24,12 @@ int main(int argc, char *argv[])
     // Manage command line arguments from the cpp side
     QStringList args = app.arguments();
     if (args.contains("-h") || args.contains("--help")) {
-        qDebug() << "Usage: " + args.at(0) + " [--default-settings] [--workdir <dir>] [--program <prog>] [-h|--help]";
-        qDebug() << "    --default-settings  Run cool-old-term with the default settings";
+        qDebug() << "Usage: " + args.at(0) + " [--default-settings] [--workdir <dir>] [--program <prog>] [-p|--profile <prof>] [--fullscreen] [-h|--help]";
+        qDebug() << "    --default-settings  Run cool-retro-term with the default settings";
         qDebug() << "    --workdir <dir>     Change working directory to 'dir'";
         qDebug() << "    --program <prog>    Run the 'prog' in the new terminal.";
-        qDebug() << "    -p|--profile        Run cool-old-term with the given profile.";
+        qDebug() << "    --fullscreen        Run cool-retro-term in fullscreen.";
+        qDebug() << "    -p|--profile <prof> Run cool-retro-term with the given profile.";
         qDebug() << "    -h|--help           Print this help.";
         return 0;
     }
