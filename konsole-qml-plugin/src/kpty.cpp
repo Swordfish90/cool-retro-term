@@ -508,7 +508,7 @@ void KPty::login(const char * user, const char * remotehost)
     if (user) {
 # ifdef HAVE_UT_USER
         strncpy(l_struct.ut_user, user, sizeof(l_struct.ut_user));
-#elif
+#else
         strncpy(l_struct.ut_name, user, sizeof(l_struct.ut_name));
 #endif
     }
@@ -624,7 +624,7 @@ void KPty::logout()
 
 # ifdef HAVE_UT_USER
         memset(ut->ut_user, 0, sizeof(*ut->ut_user));
-#elif
+#else
         memset(ut->ut_name, 0, sizeof(*ut->ut_name));
 #endif
 
