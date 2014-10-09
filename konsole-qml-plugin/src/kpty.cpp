@@ -506,7 +506,11 @@ void KPty::login(const char * user, const char * remotehost)
     // note: strncpy without terminators _is_ correct here. man 4 utmp
 
     if (user) {
+# ifdef HAVE_UT_USER
+        strncpy(l_struct.ut_user, user, sizeof(l_struct.ut_user));
+#elif
         strncpy(l_struct.ut_name, user, sizeof(l_struct.ut_name));
+#endif
     }
 
     if (remotehost) {
@@ -617,7 +621,13 @@ void KPty::logout()
     setutent();
     if ((ut = getutline(&l_struct))) {
 #  endif
+
+# ifdef HAVE_UT_USER
+        memset(ut->ut_user, 0, sizeof(*ut->ut_user));
+#elif
         memset(ut->ut_name, 0, sizeof(*ut->ut_name));
+#endif
+
         memset(ut->ut_host, 0, sizeof(*ut->ut_host));
 #  ifdef HAVE_STRUCT_UTMP_UT_SYSLEN
         ut->ut_syslen = 0;

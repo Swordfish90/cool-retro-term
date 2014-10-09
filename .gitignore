@@ -42,3 +42,8 @@ Makefile*
 # Excludes compiled files
 imports
 cool-retro-term
+
+# Mac OSX
+
+.DS_Store
+*.app
