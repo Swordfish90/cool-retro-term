@@ -143,7 +143,7 @@ Item{
     function handleFontChanged(){
         if(!fontManager.item) return;
         fontManager.item.selectedFontIndex = fontIndexes[rasterization];
-        fontManager.item.scaling = fontScaling;
+        fontManager.item.scaling = fontScaling * window_scaling;
 
         var fontSource = fontManager.item.source;
         var pixelSize = fontManager.item.pixelSize;

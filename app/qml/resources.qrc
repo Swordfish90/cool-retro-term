@@ -65,5 +65,6 @@
         <file>Storage.qml</file>
         <file>CRTMainMenuBar.qml</file>
         <file>SettingsPerformanceTab.qml</file>
+        <file>TerminalContainer.qml</file>
     </qresource>
 </RCC>

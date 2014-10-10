@@ -113,29 +113,8 @@ ApplicationWindow{
         id: timeManager
         enableTimer: terminalWindow.visible
     }
-    Item{
-        id: maincontainer
-        anchors.centerIn: parent
-        width: parent.width * shadersettings.window_scaling
-        height: parent.height * shadersettings.window_scaling
-        scale: 1.0 / shadersettings.window_scaling
-        opacity: shadersettings.windowOpacity * 0.3 + 0.7
-
-        Loader{
-            id: frame
-            anchors.fill: parent
-            z: 2.1
-            source: shadersettings.frame_source
-        }
-        PreprocessedTerminal{
-            id: terminal
-            anchors.fill: parent
-        }
-        ShaderTerminal{
-            id: shadercontainer
-            anchors.fill: parent
-            z: 1.9
-        }
+    TerminalContainer{
+        anchors.fill: parent
     }
     SettingsWindow{
         id: settingswindow
@@ -144,15 +123,6 @@ ApplicationWindow{
     AboutDialog{
         id: aboutDialog
         visible: false
-    }
-    Loader{
-        id: sizeoverlayloader
-        z: 3
-        anchors.centerIn: parent
-        active: shadersettings.show_terminal_size
-        sourceComponent: SizeOverlay{
-            terminalSize: terminal.terminalSize
-        }
     }
     Component.onCompleted: shadersettings.handleFontChanged();
 }

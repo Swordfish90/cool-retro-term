@@ -46,10 +46,10 @@ ShaderEffect {
 
     property bool frameReflections: shadersettings.frameReflections
 
-    property real disp_top: frame.item.displacementTop / height
-    property real disp_bottom: frame.item.displacementBottom / height
-    property real disp_left: frame.item.displacementLeft / width
-    property real disp_right: frame.item.displacementRight / width
+    property real disp_top: (frame.item.displacementTop * shadersettings.window_scaling) / height
+    property real disp_bottom: (frame.item.displacementBottom * shadersettings.window_scaling) / height
+    property real disp_left: (frame.item.displacementLeft * shadersettings.window_scaling) / width
+    property real disp_right: (frame.item.displacementRight * shadersettings.window_scaling) / width
 
     property real screen_brightness: shadersettings.brightness * 1.5 + 0.5
 

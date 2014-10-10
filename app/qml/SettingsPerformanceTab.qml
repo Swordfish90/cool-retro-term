@@ -56,8 +56,8 @@ Tab{
                     id: txtslider
                     onValueChanged: shadersettings.window_scaling = value;
                     value: shadersettings.window_scaling
-                    stepSize: 0.25
-                    Component.onCompleted: minimumValue = 0.5 //Without this value gets set to 0.5
+                    stepSize: 0.10
+                    Component.onCompleted: minimumValue = 0.3 //Without this value gets set to 0.5
                 }
                 Text{text: Math.round(txtslider.value * 100) + "%"}
             }
