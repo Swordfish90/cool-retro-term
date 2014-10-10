@@ -307,6 +307,13 @@ void Session::run()
     QString argsTmp(_arguments.join(" ").trimmed());
     QStringList arguments;
     arguments << exec;
+
+#ifdef Q_OS_OSX
+    // Fix osx initial behavior with -i (interactive) and -l (login).
+    arguments.append("-i");
+    arguments.append("-l");
+#endif
+
     if (argsTmp.length())
         arguments << _arguments;
 
