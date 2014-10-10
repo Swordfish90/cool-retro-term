@@ -48,6 +48,7 @@ ApplicationWindow{
         id: showMenubarAction
         text: qsTr("Show Menubar")
         enabled: Qt.platform.os !== "osx"
+        shortcut: "Ctrl+Shift+M"
         checkable: true
         checked: shadersettings.showMenubar
         onTriggered: shadersettings.showMenubar = !shadersettings.showMenubar
