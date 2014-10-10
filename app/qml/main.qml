@@ -37,7 +37,9 @@ ApplicationWindow{
     onFullscreenChanged: visibility = (fullscreen ? Window.FullScreen : Window.Windowed)
 
     //Workaround: if menubar is assigned ugly margins are visible.
-    menuBar: shadersettings.showMenubar ? defaultMenuBar : null
+    menuBar: Qt.platform.os === "osx"
+                ? defaultMenuBar
+                : shadersettings.showMenubar ? defaultMenuBar : null
 
     color: "#00000000"
     title: qsTr("cool-retro-term")
@@ -45,6 +47,7 @@ ApplicationWindow{
     Action {
         id: showMenubarAction
         text: qsTr("Show Menubar")
+        enabled: Qt.platform.os !== "osx"
         checkable: true
         checked: shadersettings.showMenubar
         onTriggered: shadersettings.showMenubar = !shadersettings.showMenubar
@@ -52,6 +55,7 @@ ApplicationWindow{
     Action {
         id: fullscreenAction
         text: qsTr("Fullscreen")
+        enabled: Qt.platform.os !== "osx"
         shortcut: "Alt+F11"
         onTriggered: shadersettings.fullscreen = !shadersettings.fullscreen;
         checkable: true

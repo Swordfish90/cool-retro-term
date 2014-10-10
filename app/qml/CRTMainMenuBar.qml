@@ -14,15 +14,15 @@ MenuBar {
         visible: defaultMenuBar.visible
         MenuItem {action: copyAction}
         MenuItem {action: pasteAction}
-        MenuSeparator{}
+        MenuSeparator{visible: Qt.platform.os !== "osx"}
         MenuItem {action: showsettingsAction}
     }
     Menu{
         title: qsTr("View")
         visible: defaultMenuBar.visible
-        MenuItem {action: fullscreenAction}
-        MenuItem {action: showMenubarAction}
-        MenuSeparator{}
+        MenuItem {action: fullscreenAction; visible: fullscreenAction.enabled}
+        MenuItem {action: showMenubarAction; visible: showMenubarAction.enabled}
+        MenuSeparator{visible: showMenubarAction.enabled}
         MenuItem {action: zoomIn}
         MenuItem {action: zoomOut}
     }

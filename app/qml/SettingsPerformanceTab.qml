@@ -56,7 +56,6 @@ Tab{
                     id: txtslider
                     onValueChanged: shadersettings.window_scaling = value;
                     value: shadersettings.window_scaling
-                    tickmarksEnabled: true
                     stepSize: 0.25
                     Component.onCompleted: minimumValue = 0.5 //Without this value gets set to 0.5
                 }

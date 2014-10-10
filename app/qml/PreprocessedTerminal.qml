@@ -152,9 +152,9 @@ Item{
         id: contextmenu
         MenuItem{action: copyAction}
         MenuItem{action: pasteAction}
-        MenuSeparator{}
-        MenuItem{action: fullscreenAction}
-        MenuItem{action: showMenubarAction}
+        MenuSeparator{visible: Qt.platform.os !== "osx"}
+        MenuItem{action: fullscreenAction; visible: Qt.platform.os !== "osx"}
+        MenuItem{action: showMenubarAction; visible: Qt.platform.os !== "osx"}
         MenuSeparator{visible: !shadersettings.showMenubar}
         CRTMainMenuBar{visible: !shadersettings.showMenubar}
     }
