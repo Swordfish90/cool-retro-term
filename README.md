@@ -9,9 +9,10 @@ It uses the Konsole engine which is powerful and mature.
 This terminal emulator requires Qt 5.2 or higher to run.
 
 ##Screenshots
-![Image](<http://i.imgur.com/NUfvnlu.png>)
-![Image](<http://i.imgur.com/4LpfLF8.png>)
-![Image](<http://i.imgur.com/MMmM6Ht.png>)
+![Image](<http://i.imgur.com/PBYrftp.png>)
+![Image](<http://i.imgur.com/mVvcIok.png>)
+![Image](<http://i.imgur.com/u8PSKNV.png>)
+![Image](<http://i.imgur.com/ZvjOUpg.png>)
 
 ## Get cool-retro-term
 You can either build cool-retro-term yourself (see below) or walk the easy way and install one of these packages:
