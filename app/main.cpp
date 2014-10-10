@@ -37,9 +37,10 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("workdir", getNamedArgument(args, "--workdir"));
     engine.rootContext()->setContextProperty("shellProgram", getNamedArgument(args, "--program"));
 
-    // Manage import paths
+    // Manage import paths for Linux and OSX.
     QStringList importPathList = engine.importPathList();
     importPathList.prepend(QCoreApplication::applicationDirPath() + "/imports/");
+    importPathList.prepend(QCoreApplication::applicationDirPath() + "/../PlugIns");
     engine.setImportPathList(importPathList);
 
     engine.load(QUrl("qrc:/main.qml"));
