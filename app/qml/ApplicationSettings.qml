@@ -181,8 +181,8 @@ Item{
         return JSON.stringify(settings);
     }
 
-    function composeProfileString(){
-        var settings = {
+    function composeProfileObject(){
+        var profile = {
             background_color: _background_color,
             font_color: _font_color,
             brightness_flickering: brightness_flickering,
@@ -205,7 +205,11 @@ Item{
             fontIndex: fontIndexes[rasterization],
             fontWidth: fontWidth
         }
-        return JSON.stringify(settings);
+        return profile;
+    }
+
+    function composeProfileString(){
+        return JSON.stringify(composeProfileObject());
     }
 
     function loadSettings(){

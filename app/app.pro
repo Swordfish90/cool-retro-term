@@ -15,3 +15,6 @@ RESOURCES += qml/resources.qrc
 target.path += /usr/bin/
 
 INSTALLS += target
+
+HEADERS += \
+    FileIO.h

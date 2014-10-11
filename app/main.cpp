@@ -9,6 +9,8 @@
 #include <QDebug>
 #include <stdlib.h>
 
+#include <FileIO.h>
+
 
 QString getNamedArgument(QStringList args, QString name) {
     int index = args.indexOf(name);
@@ -36,6 +38,10 @@ int main(int argc, char *argv[])
 
     engine.rootContext()->setContextProperty("workdir", getNamedArgument(args, "--workdir"));
     engine.rootContext()->setContextProperty("shellProgram", getNamedArgument(args, "--program"));
+
+    // Used to read and write files
+    FileIO fileIO;
+    engine.rootContext()->setContextProperty("fileio", &fileIO);
 
     // Manage import paths for Linux and OSX.
     QStringList importPathList = engine.importPathList();
