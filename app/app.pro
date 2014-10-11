@@ -4,6 +4,8 @@ TARGET = cool-retro-term
 DESTDIR = $$OUT_PWD/../
 SOURCES = main.cpp
 
+macx:ICON = icons/crt.icns
+
 RESOURCES += qml/resources.qrc
 
 #########################################

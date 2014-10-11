@@ -63,17 +63,23 @@ Window{
         id: defaultComponent
         ColumnLayout{
             anchors.fill: parent
-            anchors.margins: 10
             spacing: 10
             Item{
                 Layout.fillHeight: true
+                Layout.fillWidth: true
+                Image{
+                    anchors.fill: parent
+                    fillMode: Image.PreserveAspectFit
+                    source: "images/crt256.png"
+                    smooth: true
+                }
             }
             Text{
                 anchors.horizontalCenter: parent.horizontalCenter
                 horizontalAlignment: Text.AlignHCenter
                 text: shadersettings.version + "\n" +
                       qsTr("Author: ") + "Filippo Scognamiglio\n" +
-                      qsTr("Email: ") + "flscogna@gmail.com\n" +
+                      qsTr("Email: ")  + "flscogna@gmail.com\n" +
                       qsTr("Source: ") + "https://github.com/Swordfish90/cool-retro-term\n"
             }
         }
