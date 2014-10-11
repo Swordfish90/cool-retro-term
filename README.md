@@ -13,7 +13,7 @@ This terminal emulator requires Qt 5.2 or higher to run.
 ![Image](<http://i.imgur.com/4LpfLF8.png>)
 ![Image](<http://i.imgur.com/MMmM6Ht.png>)
 
-## Get cool-retro-term
+##Get cool-retro-term
 You can either build cool-retro-term yourself (see below) or walk the easy way and install one of these packages:
 
 Users of Fedora and openSUSE can grab a package from [Open Build Service](http://software.opensuse.org/package/cool-retro-term).
@@ -22,7 +22,7 @@ Arch users can install this [package](https://aur.archlinux.org/packages/cool-re
 
     yaourt -S aur/cool-retro-term-git
 
-##Build instructions
+##Build instructions (Linux)
 
 ##Dependencies
 Make sure to install these first.
@@ -43,13 +43,13 @@ Make sure to install these first.
 
 **Fedora**
 This command should install the known fedora dependencies:
-```
-sudo yum -y install qt5-qtbase qt5-qtbase-devel qt5-qtdeclarative qt5-qtdeclarative-devel qt5-qtgraphicaleffects qt5-qtquickcontrols
-```
+
+    sudo yum -y install qt5-qtbase qt5-qtbase-devel qt5-qtdeclarative qt5-qtdeclarative-devel qt5-qtgraphicaleffects qt5-qtquickcontrols
+
 or:
-```
-sudo dnf -y install qt5-qtbase qt5-qtbase-devel qt5-qtdeclarative qt5-qtdeclarative-devel qt5-qtgraphicaleffects qt5-qtquickcontrols
-```
+
+    sudo dnf -y install qt5-qtbase qt5-qtbase-devel qt5-qtdeclarative qt5-qtdeclarative-devel qt5-qtgraphicaleffects qt5-qtquickcontrols
+
 ---
 
 **Arch Linux**
@@ -75,6 +75,7 @@ Install dependencies:
 Install Qt directly from here http://qt-project.org/downloads . Once done export them in you path (replace "_/opt/Qt5.3.1/5.3/gcc_64/bin_" with your correct folder):
     
     export PATH=/opt/Qt5.3.1/5.3/gcc_64/bin/:$PATH
+---
 
 ###Compile
 Once you installed all dependencies (Qt is installed and in your path) you need to compile and run the application: 
@@ -92,3 +93,17 @@ qmake && make
 # Have fun!
 ./cool-retro-term
 ```
+
+##Build instructions (OSX)
+
+    brew install qt5
+    git clone https://github.com/Swordfish90/cool-retro-term.git
+    export CPPFLAGS="-I/usr/local/opt/qt5/include"
+    export LDFLAGS="-L/usr/local/opt/qt5/lib"
+    export PATH=/usr/local/opt/qt5/bin:$PATH
+    cd cool-retro-term
+    qmake && make
+    open cool-retro-term.app
+
+##Donations
+I made this project in my spare time because I love what I'm doing. If you are enjoying it and you want to buy me a beer click [here](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=flscogna%40gmail%2ecom&lc=IT&item_name=Filippo%20Scognamiglio&currency_code=EUR&bn=PP%2dDonationsBF%3abtn_donate_LG%2egif%3aNonHosted) .
