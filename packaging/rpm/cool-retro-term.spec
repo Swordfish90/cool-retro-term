@@ -22,7 +22,7 @@ Version:    0.9
 Release:    0%{?dist}
 Group:      System/X11/Terminals
 License:    GPLv3
-URL:        https://github.com/Swordifish90/cool-retro-term
+URL:        https://github.com/Swordfish90/cool-retro-term
 
 # For this spec file to work, the cool-retro-term sources must be located
 # in a directory named cool-retro-term-0.9 (with "0.9" being the version
@@ -72,8 +72,8 @@ make %{?_smp_mflags}
 # Work around weird qmake behaviour: http://davmac.wordpress.com/2007/02/21/qts-qmake/
 make INSTALL_ROOT=%{buildroot} install
 
-desktop-file-install                                    \
---dir=${RPM_BUILD_ROOT}%{_datadir}/applications         \
+desktop-file-install                            \
+--dir=${RPM_BUILD_ROOT}%{_datadir}/applications \
 %{name}.desktop
 
 %files
