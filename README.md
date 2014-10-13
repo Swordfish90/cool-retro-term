@@ -103,6 +103,7 @@ qmake && make
     export PATH=/usr/local/opt/qt5/bin:$PATH
     cd cool-retro-term
     qmake && make
+    cp -r imports cool-retro-term.app/Contents/PlugIns
     open cool-retro-term.app
 
 ##Donations
