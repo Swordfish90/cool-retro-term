@@ -10,7 +10,8 @@ Build-Depends: debhelper (>= 9),qmlscene,
 
 Package: cool-retro-term
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}
+Replaces: cool-old-term
+Depends: qml-module-qtquick-controls, qml-module-qtgraphicaleffects, qml-module-qtquick-dialogs, qml-module-qtquick-localstorage, qml-module-qtquick-window2, ${shlibs:Depends}, ${misc:Depends}
 Description: terminal emulator which mimics old screens
  cool-retro-term is a terminal emulator which mimics the look and feel
  of the old cathode tube screens. It has been designed to be eye-candy,
