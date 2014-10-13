@@ -66,15 +66,19 @@ Item{
 
     onMBlurChanged: restartBlurredSource()
 
+    // Manage copy and paste
+    Connections{
+        target: copyAction
+        onTriggered: kterminal.copyClipboard();
+    }
+    Connections{
+        target: pasteAction
+        onTriggered: kterminal.pasteClipboard()
+    }
+
     function restartBlurredSource(){
         if(!blurredSourceLoader.item) return;
         blurredSourceLoader.item.restartBlurSource();
-    }
-    function pasteClipboard(){
-        kterminal.pasteClipboard();
-    }
-    function copyClipboard(){
-        kterminal.copyClipboard();
     }
 
     //When settings are updated sources need to be redrawn.

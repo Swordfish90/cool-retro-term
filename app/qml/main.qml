@@ -77,13 +77,11 @@ ApplicationWindow{
         id: copyAction
         text: qsTr("Copy")
         shortcut: "Ctrl+Shift+C"
-        onTriggered: terminal.copyClipboard()
     }
     Action{
         id: pasteAction
         text: qsTr("Paste")
         shortcut: "Ctrl+Shift+V"
-        onTriggered: terminal.pasteClipboard()
     }
     Action{
         id: zoomIn
