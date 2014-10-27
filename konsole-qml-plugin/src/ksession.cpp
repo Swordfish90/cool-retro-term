@@ -35,6 +35,7 @@ KSession::KSession(QObject *parent) :
     QObject(parent), m_session(createSession("KSession"))
 {
     connect(m_session, SIGNAL(finished()), this, SLOT(sessionFinished()));
+    connect(m_session, SIGNAL(titleChanged()), this, SIGNAL(titleChanged()));
 }
 
 KSession::~KSession()
@@ -238,4 +239,7 @@ QString KSession::keyBindings()
     return m_session->keyBindings();
 }
 
-
+QString KSession::getTitle()
+{
+    return m_session->userTitle();
+}

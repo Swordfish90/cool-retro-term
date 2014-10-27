@@ -42,7 +42,7 @@ ApplicationWindow{
                 : shadersettings.showMenubar ? defaultMenuBar : null
 
     color: "#00000000"
-    title: qsTr("cool-retro-term")
+    title: terminalContainer.title || qsTr("cool-retro-term")
 
     Action {
         id: showMenubarAction
@@ -113,6 +113,7 @@ ApplicationWindow{
         enableTimer: terminalWindow.visible
     }
     TerminalContainer{
+        id: terminalContainer
         anchors.fill: parent
     }
     SettingsWindow{

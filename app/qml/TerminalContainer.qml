@@ -1,6 +1,8 @@
 import QtQuick 2.2
 
 Item{
+    property alias title: terminal.title
+
     Item{
         id: scalableContent
         width: parent.width * shadersettings.window_scaling
