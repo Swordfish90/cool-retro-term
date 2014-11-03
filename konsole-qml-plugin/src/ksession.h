@@ -35,6 +35,7 @@ class KSession : public QObject
     Q_OBJECT
     Q_PROPERTY(QString  kbScheme  READ  getKeyBindings WRITE setKeyBindings NOTIFY changedKeyBindings)
     Q_PROPERTY(QString  initialWorkingDirectory READ getInitialWorkingDirectory WRITE setInitialWorkingDirectory)
+    Q_PROPERTY(QString  title READ getTitle NOTIFY titleChanged)
 
 public:
     KSession(QObject *parent = 0);
@@ -84,6 +85,8 @@ public:
     //! Return current key bindings
     QString keyBindings();
 
+    QString getTitle();
+
 signals:
     void finished();
     void copyAvailable(bool);
@@ -95,6 +98,7 @@ signals:
 
     void changedKeyBindings(QString kb);
 
+    void titleChanged();
 
 public slots:
     /*! Set named key binding for given widget

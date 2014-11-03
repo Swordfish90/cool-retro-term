@@ -33,6 +33,8 @@ Item{
     property real dright: frame.item.displacementRight
     property real dbottom: frame.item.displacementBottom
 
+    property alias title: ksession.title
+
     anchors.leftMargin: dleft
     anchors.rightMargin: dright
     anchors.topMargin: dtop
