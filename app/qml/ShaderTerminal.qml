@@ -53,7 +53,12 @@ ShaderEffect {
 
     property real screen_brightness: shadersettings.brightness * 1.5 + 0.5
 
-    property real time: timeManager.time
+    TimeManager{
+        id: timeManager
+        enableTimer: terminalWindow.visible
+    }
+
+    property alias time: timeManager.time
     property variant randomFunctionSource: randfuncsource
 
     // If something goes wrong activate the fallback version of the shader.
