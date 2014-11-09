@@ -1,0 +1,3 @@
+[submodule "qmltermwidget"]
+	path = qmltermwidget
+	url = https://github.com/Swordfish90/qmltermwidget

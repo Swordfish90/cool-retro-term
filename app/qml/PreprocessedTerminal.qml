@@ -22,7 +22,7 @@ import QtQuick 2.2
 import QtGraphicalEffects 1.0
 import QtQuick.Controls 1.1
 
-import org.crt.konsole 0.1
+import QMLTermWidget 1.0
 
 Item{
     id: terminalContainer
@@ -52,8 +52,6 @@ Item{
     onHeightChanged: sizeChanged()
 
     //The blur effect has to take into account the framerate
-    property int fps: shadersettings.fps !== 0 ? shadersettings.fps : 60
-    property real fpsAttenuation: Math.sqrt(60 / fps)
     property real mBlur: shadersettings.motion_blur
     property real motionBlurCoefficient: (_maxBlurCoefficient * mBlur + _minBlurCoefficient * (1 - mBlur))
     property real _minBlurCoefficient: 0.70
@@ -96,11 +94,9 @@ Item{
     }
     function updateSources() {
         kterminal.update();
-        kterminal.updateImage();
     }
 
-
-    KTerminal {
+    QMLTermWidget {
         id: kterminal
         width: parent.width
         height: parent.height
@@ -109,9 +105,8 @@ Item{
 
         smooth: false
 
-        session: KSession {
+        session: QMLTermSession {
             id: ksession
-            kbScheme: "xterm"
 
             onFinished: {
                 Qt.quit()
@@ -137,8 +132,8 @@ Item{
                 return Qt.size(kterminal.width * scaleTexture, kterminal.height * scaleTexture);
             });
 
-            setLineSpacing(lineSpacing);
-            update();
+            kterminal.lineSpacing = lineSpacing;
+            //update();
             restartBlurredSource();
         }
         Component.onCompleted: {
@@ -174,29 +169,28 @@ Item{
                wheel.angleDelta.y > 0 ? zoomIn.trigger() : zoomOut.trigger();
             } else {
                 var coord = correctDistortion(wheel.x, wheel.y);
-                var lines = wheel.angleDelta.y > 0 ? -1 : 1;
-                kterminal.scrollWheelEvent(coord, lines);
+                kterminal.simulateWheel(coord.x, coord.y, wheel.buttons, wheel.modifiers, wheel.angleDelta);
             }
         }
         onDoubleClicked: {
             var coord = correctDistortion(mouse.x, mouse.y);
-            kterminal.mouseDoubleClickEvent(coord, mouse.button, mouse.modifiers);
+            kterminal.simulateMouseDoubleClick(coord.x, coord.y, mouse.button, mouse.buttons, mouse.modifiers);
         }
         onPressed: {
-	    if((!kterminal.usesMouse || mouse.modifiers & Qt.ShiftModifier) && mouse.button == Qt.RightButton) {
+            if((!kterminal.terminalUsesMouse || mouse.modifiers & Qt.ShiftModifier) && mouse.button == Qt.RightButton) {
                 contextmenu.popup();
             } else {
                 var coord = correctDistortion(mouse.x, mouse.y);
-                kterminal.mousePressEvent(coord, mouse.button, mouse.modifiers)
+                kterminal.simulateMousePress(coord.x, coord.y, mouse.button, mouse.buttons, mouse.modifiers)
             }
         }
         onReleased: {
             var coord = correctDistortion(mouse.x, mouse.y);
-            kterminal.mouseReleaseEvent(coord, mouse.button, mouse.modifiers);
+            kterminal.simulateMouseRelease(coord.x, coord.y, mouse.button, mouse.buttons, mouse.modifiers);
         }
         onPositionChanged: {
             var coord = correctDistortion(mouse.x, mouse.y);
-            kterminal.mouseMoveEvent(coord, mouse.button, mouse.buttons, mouse.modifiers);
+            kterminal.simulateMouseMove(coord.x, coord.y, mouse.button, mouse.buttons, mouse.modifiers);
         }
 
         function correctDistortion(x, y){
@@ -215,17 +209,6 @@ Item{
         sourceItem: kterminal
         hideSource: true
         wrapMode: ShaderEffectSource.ClampToEdge
-        live: false
-
-        signal sourceUpdate
-
-        Connections{
-            target: kterminal
-            onUpdatedImage:{
-                kterminalSource.scheduleUpdate();
-                kterminalSource.sourceUpdate();
-            }
-        }
     }
     Loader{
         id: blurredSourceLoader
@@ -236,7 +219,7 @@ Item{
             id: _blurredSourceEffect
             sourceItem: blurredTerminalLoader.item
             recursive: true
-            live: false
+            live: true
             hideSource: true
             wrapMode: kterminalSource.wrapMode
 
@@ -249,20 +232,13 @@ Item{
                 running: true
                 onRunningChanged: {
                     running ?
-                        timeBinding.target = timeManager :
-                        timeBinding.target = null
+                        _blurredSourceEffect.live = true :
+                        _blurredSourceEffect.live = false
                 }
             }
             Connections{
-                id: timeBinding
-                target: timeManager
-                onTimeChanged: {
-                    _blurredSourceEffect.scheduleUpdate();
-                }
-            }
-            Connections{
-                target: kterminalSource
-                onSourceUpdate:{
+                target: kterminal
+                onImagePainted:{
                     livetimer.restart();
                 }
             }
@@ -275,6 +251,7 @@ Item{
 
     Loader{
         id: blurredTerminalLoader
+
         width: kterminalSource.textureSize.width
         height: kterminalSource.textureSize.height
         active: mBlur !== 0
@@ -283,7 +260,7 @@ Item{
         sourceComponent: ShaderEffect {
             property variant txt_source: kterminalSource
             property variant blurredSource: blurredSourceLoader.item
-            property real blurCoefficient: (1.0 - motionBlurCoefficient) * fpsAttenuation
+            property real blurCoefficient: (1.0 - motionBlurCoefficient)
 
             blending: false
 
@@ -341,12 +318,7 @@ Item{
             id: _bloomEffectSource
             sourceItem: bloomEffectLoader.item
             hideSource: true
-            live: false
             smooth: true
-            Connections{
-                target: kterminalSource
-                onSourceUpdate: _bloomEffectSource.scheduleUpdate();
-            }
         }
     }
 
