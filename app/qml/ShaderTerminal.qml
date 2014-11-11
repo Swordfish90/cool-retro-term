@@ -223,7 +223,7 @@ ShaderEffect {
             "float color = 0.0;" +
 
             (noise_strength !== 0 ? "
-                float noiseVal = texture2D(noiseSource, qt_TexCoord0 + vec2(fract(time / 51.0), fract(time / 237.0))).a;
+                float noiseVal = texture2D(noiseSource, coords + vec2(fract(time / 51.0), fract(time / 237.0))).a;
                 color += noiseVal * noise * (1.0 - distance * 1.3);" : "") +
 
             (glowing_line_strength !== 0 ? "
