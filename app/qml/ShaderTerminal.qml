@@ -53,7 +53,12 @@ ShaderEffect {
 
     property real screen_brightness: shadersettings.brightness * 1.5 + 0.5
 
-    property real time: timeManager.time
+    TimeManager{
+        id: timeManager
+        enableTimer: terminalWindow.visible
+    }
+
+    property alias time: timeManager.time
     property variant randomFunctionSource: randfuncsource
 
     // If something goes wrong activate the fallback version of the shader.
@@ -218,7 +223,7 @@ ShaderEffect {
             "float color = 0.0;" +
 
             (noise_strength !== 0 ? "
-                float noiseVal = texture2D(noiseSource, qt_TexCoord0 + vec2(fract(time / 51.0), fract(time / 237.0))).a;
+                float noiseVal = texture2D(noiseSource, coords + vec2(fract(time / 51.0), fract(time / 237.0))).a;
                 color += noiseVal * noise * (1.0 - distance * 1.3);" : "") +
 
             (glowing_line_strength !== 0 ? "

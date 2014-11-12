@@ -108,10 +108,6 @@ ApplicationWindow{
     ApplicationSettings{
         id: shadersettings
     }
-    TimeManager{
-        id: timeManager
-        enableTimer: terminalWindow.visible
-    }
     TerminalContainer{
         id: terminalContainer
         anchors.fill: parent

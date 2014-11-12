@@ -40,7 +40,7 @@ Item{
     property real window_scaling: 1.0
     onWindow_scalingChanged: handleFontChanged();
 
-    property real fps: 0
+    property real fps: 24
 
     function mix(c1, c2, alpha){
         return Qt.rgba(c1.r * alpha + c2.r * (1-alpha),
@@ -87,7 +87,7 @@ Item{
 
     property int rasterization: no_rasterization
 
-    property int scanline_quality: 3
+    property int scanline_quality: 2
     onScanline_qualityChanged: handleFontChanged();
 
     ListModel{

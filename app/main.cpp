@@ -10,9 +10,15 @@
 #include <stdlib.h>
 
 
-QString getNamedArgument(QStringList args, QString name) {
+QString getNamedArgument(QStringList args, QString name, QString defaultName)
+{
     int index = args.indexOf(name);
-    return (index != -1) ? args[index + 1] : QString("");
+    return (index != -1) ? args[index + 1] : QString(defaultName);
+}
+
+QString getNamedArgument(QStringList args, QString name)
+{
+    return getNamedArgument(args, name, "");
 }
 
 int main(int argc, char *argv[])
@@ -34,12 +40,12 @@ int main(int argc, char *argv[])
         return 0;
     }
 
-    engine.rootContext()->setContextProperty("workdir", getNamedArgument(args, "--workdir"));
+    engine.rootContext()->setContextProperty("workdir", getNamedArgument(args, "--workdir", "$HOME"));
     engine.rootContext()->setContextProperty("shellProgram", getNamedArgument(args, "--program"));
 
     // Manage import paths for Linux and OSX.
     QStringList importPathList = engine.importPathList();
-    importPathList.prepend(QCoreApplication::applicationDirPath() + "/imports/");
+    importPathList.prepend(QCoreApplication::applicationDirPath() + "/qmltermwidget");
     importPathList.prepend(QCoreApplication::applicationDirPath() + "/../PlugIns");
     engine.setImportPathList(importPathList);
 

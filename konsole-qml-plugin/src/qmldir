@@ -1,3 +1,0 @@
-module org.crt.konsole
-typeinfo plugins.qmltypes
-plugin kdekonsole

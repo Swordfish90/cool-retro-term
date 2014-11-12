@@ -11,7 +11,6 @@
         <file>frames/images/screen-frame-original.png</file>
         <file>frames/WhiteSimpleFrame.qml</file>
         <file>frames/utils/FrameShader.qml</file>
-        <file>frames/utils/NoFrameShader.qml</file>
         <file>frames/utils/TerminalFrame.qml</file>
         <file>SizeOverlay.qml</file>
         <file>ShaderTerminal.qml</file>
