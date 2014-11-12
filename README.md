@@ -4,7 +4,7 @@
 cool-retro-term is a terminal emulator which mimics the look and feel of the old cathode tube screens.
 It has been designed to be eye-candy, customizable, and reasonably lightweight.
 
-It uses the Konsole engine which is powerful and mature.
+It uses the QML port of qtermwidget (Konsole) developed by me: https://github.com/Swordfish90/qmltermwidget
 
 This terminal emulator requires Qt 5.2 or higher to run.
 
@@ -82,7 +82,7 @@ Once you installed all dependencies (Qt is installed and in your path) you need 
 
 ```bash
 # Get it from GitHub
-git clone https://github.com/Swordfish90/cool-retro-term.git
+git clone --recursive https://github.com/Swordfish90/cool-retro-term.git
 
 # Build it
 cd cool-retro-term
@@ -97,13 +97,14 @@ qmake && make
 ##Build instructions (OSX)
 
     brew install qt5
-    git clone https://github.com/Swordfish90/cool-retro-term.git
+    git clone --recursive https://github.com/Swordfish90/cool-retro-term.git
     export CPPFLAGS="-I/usr/local/opt/qt5/include"
     export LDFLAGS="-L/usr/local/opt/qt5/lib"
     export PATH=/usr/local/opt/qt5/bin:$PATH
     cd cool-retro-term
     qmake && make
-    cp -r imports cool-retro-term.app/Contents/PlugIns
+    mkdir cool-retro-term.app/Contents/PlugIns
+    cp -r qmltermwidget/QMLTermWidget cool-retro-term.app/Contents/PlugIns
     open cool-retro-term.app
 
 ##Donations
