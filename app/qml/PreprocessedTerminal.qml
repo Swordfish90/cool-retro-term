@@ -104,6 +104,7 @@ Item{
         colorScheme: "cool-retro-term"
 
         smooth: false
+        enableBold: false
 
         session: QMLTermSession {
             id: ksession
@@ -113,8 +114,20 @@ Item{
             }
         }
 
+        QMLTermScrollbar {
+            terminal: kterminal
+            anchors.margins: width * 0.5
+            width: terminal.fontMetrics.width * 0.75
+            Rectangle {
+                anchors.fill: parent
+                color: "white"
+                radius: width * 0.25
+                opacity: 0.7
+            }
+            onOpacityChanged: restartBlurredSource();
+        }
+
         FontLoader{ id: fontLoader }
-        Text{id: fontMetrics; text: "B"; visible: false}
 
         function handleFontChange(fontSource, pixelSize, lineSpacing, screenScaling){
             fontLoader.source = fontSource;

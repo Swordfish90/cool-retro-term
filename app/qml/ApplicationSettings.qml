@@ -87,7 +87,7 @@ Item{
 
     property int rasterization: no_rasterization
 
-    property int scanline_quality: 3
+    property int scanline_quality: 2
     onScanline_qualityChanged: handleFontChanged();
 
     ListModel{
