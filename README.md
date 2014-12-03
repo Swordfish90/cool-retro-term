@@ -22,6 +22,13 @@ Arch users can install this [package](https://aur.archlinux.org/packages/cool-re
 
     yaourt -S aur/cool-retro-term-git
 
+Gentoo users can install from a 3rd-party repository preferably via layman:
+
+    # USE="subversion git" emerge app-portage/layman
+    # wget --no-check-certificate https://www.gerczei.eu/files/gerczei.xml -O /etc/layman/overlays/gerczei.xml
+    # layman -a gerczei
+    # emerge x11-terms/cool-retro-term
+
 ##Build instructions (Linux)
 
 ##Dependencies
