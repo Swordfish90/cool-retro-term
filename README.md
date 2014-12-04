@@ -22,6 +22,15 @@ Arch users can install this [package](https://aur.archlinux.org/packages/cool-re
 
     yaourt -S aur/cool-retro-term-git
 
+Gentoo users can install from a 3rd-party repository preferably via layman:
+
+    # USE="subversion git" emerge app-portage/layman
+    # wget --no-check-certificate https://www.gerczei.eu/files/gerczei.xml -O /etc/layman/overlays/gerczei.xml
+    # layman -a qt gerczei
+    # ACCEPT_KEYWORDS="~*" emerge x11-terms/cool-retro-term::gerczei
+
+A word of warning: USE flags and keywords are to be added to portage's configuration files and every emerge operation should be executed with '-p' (short option for --pretend) appended to the command line first as per best practice!
+
 ##Build instructions (Linux)
 
 ##Dependencies
