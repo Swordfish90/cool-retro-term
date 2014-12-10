@@ -222,6 +222,7 @@ Item{
         sourceItem: kterminal
         hideSource: true
         wrapMode: ShaderEffectSource.ClampToEdge
+        visible: false
     }
     Loader{
         id: blurredSourceLoader
@@ -235,6 +236,8 @@ Item{
             live: true
             hideSource: true
             wrapMode: kterminalSource.wrapMode
+
+            visible: false
 
             function restartBlurSource(){
                 livetimer.restart();
@@ -332,6 +335,7 @@ Item{
             sourceItem: bloomEffectLoader.item
             hideSource: true
             smooth: true
+            visible: false
         }
     }
 
@@ -385,6 +389,7 @@ Item{
         wrapMode: ShaderEffectSource.Repeat
         smooth: true
         hideSource: true
+        visible: false
     }
 
     // RASTERIZATION //////////////////////////////////////////////////////////
@@ -442,5 +447,6 @@ Item{
         hideSource: true
         smooth: true
         wrapMode: ShaderEffectSource.ClampToEdge
+        visible: false
     }
 }

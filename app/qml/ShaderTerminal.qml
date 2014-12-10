@@ -82,6 +82,7 @@ ShaderEffect {
         live: false
         hideSource: true
         wrapMode: ShaderEffectSource.Repeat
+        visible: false
     }
 
     //Print the number with a reasonable precision for the shader.

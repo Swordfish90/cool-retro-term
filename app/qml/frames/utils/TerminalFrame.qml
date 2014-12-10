@@ -56,12 +56,14 @@ Item{
         sourceItem: frameimage
         hideSource: true
         textureSize: Qt.size(parent.width, parent.height)
+        visible: false
     }
     ShaderEffectSource{
         id: framesourcenormals
         sourceItem: framenormals
         hideSource: true
         textureSize: Qt.size(parent.width, parent.height)
+        visible: false
     }
     Loader{
         anchors.centerIn: parent

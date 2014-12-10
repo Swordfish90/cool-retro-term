@@ -37,6 +37,7 @@ ShaderEffect{
             sourceItem: reflectionEffectLoader.item
             hideSource: true
             smooth: true
+            visible: false
         }
     }
 
