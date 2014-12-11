@@ -1,4 +1,5 @@
 import QtQuick 2.2
+import QtGraphicalEffects 1.0
 
 ShaderTerminal{
     property alias title: terminal.title
@@ -6,6 +7,8 @@ ShaderTerminal{
 
     id: mainShader
     opacity: shadersettings.windowOpacity * 0.3 + 0.7
+
+    blending: false
 
     Loader{
         id: frame
@@ -19,7 +22,37 @@ ShaderTerminal{
         anchors.fill: parent
     }
 
-    //  NOISE  ////////////////////////////////////////////////////////////////
+    source: terminal.mainSource
+
+    //  EFFECTS  ////////////////////////////////////////////////////////////////
+
+    Loader{
+        property real scaling: shadersettings.bloom_quality * shadersettings.window_scaling
+        id: bloomEffectLoader
+        active: shadersettings.bloom_strength
+        asynchronous: true
+        width: parent.width * scaling
+        height: parent.height * scaling
+        sourceComponent: FastBlur{
+            radius: 48 * scaling
+            source: terminal.mainTerminal
+            transparentBorder: true
+        }
+    }
+    Loader{
+        id: bloomSourceLoader
+        active: shadersettings.bloom_strength !== 0
+        asynchronous: true
+        sourceComponent: ShaderEffectSource{
+            id: _bloomEffectSource
+            sourceItem: bloomEffectLoader.item
+            hideSource: true
+            smooth: true
+            visible: false
+        }
+    }
+
+    bloomSource: bloomSourceLoader.item
 
     ShaderEffect {
         id: staticNoiseEffect

@@ -23,12 +23,13 @@ import QtGraphicalEffects 1.0
 
 
 ShaderEffect {
+    property ShaderEffectSource source
     property ShaderEffectSource rasterizationSource
     property ShaderEffectSource noiseSource
+    property ShaderEffectSource bloomSource
+
     property color font_color: shadersettings.font_color
     property color background_color: shadersettings.background_color
-    property variant source: terminal.theSource
-    property variant bloomSource: terminal.bloomSource
     property real bloom_strength: shadersettings.bloom_strength * 2.5
 
     property real jitter: shadersettings.jitter * 0.007

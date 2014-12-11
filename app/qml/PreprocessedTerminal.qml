@@ -19,7 +19,6 @@
 *******************************************************************************/
 
 import QtQuick 2.2
-import QtGraphicalEffects 1.0
 import QtQuick.Controls 1.1
 
 import QMLTermWidget 1.0
@@ -27,7 +26,9 @@ import QMLTermWidget 1.0
 Item{
     id: terminalContainer
 
-    property size virtualResolution: Qt.size(kterminal.width, kterminal.height);
+    property size virtualResolution: Qt.size(kterminal.width, kterminal.height)
+    property alias mainTerminal: kterminal
+    property ShaderEffectSource mainSource: mBlur !== 0 ? blurredSourceLoader.item : kterminalSource
 
     //Frame displacement properties. This makes the terminal the same size of the texture.
     property real dtop: frame.item.displacementTop * shadersettings.window_scaling
@@ -42,10 +43,6 @@ Item{
     anchors.topMargin: dtop
     anchors.bottomMargin: dbottom
 
-    property variant theSource: mBlur !== 0 ? blurredSourceLoader.item : kterminalSource
-    property variant bloomSource: bloomSourceLoader.item
-    property variant staticNoiseSource: staticNoiseSource
-
     property alias kterminal: kterminal
 
     signal sizeChanged
@@ -58,14 +55,8 @@ Item{
     property real _minBlurCoefficient: 0.70
     property real _maxBlurCoefficient: 0.90
 
-    property real mBloom: shadersettings.bloom_strength
-    property int mScanlines: shadersettings.rasterization
-    onMScanlinesChanged: restartBlurredSource()
-
     property size terminalSize: kterminal.terminalSize
     property size paintedTextSize
-
-    onMBlurChanged: restartBlurredSource()
 
     // Manage copy and paste
     Connections{
@@ -75,11 +66,6 @@ Item{
     Connections{
         target: pasteAction
         onTriggered: kterminal.pasteClipboard()
-    }
-
-    function restartBlurredSource(){
-        if(!blurredSourceLoader.item) return;
-        blurredSourceLoader.item.restartBlurSource();
     }
 
     //When settings are updated sources need to be redrawn.
@@ -148,7 +134,6 @@ Item{
 
             kterminal.lineSpacing = lineSpacing;
             //update();
-            restartBlurredSource();
         }
         Component.onCompleted: {
             shadersettings.terminalFontChanged.connect(handleFontChange);
@@ -259,9 +244,13 @@ Item{
                     livetimer.restart();
                 }
             }
+            // Restart blurred source settings change.
             Connections{
                 target: shadersettings
-                onScanline_qualityChanged: restartBlurredSource();
+                onScanline_qualityChanged: _blurredSourceEffect.restartBlurSource();
+                onMotion_blurChanged: _blurredSourceEffect.restartBlurSource();
+                onTerminalFontChanged: _blurredSourceEffect.restartBlurSource();
+                onRasterizationChanged: _blurredSourceEffect.restartBlurSource();
             }
         }
     }
@@ -306,37 +295,6 @@ Item{
                 "}"
 
             onStatusChanged: if (log) console.log(log) //Print warning messages
-        }
-    }
-    ///////////////////////////////////////////////////////////////////////////
-    //  EFFECTS  //////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////
-
-    //  BLOOM  ////////////////////////////////////////////////////////////////
-
-    Loader{
-        property real scaling: shadersettings.bloom_quality * shadersettings.window_scaling
-        id: bloomEffectLoader
-        active: mBloom != 0
-        asynchronous: true
-        width: parent.width * scaling
-        height: parent.height * scaling
-        sourceComponent: FastBlur{
-            radius: 48 * scaling
-            source: kterminal
-            transparentBorder: true
-        }
-    }
-    Loader{
-        id: bloomSourceLoader
-        active: mBloom != 0
-        asynchronous: true
-        sourceComponent: ShaderEffectSource{
-            id: _bloomEffectSource
-            sourceItem: bloomEffectLoader.item
-            hideSource: true
-            smooth: true
-            visible: false
         }
     }
 }
