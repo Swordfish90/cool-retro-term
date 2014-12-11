@@ -30,24 +30,13 @@ Item{
     property alias mainTerminal: kterminal
     property ShaderEffectSource mainSource: mBlur !== 0 ? blurredSourceLoader.item : kterminalSource
 
-    //Frame displacement properties. This makes the terminal the same size of the texture.
-    property real dtop: frame.item.displacementTop * shadersettings.window_scaling
-    property real dleft:frame.item.displacementLeft * shadersettings.window_scaling
-    property real dright: frame.item.displacementRight * shadersettings.window_scaling
-    property real dbottom: frame.item.displacementBottom * shadersettings.window_scaling
-
     property alias title: ksession.title
-
-    anchors.leftMargin: dleft
-    anchors.rightMargin: dright
-    anchors.topMargin: dtop
-    anchors.bottomMargin: dbottom
-
     property alias kterminal: kterminal
 
-    signal sizeChanged
-    onWidthChanged: sizeChanged()
-    onHeightChanged: sizeChanged()
+    anchors.leftMargin: frame.item.displacementLeft * shadersettings.window_scaling
+    anchors.rightMargin: frame.item.displacementRight * shadersettings.window_scaling
+    anchors.topMargin: frame.item.displacementTop * shadersettings.window_scaling
+    anchors.bottomMargin: frame.item.displacementBottom * shadersettings.window_scaling
 
     //The blur effect has to take into account the framerate
     property real mBlur: shadersettings.motion_blur
@@ -56,7 +45,6 @@ Item{
     property real _maxBlurCoefficient: 0.90
 
     property size terminalSize: kterminal.terminalSize
-    property size paintedTextSize
 
     // Manage copy and paste
     Connections{
@@ -160,9 +148,7 @@ Item{
     }
     MouseArea{
         acceptedButtons: Qt.LeftButton | Qt.MiddleButton | Qt.RightButton
-        // This is incredibly ugly. All this file should be reorganized.
-        width: (parent.width + dleft + dright) - dleft -dright
-        height: (parent.height + dtop + dbottom) - dtop - dbottom
+        anchors.fill: parent
         onWheel:{
             if(wheel.modifiers & Qt.ControlModifier){
                wheel.angleDelta.y > 0 ? zoomIn.trigger() : zoomOut.trigger();
@@ -232,15 +218,12 @@ Item{
             Timer{
                 id: livetimer
                 running: true
-                onRunningChanged: {
-                    running ?
-                        _blurredSourceEffect.live = true :
-                        _blurredSourceEffect.live = false
-                }
+                onTriggered: _blurredSourceEffect.live = false;
             }
             Connections{
                 target: kterminal
                 onImagePainted:{
+                    _blurredSourceEffect.live = true;
                     livetimer.restart();
                 }
             }
