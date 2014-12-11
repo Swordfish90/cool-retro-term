@@ -28,10 +28,10 @@ Item{
     id: terminalContainer
 
     //Frame displacement properties. This makes the terminal the same size of the texture.
-    property real dtop: frame.item.displacementTop
-    property real dleft:frame.item.displacementLeft
-    property real dright: frame.item.displacementRight
-    property real dbottom: frame.item.displacementBottom
+    property real dtop: frame.item.displacementTop * shadersettings.window_scaling
+    property real dleft:frame.item.displacementLeft * shadersettings.window_scaling
+    property real dright: frame.item.displacementRight * shadersettings.window_scaling
+    property real dbottom: frame.item.displacementBottom * shadersettings.window_scaling
 
     property alias title: ksession.title
 
@@ -175,8 +175,8 @@ Item{
     MouseArea{
         acceptedButtons: Qt.LeftButton | Qt.MiddleButton | Qt.RightButton
         // This is incredibly ugly. All this file should be reorganized.
-        width: (parent.width + dleft + dright) / shadersettings.window_scaling - dleft -dright
-        height: (parent.height + dtop + dbottom) / shadersettings.window_scaling - dtop - dbottom
+        width: (parent.width + dleft + dright) - dleft -dright
+        height: (parent.height + dtop + dbottom) - dtop - dbottom
         onWheel:{
             if(wheel.modifiers & Qt.ControlModifier){
                wheel.angleDelta.y > 0 ? zoomIn.trigger() : zoomOut.trigger();
