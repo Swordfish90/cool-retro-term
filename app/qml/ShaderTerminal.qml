@@ -28,31 +28,31 @@ ShaderEffect {
     property ShaderEffectSource noiseSource
     property ShaderEffectSource bloomSource
 
-    property color font_color: shadersettings.font_color
-    property color background_color: shadersettings.background_color
-    property real bloom_strength: shadersettings.bloom_strength * 2.5
+    property color font_color: appSettings.font_color
+    property color background_color: appSettings.background_color
+    property real bloom_strength: appSettings.bloom_strength * 2.5
 
-    property real jitter: shadersettings.jitter * 0.007
+    property real jitter: appSettings.jitter * 0.007
 
-    property real noise_strength: shadersettings.noise_strength
-    property real screen_distorsion: shadersettings.screen_distortion
-    property real glowing_line_strength: shadersettings.glowing_line_strength
+    property real noise_strength: appSettings.noise_strength
+    property real screen_distorsion: appSettings.screen_distortion
+    property real glowing_line_strength: appSettings.glowing_line_strength
 
-    property real chroma_color: shadersettings.chroma_color;
+    property real chroma_color: appSettings.chroma_color;
 
-    property real rgb_shift: shadersettings.rgb_shift * 0.2
+    property real rgb_shift: appSettings.rgb_shift * 0.2
 
-    property real brightness_flickering: shadersettings.brightness_flickering
-    property real horizontal_sincronization: shadersettings.horizontal_sincronization
+    property real brightness_flickering: appSettings.brightness_flickering
+    property real horizontal_sincronization: appSettings.horizontal_sincronization
 
-    property bool frameReflections: shadersettings.frameReflections
+    property bool frameReflections: appSettings.frameReflections
 
-    property real disp_top: (frame.item.displacementTop * shadersettings.window_scaling) / height
-    property real disp_bottom: (frame.item.displacementBottom * shadersettings.window_scaling) / height
-    property real disp_left: (frame.item.displacementLeft * shadersettings.window_scaling) / width
-    property real disp_right: (frame.item.displacementRight * shadersettings.window_scaling) / width
+    property real disp_top: (frame.item.displacementTop * appSettings.window_scaling) / height
+    property real disp_bottom: (frame.item.displacementBottom * appSettings.window_scaling) / height
+    property real disp_left: (frame.item.displacementLeft * appSettings.window_scaling) / width
+    property real disp_right: (frame.item.displacementRight * appSettings.window_scaling) / width
 
-    property real screen_brightness: shadersettings.brightness * 1.5 + 0.5
+    property real screen_brightness: appSettings.brightness * 1.5 + 0.5
 
     TimeManager{
         id: timeManager

@@ -33,9 +33,9 @@ Tab{
                 property string selectedElement: model[currentIndex]
                 anchors.fill: parent
                 model: [qsTr("Default"), qsTr("Scanlines"), qsTr("Pixels")]
-                currentIndex: shadersettings.rasterization
+                currentIndex: appSettings.rasterization
                 onCurrentIndexChanged: {
-                    shadersettings.rasterization = currentIndex
+                    appSettings.rasterization = currentIndex
                     fontChanger.updateIndex();
                 }
             }
@@ -50,14 +50,14 @@ Tab{
                 ComboBox{
                     id: fontChanger
                     Layout.fillWidth: true
-                    model: shadersettings.fontlist
+                    model: appSettings.fontlist
                     currentIndex: updateIndex()
                     onActivated: {
-                        shadersettings.fontIndexes[shadersettings.rasterization] = index;
-                        shadersettings.handleFontChanged();
+                        appSettings.fontIndexes[appSettings.rasterization] = index;
+                        appSettings.handleFontChanged();
                     }
                     function updateIndex(){
-                        currentIndex = shadersettings.fontIndexes[shadersettings.rasterization];
+                        currentIndex = appSettings.fontIndexes[appSettings.rasterization];
                     }
                 }
                 Text{ text: qsTr("Scaling") }
@@ -66,18 +66,18 @@ Tab{
                     Slider{
                         Layout.fillWidth: true
                         id: fontScalingChanger
-                        onValueChanged: if(enabled) shadersettings.fontScaling = value
+                        onValueChanged: if(enabled) appSettings.fontScaling = value
                         stepSize: 0.05
                         enabled: false // Another trick to fix initial bad behavior.
                         Component.onCompleted: {
                             minimumValue = 0.5;
                             maximumValue = 2.5;
-                            value = shadersettings.fontScaling;
+                            value = appSettings.fontScaling;
                             enabled = true;
                         }
                         Connections{
-                            target: shadersettings
-                            onFontScalingChanged: fontScalingChanger.value = shadersettings.fontScaling;
+                            target: appSettings
+                            onFontScalingChanged: fontScalingChanger.value = appSettings.fontScaling;
                         }
                     }
                     Text{
@@ -90,8 +90,8 @@ Tab{
                     Slider{
                         Layout.fillWidth: true
                         id: widthChanger
-                        onValueChanged: shadersettings.fontWidth = value;
-                        value: shadersettings.fontWidth
+                        onValueChanged: appSettings.fontWidth = value;
+                        value: appSettings.fontWidth
                         stepSize: 0.05
                         Component.onCompleted: minimumValue = 0.5 //Without this value gets set to 0.5
                     }
@@ -112,29 +112,29 @@ Tab{
                         name: qsTr("Font")
                         height: 50
                         Layout.fillWidth: true
-                        onColorSelected: shadersettings._font_color = color;
-                        button_color: shadersettings._font_color
+                        onColorSelected: appSettings._font_color = color;
+                        button_color: appSettings._font_color
                     }
                     ColorButton{
                         name: qsTr("Background")
                         height: 50
                         Layout.fillWidth: true
-                        onColorSelected: shadersettings._background_color = color;
-                        button_color: shadersettings._background_color
+                        onColorSelected: appSettings._background_color = color;
+                        button_color: appSettings._background_color
                     }
                 }
                 ColumnLayout{
                     Layout.fillWidth: true
                     CheckableSlider{
                         name: qsTr("Chroma Color")
-                        onNewValue: shadersettings.chroma_color = newValue
-                        value: shadersettings.chroma_color
+                        onNewValue: appSettings.chroma_color = newValue
+                        value: appSettings.chroma_color
                     }
                     CheckableSlider{
                         name: qsTr("Saturation Color")
-                        onNewValue: shadersettings.saturation_color = newValue
-                        value: shadersettings.saturation_color
-                        enabled: shadersettings.chroma_color !== 0
+                        onNewValue: appSettings.saturation_color = newValue
+                        value: appSettings.saturation_color
+                        enabled: appSettings.chroma_color !== 0
                     }
                 }
             }

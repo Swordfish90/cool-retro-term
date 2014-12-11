@@ -30,55 +30,55 @@ Tab{
             anchors.fill: parent
             CheckableSlider{
                 name: qsTr("Bloom")
-                onNewValue: shadersettings.bloom_strength = newValue
-                value: shadersettings.bloom_strength
+                onNewValue: appSettings.bloom_strength = newValue
+                value: appSettings.bloom_strength
             }
             CheckableSlider{
                 name: qsTr("Motion Blur")
-                onNewValue: shadersettings.motion_blur = newValue
-                value: shadersettings.motion_blur
+                onNewValue: appSettings.motion_blur = newValue
+                value: appSettings.motion_blur
             }
             CheckableSlider{
                 name: qsTr("Noise")
-                onNewValue: shadersettings.noise_strength = newValue
-                value: shadersettings.noise_strength
+                onNewValue: appSettings.noise_strength = newValue
+                value: appSettings.noise_strength
             }
             CheckableSlider{
                 name: qsTr("Jitter")
-                onNewValue: shadersettings.jitter = newValue
-                value: shadersettings.jitter
+                onNewValue: appSettings.jitter = newValue
+                value: appSettings.jitter
             }
             CheckableSlider{
                 name: qsTr("Glow")
-                onNewValue: shadersettings.glowing_line_strength = newValue;
-                value: shadersettings.glowing_line_strength
+                onNewValue: appSettings.glowing_line_strength = newValue;
+                value: appSettings.glowing_line_strength
             }
             CheckableSlider{
                 name: qsTr("Screen distortion")
-                onNewValue: shadersettings.screen_distortion = newValue;
-                value: shadersettings.screen_distortion;
+                onNewValue: appSettings.screen_distortion = newValue;
+                value: appSettings.screen_distortion;
             }
             CheckableSlider{
                 name: qsTr("Ambient light")
-                onNewValue: shadersettings.ambient_light = newValue;
-                value: shadersettings.ambient_light
-                enabled: shadersettings.frames_index !== 0
+                onNewValue: appSettings.ambient_light = newValue;
+                value: appSettings.ambient_light
+                enabled: appSettings.frames_index !== 0
             }
             CheckableSlider{
                 name: qsTr("Brightness flickering")
-                onNewValue: shadersettings.brightness_flickering = newValue;
-                value: shadersettings.brightness_flickering;
+                onNewValue: appSettings.brightness_flickering = newValue;
+                value: appSettings.brightness_flickering;
             }
             CheckableSlider{
                 name: qsTr("Horizontal flickering")
-                onNewValue: shadersettings.horizontal_sincronization = newValue;
-                value: shadersettings.horizontal_sincronization;
+                onNewValue: appSettings.horizontal_sincronization = newValue;
+                value: appSettings.horizontal_sincronization;
             }
             CheckableSlider{
                 name: qsTr("RGB shift")
-                onNewValue: shadersettings.rgb_shift = newValue;
-                value: shadersettings.rgb_shift;
-                enabled: shadersettings.chroma_color !== 0
+                onNewValue: appSettings.rgb_shift = newValue;
+                value: appSettings.rgb_shift;
+                enabled: appSettings.chroma_color !== 0
             }
         }
     }

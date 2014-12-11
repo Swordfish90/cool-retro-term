@@ -33,13 +33,13 @@ Item{
     property alias title: ksession.title
     property alias kterminal: kterminal
 
-    anchors.leftMargin: frame.item.displacementLeft * shadersettings.window_scaling
-    anchors.rightMargin: frame.item.displacementRight * shadersettings.window_scaling
-    anchors.topMargin: frame.item.displacementTop * shadersettings.window_scaling
-    anchors.bottomMargin: frame.item.displacementBottom * shadersettings.window_scaling
+    anchors.leftMargin: frame.item.displacementLeft * appSettings.window_scaling
+    anchors.rightMargin: frame.item.displacementRight * appSettings.window_scaling
+    anchors.topMargin: frame.item.displacementTop * appSettings.window_scaling
+    anchors.bottomMargin: frame.item.displacementBottom * appSettings.window_scaling
 
     //The blur effect has to take into account the framerate
-    property real mBlur: shadersettings.motion_blur
+    property real mBlur: appSettings.motion_blur
     property real motionBlurCoefficient: (_maxBlurCoefficient * mBlur + _minBlurCoefficient * (1 - mBlur))
     property real _minBlurCoefficient: 0.70
     property real _maxBlurCoefficient: 0.90
@@ -58,7 +58,7 @@ Item{
 
     //When settings are updated sources need to be redrawn.
     Connections{
-        target: shadersettings
+        target: appSettings
         onFontScalingChanged: terminalContainer.updateSources();
         onFontWidthChanged: terminalContainer.updateSources();
     }
@@ -109,12 +109,12 @@ Item{
             font.pixelSize = pixelSize;
             font.family = fontLoader.name;
 
-            var fontWidth = 1.0 / shadersettings.fontWidth;
+            var fontWidth = 1.0 / appSettings.fontWidth;
 
             width = Qt.binding(function() {return Math.floor(fontWidth * terminalContainer.width / screenScaling);});
             height = Qt.binding(function() {return Math.floor(terminalContainer.height / screenScaling);});
 
-            var scaleTexture = Math.max(Math.round(screenScaling / shadersettings.scanline_quality), 1.0);
+            var scaleTexture = Math.max(Math.round(screenScaling / appSettings.scanline_quality), 1.0);
 
             kterminalSource.textureSize = Qt.binding(function () {
                 return Qt.size(kterminal.width * scaleTexture, kterminal.height * scaleTexture);
@@ -124,7 +124,7 @@ Item{
             //update();
         }
         Component.onCompleted: {
-            shadersettings.terminalFontChanged.connect(handleFontChange);
+            appSettings.terminalFontChanged.connect(handleFontChange);
 
             // Retrieve the variable set in main.cpp if arguments are passed.
             if (shellProgram)
@@ -143,8 +143,8 @@ Item{
         MenuSeparator{visible: Qt.platform.os !== "osx"}
         MenuItem{action: fullscreenAction; visible: Qt.platform.os !== "osx"}
         MenuItem{action: showMenubarAction; visible: Qt.platform.os !== "osx"}
-        MenuSeparator{visible: !shadersettings.showMenubar}
-        CRTMainMenuBar{visible: !shadersettings.showMenubar}
+        MenuSeparator{visible: !appSettings.showMenubar}
+        CRTMainMenuBar{visible: !appSettings.showMenubar}
     }
     MouseArea{
         acceptedButtons: Qt.LeftButton | Qt.MiddleButton | Qt.RightButton
@@ -183,7 +183,7 @@ Item{
             y = y / height;
 
             var cc = Qt.size(0.5 - x, 0.5 - y);
-            var distortion = (cc.height * cc.height + cc.width * cc.width) * shadersettings.screen_distortion;
+            var distortion = (cc.height * cc.height + cc.width * cc.width) * appSettings.screen_distortion;
 
             return Qt.point((x - cc.width  * (1+distortion) * distortion) * kterminal.width,
                            (y - cc.height * (1+distortion) * distortion) * kterminal.height)
@@ -229,7 +229,7 @@ Item{
             }
             // Restart blurred source settings change.
             Connections{
-                target: shadersettings
+                target: appSettings
                 onScanline_qualityChanged: _blurredSourceEffect.restartBlurSource();
                 onMotion_blurChanged: _blurredSourceEffect.restartBlurSource();
                 onTerminalFontChanged: _blurredSourceEffect.restartBlurSource();

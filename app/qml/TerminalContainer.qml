@@ -6,7 +6,7 @@ ShaderTerminal{
     property alias terminalSize: terminal.terminalSize
 
     id: mainShader
-    opacity: shadersettings.windowOpacity * 0.3 + 0.7
+    opacity: appSettings.windowOpacity * 0.3 + 0.7
 
     blending: false
 
@@ -14,7 +14,7 @@ ShaderTerminal{
         id: frame
         anchors.fill: parent
         z: 2.1
-        source: shadersettings.frame_source
+        source: appSettings.frame_source
     }
 
     PreprocessedTerminal{
@@ -27,9 +27,9 @@ ShaderTerminal{
     //  EFFECTS  ////////////////////////////////////////////////////////////////
 
     Loader{
-        property real scaling: shadersettings.bloom_quality * shadersettings.window_scaling
+        property real scaling: appSettings.bloom_quality * appSettings.window_scaling
         id: bloomEffectLoader
-        active: shadersettings.bloom_strength
+        active: appSettings.bloom_strength
         asynchronous: true
         width: parent.width * scaling
         height: parent.height * scaling
@@ -41,7 +41,7 @@ ShaderTerminal{
     }
     Loader{
         id: bloomSourceLoader
-        active: shadersettings.bloom_strength !== 0
+        active: appSettings.bloom_strength !== 0
         asynchronous: true
         sourceComponent: ShaderEffectSource{
             id: _bloomEffectSource
@@ -57,7 +57,7 @@ ShaderTerminal{
     ShaderEffect {
         id: staticNoiseEffect
         anchors.fill: parent
-        property real element_size: shadersettings.rasterization == shadersettings.no_rasterization ? 2 : 1
+        property real element_size: appSettings.rasterization == appSettings.no_rasterization ? 2 : 1
         property alias __terminalHeight: terminal.virtualResolution.height
         property alias __terminalWidth: terminal.virtualResolution.width
         property size virtual_resolution: Qt.size(__terminalWidth / element_size, __terminalHeight / element_size)
@@ -112,8 +112,8 @@ ShaderTerminal{
         width: parent.width
         height: parent.height
         property real outColor: 0.0
-        property real dispX: (5 / width) * shadersettings.window_scaling
-        property real dispY: 5 / height * shadersettings.window_scaling
+        property real dispX: (5 / width) * appSettings.window_scaling
+        property real dispY: 5 / height * appSettings.window_scaling
         property size virtual_resolution: terminal.virtualResolution
 
         blending: false
@@ -130,9 +130,9 @@ ShaderTerminal{
              highp float getScanlineIntensity(vec2 coords) {
                  highp float result = 1.0;" +
 
-                (shadersettings.rasterization != shadersettings.no_rasterization ?
+                (appSettings.rasterization != appSettings.no_rasterization ?
                     "result *= abs(sin(coords.y * virtual_resolution.y * "+Math.PI+"));" : "") +
-                (shadersettings.rasterization == shadersettings.pixel_rasterization ?
+                (appSettings.rasterization == appSettings.pixel_rasterization ?
                     "result *= abs(sin(coords.x * virtual_resolution.x * "+Math.PI+"));" : "") + "
 
                 return result;

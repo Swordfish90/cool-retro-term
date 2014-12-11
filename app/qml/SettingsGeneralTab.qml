@@ -33,8 +33,8 @@ Tab{
                 ComboBox{
                     id: profilesbox
                     Layout.fillWidth: true
-                    model: shadersettings.profiles_list
-                    currentIndex: shadersettings.profiles_index
+                    model: appSettings.profiles_list
+                    currentIndex: appSettings.profiles_index
                 }
                 RowLayout{
                     Layout.fillWidth: true
@@ -42,9 +42,9 @@ Tab{
                         Layout.fillWidth: true
                         text: qsTr("Load")
                         onClicked: {
-                            shadersettings.profiles_index = profilesbox.currentIndex
-                            shadersettings.loadCurrentProfile();
-                            shadersettings.handleFontChanged();
+                            appSettings.profiles_index = profilesbox.currentIndex
+                            appSettings.loadCurrentProfile();
+                            appSettings.handleFontChanged();
                         }
                     }
                     Button{
@@ -55,16 +55,16 @@ Tab{
                     Button{
                         Layout.fillWidth: true
                         text: qsTr("Remove Selected")
-                        enabled: !shadersettings.profiles_list.get(profilesbox.currentIndex).builtin
+                        enabled: !appSettings.profiles_list.get(profilesbox.currentIndex).builtin
                         onClicked: {
-                            shadersettings.profiles_list.remove(profilesbox.currentIndex)
+                            appSettings.profiles_list.remove(profilesbox.currentIndex)
                             profilesbox.currentIndex = profilesbox.currentIndex - 1
                         }
                     }
                 }
                 InsertNameDialog{
                     id: insertname
-                    onNameSelected: shadersettings.addNewCustomProfile(name)
+                    onNameSelected: appSettings.addNewCustomProfile(name)
                 }
             }
         }
@@ -76,18 +76,18 @@ Tab{
                 columns: 2
                 Text{ text: qsTr("Brightness") }
                 SimpleSlider{
-                    onValueChanged: shadersettings.brightness = value
-                    value: shadersettings.brightness
+                    onValueChanged: appSettings.brightness = value
+                    value: appSettings.brightness
                 }
                 Text{ text: qsTr("Contrast") }
                 SimpleSlider{
-                    onValueChanged: shadersettings.contrast = value
-                    value: shadersettings.contrast
+                    onValueChanged: appSettings.contrast = value
+                    value: appSettings.contrast
                 }
                 Text{ text: qsTr("Opacity") }
                 SimpleSlider{
-                    onValueChanged: shadersettings.windowOpacity = value
-                    value: shadersettings.windowOpacity
+                    onValueChanged: appSettings.windowOpacity = value
+                    value: appSettings.windowOpacity
                 }
             }
         }
@@ -99,9 +99,9 @@ Tab{
                 ComboBox{
                     id: framescombobox
                     Layout.fillWidth: true
-                    model: shadersettings.frames_list
-                    currentIndex: shadersettings.frames_index
-                    onCurrentIndexChanged: shadersettings.frames_index = currentIndex
+                    model: appSettings.frames_list
+                    currentIndex: appSettings.frames_index
+                    onCurrentIndexChanged: appSettings.frames_index = currentIndex
                 }
             }
         }
