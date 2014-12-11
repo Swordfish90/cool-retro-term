@@ -30,6 +30,7 @@ Item{
     property alias mainTerminal: kterminal
     property ShaderEffectSource mainSource: mBlur !== 0 ? blurredSourceLoader.item : kterminalSource
 
+    property real scaleTexture: 1.0
     property alias title: ksession.title
     property alias kterminal: kterminal
 
@@ -114,14 +115,9 @@ Item{
             width = Qt.binding(function() {return Math.floor(fontWidth * terminalContainer.width / screenScaling);});
             height = Qt.binding(function() {return Math.floor(terminalContainer.height / screenScaling);});
 
-            var scaleTexture = Math.max(Math.round(screenScaling / appSettings.scanline_quality), 1.0);
-
-            kterminalSource.textureSize = Qt.binding(function () {
-                return Qt.size(kterminal.width * scaleTexture, kterminal.height * scaleTexture);
-            });
+            scaleTexture = Math.max(Math.round(screenScaling / appSettings.scanline_quality), 1.0);
 
             kterminal.lineSpacing = lineSpacing;
-            //update();
         }
         Component.onCompleted: {
             appSettings.terminalFontChanged.connect(handleFontChange);
@@ -195,6 +191,7 @@ Item{
         hideSource: true
         wrapMode: ShaderEffectSource.ClampToEdge
         visible: false
+        textureSize: Qt.size(kterminal.width * scaleTexture, kterminal.height * scaleTexture);
     }
     Loader{
         id: blurredSourceLoader
