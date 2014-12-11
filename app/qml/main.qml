@@ -110,7 +110,13 @@ ApplicationWindow{
     }
     TerminalContainer{
         id: terminalContainer
-        anchors.fill: parent
+        width: parent.width * shadersettings.window_scaling
+        height: parent.height * shadersettings.window_scaling
+
+        transform: Scale {
+            xScale: 1 / shadersettings.window_scaling
+            yScale: 1 / shadersettings.window_scaling
+        }
     }
     SettingsWindow{
         id: settingswindow
@@ -119,6 +125,14 @@ ApplicationWindow{
     AboutDialog{
         id: aboutDialog
         visible: false
+    }
+    Loader{
+        anchors.centerIn: parent
+        active: shadersettings.show_terminal_size
+        sourceComponent: SizeOverlay{
+            z: 3
+            terminalSize: terminalContainer.terminalSize
+        }
     }
     Component.onCompleted: shadersettings.handleFontChanged();
 }
