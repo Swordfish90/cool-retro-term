@@ -47,12 +47,6 @@ Item{
             pixelSize: 24
         }
         ListElement{
-            text: "Commodore PET 2Y (1977)"
-            source: "fonts/1977-commodore-pet/COMMODORE_PET_2y.ttf"
-            lineSpacing: 0.2
-            pixelSize: 32
-        }
-        ListElement{
             text: "Apple ][ (1977)"
             source: "fonts/1977-apple2/PrintChar21.ttf"
             lineSpacing: 0.2
