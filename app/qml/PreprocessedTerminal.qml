@@ -90,6 +90,7 @@ Item{
         }
 
         QMLTermScrollbar {
+            id: kterminalScrollbar
             terminal: kterminal
             anchors.margins: width * 0.5
             width: terminal.fontMetrics.width * 0.75
@@ -99,7 +100,6 @@ Item{
                 radius: width * 0.25
                 opacity: 0.7
             }
-            onOpacityChanged: restartBlurredSource();
         }
 
         FontLoader{ id: fontLoader }
@@ -234,6 +234,10 @@ Item{
                 onMotion_blurChanged: _blurredSourceEffect.restartBlurSource();
                 onTerminalFontChanged: _blurredSourceEffect.restartBlurSource();
                 onRasterizationChanged: _blurredSourceEffect.restartBlurSource();
+            }
+            Connections {
+                target: kterminalScrollbar
+                onOpacityChanged: _blurredSourceEffect.restartBlurSource();
             }
         }
     }
