@@ -81,6 +81,7 @@ Item{
 
         smooth: false
         enableBold: false
+        fullCursorHeight: true
 
         session: QMLTermSession {
             id: ksession
