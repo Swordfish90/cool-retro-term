@@ -66,5 +66,6 @@
         <file>SettingsPerformanceTab.qml</file>
         <file>TerminalContainer.qml</file>
         <file>images/crt256.png</file>
+        <file>utils.js</file>
     </qresource>
 </RCC>

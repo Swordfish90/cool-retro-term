@@ -20,6 +20,8 @@
 
 import QtQuick 2.2
 
+import "utils.js" as Utils
+
 Item{
     property string version: "0.9"
 
@@ -34,35 +36,20 @@ Item{
     property real brightness: 0.5
 
     property bool show_terminal_size: true
-
     property real window_scaling: 1.0
 
     property real fps: 24
-
     property bool verbose: false
 
     onWindow_scalingChanged: handleFontChanged();
-
-    function mix(c1, c2, alpha){
-        return Qt.rgba(c1.r * alpha + c2.r * (1-alpha),
-                       c1.g * alpha + c2.g * (1-alpha),
-                       c1.b * alpha + c2.b * (1-alpha),
-                       c1.a * alpha + c2.a * (1-alpha))
-    }
-    function strToColor(s){
-        var r = parseInt(s.substring(1,3), 16) / 256;
-        var g = parseInt(s.substring(3,5), 16) / 256;
-        var b = parseInt(s.substring(5,7), 16) / 256;
-        return Qt.rgba(r, g, b, 1.0);
-    }
 
     // PROFILE SETTINGS ///////////////////////////////////////////////////////
 
     property string _background_color: "#000000"
     property string _font_color: "#ff8100"
-    property string saturated_color: mix(strToColor("#FFFFFF"), strToColor(_font_color), saturation_color * 0.5)
-    property color font_color: mix(strToColor(saturated_color), strToColor(_background_color), 0.7 + (contrast * 0.3))
-    property color background_color: mix(strToColor(_background_color), strToColor(saturated_color), 0.7 + (contrast * 0.3))
+    property string saturated_color: Utils.mix(Utils.strToColor("#FFFFFF"), Utils.strToColor(_font_color), saturation_color * 0.5)
+    property color font_color: Utils.mix(Utils.strToColor(saturated_color), Utils.strToColor(_background_color), 0.7 + (contrast * 0.3))
+    property color background_color: Utils.mix(Utils.strToColor(_background_color), Utils.strToColor(saturated_color), 0.7 + (contrast * 0.3))
 
     property real noise_strength: 0.1
     property real screen_distortion: 0.1
