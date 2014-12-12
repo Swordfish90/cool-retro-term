@@ -93,7 +93,11 @@ Tab{
                         onValueChanged: appSettings.fontWidth = value;
                         value: appSettings.fontWidth
                         stepSize: 0.05
-                        Component.onCompleted: minimumValue = 0.5 //Without this value gets set to 0.5
+                        Component.onCompleted: {
+                            // This is needed to avoid unnecessary chnaged events.
+                            minimumValue = 0.5;
+                            maximumValue = 1.5;
+                        }
                     }
                     Text{
                         text: Math.round(widthChanger.value * 100) + "%"

@@ -102,7 +102,13 @@ Item{
 
     // FONTS //////////////////////////////////////////////////////////////////
 
-    signal terminalFontChanged(string fontSource, int pixelSize, int lineSpacing, real screenScaling)
+    property real fontScaling: 1.0
+    property real fontWidth: 1.0
+
+    property var fontIndexes: [0,0,0]
+    property var fontlist: fontManager.item.fontlist
+
+    signal terminalFontChanged(string fontSource, int pixelSize, int lineSpacing, real screenScaling, real fontWidth)
 
     Loader{
         id: fontManager
@@ -119,8 +125,8 @@ Item{
         onLoaded: handleFontChanged()
     }
 
-    property real fontScaling: 1.0
     onFontScalingChanged: handleFontChanged();
+    onFontWidthChanged: handleFontChanged();
 
     function incrementScaling(){
         fontScaling = Math.min(fontScaling + 0.05, 2.50);
@@ -132,12 +138,6 @@ Item{
         handleFontChanged();
     }
 
-    property real fontWidth: 1.0
-    onFontWidthChanged: handleFontChanged();
-
-    property var fontIndexes: [0,0,0]
-    property var fontlist: fontManager.item.fontlist
-
     function handleFontChanged(){
         if(!fontManager.item) return;
         fontManager.item.selectedFontIndex = fontIndexes[rasterization];
@@ -147,8 +147,9 @@ Item{
         var pixelSize = fontManager.item.pixelSize;
         var lineSpacing = fontManager.item.lineSpacing;
         var screenScaling = fontManager.item.screenScaling;
+        var fontWidth = fontManager.item.defaultFontWidth * appSettings.fontWidth;
 
-        terminalFontChanged(fontSource, pixelSize, lineSpacing, screenScaling);
+        terminalFontChanged(fontSource, pixelSize, lineSpacing, screenScaling, fontWidth);
     }
 
     // FRAMES /////////////////////////////////////////////////////////////////

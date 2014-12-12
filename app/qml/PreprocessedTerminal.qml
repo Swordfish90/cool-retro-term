@@ -105,14 +105,12 @@ Item{
 
         FontLoader{ id: fontLoader }
 
-        function handleFontChange(fontSource, pixelSize, lineSpacing, screenScaling){
+        function handleFontChange(fontSource, pixelSize, lineSpacing, screenScaling, fontWidth){
             fontLoader.source = fontSource;
             font.pixelSize = pixelSize;
             font.family = fontLoader.name;
 
-            var fontWidth = 1.0 / appSettings.fontWidth;
-
-            width = Qt.binding(function() {return Math.floor(fontWidth * terminalContainer.width / screenScaling);});
+            width = Qt.binding(function() {return Math.floor(terminalContainer.width / (screenScaling * fontWidth));});
             height = Qt.binding(function() {return Math.floor(terminalContainer.height / screenScaling);});
 
             scaleTexture = Math.max(Math.round(screenScaling / appSettings.scanline_quality), 1.0);
