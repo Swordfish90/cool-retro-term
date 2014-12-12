@@ -36,9 +36,12 @@ Item{
     property bool show_terminal_size: true
 
     property real window_scaling: 1.0
-    onWindow_scalingChanged: handleFontChanged();
 
     property real fps: 24
+
+    property bool verbose: false
+
+    onWindow_scalingChanged: handleFontChanged();
 
     function mix(c1, c2, alpha){
         return Qt.rgba(c1.r * alpha + c2.r * (1-alpha),
@@ -165,6 +168,13 @@ Item{
 
     Storage{id: storage}
 
+    function stringify(obj) {
+        var replacer = function(key, val) {
+            return val.toFixed ? Number(val.toFixed(4)) : val;
+        }
+        return JSON.stringify(obj, replacer, 2);
+    }
+
     function composeSettingsString(){
         var settings = {
             fps: fps,
@@ -177,7 +187,7 @@ Item{
             scanline_quality: scanline_quality,
             bloom_quality: bloom_quality
         }
-        return JSON.stringify(settings);
+        return stringify(settings);
     }
 
     function composeProfileString(){
@@ -204,7 +214,7 @@ Item{
             fontIndex: fontIndexes[rasterization],
             fontWidth: fontWidth
         }
-        return JSON.stringify(settings);
+        return stringify(settings);
     }
 
     function loadSettings(){
@@ -217,7 +227,8 @@ Item{
         loadSettingsString(settingsString);
         loadProfileString(profileString);
 
-        console.log("Loading settings: " + settingsString + profileString);
+        if (verbose)
+            console.log("Loading settings: " + settingsString + profileString);
     }
 
     function storeSettings(){
@@ -227,8 +238,10 @@ Item{
         storage.setSetting("_CURRENT_SETTINGS", settingsString);
         storage.setSetting("_CURRENT_PROFILE", profileString);
 
-        console.log("Storing settings: " + settingsString);
-        console.log("Storing profile: " + profileString);
+        if (verbose) {
+            console.log("Storing settings: " + settingsString);
+            console.log("Storing profile: " + profileString);
+        }
     }
 
     function loadSettingsString(settingsString){
@@ -298,7 +311,7 @@ Item{
         var customProfiles = JSON.parse(customProfilesString);
         for (var i=0; i<customProfiles.length; i++) {
             var profile = customProfiles[i];
-            console.log("Loading custom profile: " + JSON.stringify(profile));
+            console.log("Loading custom profile: " + stringify(profile));
             profiles_list.append(profile);
         }
     }
@@ -310,7 +323,7 @@ Item{
             if(profile.builtin) continue;
             customProfiles.push({text: profile.text, obj_string: profile.obj_string, builtin: false})
         }
-        return JSON.stringify(customProfiles);
+        return stringify(customProfiles);
     }
 
     function loadCurrentProfile(){
@@ -389,6 +402,9 @@ Item{
     Component.onCompleted: {
         // Manage the arguments from the QML side.
         var args = Qt.application.arguments;
+        if (args.indexOf("--verbose") !== -1) {
+            verbose = true;
+        }
         if (args.indexOf("--default-settings") === -1) {
             loadSettings();
         }
