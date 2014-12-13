@@ -7,7 +7,6 @@
         <file>frames/images/black-frame-normals.png</file>
         <file>frames/images/screen-frame.png</file>
         <file>frames/images/black-frame-original.png</file>
-        <file>frames/images/randfunction.png</file>
         <file>frames/images/screen-frame-original.png</file>
         <file>frames/WhiteSimpleFrame.qml</file>
         <file>frames/utils/FrameShader.qml</file>
@@ -67,6 +66,6 @@
         <file>TerminalContainer.qml</file>
         <file>images/crt256.png</file>
         <file>utils.js</file>
-        <file>images/noise512.png</file>
+        <file>images/allNoise512.png</file>
     </qresource>
 </RCC>

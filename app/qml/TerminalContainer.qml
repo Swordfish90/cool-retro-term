@@ -54,24 +54,6 @@ ShaderTerminal{
 
     bloomSource: bloomSourceLoader.item
 
-    Image {
-        id: staticNoiseImage
-        source: "images/noise512.png"
-        anchors.centerIn: parent
-        width: parent.width / (appSettings.window_scaling * appSettings.fontScaling)
-        height: parent.height / (appSettings.window_scaling * appSettings.fontScaling)
-        fillMode: Image.Tile
-    }
-
-    noiseSource: ShaderEffectSource{
-        id: staticNoiseSource
-        sourceItem: staticNoiseImage
-        wrapMode: ShaderEffectSource.Repeat
-        smooth: true
-        hideSource: true
-        visible: false
-    }
-
     ShaderEffect {
         id: rasterizationEffect
         width: parent.width

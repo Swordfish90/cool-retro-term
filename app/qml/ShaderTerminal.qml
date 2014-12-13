@@ -21,11 +21,9 @@
 import QtQuick 2.2
 import QtGraphicalEffects 1.0
 
-
 ShaderEffect {
     property ShaderEffectSource source
     property ShaderEffectSource rasterizationSource
-    property ShaderEffectSource noiseSource
     property ShaderEffectSource bloomSource
 
     property color font_color: appSettings.font_color
@@ -33,8 +31,10 @@ ShaderEffect {
     property real bloom_strength: appSettings.bloom_strength * 2.5
 
     property real jitter: appSettings.jitter * 0.007
-
     property real noise_strength: appSettings.noise_strength
+    property size scaleNoiseSize: Qt.size((width) / (noiseTexture.width * appSettings.window_scaling * appSettings.fontScaling),
+                                          (height) / (noiseTexture.height * appSettings.window_scaling * appSettings.fontScaling))
+
     property real screen_distorsion: appSettings.screen_distortion
     property real glowing_line_strength: appSettings.glowing_line_strength
 
@@ -60,7 +60,7 @@ ShaderEffect {
     }
 
     property alias time: timeManager.time
-    property variant randomFunctionSource: randfuncsource
+    property variant noiseSource: noiseShaderSource
 
     // If something goes wrong activate the fallback version of the shader.
     property bool fallBack: false
@@ -69,21 +69,19 @@ ShaderEffect {
 
     //Smooth random texture used for flickering effect.
     Image{
-        id: randtexture
-        source: "frames/images/randfunction.png"
+        id: noiseTexture
+        source: "images/allNoise512.png"
         width: 512
         height: 512
-        sourceSize.width: 512
-        sourceSize.height: 256
-        fillMode: Image.TileVertically
+        fillMode: Image.Tile
+        visible: false
     }
     ShaderEffectSource{
-        id: randfuncsource
-        sourceItem: randtexture
-        live: false
-        hideSource: true
+        id: noiseShaderSource
+        sourceItem: noiseTexture
         wrapMode: ShaderEffectSource.Repeat
         visible: false
+        smooth: true
     }
 
     //Print the number with a reasonable precision for the shader.
@@ -106,7 +104,7 @@ ShaderEffect {
         varying highp vec2 qt_TexCoord0;" +
 
         (!fallBack ? "
-            uniform sampler2D randomFunctionSource;" : "") +
+            uniform sampler2D noiseSource;" : "") +
 
         (!fallBack && brightness_flickering !== 0.0 ?"
             varying lowp float brightness;
@@ -119,12 +117,16 @@ ShaderEffect {
             qt_TexCoord0.x = (qt_MultiTexCoord0.x - disp_left) / (1.0 - disp_left - disp_right);
             qt_TexCoord0.y = (qt_MultiTexCoord0.y - disp_top) / (1.0 - disp_top - disp_bottom);
             vec2 coords = vec2(fract(time/(1024.0*2.0)), fract(time/(1024.0*1024.0)));" +
+
+            (!fallBack && (brightness_flickering !== 0.0 || horizontal_sincronization !== 0.0) ?
+                "vec4 initialNoiseTexel = texture2D(noiseSource, coords);"
+            : "") +
             (!fallBack && brightness_flickering !== 0.0 ? "
-                brightness = 1.0 + (texture2D(randomFunctionSource, coords).g - 0.5) * brightness_flickering;"
-            :   "") +
+                brightness = 1.0 + (initialNoiseTexel.g - 0.5) * brightness_flickering;"
+            : "") +
 
             (!fallBack && horizontal_sincronization !== 0.0 ? "
-                float randval = 1.5 * texture2D(randomFunctionSource,(vec2(1.0) -coords) * 0.5).g;
+                float randval = 1.5 * initialNoiseTexel.r;
                 float negsinc = 1.0 - 0.6 * horizontal_sincronization;" + "
                 horizontal_distortion = step(negsinc, randval) * (randval - negsinc) * 0.3*horizontal_sincronization;"
             : "") +
@@ -148,8 +150,10 @@ ShaderEffect {
             uniform lowp float bloom_strength;" : "") +
         (noise_strength !== 0 ? "
             uniform highp float noise_strength;" : "") +
-        (noise_strength !== 0 || jitter !== 0 || rgb_shift ? "
-            uniform lowp sampler2D noiseSource;" : "") +
+        (((noise_strength !== 0 || jitter !== 0 || rgb_shift)
+          ||(fallBack && (brightness_flickering || horizontal_sincronization))) ? "
+            uniform lowp sampler2D noiseSource;
+            uniform highp vec2 scaleNoiseSize;" : "") +
         (screen_distorsion !== 0 ? "
             uniform highp float screen_distorsion;" : "") +
         (glowing_line_strength !== 0 ? "
@@ -161,8 +165,6 @@ ShaderEffect {
         (rgb_shift !== 0 ? "
             uniform lowp float rgb_shift;" : "") +
 
-        (fallBack && (brightness_flickering || horizontal_sincronization) ? "
-            uniform lowp sampler2D randomFunctionSource;" : "") +
         (fallBack && horizontal_sincronization !== 0 ? "
             uniform lowp float horizontal_sincronization;" : "") +
         (fallBack && brightness_flickering !== 0.0 ?"
@@ -190,11 +192,11 @@ ShaderEffect {
                 vec2 randCoords = vec2(fract(time/(1024.0*2.0)), fract(time/(1024.0*1024.0)));" : "") +
 
             (fallBack && brightness_flickering !== 0.0 ? "
-                float brightness = 1.0 + (texture2D(randomFunctionSource, randCoords).g - 0.5) * brightness_flickering;"
+                float brightness = 1.0 + (texture2D(noiseSource, randCoords).g - 0.5) * brightness_flickering;"
             :   "") +
 
             (fallBack && horizontal_sincronization !== 0.0 ? "
-                float randval = 1.5 * texture2D(randomFunctionSource,(vec2(1.0) - randCoords) * 0.5).g;
+                float randval = 1.5 * texture2D(noiseSource,(vec2(1.0) - randCoords) * 0.5).r;
                 float negsinc = 1.0 - 0.6 * horizontal_sincronization;" + "
                 float horizontal_distortion = step(negsinc, randval) * (randval - negsinc) * 0.3*horizontal_sincronization;"
             : "") +
@@ -216,16 +218,19 @@ ShaderEffect {
                     noise += horizontal_distortion;" : "")
             : "") +
 
+            (jitter !== 0 || noise_strength !== 0 ?
+                "vec4 noiseTexel = texture2D(noiseSource, scaleNoiseSize * coords + vec2(fract(time / 51.0), fract(time / 237.0)));"
+            : "") +
+
             (jitter !== 0 ? "
-                vec2 offset = vec2(texture2D(noiseSource, coords + fract(time / 57.0)).a,
-                                   texture2D(noiseSource, coords + fract(time / 251.0)).a) - 0.5;
+                vec2 offset = vec2(noiseTexel.b, noiseTexel.a) - vec2(0.5);
                 vec2 txt_coords = coords + offset * jitter;"
             :  "vec2 txt_coords = coords;") +
 
             "float color = 0.0;" +
 
             (noise_strength !== 0 ? "
-                float noiseVal = texture2D(noiseSource, coords + vec2(fract(time / 51.0), fract(time / 237.0))).a;
+                float noiseVal = noiseTexel.a;
                 color += noiseVal * noise * (1.0 - distance * 1.3);" : "") +
 
             (glowing_line_strength !== 0 ? "
