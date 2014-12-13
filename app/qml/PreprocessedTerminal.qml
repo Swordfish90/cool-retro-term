@@ -46,6 +46,7 @@ Item{
     property real _maxBlurCoefficient: 0.90
 
     property size terminalSize: kterminal.terminalSize
+    property size fontMetrics: kterminal.fontMetrics
 
     // Manage copy and paste
     Connections{
