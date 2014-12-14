@@ -63,47 +63,6 @@ Tab{
             }
         }
         GroupBox{
-            title: qsTr("Rasterization")
-            Layout.fillWidth: true
-            anchors.left: parent.left
-            anchors.right: parent.right
-            GridLayout{
-                id: scanlineQualityContainer
-                anchors.fill: parent
-                columns: 3
-                property alias valsIndex: scanlineQualitySlider.value
-                property var vals: [4,3,2]
-                property var valsStrings: [
-                    qsTr("Low"),
-                    qsTr("Medium"),
-                    qsTr("High")
-                ]
-
-                onValsIndexChanged: appSettings.scanline_quality = vals[valsIndex];
-
-                Text{text: qsTr("Scanlines Quality")}
-                Slider{
-                    id: scanlineQualitySlider
-                    Layout.fillWidth: true
-                    onValueChanged: parent.valsIndex = value;
-                    stepSize: 1
-                    Component.onCompleted: {
-                        minimumValue = 0;
-                        maximumValue = 2;
-                        value = parent.vals.indexOf(appSettings.scanline_quality);
-                    }
-                    Connections{
-                        target: appSettings
-                        onScanline_qualityChanged:
-                            scanlineQualityContainer.valsIndex = scanlineQualityContainer.vals.indexOf(appSettings.scanline_quality);
-                    }
-                }
-                Text{
-                    text: parent.valsStrings[parent.valsIndex];
-                }
-            }
-        }
-        GroupBox{
             title: qsTr("Bloom")
             Layout.fillWidth: true
             anchors.left: parent.left

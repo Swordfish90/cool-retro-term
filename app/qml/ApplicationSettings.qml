@@ -75,9 +75,6 @@ Item{
 
     property int rasterization: no_rasterization
 
-    property int scanline_quality: 2
-    onScanline_qualityChanged: handleFontChanged();
-
     ListModel{
         id: framelist
         ListElement{text: "No frame"; source: "./frames/NoFrame.qml"; reflections: false}
@@ -171,7 +168,6 @@ Item{
             fontIndexes: fontIndexes,
             frameReflections: _frameReflections,
             showMenubar: showMenubar,
-            scanline_quality: scanline_quality,
             bloom_quality: bloom_quality
         }
         return stringify(settings);
@@ -246,7 +242,6 @@ Item{
 
         showMenubar = settings.showMenubar !== undefined ? settings.showMenubar : showMenubar;
 
-        scanline_quality = settings.scanline_quality !== undefined ? settings.scanline_quality : scanline_quality;
         bloom_quality = settings.bloom_quality !== undefined ? settings.bloom_quality : bloom_quality;
     }
 

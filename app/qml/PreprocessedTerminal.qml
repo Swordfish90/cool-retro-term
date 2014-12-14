@@ -115,7 +115,7 @@ Item{
             width = Qt.binding(function() {return Math.floor(terminalContainer.width / (screenScaling * fontWidth));});
             height = Qt.binding(function() {return Math.floor(terminalContainer.height / screenScaling);});
 
-            scaleTexture = Math.max(Math.round(screenScaling / appSettings.scanline_quality), 1.0);
+            scaleTexture = Math.max(1.0, Math.round(screenScaling / 2));
 
             kterminal.lineSpacing = lineSpacing;
         }
