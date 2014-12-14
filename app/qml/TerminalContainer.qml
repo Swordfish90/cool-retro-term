@@ -3,12 +3,16 @@ import QtGraphicalEffects 1.0
 
 ShaderTerminal{
     property alias title: terminal.title
-    property alias terminalSize: terminal.terminalSize
 
     id: mainShader
     opacity: appSettings.windowOpacity * 0.3 + 0.7
 
     blending: false
+
+    source: terminal.mainSource
+    dispX: (12 / width) * appSettings.window_scaling
+    dispY: (12 / height) * appSettings.window_scaling
+    virtual_resolution: terminal.virtualResolution
 
     Loader{
         id: frame
@@ -21,8 +25,6 @@ ShaderTerminal{
         id: terminal
         anchors.fill: parent
     }
-
-    source: terminal.mainSource
 
     //  EFFECTS  ////////////////////////////////////////////////////////////////
 
@@ -54,60 +56,64 @@ ShaderTerminal{
 
     bloomSource: bloomSourceLoader.item
 
-    ShaderEffect {
-        id: rasterizationEffect
-        width: parent.width
-        height: parent.height
-        property real outColor: 0.0
-        property real dispX: (5 / width) * appSettings.window_scaling
-        property real dispY: (5 / height) * appSettings.window_scaling
-        property size virtual_resolution: terminal.virtualResolution
+    // This shader might be useful in the future. Since we used it only for a couple
+    // of calculations is probably best to move those in the main shader. If in
+    // we will need to store another fullScreen channel this might be handy.
 
-        blending: false
+//    ShaderEffect {
+//        id: rasterizationEffect
+//        width: parent.width
+//        height: parent.height
+//        property real outColor: 0.0
+//        property real dispX: (5 / width) * appSettings.window_scaling
+//        property real dispY: (5 / height) * appSettings.window_scaling
+//        property size virtual_resolution: terminal.virtualResolution
 
-        fragmentShader:
-            "uniform lowp float qt_Opacity;" +
+//        blending: false
 
-            "varying highp vec2 qt_TexCoord0;
-             uniform highp vec2 virtual_resolution;
-             uniform highp float dispX;
-             uniform highp float dispY;
-             uniform mediump float outColor;
+//        fragmentShader:
+//            "uniform lowp float qt_Opacity;" +
 
-             highp float getScanlineIntensity(vec2 coords) {
-                 highp float result = 1.0;" +
+//            "varying highp vec2 qt_TexCoord0;
+//             uniform highp vec2 virtual_resolution;
+//             uniform highp float dispX;
+//             uniform highp float dispY;
+//             uniform mediump float outColor;
 
-                (appSettings.rasterization != appSettings.no_rasterization ?
-                    "result *= abs(sin(coords.y * virtual_resolution.y * "+Math.PI+"));" : "") +
-                (appSettings.rasterization == appSettings.pixel_rasterization ?
-                    "result *= abs(sin(coords.x * virtual_resolution.x * "+Math.PI+"));" : "") + "
+//             highp float getScanlineIntensity(vec2 coords) {
+//                 highp float result = 1.0;" +
 
-                return result;
-             }" +
+//                (appSettings.rasterization != appSettings.no_rasterization ?
+//                    "result *= abs(sin(coords.y * virtual_resolution.y * "+Math.PI+"));" : "") +
+//                (appSettings.rasterization == appSettings.pixel_rasterization ?
+//                    "result *= abs(sin(coords.x * virtual_resolution.x * "+Math.PI+"));" : "") + "
 
-            "void main() {" +
-                "highp float color = getScanlineIntensity(qt_TexCoord0);" +
+//                return result;
+//             }" +
 
-                "float distance = length(vec2(0.5) - qt_TexCoord0);" +
-                "color = mix(color, 0.0, 1.2 * distance * distance);" +
+//            "void main() {" +
+//                "highp float color = getScanlineIntensity(qt_TexCoord0);" +
 
-                "color *= outColor + smoothstep(0.00, dispX, qt_TexCoord0.x) * (1.0 - outColor);" +
-                "color *= outColor + smoothstep(0.00, dispY, qt_TexCoord0.y) * (1.0 - outColor);" +
-                "color *= outColor + (1.0 - smoothstep(1.00 - dispX, 1.00, qt_TexCoord0.x)) * (1.0 - outColor);" +
-                "color *= outColor + (1.0 - smoothstep(1.00 - dispY, 1.00, qt_TexCoord0.y)) * (1.0 - outColor);" +
+//                "float distance = length(vec2(0.5) - qt_TexCoord0);" +
+//                "color = mix(color, 0.0, 1.2 * distance * distance);" +
 
-                "gl_FragColor.a = color;" +
-            "}"
+//                "color *= outColor + smoothstep(0.00, dispX, qt_TexCoord0.x) * (1.0 - outColor);" +
+//                "color *= outColor + smoothstep(0.00, dispY, qt_TexCoord0.y) * (1.0 - outColor);" +
+//                "color *= outColor + (1.0 - smoothstep(1.00 - dispX, 1.00, qt_TexCoord0.x)) * (1.0 - outColor);" +
+//                "color *= outColor + (1.0 - smoothstep(1.00 - dispY, 1.00, qt_TexCoord0.y)) * (1.0 - outColor);" +
 
-        onStatusChanged: if (log) console.log(log) //Print warning messages
-    }
+//                "gl_FragColor.a = color;" +
+//            "}"
 
-    rasterizationSource: ShaderEffectSource{
-        id: rasterizationEffectSource
-        sourceItem: rasterizationEffect
-        hideSource: true
-        smooth: true
-        wrapMode: ShaderEffectSource.ClampToEdge
-        visible: false
-    }
+//        onStatusChanged: if (log) console.log(log) //Print warning messages
+//    }
+
+//    rasterizationSource: ShaderEffectSource{
+//        id: rasterizationEffectSource
+//        sourceItem: rasterizationEffect
+//        hideSource: true
+//        smooth: true
+//        wrapMode: ShaderEffectSource.ClampToEdge
+//        visible: false
+//    }
 }

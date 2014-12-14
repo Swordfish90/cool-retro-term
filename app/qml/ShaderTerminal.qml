@@ -23,7 +23,6 @@ import QtGraphicalEffects 1.0
 
 ShaderEffect {
     property ShaderEffectSource source
-    property ShaderEffectSource rasterizationSource
     property ShaderEffectSource bloomSource
 
     property color font_color: appSettings.font_color
@@ -53,6 +52,10 @@ ShaderEffect {
     property real disp_right: (frame.item.displacementRight * appSettings.window_scaling) / width
 
     property real screen_brightness: appSettings.brightness * 1.5 + 0.5
+
+    property real dispX
+    property real dispY
+    property size virtual_resolution
 
     TimeManager{
         id: timeManager
@@ -144,8 +147,11 @@ ShaderEffect {
 
         uniform highp vec4 font_color;
         uniform highp vec4 background_color;
-        uniform highp sampler2D rasterizationSource;
-        uniform lowp float screen_brightness;" +
+        uniform lowp float screen_brightness;
+
+        uniform highp vec2 virtual_resolution;
+        uniform highp float dispX;
+        uniform highp float dispY;" +
 
         (bloom_strength !== 0 ? "
             uniform highp sampler2D bloomSource;
@@ -183,7 +189,18 @@ ShaderEffect {
                 return fract(smoothstep(-0.2, 0.0, coords.y - 3.0 * fract(time * 0.0001))) * glowing_line_strength;
             }" : "") +
 
-        "float rgb2grey(vec3 v){
+        "highp float getScanlineIntensity(vec2 coords) {
+            highp float result = 1.0;" +
+
+           (appSettings.rasterization != appSettings.no_rasterization ?
+               "result *= abs(sin(coords.y * virtual_resolution.y * "+Math.PI+"));" : "") +
+           (appSettings.rasterization == appSettings.pixel_rasterization ?
+               "result *= abs(sin(coords.x * virtual_resolution.x * "+Math.PI+"));" : "") + "
+
+           return result;
+        }
+
+        float rgb2grey(vec3 v){
             return dot(v, vec3(0.21, 0.72, 0.04));
         }" +
 
@@ -256,7 +273,9 @@ ShaderEffect {
             :
                 "vec3 finalColor = mix(background_color.rgb, font_color.rgb, greyscale_color);") +
 
-            "finalColor *= texture2D(rasterizationSource, coords).a;" +
+            "finalColor *= getScanlineIntensity(coords);
+             finalColor *= smoothstep(-dispX, 0.0, coords.x) - smoothstep(1.0, 1.0 + dispX, coords.x);
+             finalColor *= smoothstep(-dispY, 0.0, coords.y) - smoothstep(1.0, 1.0 + dispY, coords.y);" +
 
             (bloom_strength !== 0 ?
                 "vec4 bloomFullColor = texture2D(bloomSource, coords);
