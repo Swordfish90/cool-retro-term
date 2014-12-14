@@ -111,37 +111,17 @@ Tab{
             GridLayout{
                 id: bloomQualityContainer
                 anchors.fill: parent
-                columns: 3
-                property alias valsIndex: bloomQualitySlider.value
-                property var vals: [0.25, 0.50, 1.00]
-                property var valsStrings: [
-                    qsTr("Low"),
-                    qsTr("Medium"),
-                    qsTr("High")
-                ]
-
-                onValsIndexChanged: appSettings.bloom_quality = vals[valsIndex];
 
                 Text{text: qsTr("Bloom Quality")}
                 Slider{
-                    id: bloomQualitySlider
                     Layout.fillWidth: true
-                    onValueChanged: parent.valsIndex = value;
-                    stepSize: 1
-                    Component.onCompleted: {
-                        minimumValue = 0;
-                        maximumValue = 2;
-                        value = parent.vals.indexOf(appSettings.bloom_quality);
-                    }
-                    Connections{
-                        target: appSettings
-                        onBloom_qualityChanged:
-                            bloomQualityContainer.valsIndex = bloomQualityContainer.vals.indexOf(appSettings.bloom_quality);
-                    }
+                    id: bloomSlider
+                    onValueChanged: appSettings.bloom_quality = value;
+                    value: appSettings.bloom_quality
+                    stepSize: 0.10
+                    Component.onCompleted: minimumValue = 0.3 //Without this value gets set to 0.5
                 }
-                Text{
-                    text: parent.valsStrings[parent.valsIndex];
-                }
+                Text{text: Math.round(bloomSlider.value * 100) + "%"}
             }
         }
         GroupBox{

@@ -57,7 +57,7 @@ Item{
     property real motion_blur: 0.40
     property real bloom_strength: 0.65
 
-    property real bloom_quality: 1.0
+    property real bloom_quality: 0.5
 
     property real chroma_color: 0.0
     property real saturation_color: 0.0
