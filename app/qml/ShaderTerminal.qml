@@ -110,8 +110,10 @@ ShaderEffect {
             varying lowp float brightness;
             uniform lowp float brightness_flickering;" : "") +
         (!fallBack && horizontal_sincronization !== 0.0 ?"
-            varying lowp float horizontal_distortion;
-            uniform lowp float horizontal_sincronization;" : "") +
+            uniform lowp float horizontal_sincronization;
+            varying lowp float distortionScale;
+            varying lowp float distortionFreq;" : "") +
+
         "
         void main() {
             qt_TexCoord0.x = (qt_MultiTexCoord0.x - disp_left) / (1.0 - disp_left - disp_right);
@@ -126,9 +128,9 @@ ShaderEffect {
             : "") +
 
             (!fallBack && horizontal_sincronization !== 0.0 ? "
-                float randval = 1.5 * initialNoiseTexel.r;
-                float negsinc = 1.0 - 0.6 * horizontal_sincronization;" + "
-                horizontal_distortion = step(negsinc, randval) * (randval - negsinc) * 0.3*horizontal_sincronization;"
+                float randval = horizontal_sincronization - initialNoiseTexel.r;
+                distortionScale = step(0.0, randval) * randval * horizontal_sincronization;
+                distortionFreq = mix(4.0, 40.0, initialNoiseTexel.g);"
             : "") +
 
             "gl_Position = qt_Matrix * qt_Vertex;
@@ -170,9 +172,11 @@ ShaderEffect {
         (fallBack && brightness_flickering !== 0.0 ?"
             uniform lowp float brightness_flickering;" : "") +
         (!fallBack && brightness_flickering !== 0 ? "
-            varying lowp float brightness;" : "") +
+            varying lowp float brightness;"
+        : "") +
         (!fallBack && horizontal_sincronization !== 0 ? "
-            varying lowp float horizontal_distortion;" : "") +
+            varying lowp float distortionScale;
+            varying lowp float distortionFreq;" : "") +
 
         (glowing_line_strength !== 0 ? "
             float randomPass(vec2 coords){
@@ -187,18 +191,18 @@ ShaderEffect {
             "vec2 cc = vec2(0.5) - qt_TexCoord0;" +
             "float distance = length(cc);" +
 
-            //FallBack if there are problem
-            (fallBack && (brightness_flickering || horizontal_sincronization) ? "
-                vec2 randCoords = vec2(fract(time/(1024.0*2.0)), fract(time/(1024.0*1024.0)));" : "") +
-
+            //FallBack if there are problems
+            (fallBack && (brightness_flickering !== 0.0 || horizontal_sincronization !== 0.0) ?
+                "vec2 initialCoords = vec2(fract(time/(1024.0*2.0)), fract(time/(1024.0*1024.0)));
+                 vec4 initialNoiseTexel = texture2D(noiseSource, initialCoords);"
+            : "") +
             (fallBack && brightness_flickering !== 0.0 ? "
-                float brightness = 1.0 + (texture2D(noiseSource, randCoords).g - 0.5) * brightness_flickering;"
-            :   "") +
-
+                float brightness = 1.0 + (initialNoiseTexel.g - 0.5) * brightness_flickering;"
+            : "") +
             (fallBack && horizontal_sincronization !== 0.0 ? "
-                float randval = 1.5 * texture2D(noiseSource,(vec2(1.0) - randCoords) * 0.5).r;
-                float negsinc = 1.0 - 0.6 * horizontal_sincronization;" + "
-                float horizontal_distortion = step(negsinc, randval) * (randval - negsinc) * 0.3*horizontal_sincronization;"
+                float randval = horizontal_sincronization - initialNoiseTexel.r;
+                float distortionScale = step(0.0, randval) * randval * horizontal_sincronization;
+                float distortionFreq = mix(4.0, 40.0, initialNoiseTexel.g);"
             : "") +
 
             (noise_strength ? "
@@ -211,11 +215,8 @@ ShaderEffect {
                 vec2 coords = qt_TexCoord0;") +
 
             (horizontal_sincronization !== 0 ? "
-                float h_distortion = 0.5 * sin(time*0.001 + coords.y*10.0*fract(time/10.0));
-                h_distortion += 0.5 * cos(time*0.04 + 0.03 + coords.y*50.0*fract(time/10.0 + 0.4));
-                coords.x = coords.x + h_distortion * horizontal_distortion;" +
-                (noise_strength ? "
-                    noise += horizontal_distortion;" : "")
+                float dst = sin((coords.y + time * 0.001) * distortionFreq);
+                coords.x += dst * distortionScale;"
             : "") +
 
             (jitter !== 0 || noise_strength !== 0 ?
