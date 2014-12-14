@@ -30,7 +30,7 @@ ShaderTerminal{
     //  EFFECTS  ////////////////////////////////////////////////////////////////
 
     Loader{
-        property real scaling: appSettings.bloom_quality * appSettings.window_scaling
+        property real scaling: appSettings.bloom_quality
         id: bloomEffectLoader
         active: appSettings.bloom_strength
         asynchronous: true
