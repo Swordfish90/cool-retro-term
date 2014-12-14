@@ -227,7 +227,6 @@ Item{
             // Restart blurred source settings change.
             Connections{
                 target: appSettings
-                onScanline_qualityChanged: _blurredSourceEffect.restartBlurSource();
                 onMotion_blurChanged: _blurredSourceEffect.restartBlurSource();
                 onTerminalFontChanged: _blurredSourceEffect.restartBlurSource();
                 onRasterizationChanged: _blurredSourceEffect.restartBlurSource();

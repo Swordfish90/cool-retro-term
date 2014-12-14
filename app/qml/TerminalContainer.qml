@@ -30,14 +30,13 @@ ShaderTerminal{
     //  EFFECTS  ////////////////////////////////////////////////////////////////
 
     Loader{
-        property real scaling: appSettings.bloom_quality
         id: bloomEffectLoader
         active: appSettings.bloom_strength
         asynchronous: true
-        width: parent.width * scaling
-        height: parent.height * scaling
+        width: parent.width * appSettings.bloom_quality
+        height: parent.height * appSettings.bloom_quality
         sourceComponent: FastBlur{
-            radius: 48 * scaling
+            radius: 48 * appSettings.bloom_quality * appSettings.window_scaling
             source: terminal.mainTerminal
             transparentBorder: true
         }
