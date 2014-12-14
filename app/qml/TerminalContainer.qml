@@ -3,6 +3,7 @@ import QtGraphicalEffects 1.0
 
 ShaderTerminal{
     property alias title: terminal.title
+    property alias terminalSize: terminal.terminalSize
 
     id: mainShader
     opacity: appSettings.windowOpacity * 0.3 + 0.7
