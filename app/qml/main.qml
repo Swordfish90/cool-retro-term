@@ -33,13 +33,13 @@ ApplicationWindow{
 
     visible: true
 
-    property bool fullscreen: shadersettings.fullscreen
+    property bool fullscreen: appSettings.fullscreen
     onFullscreenChanged: visibility = (fullscreen ? Window.FullScreen : Window.Windowed)
 
     //Workaround: if menubar is assigned ugly margins are visible.
     menuBar: Qt.platform.os === "osx"
                 ? defaultMenuBar
-                : shadersettings.showMenubar ? defaultMenuBar : null
+                : appSettings.showMenubar ? defaultMenuBar : null
 
     color: "#00000000"
     title: terminalContainer.title || qsTr("cool-retro-term")
@@ -50,17 +50,17 @@ ApplicationWindow{
         enabled: Qt.platform.os !== "osx"
         shortcut: "Ctrl+Shift+M"
         checkable: true
-        checked: shadersettings.showMenubar
-        onTriggered: shadersettings.showMenubar = !shadersettings.showMenubar
+        checked: appSettings.showMenubar
+        onTriggered: appSettings.showMenubar = !appSettings.showMenubar
     }
     Action {
         id: fullscreenAction
         text: qsTr("Fullscreen")
         enabled: Qt.platform.os !== "osx"
         shortcut: "Alt+F11"
-        onTriggered: shadersettings.fullscreen = !shadersettings.fullscreen;
+        onTriggered: appSettings.fullscreen = !appSettings.fullscreen;
         checkable: true
-        checked: shadersettings.fullscreen
+        checked: appSettings.fullscreen
     }
     Action {
         id: quitAction
@@ -87,13 +87,13 @@ ApplicationWindow{
         id: zoomIn
         text: qsTr("Zoom In")
         shortcut: "Ctrl++"
-        onTriggered: shadersettings.incrementScaling();
+        onTriggered: appSettings.incrementScaling();
     }
     Action{
         id: zoomOut
         text: qsTr("Zoom Out")
         shortcut: "Ctrl+-"
-        onTriggered: shadersettings.decrementScaling();
+        onTriggered: appSettings.decrementScaling();
     }
     Action{
         id: showAboutAction
@@ -106,11 +106,17 @@ ApplicationWindow{
         id: defaultMenuBar
     }
     ApplicationSettings{
-        id: shadersettings
+        id: appSettings
     }
     TerminalContainer{
         id: terminalContainer
-        anchors.fill: parent
+        width: parent.width * appSettings.window_scaling
+        height: parent.height * appSettings.window_scaling
+
+        transform: Scale {
+            xScale: 1 / appSettings.window_scaling
+            yScale: 1 / appSettings.window_scaling
+        }
     }
     SettingsWindow{
         id: settingswindow
@@ -120,5 +126,13 @@ ApplicationWindow{
         id: aboutDialog
         visible: false
     }
-    Component.onCompleted: shadersettings.handleFontChanged();
+    Loader{
+        anchors.centerIn: parent
+        active: appSettings.show_terminal_size
+        sourceComponent: SizeOverlay{
+            z: 3
+            terminalSize: terminalContainer.terminalSize
+        }
+    }
+    Component.onCompleted: appSettings.handleFontChanged();
 }

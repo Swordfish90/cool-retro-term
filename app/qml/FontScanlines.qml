@@ -29,6 +29,7 @@ Item{
     property int pixelSize: _font.pixelSize
     property int lineSpacing: _font.lineSpacing
     property real screenScaling: scaling * _font.baseScaling
+    property real defaultFontWidth: fontlist.get(selectedFontIndex).fontWidth
 
     ListModel{
         id: fontlist
@@ -38,6 +39,7 @@ Item{
             lineSpacing: 2
             pixelSize: 8
             baseScaling: 4.0
+            fontWidth: 0.7
         }
         ListElement{
             text: "Apple ][ (1977)"
@@ -45,6 +47,7 @@ Item{
             lineSpacing: 2
             pixelSize: 8
             baseScaling: 4.0
+            fontWidth: 0.8
         }
         ListElement{
             text: "Atari 400-800 (1979)"
@@ -52,6 +55,7 @@ Item{
             lineSpacing: 3
             pixelSize: 8
             baseScaling: 4.0
+            fontWidth: 0.7
         }
         ListElement{
             text: "Commodore 64 (1982)"
@@ -59,6 +63,7 @@ Item{
             lineSpacing: 3
             pixelSize: 8
             baseScaling: 4.0
+            fontWidth: 0.7
         }
     }
 }

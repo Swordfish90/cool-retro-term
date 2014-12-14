@@ -20,7 +20,7 @@
 
 import QtQuick 2.2
 
-
+import "utils.js" as Utils
 
 Item{
     property string version: "0.9"
@@ -36,32 +36,20 @@ Item{
     property real brightness: 0.5
 
     property bool show_terminal_size: true
-
     property real window_scaling: 1.0
-    onWindow_scalingChanged: handleFontChanged();
 
     property real fps: 24
+    property bool verbose: false
 
-    function mix(c1, c2, alpha){
-        return Qt.rgba(c1.r * alpha + c2.r * (1-alpha),
-                       c1.g * alpha + c2.g * (1-alpha),
-                       c1.b * alpha + c2.b * (1-alpha),
-                       c1.a * alpha + c2.a * (1-alpha))
-    }
-    function strToColor(s){
-        var r = parseInt(s.substring(1,3), 16) / 256;
-        var g = parseInt(s.substring(3,5), 16) / 256;
-        var b = parseInt(s.substring(5,7), 16) / 256;
-        return Qt.rgba(r, g, b, 1.0);
-    }
+    onWindow_scalingChanged: handleFontChanged();
 
     // PROFILE SETTINGS ///////////////////////////////////////////////////////
 
     property string _background_color: "#000000"
     property string _font_color: "#ff8100"
-    property string saturated_color: mix(strToColor("#FFFFFF"), strToColor(_font_color), saturation_color * 0.5)
-    property color font_color: mix(strToColor(saturated_color), strToColor(_background_color), 0.7 + (contrast * 0.3))
-    property color background_color: mix(strToColor(_background_color), strToColor(saturated_color), 0.7 + (contrast * 0.3))
+    property string saturated_color: Utils.mix(Utils.strToColor("#FFFFFF"), Utils.strToColor(_font_color), saturation_color * 0.5)
+    property color font_color: Utils.mix(Utils.strToColor(saturated_color), Utils.strToColor(_background_color), 0.7 + (contrast * 0.3))
+    property color background_color: Utils.mix(Utils.strToColor(_background_color), Utils.strToColor(saturated_color), 0.7 + (contrast * 0.3))
 
     property real noise_strength: 0.1
     property real screen_distortion: 0.1
@@ -69,7 +57,7 @@ Item{
     property real motion_blur: 0.40
     property real bloom_strength: 0.65
 
-    property real bloom_quality: 1.0
+    property real bloom_quality: 0.5
 
     property real chroma_color: 0.0
     property real saturation_color: 0.0
@@ -87,9 +75,6 @@ Item{
 
     property int rasterization: no_rasterization
 
-    property int scanline_quality: 2
-    onScanline_qualityChanged: handleFontChanged();
-
     ListModel{
         id: framelist
         ListElement{text: "No frame"; source: "./frames/NoFrame.qml"; reflections: false}
@@ -104,7 +89,13 @@ Item{
 
     // FONTS //////////////////////////////////////////////////////////////////
 
-    signal terminalFontChanged(string fontSource, int pixelSize, int lineSpacing, real screenScaling)
+    property real fontScaling: 1.0
+    property real fontWidth: 1.0
+
+    property var fontIndexes: [0,0,0]
+    property var fontlist: fontManager.item.fontlist
+
+    signal terminalFontChanged(string fontSource, int pixelSize, int lineSpacing, real screenScaling, real fontWidth)
 
     Loader{
         id: fontManager
@@ -121,8 +112,8 @@ Item{
         onLoaded: handleFontChanged()
     }
 
-    property real fontScaling: 1.0
     onFontScalingChanged: handleFontChanged();
+    onFontWidthChanged: handleFontChanged();
 
     function incrementScaling(){
         fontScaling = Math.min(fontScaling + 0.05, 2.50);
@@ -134,12 +125,6 @@ Item{
         handleFontChanged();
     }
 
-    property real fontWidth: 1.0
-    onFontWidthChanged: handleFontChanged();
-
-    property var fontIndexes: [0,0,0]
-    property var fontlist: fontManager.item.fontlist
-
     function handleFontChanged(){
         if(!fontManager.item) return;
         fontManager.item.selectedFontIndex = fontIndexes[rasterization];
@@ -149,8 +134,9 @@ Item{
         var pixelSize = fontManager.item.pixelSize;
         var lineSpacing = fontManager.item.lineSpacing;
         var screenScaling = fontManager.item.screenScaling;
+        var fontWidth = fontManager.item.defaultFontWidth * appSettings.fontWidth;
 
-        terminalFontChanged(fontSource, pixelSize, lineSpacing, screenScaling);
+        terminalFontChanged(fontSource, pixelSize, lineSpacing, screenScaling, fontWidth);
     }
 
     // FRAMES /////////////////////////////////////////////////////////////////
@@ -166,6 +152,13 @@ Item{
 
     Storage{id: storage}
 
+    function stringify(obj) {
+        var replacer = function(key, val) {
+            return val.toFixed ? Number(val.toFixed(4)) : val;
+        }
+        return JSON.stringify(obj, replacer, 2);
+    }
+
     function composeSettingsString(){
         var settings = {
             fps: fps,
@@ -175,10 +168,9 @@ Item{
             fontIndexes: fontIndexes,
             frameReflections: _frameReflections,
             showMenubar: showMenubar,
-            scanline_quality: scanline_quality,
             bloom_quality: bloom_quality
         }
-        return JSON.stringify(settings);
+        return stringify(settings);
     }
 
     function composeProfileString(){
@@ -205,7 +197,7 @@ Item{
             fontIndex: fontIndexes[rasterization],
             fontWidth: fontWidth
         }
-        return JSON.stringify(settings);
+        return stringify(settings);
     }
 
     function loadSettings(){
@@ -218,7 +210,8 @@ Item{
         loadSettingsString(settingsString);
         loadProfileString(profileString);
 
-        console.log("Loading settings: " + settingsString + profileString);
+        if (verbose)
+            console.log("Loading settings: " + settingsString + profileString);
     }
 
     function storeSettings(){
@@ -228,8 +221,10 @@ Item{
         storage.setSetting("_CURRENT_SETTINGS", settingsString);
         storage.setSetting("_CURRENT_PROFILE", profileString);
 
-        console.log("Storing settings: " + settingsString);
-        console.log("Storing profile: " + profileString);
+        if (verbose) {
+            console.log("Storing settings: " + settingsString);
+            console.log("Storing profile: " + profileString);
+        }
     }
 
     function loadSettingsString(settingsString){
@@ -247,7 +242,6 @@ Item{
 
         showMenubar = settings.showMenubar !== undefined ? settings.showMenubar : showMenubar;
 
-        scanline_quality = settings.scanline_quality !== undefined ? settings.scanline_quality : scanline_quality;
         bloom_quality = settings.bloom_quality !== undefined ? settings.bloom_quality : bloom_quality;
     }
 
@@ -299,7 +293,7 @@ Item{
         var customProfiles = JSON.parse(customProfilesString);
         for (var i=0; i<customProfiles.length; i++) {
             var profile = customProfiles[i];
-            console.log("Loading custom profile: " + JSON.stringify(profile));
+            console.log("Loading custom profile: " + stringify(profile));
             profiles_list.append(profile);
         }
     }
@@ -311,7 +305,7 @@ Item{
             if(profile.builtin) continue;
             customProfiles.push({text: profile.text, obj_string: profile.obj_string, builtin: false})
         }
-        return JSON.stringify(customProfiles);
+        return stringify(customProfiles);
     }
 
     function loadCurrentProfile(){
@@ -390,6 +384,9 @@ Item{
     Component.onCompleted: {
         // Manage the arguments from the QML side.
         var args = Qt.application.arguments;
+        if (args.indexOf("--verbose") !== -1) {
+            verbose = true;
+        }
         if (args.indexOf("--default-settings") === -1) {
             loadSettings();
         }

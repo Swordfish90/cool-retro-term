@@ -4,16 +4,16 @@ import QtGraphicalEffects 1.0
 ShaderEffect{
     property variant source: framesource
     property variant normals: framesourcenormals
-    property real screen_distorsion: shadersettings.screen_distortion * framecontainer.distortionCoefficient
-    property real ambient_light: shadersettings.ambient_light
-    property color font_color: shadersettings.font_color
-    property color background_color: shadersettings.background_color
-    property real brightness: shadersettings.brightness * 1.5 + 0.5
+    property real screen_distorsion: appSettings.screen_distortion * framecontainer.distortionCoefficient
+    property real ambient_light: appSettings.ambient_light
+    property color font_color: appSettings.font_color
+    property color background_color: appSettings.background_color
+    property real brightness: appSettings.brightness * 1.5 + 0.5
 
-    property bool frameReflections: shadersettings.frameReflections
+    property bool frameReflections: appSettings.frameReflections
     property variant lightSource: reflectionEffectSourceLoader.item
 
-    property real chroma_color: shadersettings.chroma_color
+    property real chroma_color: appSettings.chroma_color
 
     Loader{
         id: reflectionEffectLoader
@@ -37,6 +37,7 @@ ShaderEffect{
             sourceItem: reflectionEffectLoader.item
             hideSource: true
             smooth: true
+            visible: false
         }
     }
 

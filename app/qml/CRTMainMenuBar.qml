@@ -31,12 +31,12 @@ MenuBar {
         title: qsTr("Profiles")
         visible: defaultMenuBar.visible
         Instantiator{
-            model: shadersettings.profiles_list
+            model: appSettings.profiles_list
             delegate: MenuItem {
                 text: model.text
                 onTriggered: {
-                    shadersettings.loadProfileString(obj_string);
-                    shadersettings.handleFontChanged();
+                    appSettings.loadProfileString(obj_string);
+                    appSettings.handleFontChanged();
                 }
             }
             onObjectAdded: profilesMenu.insertItem(index, object)

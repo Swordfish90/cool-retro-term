@@ -27,13 +27,13 @@ Timer{
     NumberAnimation on time {
         from: 0
         to: 100000
-        running: shadersettings.fps === 0 && enableTimer
+        running: appSettings.fps === 0 && enableTimer
         duration: 100000
         loops: Animation.Infinite
     }
 
     onTriggered: time += interval
-    running: shadersettings.fps !== 0 && enableTimer
-    interval: Math.round(1000 / shadersettings.fps)
+    running: appSettings.fps !== 0 && enableTimer
+    interval: Math.round(1000 / appSettings.fps)
     repeat: true
 }
