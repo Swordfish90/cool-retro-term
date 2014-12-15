@@ -36,10 +36,12 @@ ApplicationWindow{
     property bool fullscreen: appSettings.fullscreen
     onFullscreenChanged: visibility = (fullscreen ? Window.FullScreen : Window.Windowed)
 
-    //Workaround: if menubar is assigned ugly margins are visible.
-    menuBar: Qt.platform.os === "osx"
-                ? defaultMenuBar
-                : appSettings.showMenubar ? defaultMenuBar : null
+    //Workaround: Without __contentItem a ugly thin border is visible.
+    menuBar: CRTMainMenuBar{
+        id: mainMenu
+        visible: (Qt.platform.os === "osx" || appSettings.showMenubar)
+        __contentItem.visible: mainMenu.visible
+    }
 
     color: "#00000000"
     title: terminalContainer.title || qsTr("cool-retro-term")
@@ -101,9 +103,6 @@ ApplicationWindow{
         onTriggered: {
             aboutDialog.show();
         }
-    }
-    CRTMainMenuBar{
-        id: defaultMenuBar
     }
     ApplicationSettings{
         id: appSettings
