@@ -284,22 +284,21 @@ ShaderEffect {
             :
                 "vec3 finalColor = mix(background_color.rgb, font_color.rgb, greyscale_color);") +
 
-            "finalColor *= getScanlineIntensity(coords);
-             finalColor *= smoothstep(-dispX, 0.0, coords.x) - smoothstep(1.0, 1.0 + dispX, coords.x);
-             finalColor *= smoothstep(-dispY, 0.0, coords.y) - smoothstep(1.0, 1.0 + dispY, coords.y);" +
+            "finalColor *= getScanlineIntensity(coords);" +
 
             (bloom_strength !== 0 ?
                 "vec4 bloomFullColor = texture2D(bloomSource, coords);
                  vec3 bloomColor = bloomFullColor.rgb;
-                 vec2 minBound = step(vec2(0.0), coords);
-                 vec2 maxBound = step(coords, vec2(1.0));
-                 float bloomAlpha = bloomFullColor.a * minBound.x * minBound.y * maxBound.x * maxBound.y;" +
+                 float bloomAlpha = bloomFullColor.a;" +
                 (chroma_color !== 0 ?
                     "bloomColor = font_color.rgb * mix(vec3(rgb2grey(bloomColor)), bloomColor, chroma_color);"
                 :
                     "bloomColor = font_color.rgb * rgb2grey(bloomColor);") +
                 "finalColor += bloomColor * bloom_strength * bloomAlpha;"
             : "") +
+
+            "finalColor *= smoothstep(-dispX, 0.0, coords.x) - smoothstep(1.0, 1.0 + dispX, coords.x);
+             finalColor *= smoothstep(-dispY, 0.0, coords.y) - smoothstep(1.0, 1.0 + dispY, coords.y);" +
 
             (brightness_flickering !== 0 ? "
                 finalColor *= brightness;" : "") +
