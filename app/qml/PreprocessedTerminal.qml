@@ -43,8 +43,8 @@ Item{
     //The blur effect has to take into account the framerate
     property real mBlur: appSettings.motion_blur
     property real motionBlurCoefficient: (_maxBlurCoefficient * Math.sqrt(mBlur) + _minBlurCoefficient * (1 - Math.sqrt(mBlur)))
-    property real _minBlurCoefficient: 0.70
-    property real _maxBlurCoefficient: 0.95
+    property real _minBlurCoefficient: 0.50
+    property real _maxBlurCoefficient: 0.90
 
     property size terminalSize: kterminal.terminalSize
     property size fontMetrics: kterminal.fontMetrics
@@ -273,7 +273,7 @@ Item{
                     "vec3 blur_color = texture2D(blurredSource, coords).rgb * (1.0 - blurCoefficient);" +
                     "vec3 color = min(origColor + blur_color, max(origColor, blur_color));" +
 
-                    "gl_FragColor = vec4(color, step(0.004, rgb2grey(color - origColor)));" +
+                    "gl_FragColor = vec4(color, step(0.02, rgb2grey(color - origColor)));" +
                 "}"
 
             onStatusChanged: if (log) console.log(log) //Print warning messages
