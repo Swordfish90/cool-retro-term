@@ -238,7 +238,9 @@ ShaderEffect {
 
             (horizontal_sincronization !== 0 ? "
                 float dst = sin((coords.y + time * 0.001) * distortionFreq);
-                coords.x += dst * distortionScale;"
+                coords.x += dst * distortionScale;" +
+                (noise_strength ? "
+                    noise += distortionScale * 3.0;" : "")
             : "") +
 
             (jitter !== 0 || noise_strength !== 0 ?
