@@ -23,11 +23,14 @@ import QtGraphicalEffects 1.0
 
 ShaderEffect {
     property ShaderEffectSource source
+    property ShaderEffectSource blurredSource
     property ShaderEffectSource bloomSource
 
     property color font_color: appSettings.font_color
     property color background_color: appSettings.background_color
     property real bloom_strength: appSettings.bloom_strength * 2.5
+
+    property real motion_blur: appSettings.motion_blur
 
     property real jitter: appSettings.jitter * 0.007
     property real noise_strength: appSettings.noise_strength
@@ -156,6 +159,8 @@ ShaderEffect {
         (bloom_strength !== 0 ? "
             uniform highp sampler2D bloomSource;
             uniform lowp float bloom_strength;" : "") +
+        (motion_blur !== 0 ? "
+            uniform sampler2D blurredSource;" : "") +
         (noise_strength !== 0 ? "
             uniform highp float noise_strength;" : "") +
         (((noise_strength !== 0 || jitter !== 0 || rgb_shift)
@@ -255,8 +260,14 @@ ShaderEffect {
                 color += randomPass(coords) * glowing_line_strength;" : "") +
 
 
-            "vec3 txt_color = texture2D(source, txt_coords).rgb;
-             float greyscale_color = rgb2grey(txt_color) + color;" +
+            "vec3 txt_color = texture2D(source, txt_coords).rgb;" +
+
+            (motion_blur !== 0 ? "
+                vec4 txt_blur = texture2D(blurredSource, txt_coords);
+                txt_color = txt_color + txt_blur.rgb * txt_blur.a;"
+            : "") +
+
+             "float greyscale_color = rgb2grey(txt_color) + color;" +
 
             (chroma_color !== 0 ?
                 (rgb_shift !== 0 ? "

@@ -58,6 +58,7 @@ Item{
     property real bloom_strength: 0.65
 
     property real bloom_quality: 0.5
+    property real blur_quality: 0.5
 
     property real chroma_color: 0.0
     property real saturation_color: 0.0
@@ -168,7 +169,8 @@ Item{
             fontIndexes: fontIndexes,
             frameReflections: _frameReflections,
             showMenubar: showMenubar,
-            bloom_quality: bloom_quality
+            bloom_quality: bloom_quality,
+            blur_quality: blur_quality
         }
         return stringify(settings);
     }
@@ -243,6 +245,7 @@ Item{
         showMenubar = settings.showMenubar !== undefined ? settings.showMenubar : showMenubar;
 
         bloom_quality = settings.bloom_quality !== undefined ? settings.bloom_quality : bloom_quality;
+        blur_quality = settings.blur_quality !== undefined ? settings.blur_quality : blur_quality;
     }
 
     function loadProfileString(profileString){

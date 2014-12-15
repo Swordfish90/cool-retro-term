@@ -84,6 +84,27 @@ Tab{
             }
         }
         GroupBox{
+            title: qsTr("Motion Blur")
+            Layout.fillWidth: true
+            anchors.left: parent.left
+            anchors.right: parent.right
+            GridLayout{
+                id: blurQualityContainer
+                anchors.fill: parent
+
+                Text{text: qsTr("Blur Quality")}
+                Slider{
+                    Layout.fillWidth: true
+                    id: blurSlider
+                    onValueChanged: appSettings.blur_quality = value;
+                    value: appSettings.blur_quality
+                    stepSize: 0.10
+                    Component.onCompleted: minimumValue = 0.3 //Without this value gets set to 0.5
+                }
+                Text{text: Math.round(blurSlider.value * 100) + "%"}
+            }
+        }
+        GroupBox{
             title: qsTr("Frame")
             Layout.fillWidth: true
             anchors.left: parent.left

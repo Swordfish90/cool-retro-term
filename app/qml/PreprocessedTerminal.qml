@@ -28,7 +28,8 @@ Item{
 
     property size virtualResolution: Qt.size(kterminal.width, kterminal.height)
     property alias mainTerminal: kterminal
-    property ShaderEffectSource mainSource: mBlur !== 0 ? blurredSourceLoader.item : kterminalSource
+    property ShaderEffectSource mainSource: kterminalSource
+    property ShaderEffectSource blurredSource: blurredSourceLoader.item
 
     property real scaleTexture: 1.0
     property alias title: ksession.title
@@ -41,9 +42,9 @@ Item{
 
     //The blur effect has to take into account the framerate
     property real mBlur: appSettings.motion_blur
-    property real motionBlurCoefficient: (_maxBlurCoefficient * mBlur + _minBlurCoefficient * (1 - mBlur))
+    property real motionBlurCoefficient: (_maxBlurCoefficient * Math.sqrt(mBlur) + _minBlurCoefficient * (1 - Math.sqrt(mBlur)))
     property real _minBlurCoefficient: 0.70
-    property real _maxBlurCoefficient: 0.90
+    property real _maxBlurCoefficient: 0.95
 
     property size terminalSize: kterminal.terminalSize
     property size fontMetrics: kterminal.fontMetrics
@@ -241,8 +242,8 @@ Item{
     Loader{
         id: blurredTerminalLoader
 
-        width: kterminalSource.textureSize.width
-        height: kterminalSource.textureSize.height
+        width: kterminal.width * scaleTexture * appSettings.blur_quality
+        height: kterminal.height * scaleTexture * appSettings.blur_quality
         active: mBlur !== 0
         asynchronous: true
 
@@ -268,13 +269,11 @@ Item{
 
                 "void main() {" +
                     "vec2 coords = qt_TexCoord0;" +
-                    "vec3 color = texture2D(txt_source, coords).rgb * 256.0;" +
+                    "vec3 origColor = texture2D(txt_source, coords).rgb;" +
+                    "vec3 blur_color = texture2D(blurredSource, coords).rgb * (1.0 - blurCoefficient);" +
+                    "vec3 color = min(origColor + blur_color, max(origColor, blur_color));" +
 
-                    "vec3 blur_color = texture2D(blurredSource, coords).rgb * 256.0;" +
-                    "blur_color = blur_color - blur_color * blurCoefficient;" +
-                    "color = step(vec3(1.0), color) * color + step(color, vec3(1.0)) * blur_color;" +
-
-                    "gl_FragColor = vec4(floor(color) / 256.0, 1.0);" +
+                    "gl_FragColor = vec4(color, step(0.004, rgb2grey(color - origColor)));" +
                 "}"
 
             onStatusChanged: if (log) console.log(log) //Print warning messages
