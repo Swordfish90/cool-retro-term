@@ -23,11 +23,14 @@ import QtGraphicalEffects 1.0
 
 ShaderEffect {
     property ShaderEffectSource source
+    property ShaderEffectSource blurredSource
     property ShaderEffectSource bloomSource
 
     property color font_color: appSettings.font_color
     property color background_color: appSettings.background_color
     property real bloom_strength: appSettings.bloom_strength * 2.5
+
+    property real motion_blur: appSettings.motion_blur
 
     property real jitter: appSettings.jitter * 0.007
     property real noise_strength: appSettings.noise_strength
@@ -156,6 +159,8 @@ ShaderEffect {
         (bloom_strength !== 0 ? "
             uniform highp sampler2D bloomSource;
             uniform lowp float bloom_strength;" : "") +
+        (motion_blur !== 0 ? "
+            uniform sampler2D blurredSource;" : "") +
         (noise_strength !== 0 ? "
             uniform highp float noise_strength;" : "") +
         (((noise_strength !== 0 || jitter !== 0 || rgb_shift)
@@ -233,7 +238,9 @@ ShaderEffect {
 
             (horizontal_sincronization !== 0 ? "
                 float dst = sin((coords.y + time * 0.001) * distortionFreq);
-                coords.x += dst * distortionScale;"
+                coords.x += dst * distortionScale;" +
+                (noise_strength ? "
+                    noise += distortionScale * 3.0;" : "")
             : "") +
 
             (jitter !== 0 || noise_strength !== 0 ?
@@ -254,9 +261,14 @@ ShaderEffect {
             (glowing_line_strength !== 0 ? "
                 color += randomPass(coords) * glowing_line_strength;" : "") +
 
+            "vec3 txt_color = texture2D(source, txt_coords).rgb;" +
 
-            "vec3 txt_color = texture2D(source, txt_coords).rgb;
-             float greyscale_color = rgb2grey(txt_color) + color;" +
+            (motion_blur !== 0 ? "
+                vec4 txt_blur = texture2D(blurredSource, txt_coords);
+                txt_color = txt_color + txt_blur.rgb * txt_blur.a;"
+            : "") +
+
+             "float greyscale_color = rgb2grey(txt_color) + color;" +
 
             (chroma_color !== 0 ?
                 (rgb_shift !== 0 ? "
@@ -273,22 +285,21 @@ ShaderEffect {
             :
                 "vec3 finalColor = mix(background_color.rgb, font_color.rgb, greyscale_color);") +
 
-            "finalColor *= getScanlineIntensity(coords);
-             finalColor *= smoothstep(-dispX, 0.0, coords.x) - smoothstep(1.0, 1.0 + dispX, coords.x);
-             finalColor *= smoothstep(-dispY, 0.0, coords.y) - smoothstep(1.0, 1.0 + dispY, coords.y);" +
+            "finalColor *= getScanlineIntensity(coords);" +
 
             (bloom_strength !== 0 ?
                 "vec4 bloomFullColor = texture2D(bloomSource, coords);
                  vec3 bloomColor = bloomFullColor.rgb;
-                 vec2 minBound = step(vec2(0.0), coords);
-                 vec2 maxBound = step(coords, vec2(1.0));
-                 float bloomAlpha = bloomFullColor.a * minBound.x * minBound.y * maxBound.x * maxBound.y;" +
+                 float bloomAlpha = bloomFullColor.a;" +
                 (chroma_color !== 0 ?
                     "bloomColor = font_color.rgb * mix(vec3(rgb2grey(bloomColor)), bloomColor, chroma_color);"
                 :
                     "bloomColor = font_color.rgb * rgb2grey(bloomColor);") +
                 "finalColor += bloomColor * bloom_strength * bloomAlpha;"
             : "") +
+
+            "finalColor *= smoothstep(-dispX, 0.0, coords.x) - smoothstep(1.0, 1.0 + dispX, coords.x);
+             finalColor *= smoothstep(-dispY, 0.0, coords.y) - smoothstep(1.0, 1.0 + dispY, coords.y);" +
 
             (brightness_flickering !== 0 ? "
                 finalColor *= brightness;" : "") +
