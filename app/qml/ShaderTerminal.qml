@@ -261,7 +261,6 @@ ShaderEffect {
             (glowing_line_strength !== 0 ? "
                 color += randomPass(coords) * glowing_line_strength;" : "") +
 
-
             "vec3 txt_color = texture2D(source, txt_coords).rgb;" +
 
             (motion_blur !== 0 ? "

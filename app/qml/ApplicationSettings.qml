@@ -93,7 +93,7 @@ Item{
     property real fontScaling: 1.0
     property real fontWidth: 1.0
 
-    property var fontIndexes: [0,0,0]
+    property var fontNames: ["TERMINUS", "COMMODORE_PET", "COMMODORE_PET"]
     property var fontlist: fontManager.item.fontlist
 
     signal terminalFontChanged(string fontSource, int pixelSize, int lineSpacing, real screenScaling, real fontWidth)
@@ -116,6 +116,14 @@ Item{
     onFontScalingChanged: handleFontChanged();
     onFontWidthChanged: handleFontChanged();
 
+    function getIndexByName(name) {
+        for (var i = 0; i < fontlist.count; i++) {
+            if (name === fontlist.get(i).name)
+                return i;
+        }
+        return undefined;
+    }
+
     function incrementScaling(){
         fontScaling = Math.min(fontScaling + 0.05, 2.50);
         handleFontChanged();
@@ -127,8 +135,12 @@ Item{
     }
 
     function handleFontChanged(){
-        if(!fontManager.item) return;
-        fontManager.item.selectedFontIndex = fontIndexes[rasterization];
+        if (!fontManager.item) return;
+
+        var index = getIndexByName(fontNames[rasterization]);
+        if (index === undefined) return;
+
+        fontManager.item.selectedFontIndex = index;
         fontManager.item.scaling = fontScaling * window_scaling;
 
         var fontSource = fontManager.item.source;
@@ -166,7 +178,7 @@ Item{
             window_scaling: window_scaling,
             show_terminal_size: show_terminal_size,
             fontScaling: fontScaling,
-            fontIndexes: fontIndexes,
+            fontNames: fontNames,
             frameReflections: _frameReflections,
             showMenubar: showMenubar,
             bloom_quality: bloom_quality,
@@ -196,7 +208,7 @@ Item{
             contrast: contrast,
             ambient_light: ambient_light,
             windowOpacity: windowOpacity,
-            fontIndex: fontIndexes[rasterization],
+            fontName: fontNames[rasterization],
             fontWidth: fontWidth
         }
         return stringify(settings);
@@ -237,7 +249,7 @@ Item{
         fps = settings.fps !== undefined ? settings.fps: fps
         window_scaling = settings.window_scaling !== undefined ? settings.window_scaling : window_scaling
 
-        fontIndexes = settings.fontIndexes !== undefined ? settings.fontIndexes : fontIndexes
+        fontNames = settings.fontNames !== undefined ? settings.fontNames : fontNames
         fontScaling = settings.fontScaling !== undefined ? settings.fontScaling : fontScaling
 
         _frameReflections = settings.frameReflections !== undefined ? settings.frameReflections : _frameReflections;
@@ -278,7 +290,7 @@ Item{
         brightness = settings.brightness !== undefined ? settings.brightness : brightness;
         windowOpacity = settings.windowOpacity !== undefined ? settings.windowOpacity : windowOpacity;
 
-        fontIndexes[rasterization] = settings.fontIndex !== undefined ? settings.fontIndex : fontIndexes[rasterization];
+        fontNames[rasterization] = settings.fontName !== undefined ? settings.fontName : fontNames[rasterization];
         fontWidth = settings.fontWidth !== undefined ? settings.fontWidth : fontWidth;
     }
 

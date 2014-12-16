@@ -36,6 +36,7 @@ Item{
     ListModel{
         id: fontlist
         ListElement{
+            name: "TERMINUS"
             text: "Terminus (Modern)"
             source: "fonts/modern-terminus/TerminusTTF-Bold-4.38.2.ttf"
             lineSpacing: 0.2
@@ -43,6 +44,7 @@ Item{
             fontWidth: 1.0
         }
         ListElement{
+            name: "COMMODORE_PET"
             text: "Commodore PET (1977)"
             source: "fonts/1977-commodore-pet/COMMODORE_PET.ttf"
             lineSpacing: 0.2
@@ -50,6 +52,7 @@ Item{
             fontWidth: 0.7
         }
         ListElement{
+            name: "APPLE_II"
             text: "Apple ][ (1977)"
             source: "fonts/1977-apple2/PrintChar21.ttf"
             lineSpacing: 0.2
@@ -57,6 +60,7 @@ Item{
             fontWidth: 0.8
         }
         ListElement{
+            name: "ATARI_400"
             text: "Atari 400-800 (1979)"
             source: "fonts/1979-atari-400-800/ATARI400800_original.TTF"
             lineSpacing: 0.3
@@ -64,6 +68,7 @@ Item{
             fontWidth: 0.7
         }
         ListElement{
+            name: "COMMODORE_64"
             text: "Commodore 64 (1982)"
             source: "fonts/1982-commodore64/C64_User_Mono_v1.0-STYLE.ttf"
             lineSpacing: 0.3
@@ -71,6 +76,7 @@ Item{
             fontWidth: 0.7
         }
         ListElement{
+            name: "ATARI_ST"
             text: "Atari ST (1985)"
             source: "fonts/1985-atari-st/AtariST8x16SystemFont.ttf"
             lineSpacing: 0.2
@@ -78,6 +84,7 @@ Item{
             fontWidth: 1.0
         }
         ListElement{
+            name: "IBM_DOS"
             text: "IBM DOS (1985)"
             source: "fonts/1985-ibm-pc-vga/Perfect DOS VGA 437.ttf"
             lineSpacing: 0.2
@@ -85,6 +92,7 @@ Item{
             fontWidth: 1.0
         }
         ListElement{
+            name: "IBM_3278"
             text: "IBM 3278 (1971)"
             source: "fonts/1971-ibm-3278/3270Medium.ttf"
             lineSpacing: 0.2

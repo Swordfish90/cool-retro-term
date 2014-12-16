@@ -34,6 +34,7 @@ Item{
     ListModel{
         id: fontlist
         ListElement{
+            name: "COMMODORE_PET"
             text: "Commodore PET (1977)"
             source: "fonts/1977-commodore-pet/COMMODORE_PET.ttf"
             lineSpacing: 2
@@ -42,6 +43,7 @@ Item{
             fontWidth: 0.8
         }
         ListElement{
+            name: "APPLE_II"
             text: "Apple ][ (1977)"
             source: "fonts/1977-apple2/PrintChar21.ttf"
             lineSpacing: 2
@@ -50,6 +52,7 @@ Item{
             fontWidth: 0.9
         }
         ListElement{
+            name: "ATARI_400"
             text: "Atari 400-800 (1979)"
             source: "fonts/1979-atari-400-800/ATARI400800_original.TTF"
             lineSpacing: 3
@@ -58,6 +61,7 @@ Item{
             fontWidth: 0.8
         }
         ListElement{
+            name: "COMMODORE_64"
             text: "Commodore 64 (1982)"
             source: "fonts/1982-commodore64/C64_User_Mono_v1.0-STYLE.ttf"
             lineSpacing: 3

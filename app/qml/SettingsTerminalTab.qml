@@ -36,7 +36,6 @@ Tab{
                 currentIndex: appSettings.rasterization
                 onCurrentIndexChanged: {
                     appSettings.rasterization = currentIndex
-                    fontChanger.updateIndex();
                 }
             }
         }
@@ -51,14 +50,22 @@ Tab{
                     id: fontChanger
                     Layout.fillWidth: true
                     model: appSettings.fontlist
-                    currentIndex: updateIndex()
                     onActivated: {
-                        appSettings.fontIndexes[appSettings.rasterization] = index;
+                        var name = appSettings.fontlist.get(index).name;
+                        appSettings.fontNames[appSettings.rasterization] = name;
                         appSettings.handleFontChanged();
                     }
                     function updateIndex(){
-                        currentIndex = appSettings.fontIndexes[appSettings.rasterization];
+                        var name = appSettings.fontNames[appSettings.rasterization];
+                        var index = appSettings.getIndexByName(name);
+                        if (index !== undefined)
+                            currentIndex = index;
                     }
+                    Connections{
+                        target: appSettings
+                        onRasterizationChanged: fontChanger.updateIndex();
+                    }
+                    Component.onCompleted: updateIndex();
                 }
                 Text{ text: qsTr("Scaling") }
                 RowLayout{
