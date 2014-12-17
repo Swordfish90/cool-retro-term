@@ -31,6 +31,8 @@ Item{
     property ShaderEffectSource mainSource: kterminalSource
     property ShaderEffectSource blurredSource: blurredSourceLoader.item
 
+    property real fontWidth: 1.0
+    property real screenScaling: 1.0
     property real scaleTexture: 1.0
     property alias title: ksession.title
     property alias kterminal: kterminal
@@ -76,8 +78,8 @@ Item{
 
     QMLTermWidget {
         id: kterminal
-        width: parent.width
-        height: parent.height
+        width: Math.floor(parent.width / (screenScaling * fontWidth))
+        height: Math.floor(parent.height / screenScaling)
 
         colorScheme: "cool-retro-term"
 
@@ -113,9 +115,8 @@ Item{
             font.pixelSize = pixelSize;
             font.family = fontLoader.name;
 
-            width = Qt.binding(function() {return Math.floor(terminalContainer.width / (screenScaling * fontWidth));});
-            height = Qt.binding(function() {return Math.floor(terminalContainer.height / screenScaling);});
-
+            terminalContainer.fontWidth = fontWidth;
+            terminalContainer.screenScaling= screenScaling;
             scaleTexture = Math.max(1.0, Math.round(screenScaling / 2));
 
             kterminal.lineSpacing = lineSpacing;
