@@ -102,6 +102,8 @@ Item{
             width: terminal.fontMetrics.width * 0.75
             Rectangle {
                 anchors.fill: parent
+                anchors.topMargin: 1
+                anchors.bottomMargin: 1
                 color: "white"
                 radius: width * 0.25
                 opacity: 0.7
