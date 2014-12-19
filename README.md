@@ -105,16 +105,21 @@ qmake && make
 
 ##Build instructions (OSX)
 
-    brew install qt5
-    git clone --recursive https://github.com/Swordfish90/cool-retro-term.git
-    export CPPFLAGS="-I/usr/local/opt/qt5/include"
-    export LDFLAGS="-L/usr/local/opt/qt5/lib"
-    export PATH=/usr/local/opt/qt5/bin:$PATH
-    cd cool-retro-term
-    qmake && make
-    mkdir cool-retro-term.app/Contents/PlugIns
-    cp -r qmltermwidget/QMLTermWidget cool-retro-term.app/Contents/PlugIns
-    open cool-retro-term.app
+1. Install [Xcode](https://developer.apple.com/xcode/) and agree to the licence agreement
+2. Enter the following commands into the terminal:
+
+```sh
+brew install qt5
+git clone --recursive https://github.com/Swordfish90/cool-retro-term.git
+export CPPFLAGS="-I/usr/local/opt/qt5/include"
+export LDFLAGS="-L/usr/local/opt/qt5/lib"
+export PATH=/usr/local/opt/qt5/bin:$PATH
+cd cool-retro-term
+qmake && make
+mkdir cool-retro-term.app/Contents/PlugIns
+cp -r qmltermwidget/QMLTermWidget cool-retro-term.app/Contents/PlugIns
+open cool-retro-term.app
+```
 
 ##Donations
 I made this project in my spare time because I love what I'm doing. If you are enjoying it and you want to buy me a beer click [here](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=flscogna%40gmail%2ecom&lc=IT&item_name=Filippo%20Scognamiglio&currency_code=EUR&bn=PP%2dDonationsBF%3abtn_donate_LG%2egif%3aNonHosted) .
