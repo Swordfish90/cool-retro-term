@@ -14,8 +14,6 @@ TerminalFrame{
     imageSource: "../images/screen-frame.png"
     normalsSource: "../images/screen-frame-normals.png"
 
-    distortionCoefficient: 1.5
-
     displacementLeft: 55
     displacementTop: 50
     displacementRight: 55
