@@ -49,10 +49,10 @@ ShaderEffect {
 
     property bool frameReflections: appSettings.frameReflections
 
-    property real disp_top: (frame.item.displacementTop * appSettings.window_scaling) / height
-    property real disp_bottom: (frame.item.displacementBottom * appSettings.window_scaling) / height
-    property real disp_left: (frame.item.displacementLeft * appSettings.window_scaling) / width
-    property real disp_right: (frame.item.displacementRight * appSettings.window_scaling) / width
+    property real disp_top: (frame.displacementTop * appSettings.window_scaling) / height
+    property real disp_bottom: (frame.displacementBottom * appSettings.window_scaling) / height
+    property real disp_left: (frame.displacementLeft * appSettings.window_scaling) / width
+    property real disp_right: (frame.displacementRight * appSettings.window_scaling) / width
 
     property real screen_brightness: appSettings.brightness * 1.5 + 0.5
 

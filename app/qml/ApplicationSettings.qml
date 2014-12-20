@@ -76,17 +76,8 @@ Item{
 
     property int rasterization: no_rasterization
 
-    ListModel{
-        id: framelist
-        ListElement{text: "No frame"; source: "./frames/NoFrame.qml"; reflections: false}
-        ListElement{text: "Simple white frame"; source: "./frames/WhiteSimpleFrame.qml"; reflections: true}
-        ListElement{text: "Rough black frame"; source: "./frames/BlackRoughFrame.qml"; reflections: true}
-    }
-
-    property string frame_source: frames_list.get(frames_index).source
-    property int frames_index: 1
-    property var frames_list: framelist
-
+    property alias profiles_list: profileslist
+    property int profiles_index: 0
 
     // FONTS //////////////////////////////////////////////////////////////////
 
@@ -121,7 +112,7 @@ Item{
             if (name === fontlist.get(i).name)
                 return i;
         }
-        return undefined;
+        return 0; // If the font is not available returns the first one.
     }
 
     function incrementScaling(){
@@ -154,12 +145,20 @@ Item{
 
     // FRAMES /////////////////////////////////////////////////////////////////
 
-    property bool _frameReflections: true
+    property bool _frameReflections: false
     property bool reflectionsAllowed: framelist.get(frames_index).reflections
     property bool frameReflections: _frameReflections && reflectionsAllowed
 
-    property alias profiles_list: profileslist
-    property int profiles_index: 0
+    ListModel{
+        id: framelist
+        ListElement{text: "No frame"; source: ""; reflections: false}
+        ListElement{text: "Simple white frame"; source: "./frames/WhiteSimpleFrame.qml"; reflections: true}
+        ListElement{text: "Rough black frame"; source: "./frames/BlackRoughFrame.qml"; reflections: true}
+    }
+
+    property string frame_source: frames_list.get(frames_index).source
+    property int frames_index: 1
+    property alias frames_list: framelist
 
     // DB STORAGE /////////////////////////////////////////////////////////////
 

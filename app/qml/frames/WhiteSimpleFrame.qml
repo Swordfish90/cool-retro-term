@@ -14,12 +14,11 @@ TerminalFrame{
     imageSource: "../images/screen-frame.png"
     normalsSource: "../images/screen-frame-normals.png"
 
-    distortionCoefficient: 1.5
-
     displacementLeft: 55
     displacementTop: 50
     displacementRight: 55
     displacementBottom: 50
 
-    shaderString: "FrameShader.qml"
+    staticDiffuseComponent: 1.0
+    dinamycDiffuseComponent: 0.6
 }

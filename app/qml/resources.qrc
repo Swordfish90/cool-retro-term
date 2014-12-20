@@ -1,7 +1,6 @@
 <RCC>
     <qresource prefix="/">
         <file>frames/BlackRoughFrame.qml</file>
-        <file>frames/NoFrame.qml</file>
         <file>frames/images/black-frame.png</file>
         <file>frames/images/screen-frame-normals.png</file>
         <file>frames/images/black-frame-normals.png</file>
@@ -9,7 +8,6 @@
         <file>frames/images/black-frame-original.png</file>
         <file>frames/images/screen-frame-original.png</file>
         <file>frames/WhiteSimpleFrame.qml</file>
-        <file>frames/utils/FrameShader.qml</file>
         <file>frames/utils/TerminalFrame.qml</file>
         <file>SizeOverlay.qml</file>
         <file>ShaderTerminal.qml</file>

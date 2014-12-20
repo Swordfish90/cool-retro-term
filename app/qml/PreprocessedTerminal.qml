@@ -31,14 +31,16 @@ Item{
     property ShaderEffectSource mainSource: kterminalSource
     property ShaderEffectSource blurredSource: blurredSourceLoader.item
 
+    property real fontWidth: 1.0
+    property real screenScaling: 1.0
     property real scaleTexture: 1.0
     property alias title: ksession.title
     property alias kterminal: kterminal
 
-    anchors.leftMargin: frame.item.displacementLeft * appSettings.window_scaling
-    anchors.rightMargin: frame.item.displacementRight * appSettings.window_scaling
-    anchors.topMargin: frame.item.displacementTop * appSettings.window_scaling
-    anchors.bottomMargin: frame.item.displacementBottom * appSettings.window_scaling
+    anchors.leftMargin: frame.displacementLeft * appSettings.window_scaling
+    anchors.rightMargin: frame.displacementRight * appSettings.window_scaling
+    anchors.topMargin: frame.displacementTop * appSettings.window_scaling
+    anchors.bottomMargin: frame.displacementBottom * appSettings.window_scaling
 
     //The blur effect has to take into account the framerate
     property real mBlur: appSettings.motion_blur
@@ -76,8 +78,8 @@ Item{
 
     QMLTermWidget {
         id: kterminal
-        width: parent.width
-        height: parent.height
+        width: Math.floor(parent.width / (screenScaling * fontWidth))
+        height: Math.floor(parent.height / screenScaling)
 
         colorScheme: "cool-retro-term"
 
@@ -100,6 +102,8 @@ Item{
             width: terminal.fontMetrics.width * 0.75
             Rectangle {
                 anchors.fill: parent
+                anchors.topMargin: 1
+                anchors.bottomMargin: 1
                 color: "white"
                 radius: width * 0.25
                 opacity: 0.7
@@ -113,9 +117,8 @@ Item{
             font.pixelSize = pixelSize;
             font.family = fontLoader.name;
 
-            width = Qt.binding(function() {return Math.floor(terminalContainer.width / (screenScaling * fontWidth));});
-            height = Qt.binding(function() {return Math.floor(terminalContainer.height / screenScaling);});
-
+            terminalContainer.fontWidth = fontWidth;
+            terminalContainer.screenScaling= screenScaling;
             scaleTexture = Math.max(1.0, Math.round(screenScaling / 2));
 
             kterminal.lineSpacing = lineSpacing;
