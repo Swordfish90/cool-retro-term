@@ -21,5 +21,6 @@ TerminalFrame{
     displacementRight: 55
     displacementBottom: 50
 
-    shaderString: "FrameShader.qml"
+    staticDiffuseComponent: 1.0
+    dinamycDiffuseComponent: 0.6
 }

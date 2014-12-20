@@ -35,10 +35,10 @@ Item{
     property alias title: ksession.title
     property alias kterminal: kterminal
 
-    anchors.leftMargin: frame.item.displacementLeft * appSettings.window_scaling
-    anchors.rightMargin: frame.item.displacementRight * appSettings.window_scaling
-    anchors.topMargin: frame.item.displacementTop * appSettings.window_scaling
-    anchors.bottomMargin: frame.item.displacementBottom * appSettings.window_scaling
+    anchors.leftMargin: frame.displacementLeft * appSettings.window_scaling
+    anchors.rightMargin: frame.displacementRight * appSettings.window_scaling
+    anchors.topMargin: frame.displacementTop * appSettings.window_scaling
+    anchors.bottomMargin: frame.displacementBottom * appSettings.window_scaling
 
     //The blur effect has to take into account the framerate
     property real mBlur: appSettings.motion_blur

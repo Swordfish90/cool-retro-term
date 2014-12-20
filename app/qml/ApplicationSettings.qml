@@ -78,7 +78,7 @@ Item{
 
     ListModel{
         id: framelist
-        ListElement{text: "No frame"; source: "./frames/NoFrame.qml"; reflections: false}
+        ListElement{text: "No frame"; source: ""; reflections: false}
         ListElement{text: "Simple white frame"; source: "./frames/WhiteSimpleFrame.qml"; reflections: true}
         ListElement{text: "Rough black frame"; source: "./frames/BlackRoughFrame.qml"; reflections: true}
     }
@@ -154,7 +154,7 @@ Item{
 
     // FRAMES /////////////////////////////////////////////////////////////////
 
-    property bool _frameReflections: true
+    property bool _frameReflections: false
     property bool reflectionsAllowed: framelist.get(frames_index).reflections
     property bool frameReflections: _frameReflections && reflectionsAllowed
 
