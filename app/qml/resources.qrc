@@ -1,7 +1,6 @@
 <RCC>
     <qresource prefix="/">
         <file>frames/BlackRoughFrame.qml</file>
-        <file>frames/NoFrame.qml</file>
         <file>frames/images/black-frame.png</file>
         <file>frames/images/screen-frame-normals.png</file>
         <file>frames/images/black-frame-normals.png</file>
