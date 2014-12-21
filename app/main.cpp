@@ -52,5 +52,8 @@ int main(int argc, char *argv[])
 
     engine.load(QUrl("qrc:/main.qml"));
 
+    // Quit the application when the engine closes.
+    QObject::connect((QObject*) &engine, SIGNAL(quit()), (QObject*) &app, SLOT(quit()));
+
     return app.exec();
 }
