@@ -127,8 +127,13 @@ Item{
             appSettings.terminalFontChanged.connect(handleFontChange);
 
             // Retrieve the variable set in main.cpp if arguments are passed.
-            if (shellProgram)
+            if (shellProgram) {
                 ksession.setShellProgram(shellProgram);
+            } else if (!shellProgram && Qt.platform.os === "osx") {
+                // OSX Requires the following default parameters for auto login.
+                ksession.setArgs(["-i", "-l"]);
+            }
+
             if (workdir)
                 ksession.initialWorkingDirectory = workdir;
 
