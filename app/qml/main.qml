@@ -115,8 +115,9 @@ ApplicationWindow{
     }
     TerminalContainer{
         id: terminalContainer
+        y: appSettings.showMenubar ? 0 : -2 // Workaroud to hide the margin in the menubar.
         width: parent.width * appSettings.window_scaling
-        height: parent.height * appSettings.window_scaling
+        height: (parent.height + Math.abs(y)) * appSettings.window_scaling
 
         transform: Scale {
             xScale: 1 / appSettings.window_scaling
