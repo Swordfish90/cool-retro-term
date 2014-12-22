@@ -61,6 +61,7 @@ Item{
         sourceItem: frameimage
         hideSource: true
         textureSize: Qt.size(parent.width, parent.height)
+        sourceRect: Qt.rect(-1, -1, frameimage.width + 2, frameimage.height + 2)
         visible: false
     }
     ShaderEffectSource{
@@ -68,6 +69,7 @@ Item{
         sourceItem: framenormals
         hideSource: true
         textureSize: Qt.size(parent.width, parent.height)
+        sourceRect: Qt.rect(-1, -1, framenormals.width + 2, framenormals.height + 2)
         visible: false
     }
 
@@ -146,7 +148,7 @@ Item{
 
                 vec3 normal = normalize(txtNormal.rgb * 2.0 - 1.0);
                 vec2 lightDirection = normalize(vec2(0.5, 0.5) - coords);
-                float dotProd = dot(normal, vec3(lightDirection, 0.0)) * diffuseComponent;
+                float dotProd = dot(normal, vec3(lightDirection, 0.0)) * diffuseComponent * txtNormal.a;
 
                 vec3 darkColor = dotProd * reflectionColor.rgb;
                 gl_FragColor = vec4(mix(darkColor, txtColor.rgb, ambient_light), dotProd);
