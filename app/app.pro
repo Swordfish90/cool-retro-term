@@ -1,4 +1,4 @@
-QT += qml quick widgets
+QT += qml quick widgets sql
 TARGET = cool-retro-term 
 
 DESTDIR = $$OUT_PWD/../
