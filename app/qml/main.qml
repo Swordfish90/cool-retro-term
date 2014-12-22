@@ -68,12 +68,16 @@ ApplicationWindow{
         id: quitAction
         text: qsTr("Quit")
         shortcut: "Ctrl+Shift+Q"
-        onTriggered: terminalWindow.close();
+        onTriggered: Qt.quit();
     }
     Action{
         id: showsettingsAction
         text: qsTr("Settings")
-        onTriggered: settingswindow.show();
+        onTriggered: {
+            settingswindow.show();
+            settingswindow.requestActivate();
+            settingswindow.raise();
+        }
     }
     Action{
         id: copyAction
@@ -102,6 +106,8 @@ ApplicationWindow{
         text: qsTr("About")
         onTriggered: {
             aboutDialog.show();
+            aboutDialog.requestActivate();
+            aboutDialog.raise();
         }
     }
     ApplicationSettings{
@@ -134,4 +140,10 @@ ApplicationWindow{
         }
     }
     Component.onCompleted: appSettings.handleFontChanged();
+    onClosing: {
+        // OSX Since we are currently supporting only one window
+        // quit the application when it is closed.
+        if (Qt.platform.os === "osx")
+            Qt.quit()
+    }
 }
