@@ -114,6 +114,8 @@ Item{
 
         function handleFontChange(fontSource, pixelSize, lineSpacing, screenScaling, fontWidth){
             fontLoader.source = fontSource;
+
+            kterminal.antialiasText = appSettings.rasterization === appSettings.no_rasterization
             font.pixelSize = pixelSize;
             font.family = fontLoader.name;
 
