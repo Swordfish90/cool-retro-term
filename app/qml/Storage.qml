@@ -21,7 +21,7 @@
 import QtQuick 2.2
 import QtQuick.LocalStorage 2.0
 
-Item {
+QtObject {
     property bool initialized: false
 
     function getDatabase() {

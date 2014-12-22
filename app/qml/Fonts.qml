@@ -20,10 +20,9 @@
 
 import QtQuick 2.2
 
-Item{
+QtObject{
     property int selectedFontIndex
     property real scaling
-    property alias fontlist: fontlist
     property var source: fontlist.get(selectedFontIndex).source
     property var _font: fontlist.get(selectedFontIndex)
     property int pixelSize: _font.pixelSize * scaling
@@ -33,8 +32,7 @@ Item{
 
     //In this configuration lineSpacing is proportional to pixelSize.
 
-    ListModel{
-        id: fontlist
+    property ListModel fontlist: ListModel{
         ListElement{
             name: "TERMINUS"
             text: "Terminus (Modern)"

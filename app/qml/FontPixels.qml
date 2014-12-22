@@ -20,10 +20,9 @@
 
 import QtQuick 2.2
 
-Item{
+QtObject{
     property int selectedFontIndex
     property real scaling
-    property alias fontlist: fontlist
     property var _font: fontlist.get(selectedFontIndex)
     property var source: _font.source
     property int pixelSize: _font.pixelSize
@@ -31,8 +30,7 @@ Item{
     property real screenScaling: scaling * _font.baseScaling
     property real defaultFontWidth: fontlist.get(selectedFontIndex).fontWidth
 
-    ListModel{
-        id: fontlist
+    property ListModel fontlist: ListModel{
         ListElement{
             name: "COMMODORE_PET"
             text: "Commodore PET (1977)"
