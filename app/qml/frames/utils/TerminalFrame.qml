@@ -5,8 +5,8 @@ import "../../utils.js" as Utils
 
 Item{
     id: framecontainer
-    property int textureWidth: terminalContainer.width
-    property int textureHeight: terminalContainer.height
+    property int textureWidth: terminalContainer.width / appSettings.window_scaling
+    property int textureHeight: terminalContainer.height / appSettings.window_scaling
 
     property int addedWidth
     property int addedHeight
