@@ -141,16 +141,36 @@ Item{
             forceActiveFocus();
         }
     }
-    Menu{
-        id: contextmenu
-        MenuItem{action: copyAction}
-        MenuItem{action: pasteAction}
-        MenuSeparator{visible: Qt.platform.os !== "osx"}
-        MenuItem{action: fullscreenAction; visible: Qt.platform.os !== "osx"}
-        MenuItem{action: showMenubarAction; visible: Qt.platform.os !== "osx"}
-        MenuSeparator{visible: !appSettings.showMenubar}
-        CRTMainMenuBar{visible: !appSettings.showMenubar}
+    Component {
+        id: linuxContextMenu
+        Menu{
+            id: contextmenu
+            MenuItem{action: copyAction}
+            MenuItem{action: pasteAction}
+            MenuSeparator{visible: Qt.platform.os !== "osx"}
+            MenuItem{action: fullscreenAction; visible: Qt.platform.os !== "osx"}
+            MenuItem{action: showMenubarAction; visible: Qt.platform.os !== "osx"}
+            MenuSeparator{visible: !appSettings.showMenubar}
+            CRTMainMenuBar{visible: !appSettings.showMenubar}
+        }
     }
+    Component {
+        id: osxContextMenu
+        Menu{
+            id: contextmenu
+            MenuItem{action: copyAction}
+            MenuItem{action: pasteAction}
+            MenuSeparator{visible: Qt.platform.os !== "osx"}
+            MenuItem{action: fullscreenAction; visible: Qt.platform.os !== "osx"}
+            MenuItem{action: showMenubarAction; visible: Qt.platform.os !== "osx"}
+        }
+    }
+    Loader {
+        id: menuLoader
+        sourceComponent: (Qt.platform.os === "osx" ? osxContextMenu : linuxContextMenu)
+    }
+    property alias contextmenu: menuLoader.item
+
     MouseArea{
         acceptedButtons: Qt.LeftButton | Qt.MiddleButton | Qt.RightButton
         anchors.fill: parent
