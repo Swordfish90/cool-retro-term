@@ -232,9 +232,11 @@ ShaderEffect {
 
             (screen_distorsion !== 0 ? "
                 float distortion = dot(cc, cc) * screen_distorsion;
-                vec2 coords = (qt_TexCoord0 - cc * (1.0 + distortion) * distortion);"
+                vec2 staticCoords = (qt_TexCoord0 - cc * (1.0 + distortion) * distortion);"
             :"
-                vec2 coords = qt_TexCoord0;") +
+                vec2 staticCoords = qt_TexCoord0;") +
+
+            "vec2 coords = staticCoords;" +
 
             (horizontal_sincronization !== 0 ? "
                 float dst = sin((coords.y + time * 0.001) * distortionFreq);
@@ -298,8 +300,8 @@ ShaderEffect {
                 "finalColor += bloomColor * bloom_strength * bloomAlpha;"
             : "") +
 
-            "finalColor *= smoothstep(-dispX, 0.0, coords.x) - smoothstep(1.0, 1.0 + dispX, coords.x);
-             finalColor *= smoothstep(-dispY, 0.0, coords.y) - smoothstep(1.0, 1.0 + dispY, coords.y);" +
+            "finalColor *= smoothstep(-dispX, 0.0, staticCoords.x) - smoothstep(1.0, 1.0 + dispX, staticCoords.x);
+             finalColor *= smoothstep(-dispY, 0.0, staticCoords.y) - smoothstep(1.0, 1.0 + dispY, staticCoords.y);" +
 
             (brightness_flickering !== 0 ? "
                 finalColor *= brightness;" : "") +
