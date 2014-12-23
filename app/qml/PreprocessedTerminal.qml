@@ -149,9 +149,9 @@ Item{
             id: contextmenu
             MenuItem{action: copyAction}
             MenuItem{action: pasteAction}
-            MenuSeparator{visible: Qt.platform.os !== "osx"}
-            MenuItem{action: fullscreenAction; visible: Qt.platform.os !== "osx"}
-            MenuItem{action: showMenubarAction; visible: Qt.platform.os !== "osx"}
+            MenuSeparator{}
+            MenuItem{action: fullscreenAction}
+            MenuItem{action: showMenubarAction}
             MenuSeparator{visible: !appSettings.showMenubar}
             CRTMainMenuBar{visible: !appSettings.showMenubar}
         }
@@ -162,9 +162,6 @@ Item{
             id: contextmenu
             MenuItem{action: copyAction}
             MenuItem{action: pasteAction}
-            MenuSeparator{visible: Qt.platform.os !== "osx"}
-            MenuItem{action: fullscreenAction; visible: Qt.platform.os !== "osx"}
-            MenuItem{action: showMenubarAction; visible: Qt.platform.os !== "osx"}
         }
     }
     Loader {
