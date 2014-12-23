@@ -32,6 +32,15 @@ QtObject{
 
     property ListModel fontlist: ListModel{
         ListElement{
+            name: "PROGGY_TINY"
+            text: "Proggy Tiny (Modern)"
+            source: "fonts/modern-proggy-tiny/ProggyTiny.ttf"
+            lineSpacing: 1
+            pixelSize: 16
+            baseScaling: 3.5
+            fontWidth: 0.9
+        }
+        ListElement{
             name: "COMMODORE_PET"
             text: "Commodore PET (1977)"
             source: "fonts/1977-commodore-pet/COMMODORE_PET.ttf"
@@ -61,7 +70,7 @@ QtObject{
         ListElement{
             name: "COMMODORE_64"
             text: "Commodore 64 (1982)"
-            source: "fonts/1982-commodore64/C64_User_Mono_v1.0-STYLE.ttf"
+            source: "fonts/1982-commodore64/C64_Pro_Mono_v1.0-STYLE.ttf"
             lineSpacing: 3
             pixelSize: 8
             baseScaling: 4.0
