@@ -33,8 +33,8 @@ Tab{
                 ComboBox{
                     id: profilesbox
                     Layout.fillWidth: true
-                    model: appSettings.profiles_list
-                    currentIndex: appSettings.profiles_index
+                    model: appSettings.profilesList
+                    currentIndex: appSettings.profilesIndex
                 }
                 RowLayout{
                     Layout.fillWidth: true
@@ -42,7 +42,7 @@ Tab{
                         Layout.fillWidth: true
                         text: qsTr("Load")
                         onClicked: {
-                            appSettings.profiles_index = profilesbox.currentIndex
+                            appSettings.profilesIndex = profilesbox.currentIndex
                             appSettings.loadCurrentProfile();
                             appSettings.handleFontChanged();
                         }
@@ -55,9 +55,9 @@ Tab{
                     Button{
                         Layout.fillWidth: true
                         text: qsTr("Remove Selected")
-                        enabled: !appSettings.profiles_list.get(profilesbox.currentIndex).builtin
+                        enabled: !appSettings.profilesList.get(profilesbox.currentIndex).builtin
                         onClicked: {
-                            appSettings.profiles_list.remove(profilesbox.currentIndex)
+                            appSettings.profilesList.remove(profilesbox.currentIndex)
                             profilesbox.currentIndex = profilesbox.currentIndex - 1
                         }
                     }
@@ -99,9 +99,9 @@ Tab{
                 ComboBox{
                     id: framescombobox
                     Layout.fillWidth: true
-                    model: appSettings.frames_list
-                    currentIndex: appSettings.frames_index
-                    onCurrentIndexChanged: appSettings.frames_index = currentIndex
+                    model: appSettings.framesList
+                    currentIndex: appSettings.framesIndex
+                    onCurrentIndexChanged: appSettings.framesIndex = currentIndex
                 }
             }
         }

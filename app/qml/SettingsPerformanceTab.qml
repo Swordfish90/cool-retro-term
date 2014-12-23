@@ -38,7 +38,7 @@ Tab{
                     property int fps: checked ? slider.value : 0
                     onFpsChanged: appSettings.fps = fps
                     checked: appSettings.fps !== 0
-                    text: qsTr("Limit FPS")
+                    text: qsTr("Effects FPS")
                 }
                 Slider{
                     id: slider
@@ -54,8 +54,8 @@ Tab{
                 Slider{
                     Layout.fillWidth: true
                     id: txtslider
-                    onValueChanged: appSettings.window_scaling = value;
-                    value: appSettings.window_scaling
+                    onValueChanged: appSettings.windowScaling = value;
+                    value: appSettings.windowScaling
                     stepSize: 0.10
                     Component.onCompleted: minimumValue = 0.3 //Without this value gets set to 0.5
                 }
@@ -75,8 +75,8 @@ Tab{
                 Slider{
                     Layout.fillWidth: true
                     id: bloomSlider
-                    onValueChanged: appSettings.bloom_quality = value;
-                    value: appSettings.bloom_quality
+                    onValueChanged: appSettings.bloomQuality = value;
+                    value: appSettings.bloomQuality
                     stepSize: 0.10
                     Component.onCompleted: minimumValue = 0.3 //Without this value gets set to 0.5
                 }
@@ -84,7 +84,7 @@ Tab{
             }
         }
         GroupBox{
-            title: qsTr("Motion Blur")
+            title: qsTr("BurnIn")
             Layout.fillWidth: true
             anchors.left: parent.left
             anchors.right: parent.right
@@ -92,12 +92,12 @@ Tab{
                 id: blurQualityContainer
                 anchors.fill: parent
 
-                Text{text: qsTr("Blur Quality")}
+                Text{text: qsTr("BurnIn Quality")}
                 Slider{
                     Layout.fillWidth: true
                     id: blurSlider
-                    onValueChanged: appSettings.blur_quality = value;
-                    value: appSettings.blur_quality
+                    onValueChanged: appSettings.burnInQuality = value;
+                    value: appSettings.burnInQuality
                     stepSize: 0.10
                     Component.onCompleted: minimumValue = 0.3 //Without this value gets set to 0.5
                 }

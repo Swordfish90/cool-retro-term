@@ -116,12 +116,12 @@ ApplicationWindow{
     TerminalContainer{
         id: terminalContainer
         y: appSettings.showMenubar ? 0 : -2 // Workaroud to hide the margin in the menubar.
-        width: parent.width * appSettings.window_scaling
-        height: (parent.height + Math.abs(y)) * appSettings.window_scaling
+        width: parent.width * appSettings.windowScaling
+        height: (parent.height + Math.abs(y)) * appSettings.windowScaling
 
         transform: Scale {
-            xScale: 1 / appSettings.window_scaling
-            yScale: 1 / appSettings.window_scaling
+            xScale: 1 / appSettings.windowScaling
+            yScale: 1 / appSettings.windowScaling
         }
     }
     SettingsWindow{
@@ -134,7 +134,7 @@ ApplicationWindow{
     }
     Loader{
         anchors.centerIn: parent
-        active: appSettings.show_terminal_size
+        active: appSettings.showTerminalSize
         sourceComponent: SizeOverlay{
             z: 3
             terminalSize: terminalContainer.terminalSize

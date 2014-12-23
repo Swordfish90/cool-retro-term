@@ -45,7 +45,7 @@ Window{
     }
 
     function validateName(name){
-        var profile_list = appSettings.profiles_list;
+        var profile_list = appSettings.profilesList;
         if (name === "")
             return 1;
 

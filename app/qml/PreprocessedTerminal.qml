@@ -37,13 +37,13 @@ Item{
     property alias title: ksession.title
     property alias kterminal: kterminal
 
-    anchors.leftMargin: frame.displacementLeft * appSettings.window_scaling
-    anchors.rightMargin: frame.displacementRight * appSettings.window_scaling
-    anchors.topMargin: frame.displacementTop * appSettings.window_scaling
-    anchors.bottomMargin: frame.displacementBottom * appSettings.window_scaling
+    anchors.leftMargin: frame.displacementLeft * appSettings.windowScaling
+    anchors.rightMargin: frame.displacementRight * appSettings.windowScaling
+    anchors.topMargin: frame.displacementTop * appSettings.windowScaling
+    anchors.bottomMargin: frame.displacementBottom * appSettings.windowScaling
 
     //The blur effect has to take into account the framerate
-    property real mBlur: appSettings.motion_blur
+    property real mBlur: appSettings.burnIn
     property real motionBlurCoefficient: (_maxBlurCoefficient * Math.sqrt(mBlur) + _minBlurCoefficient * (1 - Math.sqrt(mBlur)))
     property real _minBlurCoefficient: 0.50
     property real _maxBlurCoefficient: 0.90
@@ -208,7 +208,7 @@ Item{
             y = y / height;
 
             var cc = Qt.size(0.5 - x, 0.5 - y);
-            var distortion = (cc.height * cc.height + cc.width * cc.width) * appSettings.screen_distortion;
+            var distortion = (cc.height * cc.height + cc.width * cc.width) * appSettings.screenCurvature;
 
             return Qt.point((x - cc.width  * (1+distortion) * distortion) * kterminal.width,
                            (y - cc.height * (1+distortion) * distortion) * kterminal.height)
@@ -256,7 +256,7 @@ Item{
             // Restart blurred source settings change.
             Connections{
                 target: appSettings
-                onMotion_blurChanged: _blurredSourceEffect.restartBlurSource();
+                onBurnInChanged: _blurredSourceEffect.restartBlurSource();
                 onTerminalFontChanged: _blurredSourceEffect.restartBlurSource();
                 onRasterizationChanged: _blurredSourceEffect.restartBlurSource();
             }
@@ -270,8 +270,8 @@ Item{
     Loader{
         id: blurredTerminalLoader
 
-        width: kterminal.width * scaleTexture * appSettings.blur_quality
-        height: kterminal.height * scaleTexture * appSettings.blur_quality
+        width: kterminal.width * scaleTexture * appSettings.burnInQuality
+        height: kterminal.height * scaleTexture * appSettings.burnInQuality
         active: mBlur !== 0
         asynchronous: true
 

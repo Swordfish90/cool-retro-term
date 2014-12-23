@@ -5,8 +5,8 @@ import "../../utils.js" as Utils
 
 Item{
     id: framecontainer
-    property int textureWidth: terminalContainer.width / appSettings.window_scaling
-    property int textureHeight: terminalContainer.height / appSettings.window_scaling
+    property int textureWidth: terminalContainer.width / appSettings.windowScaling
+    property int textureHeight: terminalContainer.height / appSettings.windowScaling
 
     property int addedWidth
     property int addedHeight
@@ -105,12 +105,12 @@ Item{
         id: staticLight
         property alias source: framesource
         property alias normals: framesourcenormals
-        property real screen_distorsion: appSettings.screen_distortion
+        property real screen_distorsion: appSettings.screenCurvature
         property size curvature_coefficients: Qt.size(width / mainShader.width, height / mainShader.height)
-        property real ambient_light: appSettings.ambient_light
-        property color font_color: appSettings.font_color
-        property color background_color: appSettings.background_color
-        property color reflectionColor: Utils.mix(font_color, background_color, 0.2)
+        property real ambientLight: appSettings.ambientLight
+        property color fontColor: appSettings.fontColor
+        property color backgroundColor: appSettings.backgroundColor
+        property color reflectionColor: Utils.mix(fontColor, backgroundColor, 0.2)
         property real diffuseComponent: staticDiffuseComponent
 
         anchors.centerIn: parent
@@ -124,7 +124,7 @@ Item{
             uniform highp sampler2D source;
             uniform lowp float screen_distorsion;
             uniform highp vec2 curvature_coefficients;
-            uniform lowp float ambient_light;
+            uniform lowp float ambientLight;
             uniform highp float qt_Opacity;
             uniform lowp vec4 reflectionColor;
             uniform lowp float diffuseComponent;
@@ -151,7 +151,7 @@ Item{
                 float dotProd = dot(normal, vec3(lightDirection, 0.0)) * diffuseComponent * txtNormal.a;
 
                 vec3 darkColor = dotProd * reflectionColor.rgb;
-                gl_FragColor = vec4(mix(darkColor, txtColor.rgb, ambient_light), dotProd);
+                gl_FragColor = vec4(mix(darkColor, txtColor.rgb, ambientLight), dotProd);
             }
         "
 
@@ -174,8 +174,8 @@ Item{
             property ShaderEffectSource lightMask: staticLightSource
             property ShaderEffectSource reflectionSource: reflectionEffectSourceLoader.item
             property real diffuseComponent: dinamycDiffuseComponent
-            property real chroma_color: appSettings.chroma_color
-            property color font_color: appSettings.font_color
+            property real chromaColor: appSettings.chromaColor
+            property color fontColor: appSettings.fontColor
 
             visible: true
             blending: true
@@ -184,8 +184,8 @@ Item{
                 uniform sampler2D lightMask;
                 uniform sampler2D reflectionSource;
                 uniform lowp float diffuseComponent;
-                uniform lowp float chroma_color;
-                uniform highp vec4 font_color;
+                uniform lowp float chromaColor;
+                uniform highp vec4 fontColor;
                 uniform highp float qt_Opacity;
 
                 varying highp vec2 qt_TexCoord0;
@@ -197,9 +197,9 @@ Item{
                 void main() {
                     float alpha = texture2D(lightMask, qt_TexCoord0).a * diffuseComponent;
                     vec3 reflectionColor = texture2D(reflectionSource, qt_TexCoord0).rgb;
-                    vec3 color = font_color.rgb * rgb2grey(reflectionColor);" +
-                    (chroma_color !== 0 ?
-                        "color = mix(color, font_color.rgb * reflectionColor, chroma_color);"
+                    vec3 color = fontColor.rgb * rgb2grey(reflectionColor);" +
+                    (chromaColor !== 0 ?
+                        "color = mix(color, fontColor.rgb * reflectionColor, chromaColor);"
                     : "") +
                     "gl_FragColor = vec4(color, 1.0) * alpha;
                 }

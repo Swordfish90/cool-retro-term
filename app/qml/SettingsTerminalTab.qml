@@ -123,29 +123,29 @@ Tab{
                         name: qsTr("Font")
                         height: 50
                         Layout.fillWidth: true
-                        onColorSelected: appSettings._font_color = color;
-                        button_color: appSettings._font_color
+                        onColorSelected: appSettings._fontColor = color;
+                        button_color: appSettings._fontColor
                     }
                     ColorButton{
                         name: qsTr("Background")
                         height: 50
                         Layout.fillWidth: true
-                        onColorSelected: appSettings._background_color = color;
-                        button_color: appSettings._background_color
+                        onColorSelected: appSettings._backgroundColor = color;
+                        button_color: appSettings._backgroundColor
                     }
                 }
                 ColumnLayout{
                     Layout.fillWidth: true
                     CheckableSlider{
                         name: qsTr("Chroma Color")
-                        onNewValue: appSettings.chroma_color = newValue
-                        value: appSettings.chroma_color
+                        onNewValue: appSettings.chromaColor = newValue
+                        value: appSettings.chromaColor
                     }
                     CheckableSlider{
                         name: qsTr("Saturation Color")
-                        onNewValue: appSettings.saturation_color = newValue
-                        value: appSettings.saturation_color
-                        enabled: appSettings.chroma_color !== 0
+                        onNewValue: appSettings.saturationColor = newValue
+                        value: appSettings.saturationColor
+                        enabled: appSettings.chromaColor !== 0
                     }
                 }
             }
