@@ -20,10 +20,9 @@
 
 import QtQuick 2.2
 
-Item{
+QtObject{
     property int selectedFontIndex
     property real scaling
-    property alias fontlist: fontlist
     property var source: fontlist.get(selectedFontIndex).source
     property var _font: fontlist.get(selectedFontIndex)
     property int pixelSize: _font.pixelSize * scaling
@@ -33,13 +32,52 @@ Item{
 
     //In this configuration lineSpacing is proportional to pixelSize.
 
-    ListModel{
-        id: fontlist
+    property ListModel fontlist: ListModel{
+        ListElement{
+            name: "HERMIT"
+            text: "Hermit (Modern)"
+            source: "fonts/modern-hermit/Hermit-medium.otf"
+            lineSpacing: 0.05
+            pixelSize: 28
+            fontWidth: 1.0
+        }
         ListElement{
             name: "TERMINUS"
             text: "Terminus (Modern)"
-            source: "fonts/modern-terminus/TerminusTTF-Bold-4.38.2.ttf"
-            lineSpacing: 0.2
+            source: "fonts/modern-terminus/TerminusTTF-4.38.2.ttf"
+            lineSpacing: 0.1
+            pixelSize: 35
+            fontWidth: 1.0
+        }
+        ListElement{
+            name: "ENVY_CODE_R"
+            text: "Envy Code R (Modern)"
+            source: "fonts/modern-envy-code-r/Envy Code R.ttf"
+            lineSpacing: 0.1
+            pixelSize: 30
+            fontWidth: 1.0
+        }
+        ListElement{
+            name: "PRO_FONT"
+            text: "Pro Font (Modern)"
+            source: "fonts/modern-pro-font-win-tweaked/ProFontWindows.ttf"
+            lineSpacing: 0.1
+            pixelSize: 35
+            fontWidth: 1.0
+        }
+        ListElement{
+            name: "MONACO"
+            text: "Monaco (Modern)"
+            source: "fonts/modern-monaco/monaco.ttf"
+            lineSpacing: 0.1
+            pixelSize: 30
+            fontWidth: 1.0
+        }
+        ListElement{
+            name: "INCONSOLATA"
+            text: "Inconsolata (Modern)"
+            source: "fonts/modern-inconsolata/Inconsolata.otf"
+            lineSpacing: 0.1
             pixelSize: 35
             fontWidth: 1.0
         }
@@ -70,7 +108,7 @@ Item{
         ListElement{
             name: "COMMODORE_64"
             text: "Commodore 64 (1982)"
-            source: "fonts/1982-commodore64/C64_User_Mono_v1.0-STYLE.ttf"
+            source: "fonts/1982-commodore64/C64_Pro_Mono_v1.0-STYLE.ttf"
             lineSpacing: 0.3
             pixelSize: 26
             fontWidth: 0.7
@@ -86,7 +124,7 @@ Item{
         ListElement{
             name: "IBM_DOS"
             text: "IBM DOS (1985)"
-            source: "fonts/1985-ibm-pc-vga/Perfect DOS VGA 437.ttf"
+            source: "fonts/1985-ibm-pc-vga/Perfect DOS VGA 437 Win.ttf"
             lineSpacing: 0.2
             pixelSize: 32
             fontWidth: 1.0

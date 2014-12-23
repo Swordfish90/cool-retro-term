@@ -22,7 +22,7 @@ import QtQuick 2.2
 
 import "utils.js" as Utils
 
-Item{
+QtObject{
     property string version: "0.9"
 
     // GENERAL SETTINGS ///////////////////////////////////////////////////
@@ -76,7 +76,6 @@ Item{
 
     property int rasterization: no_rasterization
 
-    property alias profiles_list: profileslist
     property int profiles_index: 0
 
     // FONTS //////////////////////////////////////////////////////////////////
@@ -89,9 +88,7 @@ Item{
 
     signal terminalFontChanged(string fontSource, int pixelSize, int lineSpacing, real screenScaling, real fontWidth)
 
-    Loader{
-        id: fontManager
-
+    property Loader fontManager: Loader{
         states: [
             State { when: rasterization == no_rasterization
                 PropertyChanges {target: fontManager; source: "Fonts.qml" } },
@@ -146,11 +143,10 @@ Item{
     // FRAMES /////////////////////////////////////////////////////////////////
 
     property bool _frameReflections: false
-    property bool reflectionsAllowed: framelist.get(frames_index).reflections
+    property bool reflectionsAllowed: frames_list.get(frames_index).reflections
     property bool frameReflections: _frameReflections && reflectionsAllowed
 
-    ListModel{
-        id: framelist
+    property ListModel frames_list: ListModel{
         ListElement{text: "No frame"; source: ""; reflections: false}
         ListElement{text: "Simple white frame"; source: "./frames/WhiteSimpleFrame.qml"; reflections: true}
         ListElement{text: "Rough black frame"; source: "./frames/BlackRoughFrame.qml"; reflections: true}
@@ -158,11 +154,10 @@ Item{
 
     property string frame_source: frames_list.get(frames_index).source
     property int frames_index: 1
-    property alias frames_list: framelist
 
     // DB STORAGE /////////////////////////////////////////////////////////////
 
-    Storage{id: storage}
+    property Storage storage: Storage{ }
 
     function stringify(obj) {
         var replacer = function(key, val) {
@@ -314,8 +309,8 @@ Item{
 
     function composeCustomProfilesString(){
         var customProfiles = []
-        for(var i=0; i<profileslist.count; i++){
-            var profile = profileslist.get(i);
+        for(var i=0; i<profiles_list.count; i++){
+            var profile = profiles_list.get(i);
             if(profile.builtin) continue;
             customProfiles.push({text: profile.text, obj_string: profile.obj_string, builtin: false})
         }
@@ -327,19 +322,18 @@ Item{
     }
 
     function loadProfile(index){
-        var profile = profileslist.get(index);
+        var profile = profiles_list.get(index);
         loadProfileString(profile.obj_string);
     }
 
     function addNewCustomProfile(name){
         var profileString = composeProfileString();
-        profileslist.append({text: name, obj_string: profileString, builtin: false});
+        profiles_list.append({text: name, obj_string: profileString, builtin: false});
     }
 
     // PROFILES ///////////////////////////////////////////////////////////////
 
-    ListModel{
-        id: profileslist
+    property ListModel profiles_list: ListModel{
         ListElement{
             text: "Default Amber"
             obj_string: '{"ambient_light":0.2,"background_color":"#000000","bloom_strength":0.65,"brightness":0.5,"brightness_flickering":0.1,"contrast":0.85,"fontName":"TERMINUS","font_color":"#ff8100","frames_index":1,"glowing_line_strength":0.2,"horizontal_sincronization":0.08,"jitter":0.18,"motion_blur":0.4,"noise_strength":0.1,"rasterization":0,"screen_distortion":0.1,"windowOpacity":1,"chroma_color":0,"saturation_color":0,"rgb_shift":0,"fontWidth":1.0}'
@@ -388,8 +382,8 @@ Item{
     }
 
     function getProfileIndexByName(name) {
-        for (var i = 0; i < profileslist.count; i++) {
-            if(profileslist.get(i).text === name)
+        for (var i = 0; i < profiles_list.count; i++) {
+            if(profiles_list.get(i).text === name)
                 return i;
         }
         return -1;
