@@ -63,7 +63,7 @@ Tab{
                     }
                     Connections{
                         target: appSettings
-                        onRasterizationChanged: fontChanger.updateIndex();
+                        onTerminalFontChanged: fontChanger.updateIndex();
                     }
                     Component.onCompleted: updateIndex();
                 }
