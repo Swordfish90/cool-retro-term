@@ -109,7 +109,7 @@ QtObject{
             if (name === fontlist.get(i).name)
                 return i;
         }
-        return 0; // If the font is not available returns the first one.
+        return 0; // If the font is not available default to 0.
     }
 
     function incrementScaling(){
@@ -142,18 +142,47 @@ QtObject{
 
     // FRAMES /////////////////////////////////////////////////////////////////
 
-    property bool _frameReflections: false
-    property bool reflectionsAllowed: framesList.get(framesIndex).reflections
-    property bool frameReflections: _frameReflections && reflectionsAllowed
-
     property ListModel framesList: ListModel{
-        ListElement{text: "No frame"; source: ""; reflections: false}
-        ListElement{text: "Simple white frame"; source: "./frames/WhiteSimpleFrame.qml"; reflections: true}
-        ListElement{text: "Rough black frame"; source: "./frames/BlackRoughFrame.qml"; reflections: true}
+        ListElement{
+            name: "NO_FRAME"
+            text: "No frame"
+            source: ""
+            reflections: false
+        }
+        ListElement{
+            name: "SIMPLE_WHITE_FRAME"
+            text: "Simple white frame"
+            source: "./frames/WhiteSimpleFrame.qml"
+            reflections: true
+        }
+        ListElement{
+            name: "ROUGH_BLACK_FRAME"
+            text: "Rough black frame"
+            source: "./frames/BlackRoughFrame.qml"
+            reflections: true
+        }
     }
 
-    property string frameSource: framesList.get(framesIndex).source
-    property int framesIndex: 1
+    function getFrameIndexByName(name) {
+        for (var i = 0; i < framesList.count; i++) {
+            if (name === framesList.get(i).name)
+                return i;
+        }
+        return 0; // If the frame is not available default to 0.
+    }
+
+    property string frameSource: "./frames/WhiteSimpleFrame.qml"
+    property string frameName: "SIMPLE_WHITE_FRAME"
+
+    property bool _frameReflections: false
+    property bool reflectionsAllowed: true
+    property bool frameReflections: _frameReflections && reflectionsAllowed
+
+    onFrameNameChanged: {
+        var index = getFrameIndexByName(frameName);
+        frameSource = framesList.get(index).source;
+        reflectionsAllowed = framesList.get(index).reflections;
+    }
 
     // DB STORAGE /////////////////////////////////////////////////////////////
 
@@ -192,7 +221,7 @@ QtObject{
             saturationColor: saturationColor,
             screenCurvature: screenCurvature,
             glowingLine: glowingLine,
-            framesIndex: framesIndex,
+            frameName: frameName,
             burnIn: burnIn,
             bloom: bloom,
             rasterization: rasterization,
@@ -271,7 +300,7 @@ QtObject{
         burnIn = settings.burnIn !== undefined ? settings.burnIn : burnIn
         bloom = settings.bloom !== undefined ? settings.bloom : bloom
 
-        framesIndex = settings.framesIndex !== undefined ? settings.framesIndex : framesIndex;
+        frameName = settings.frameName !== undefined ? settings.frameName : frameName;
 
         rasterization = settings.rasterization !== undefined ? settings.rasterization : rasterization;
 
@@ -336,47 +365,47 @@ QtObject{
     property ListModel profilesList: ListModel{
         ListElement{
             text: "Default Amber"
-            obj_string: '{"ambientLight":0.2,"backgroundColor":"#000000","bloom":0.65,"brightness":0.5,"flickering":0.1,"contrast":0.85,"fontName":"TERMINUS","fontColor":"#ff8100","framesIndex":1,"glowingLine":0.2,"horizontalSync":0.08,"jitter":0.18,"burnIn":0.4,"staticNoise":0.1,"rasterization":0,"screenCurvature":0.1,"windowOpacity":1,"chromaColor":0,"saturationColor":0,"rbgShift":0,"fontWidth":1.0}'
+            obj_string: '{"ambientLight":0.2,"backgroundColor":"#000000","bloom":0.65,"brightness":0.5,"flickering":0.1,"contrast":0.85,"fontName":"TERMINUS","fontColor":"#ff8100","frameName":"SIMPLE_WHITE_FRAME","glowingLine":0.2,"horizontalSync":0.08,"jitter":0.18,"burnIn":0.4,"staticNoise":0.1,"rasterization":0,"screenCurvature":0.1,"windowOpacity":1,"chromaColor":0,"saturationColor":0,"rbgShift":0,"fontWidth":1.0}'
             builtin: true
         }
         ListElement{
             text: "Default Green"
-            obj_string: '{"ambientLight":0.2,"backgroundColor":"#000000","bloom":0.4,"brightness":0.5,"flickering":0.1,"contrast":0.85,"fontName":"TERMINUS","fontColor":"#0ccc68","framesIndex":1,"glowingLine":0.2,"horizontalSync":0.08,"jitter":0.18,"burnIn":0.45,"staticNoise":0.1,"rasterization":0,"screenCurvature":0.1,"windowOpacity":1,"chromaColor":0,"saturationColor":0,"rbgShift":0,"fontWidth":1.0}'
+            obj_string: '{"ambientLight":0.2,"backgroundColor":"#000000","bloom":0.4,"brightness":0.5,"flickering":0.1,"contrast":0.85,"fontName":"TERMINUS","fontColor":"#0ccc68","frameName":"SIMPLE_WHITE_FRAME","glowingLine":0.2,"horizontalSync":0.08,"jitter":0.18,"burnIn":0.45,"staticNoise":0.1,"rasterization":0,"screenCurvature":0.1,"windowOpacity":1,"chromaColor":0,"saturationColor":0,"rbgShift":0,"fontWidth":1.0}'
             builtin: true
         }
         ListElement{
             text: "Default Scanlines"
-            obj_string: '{"ambientLight":0.2,"backgroundColor":"#000000","bloom":0.4,"brightness":0.5,"flickering":0.1,"contrast":0.85,"fontName":"TERMINUS","fontColor":"#00ff5b","framesIndex":1,"glowingLine":0.2,"horizontalSync":0.07,"jitter":0.11,"burnIn":0.4,"staticNoise":0.05,"rasterization":1,"screenCurvature":0.1,"windowOpacity":1,"chromaColor":0,"saturationColor":0,"rbgShift":0,"fontWidth":1.0}'
+            obj_string: '{"ambientLight":0.2,"backgroundColor":"#000000","bloom":0.4,"brightness":0.5,"flickering":0.1,"contrast":0.85,"fontName":"TERMINUS","fontColor":"#00ff5b","frameName":"SIMPLE_WHITE_FRAME","glowingLine":0.2,"horizontalSync":0.07,"jitter":0.11,"burnIn":0.4,"staticNoise":0.05,"rasterization":1,"screenCurvature":0.1,"windowOpacity":1,"chromaColor":0,"saturationColor":0,"rbgShift":0,"fontWidth":1.0}'
             builtin: true
         }
         ListElement{
             text: "Default Pixelated"
-            obj_string: '{"ambientLight":0.2,"backgroundColor":"#000000","bloom":0.4,"brightness":0.5,"flickering":0.1,"contrast":0.85,"fontName":"TERMINUS","fontColor":"#ff8100","framesIndex":1,"glowingLine":0.2,"horizontalSync":0.1,"jitter":0,"burnIn":0.45,"staticNoise":0.14,"rasterization":2,"screenCurvature":0.05,"windowOpacity":1,"chromaColor":0,"saturationColor":0,"rbgShift":0,"fontWidth":1.0}'
+            obj_string: '{"ambientLight":0.2,"backgroundColor":"#000000","bloom":0.4,"brightness":0.5,"flickering":0.1,"contrast":0.85,"fontName":"TERMINUS","fontColor":"#ff8100","frameName":"SIMPLE_WHITE_FRAME","glowingLine":0.2,"horizontalSync":0.1,"jitter":0,"burnIn":0.45,"staticNoise":0.14,"rasterization":2,"screenCurvature":0.05,"windowOpacity":1,"chromaColor":0,"saturationColor":0,"rbgShift":0,"fontWidth":1.0}'
             builtin: true
         }
         ListElement{
             text: "Apple ]["
-            obj_string: '{"ambientLight":0.2,"backgroundColor":"#000000","bloom":0.5,"brightness":0.5,"flickering":0.2,"contrast":0.85,"fontName":"APPLE_II","fontColor":"#2fff91","framesIndex":1,"glowingLine":0.22,"horizontalSync":0.08,"jitter":0.1,"burnIn":0.65,"staticNoise":0.08,"rasterization":1,"screenCurvature":0.18,"windowOpacity":1,"chromaColor":0,"saturationColor":0,"rbgShift":0,"fontWidth":1.0}'
+            obj_string: '{"ambientLight":0.2,"backgroundColor":"#000000","bloom":0.5,"brightness":0.5,"flickering":0.2,"contrast":0.85,"fontName":"APPLE_II","fontColor":"#2fff91","frameName":"SIMPLE_WHITE_FRAME","glowingLine":0.22,"horizontalSync":0.08,"jitter":0.1,"burnIn":0.65,"staticNoise":0.08,"rasterization":1,"screenCurvature":0.18,"windowOpacity":1,"chromaColor":0,"saturationColor":0,"rbgShift":0,"fontWidth":1.0}'
             builtin: true
         }
         ListElement{
             text: "Vintage"
-            obj_string: '{"ambientLight":0.2,"backgroundColor":"#000000","bloom":0.4,"brightness":0.5,"flickering":0.54,"contrast":0.85,"fontName":"TERMINUS","fontColor":"#00ff3e","framesIndex":2,"glowingLine":0.3,"horizontalSync":0.2,"jitter":0.4,"burnIn":0.75,"staticNoise":0.2,"rasterization":1,"screenCurvature":0.1,"windowOpacity":1,"chromaColor":0,"saturationColor":0,"rbgShift":0,"fontWidth":1.0}'
+            obj_string: '{"ambientLight":0.2,"backgroundColor":"#000000","bloom":0.4,"brightness":0.5,"flickering":0.54,"contrast":0.85,"fontName":"TERMINUS","fontColor":"#00ff3e","frameName":"ROUGH_BLACK_FRAME","glowingLine":0.3,"horizontalSync":0.2,"jitter":0.4,"burnIn":0.75,"staticNoise":0.2,"rasterization":1,"screenCurvature":0.1,"windowOpacity":1,"chromaColor":0,"saturationColor":0,"rbgShift":0,"fontWidth":1.0}'
             builtin: true
         }
         ListElement{
             text: "IBM Dos"
-            obj_string: '{"ambientLight":0.2,"backgroundColor":"#000000","bloom":0.4,"brightness":0.5,"flickering":0.07,"contrast":0.85,"fontName":"IBM_DOS","fontColor":"#ffffff","framesIndex":1,"glowingLine":0.13,"horizontalSync":0,"jitter":0.08,"burnIn":0.3,"staticNoise":0.03,"rasterization":0,"screenCurvature":0.1,"windowOpacity":1,"chromaColor":1,"saturationColor":0,"rbgShift":0.5,"fontWidth":1.0}'
+            obj_string: '{"ambientLight":0.2,"backgroundColor":"#000000","bloom":0.4,"brightness":0.5,"flickering":0.07,"contrast":0.85,"fontName":"IBM_DOS","fontColor":"#ffffff","frameName":"SIMPLE_WHITE_FRAME","glowingLine":0.13,"horizontalSync":0,"jitter":0.08,"burnIn":0.3,"staticNoise":0.03,"rasterization":0,"screenCurvature":0.1,"windowOpacity":1,"chromaColor":1,"saturationColor":0,"rbgShift":0.5,"fontWidth":1.0}'
             builtin: true
         }
         ListElement{
             text: "IBM 3278"
-            obj_string: '{"ambientLight":0.1,"backgroundColor":"#000000","bloom":0.15,"brightness":0.5,"flickering":0,"contrast":0.95,"fontName":"IBM_3278","fontColor":"#0ccc68","framesIndex":1,"glowingLine":0,"horizontalSync":0,"jitter":0,"burnIn":0.6,"staticNoise":0,"rasterization":0,"screenCurvature":0.1,"windowOpacity":1,"chromaColor":0,"saturationColor":0,"rbgShift":0,"fontWidth":1.0}'
+            obj_string: '{"ambientLight":0.1,"backgroundColor":"#000000","bloom":0.15,"brightness":0.5,"flickering":0,"contrast":0.95,"fontName":"IBM_3278","fontColor":"#0ccc68","frameName":"SIMPLE_WHITE_FRAME","glowingLine":0,"horizontalSync":0,"jitter":0,"burnIn":0.6,"staticNoise":0,"rasterization":0,"screenCurvature":0.1,"windowOpacity":1,"chromaColor":0,"saturationColor":0,"rbgShift":0,"fontWidth":1.0}'
             builtin: true
         }
         ListElement{
             text: "Transparent Green"
-            obj_string: '{"ambientLight":0.2,"backgroundColor":"#000000","bloom":0.45,"brightness":0.5,"flickering":0.20,"contrast":0.85,"fontName":"TERMINUS","fontColor":"#0ccc68","framesIndex":0,"glowingLine":0.16,"horizontalSync":0.05,"jitter":0.20,"burnIn":0.25,"staticNoise":0.20,"rasterization":0,"screenCurvature":0.05,"windowOpacity":0.60,"chromaColor":0,"saturationColor":0,"rbgShift":0,"fontWidth":1.0}'
+            obj_string: '{"ambientLight":0.2,"backgroundColor":"#000000","bloom":0.45,"brightness":0.5,"flickering":0.20,"contrast":0.85,"fontName":"TERMINUS","fontColor":"#0ccc68","frameName":"NO_FRAME","glowingLine":0.16,"horizontalSync":0.05,"jitter":0.20,"burnIn":0.25,"staticNoise":0.20,"rasterization":0,"screenCurvature":0.05,"windowOpacity":0.60,"chromaColor":0,"saturationColor":0,"rbgShift":0,"fontWidth":1.0}'
             builtin: true
         }
     }

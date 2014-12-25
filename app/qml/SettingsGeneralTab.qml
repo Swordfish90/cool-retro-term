@@ -101,7 +101,20 @@ Tab{
                     Layout.fillWidth: true
                     model: appSettings.framesList
                     currentIndex: appSettings.framesIndex
-                    onCurrentIndexChanged: appSettings.framesIndex = currentIndex
+                    onActivated: {
+                        appSettings.frameName = appSettings.framesList.get(index).name;
+                    }
+                    function updateIndex(){
+                        var name = appSettings.frameName;
+                        var index = appSettings.getFrameIndexByName(name);
+                        if (index !== undefined)
+                            currentIndex = index;
+                    }
+                    Component.onCompleted: updateIndex();
+                    Connections {
+                        target: appSettings
+                        onFrameNameChanged: framescombobox.updateIndex();
+                    }
                 }
             }
         }
