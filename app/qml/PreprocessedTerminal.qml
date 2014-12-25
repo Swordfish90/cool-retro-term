@@ -259,6 +259,7 @@ Item{
                 onBurnInChanged: _blurredSourceEffect.restartBlurSource();
                 onTerminalFontChanged: _blurredSourceEffect.restartBlurSource();
                 onRasterizationChanged: _blurredSourceEffect.restartBlurSource();
+                onBurnInQualityChanged: _blurredSourceEffect.restartBlurSource();
             }
             Connections {
                 target: kterminalScrollbar

@@ -331,7 +331,10 @@ QtObject{
         var customProfiles = JSON.parse(customProfilesString);
         for (var i=0; i<customProfiles.length; i++) {
             var profile = customProfiles[i];
-            console.log("Loading custom profile: " + stringify(profile));
+
+            if (verbose)
+                console.log("Loading custom profile: " + stringify(profile));
+
             profilesList.append(profile);
         }
     }
