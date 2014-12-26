@@ -83,7 +83,7 @@ Item{
 
         colorScheme: "cool-retro-term"
 
-        smooth: false
+        smooth: appSettings.rasterization === appSettings.no_rasterization
         enableBold: false
         fullCursorHeight: true
 
