@@ -38,7 +38,7 @@ Tab{
                     property int fps: checked ? slider.value : 0
                     onFpsChanged: appSettings.fps = fps
                     checked: appSettings.fps !== 0
-                    text: qsTr("Limit FPS")
+                    text: qsTr("Effects FPS")
                 }
                 Slider{
                     id: slider
@@ -54,10 +54,14 @@ Tab{
                 Slider{
                     Layout.fillWidth: true
                     id: txtslider
-                    onValueChanged: appSettings.window_scaling = value;
-                    value: appSettings.window_scaling
+                    onValueChanged: if (enabled) appSettings.windowScaling = value;
                     stepSize: 0.10
-                    Component.onCompleted: minimumValue = 0.3 //Without this value gets set to 0.5
+                    enabled: false
+                    Component.onCompleted: {
+                        minimumValue = 0.3 //Without this value gets set to 0.5
+                        value = appSettings.windowScaling;
+                        enabled = true;
+                    }
                 }
                 Text{text: Math.round(txtslider.value * 100) + "%"}
             }
@@ -75,16 +79,20 @@ Tab{
                 Slider{
                     Layout.fillWidth: true
                     id: bloomSlider
-                    onValueChanged: appSettings.bloom_quality = value;
-                    value: appSettings.bloom_quality
+                    onValueChanged: if (enabled) appSettings.bloomQuality = value;
                     stepSize: 0.10
-                    Component.onCompleted: minimumValue = 0.3 //Without this value gets set to 0.5
+                    enabled: false
+                    Component.onCompleted: {
+                        minimumValue = 0.3
+                        value = appSettings.bloomQuality;
+                        enabled = true;
+                    }
                 }
                 Text{text: Math.round(bloomSlider.value * 100) + "%"}
             }
         }
         GroupBox{
-            title: qsTr("Motion Blur")
+            title: qsTr("BurnIn")
             Layout.fillWidth: true
             anchors.left: parent.left
             anchors.right: parent.right
@@ -92,16 +100,20 @@ Tab{
                 id: blurQualityContainer
                 anchors.fill: parent
 
-                Text{text: qsTr("Blur Quality")}
+                Text{text: qsTr("BurnIn Quality")}
                 Slider{
                     Layout.fillWidth: true
-                    id: blurSlider
-                    onValueChanged: appSettings.blur_quality = value;
-                    value: appSettings.blur_quality
+                    id: burnInSlider
+                    onValueChanged: if (enabled) appSettings.burnInQuality = value;
                     stepSize: 0.10
-                    Component.onCompleted: minimumValue = 0.3 //Without this value gets set to 0.5
+                    enabled: false
+                    Component.onCompleted: {
+                        minimumValue = 0.3
+                        value = appSettings.burnInQuality;
+                        enabled = true;
+                    }
                 }
-                Text{text: Math.round(blurSlider.value * 100) + "%"}
+                Text{text: Math.round(burnInSlider.value * 100) + "%"}
             }
         }
         GroupBox{

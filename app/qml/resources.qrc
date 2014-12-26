@@ -49,5 +49,6 @@
         <file>fonts/modern-hermit/Hermit-medium.otf</file>
         <file>fonts/modern-envy-code-r/Envy Code R.ttf</file>
         <file>fonts/modern-inconsolata/Inconsolata.otf</file>
+        <file>SettingsScreenTab.qml</file>
     </qresource>
 </RCC>

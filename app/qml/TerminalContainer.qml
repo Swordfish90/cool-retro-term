@@ -12,8 +12,8 @@ ShaderTerminal{
 
     source: terminal.mainSource
     blurredSource: terminal.blurredSource
-    dispX: (12 / width) * appSettings.window_scaling
-    dispY: (12 / height) * appSettings.window_scaling
+    dispX: (12 / width) * appSettings.windowScaling
+    dispY: (12 / height) * appSettings.windowScaling
     virtual_resolution: terminal.virtualResolution
 
     Loader{
@@ -29,7 +29,7 @@ ShaderTerminal{
         visible: status === Loader.Ready
 
         z: 2.1
-        source: appSettings.frame_source
+        source: appSettings.frameSource
     }
 
     PreprocessedTerminal{
@@ -41,19 +41,19 @@ ShaderTerminal{
 
     Loader{
         id: bloomEffectLoader
-        active: appSettings.bloom_strength
+        active: appSettings.bloom
         asynchronous: true
-        width: parent.width * appSettings.bloom_quality
-        height: parent.height * appSettings.bloom_quality
+        width: parent.width * appSettings.bloomQuality
+        height: parent.height * appSettings.bloomQuality
         sourceComponent: FastBlur{
-            radius: 48 * appSettings.bloom_quality * appSettings.window_scaling
+            radius: 48 * appSettings.bloomQuality * appSettings.windowScaling
             source: terminal.mainTerminal
             transparentBorder: true
         }
     }
     Loader{
         id: bloomSourceLoader
-        active: appSettings.bloom_strength !== 0
+        active: appSettings.bloom !== 0
         asynchronous: true
         sourceComponent: ShaderEffectSource{
             id: _bloomEffectSource
@@ -75,8 +75,8 @@ ShaderTerminal{
 //        width: parent.width
 //        height: parent.height
 //        property real outColor: 0.0
-//        property real dispX: (5 / width) * appSettings.window_scaling
-//        property real dispY: (5 / height) * appSettings.window_scaling
+//        property real dispX: (5 / width) * appSettings.windowScaling
+//        property real dispY: (5 / height) * appSettings.windowScaling
 //        property size virtual_resolution: terminal.virtualResolution
 
 //        blending: false

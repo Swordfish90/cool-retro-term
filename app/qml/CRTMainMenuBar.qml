@@ -31,7 +31,7 @@ MenuBar {
         title: qsTr("Profiles")
         visible: defaultMenuBar.visible
         Instantiator{
-            model: appSettings.profiles_list
+            model: appSettings.profilesList
             delegate: MenuItem {
                 text: model.text
                 onTriggered: {

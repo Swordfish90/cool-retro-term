@@ -26,22 +26,9 @@ Tab{
     ColumnLayout{
         anchors.fill: parent
         GroupBox{
-            title: qsTr("Rasterization Mode")
-            Layout.fillWidth: true
-            ComboBox {
-                id: rasterizationBox
-                property string selectedElement: model[currentIndex]
-                anchors.fill: parent
-                model: [qsTr("Default"), qsTr("Scanlines"), qsTr("Pixels")]
-                currentIndex: appSettings.rasterization
-                onCurrentIndexChanged: {
-                    appSettings.rasterization = currentIndex
-                }
-            }
-        }
-        GroupBox{
-            title: qsTr("Font") + " (" + rasterizationBox.selectedElement + ")"
-            Layout.fillWidth: true
+            property var rasterization: [qsTr("Default"), qsTr("Scanlines"), qsTr("Pixels")][appSettings.rasterization]
+            title: qsTr("Font" + "(" + rasterization + ")")
+            anchors { left: parent.left; right: parent.right }
             GridLayout{
                 anchors.fill: parent
                 columns: 2
@@ -63,7 +50,7 @@ Tab{
                     }
                     Connections{
                         target: appSettings
-                        onRasterizationChanged: fontChanger.updateIndex();
+                        onTerminalFontChanged: fontChanger.updateIndex();
                     }
                     Component.onCompleted: updateIndex();
                 }
@@ -114,38 +101,38 @@ Tab{
         }
         GroupBox{
             title: qsTr("Colors")
-            Layout.fillWidth: true
+            anchors { left: parent.left; right: parent.right }
             ColumnLayout{
                 anchors.fill: parent
+                ColumnLayout{
+                    Layout.fillWidth: true
+                    CheckableSlider{
+                        name: qsTr("Chroma Color")
+                        onNewValue: appSettings.chromaColor = newValue
+                        value: appSettings.chromaColor
+                    }
+                    CheckableSlider{
+                        name: qsTr("Saturation Color")
+                        onNewValue: appSettings.saturationColor = newValue
+                        value: appSettings.saturationColor
+                        enabled: appSettings.chromaColor !== 0
+                    }
+                }
                 RowLayout{
                     Layout.fillWidth: true
                     ColorButton{
                         name: qsTr("Font")
                         height: 50
                         Layout.fillWidth: true
-                        onColorSelected: appSettings._font_color = color;
-                        button_color: appSettings._font_color
+                        onColorSelected: appSettings._fontColor = color;
+                        button_color: appSettings._fontColor
                     }
                     ColorButton{
                         name: qsTr("Background")
                         height: 50
                         Layout.fillWidth: true
-                        onColorSelected: appSettings._background_color = color;
-                        button_color: appSettings._background_color
-                    }
-                }
-                ColumnLayout{
-                    Layout.fillWidth: true
-                    CheckableSlider{
-                        name: qsTr("Chroma Color")
-                        onNewValue: appSettings.chroma_color = newValue
-                        value: appSettings.chroma_color
-                    }
-                    CheckableSlider{
-                        name: qsTr("Saturation Color")
-                        onNewValue: appSettings.saturation_color = newValue
-                        value: appSettings.saturation_color
-                        enabled: appSettings.chroma_color !== 0
+                        onColorSelected: appSettings._backgroundColor = color;
+                        button_color: appSettings._backgroundColor
                     }
                 }
             }

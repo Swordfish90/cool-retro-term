@@ -37,13 +37,13 @@ Item{
     property alias title: ksession.title
     property alias kterminal: kterminal
 
-    anchors.leftMargin: frame.displacementLeft * appSettings.window_scaling
-    anchors.rightMargin: frame.displacementRight * appSettings.window_scaling
-    anchors.topMargin: frame.displacementTop * appSettings.window_scaling
-    anchors.bottomMargin: frame.displacementBottom * appSettings.window_scaling
+    anchors.leftMargin: frame.displacementLeft * appSettings.windowScaling
+    anchors.rightMargin: frame.displacementRight * appSettings.windowScaling
+    anchors.topMargin: frame.displacementTop * appSettings.windowScaling
+    anchors.bottomMargin: frame.displacementBottom * appSettings.windowScaling
 
     //The blur effect has to take into account the framerate
-    property real mBlur: appSettings.motion_blur
+    property real mBlur: appSettings.burnIn
     property real motionBlurCoefficient: (_maxBlurCoefficient * Math.sqrt(mBlur) + _minBlurCoefficient * (1 - Math.sqrt(mBlur)))
     property real _minBlurCoefficient: 0.50
     property real _maxBlurCoefficient: 0.90
@@ -83,7 +83,7 @@ Item{
 
         colorScheme: "cool-retro-term"
 
-        smooth: false
+        smooth: appSettings.rasterization === appSettings.no_rasterization
         enableBold: false
         fullCursorHeight: true
 
@@ -129,9 +129,10 @@ Item{
             appSettings.terminalFontChanged.connect(handleFontChange);
 
             // Retrieve the variable set in main.cpp if arguments are passed.
-            if (shellProgram) {
-                ksession.setShellProgram(shellProgram);
-            } else if (!shellProgram && Qt.platform.os === "osx") {
+            if (defaultCmd) {
+                ksession.setShellProgram(defaultCmd);
+                ksession.setArgs(defaultCmdArgs);
+            } else if (!defaultCmd && Qt.platform.os === "osx") {
                 // OSX Requires the following default parameters for auto login.
                 ksession.setArgs(["-i", "-l"]);
             }
@@ -149,9 +150,9 @@ Item{
             id: contextmenu
             MenuItem{action: copyAction}
             MenuItem{action: pasteAction}
-            MenuSeparator{visible: Qt.platform.os !== "osx"}
-            MenuItem{action: fullscreenAction; visible: Qt.platform.os !== "osx"}
-            MenuItem{action: showMenubarAction; visible: Qt.platform.os !== "osx"}
+            MenuSeparator{}
+            MenuItem{action: fullscreenAction}
+            MenuItem{action: showMenubarAction}
             MenuSeparator{visible: !appSettings.showMenubar}
             CRTMainMenuBar{visible: !appSettings.showMenubar}
         }
@@ -162,9 +163,6 @@ Item{
             id: contextmenu
             MenuItem{action: copyAction}
             MenuItem{action: pasteAction}
-            MenuSeparator{visible: Qt.platform.os !== "osx"}
-            MenuItem{action: fullscreenAction; visible: Qt.platform.os !== "osx"}
-            MenuItem{action: showMenubarAction; visible: Qt.platform.os !== "osx"}
         }
     }
     Loader {
@@ -210,7 +208,7 @@ Item{
             y = y / height;
 
             var cc = Qt.size(0.5 - x, 0.5 - y);
-            var distortion = (cc.height * cc.height + cc.width * cc.width) * appSettings.screen_distortion;
+            var distortion = (cc.height * cc.height + cc.width * cc.width) * appSettings.screenCurvature;
 
             return Qt.point((x - cc.width  * (1+distortion) * distortion) * kterminal.width,
                            (y - cc.height * (1+distortion) * distortion) * kterminal.height)
@@ -258,9 +256,10 @@ Item{
             // Restart blurred source settings change.
             Connections{
                 target: appSettings
-                onMotion_blurChanged: _blurredSourceEffect.restartBlurSource();
+                onBurnInChanged: _blurredSourceEffect.restartBlurSource();
                 onTerminalFontChanged: _blurredSourceEffect.restartBlurSource();
                 onRasterizationChanged: _blurredSourceEffect.restartBlurSource();
+                onBurnInQualityChanged: _blurredSourceEffect.restartBlurSource();
             }
             Connections {
                 target: kterminalScrollbar
@@ -272,8 +271,8 @@ Item{
     Loader{
         id: blurredTerminalLoader
 
-        width: kterminal.width * scaleTexture * appSettings.blur_quality
-        height: kterminal.height * scaleTexture * appSettings.blur_quality
+        width: kterminal.width * scaleTexture * appSettings.burnInQuality
+        height: kterminal.height * scaleTexture * appSettings.burnInQuality
         active: mBlur !== 0
         asynchronous: true
 

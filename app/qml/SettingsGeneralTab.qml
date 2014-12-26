@@ -21,88 +21,180 @@
 import QtQuick 2.2
 import QtQuick.Controls 1.1
 import QtQuick.Layouts 1.1
+import QtQuick.Dialogs 1.1
 
 Tab{
     ColumnLayout{
         anchors.fill: parent
         GroupBox{
+            anchors {left: parent.left; right: parent.right}
             Layout.fillWidth: true
+            Layout.fillHeight: true
             title: qsTr("Profile")
-            ColumnLayout{
+            RowLayout {
                 anchors.fill: parent
-                ComboBox{
-                    id: profilesbox
+                TableView {
+                    id: profilesView
                     Layout.fillWidth: true
-                    model: appSettings.profiles_list
-                    currentIndex: appSettings.profiles_index
+                    anchors { top: parent.top; bottom: parent.bottom; }
+                    model: appSettings.profilesList
+                    headerVisible: false
+                    TableViewColumn {
+                        title: qsTr("Profile")
+                        role: "text"
+                        width: parent.width * 0.5
+                    }
+                    onActivated: {
+                        appSettings.loadProfile(row);
+                    }
                 }
-                RowLayout{
-                    Layout.fillWidth: true
+                ColumnLayout {
+                    anchors { top: parent.top; bottom: parent.bottom }
+                    Layout.fillWidth: false
                     Button{
                         Layout.fillWidth: true
+                        text: qsTr("New")
+                        onClicked: {
+                            insertname.profileName = "";
+                            insertname.show()
+                        }
+                    }
+                    Button{
+                        Layout.fillWidth: true
+                        property alias currentIndex: profilesView.currentRow
+                        enabled: currentIndex >= 0
                         text: qsTr("Load")
                         onClicked: {
-                            appSettings.profiles_index = profilesbox.currentIndex
-                            appSettings.loadCurrentProfile();
-                            appSettings.handleFontChanged();
+                            var index = profilesView.currentRow;
+                            if (index >= 0)
+                                appSettings.loadProfile(index);
                         }
                     }
                     Button{
                         Layout.fillWidth: true
-                        text: qsTr("Save New Profile")
-                        onClicked: insertname.show()
-                    }
-                    Button{
-                        Layout.fillWidth: true
-                        text: qsTr("Remove Selected")
-                        enabled: !appSettings.profiles_list.get(profilesbox.currentIndex).builtin
+                        text: qsTr("Remove")
+                        property alias currentIndex: profilesView.currentRow
+
+                        enabled: currentIndex >= 0 && !appSettings.profilesList.get(currentIndex).builtin
                         onClicked: {
-                            appSettings.profiles_list.remove(profilesbox.currentIndex)
-                            profilesbox.currentIndex = profilesbox.currentIndex - 1
+                            appSettings.profilesList.remove(currentIndex);
+                            profilesView.selection.clear();
+
+                            // TODO This is a very ugly workaround. The view didn't update on Qt 5.3.2.
+                            profilesView.model = 0;
+                            profilesView.model = appSettings.profilesList;
+                        }
+                    }
+                    Item {
+                        // Spacing
+                        Layout.fillHeight: true
+                    }
+                    Button{
+                        Layout.fillWidth: true
+                        text: qsTr("Import")
+                        onClicked: {
+                            fileDialog.selectExisting = true;
+                            fileDialog.callBack = function (url) {loadFile(url);};
+                            fileDialog.open();
+                        }
+                        function loadFile(url) {
+                            try {
+                                if (appSettings.verbose)
+                                    console.log("Loading file: " + url);
+
+                                var profileObject = JSON.parse(fileIO.read(url));
+                                var name = profileObject.name;
+
+                                if (!name)
+                                    throw "Profile doesn't have a name";
+
+                                delete profileObject.name;
+
+                                appSettings.appendCustomProfile(name, JSON.stringify(profileObject));
+                            } catch (err) {
+                                console.log(err);
+                                messageDialog.text = qsTr("There has been an error reading the file.")
+                                messageDialog.open();
+                            }
+                        }
+                    }
+                    Button{
+                        property alias currentIndex: profilesView.currentRow
+
+                        Layout.fillWidth: true
+
+                        text: qsTr("Export")
+                        enabled: currentIndex >= 0 && !appSettings.profilesList.get(currentIndex).builtin
+                        onClicked: {
+                            fileDialog.selectExisting = false;
+                            fileDialog.callBack = function (url) {storeFile(url);};
+                            fileDialog.open();
+                        }
+                        function storeFile(url) {
+                            try {
+                                var urlString = url.toString();
+
+                                // Fix the extension if it's missing.
+                                var extension = urlString.substring(urlString.length - 5, urlString.length);
+                                var urlTail = (extension === ".json" ? "" : ".json");
+                                url += urlTail;
+
+                                if (true)
+                                    console.log("Storing file: " + url);
+
+                                var profileObject = appSettings.profilesList.get(currentIndex);
+                                var profileSettings = JSON.parse(profileObject.obj_string);
+                                profileSettings["name"] = profileObject.text;
+
+                                var result = fileIO.write(url, JSON.stringify(profileSettings, undefined, 2));
+                                if (!result)
+                                    throw "The file could not be written.";
+                            } catch (err) {
+                                console.log(err);
+                                messageDialog.text = qsTr("There has been an error storing the file.")
+                                messageDialog.open();
+                            }
                         }
                     }
                 }
-                InsertNameDialog{
-                    id: insertname
-                    onNameSelected: appSettings.addNewCustomProfile(name)
-                }
             }
         }
-        GroupBox{
-            title: qsTr("Lights")
-            Layout.fillWidth: true
-            GridLayout{
-                anchors.fill: parent
-                columns: 2
-                Text{ text: qsTr("Brightness") }
-                SimpleSlider{
-                    onValueChanged: appSettings.brightness = value
-                    value: appSettings.brightness
-                }
-                Text{ text: qsTr("Contrast") }
-                SimpleSlider{
-                    onValueChanged: appSettings.contrast = value
-                    value: appSettings.contrast
-                }
-                Text{ text: qsTr("Opacity") }
-                SimpleSlider{
-                    onValueChanged: appSettings.windowOpacity = value
-                    value: appSettings.windowOpacity
-                }
+        // DIALOGS ////////////////////////////////////////////////////////////////
+        InsertNameDialog{
+            id: insertname
+            onNameSelected: {
+                appSettings.appendCustomProfile(name, appSettings.composeProfileString());
             }
         }
-        GroupBox{
-            title: qsTr("Frame")
-            Layout.fillWidth: true
-            RowLayout{
-                anchors.fill: parent
-                ComboBox{
-                    id: framescombobox
-                    Layout.fillWidth: true
-                    model: appSettings.frames_list
-                    currentIndex: appSettings.frames_index
-                    onCurrentIndexChanged: appSettings.frames_index = currentIndex
-                }
+        MessageDialog {
+            id: messageDialog
+            title: qsTr("File Error")
+            onAccepted: {
+                messageDialog.close();
+            }
+        }
+        Loader {
+            property var callBack
+            property bool selectExisting: false
+            id: fileDialog
+
+            sourceComponent: FileDialog{
+                nameFilters: ["Json files (*.json)"]
+                selectMultiple: false
+                selectFolder: false
+                selectExisting: fileDialog.selectExisting
+                onAccepted: callBack(fileUrl);
+            }
+
+            onSelectExistingChanged: reload()
+
+            function open() {
+                item.open();
+            }
+
+            function reload() {
+                active = false;
+                active = true;
             }
         }
     }

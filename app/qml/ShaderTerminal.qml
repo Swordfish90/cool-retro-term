@@ -26,33 +26,33 @@ ShaderEffect {
     property ShaderEffectSource blurredSource
     property ShaderEffectSource bloomSource
 
-    property color font_color: appSettings.font_color
-    property color background_color: appSettings.background_color
-    property real bloom_strength: appSettings.bloom_strength * 2.5
+    property color fontColor: appSettings.fontColor
+    property color backgroundColor: appSettings.backgroundColor
+    property real bloom: appSettings.bloom * 2.5
 
-    property real motion_blur: appSettings.motion_blur
+    property real burnIn: appSettings.burnIn
 
     property real jitter: appSettings.jitter * 0.007
-    property real noise_strength: appSettings.noise_strength
-    property size scaleNoiseSize: Qt.size((width) / (noiseTexture.width * appSettings.window_scaling * appSettings.fontScaling),
-                                          (height) / (noiseTexture.height * appSettings.window_scaling * appSettings.fontScaling))
+    property real staticNoise: appSettings.staticNoise
+    property size scaleNoiseSize: Qt.size((width) / (noiseTexture.width * appSettings.windowScaling * appSettings.fontScaling),
+                                          (height) / (noiseTexture.height * appSettings.windowScaling * appSettings.fontScaling))
 
-    property real screen_distorsion: appSettings.screen_distortion
-    property real glowing_line_strength: appSettings.glowing_line_strength
+    property real screenCurvature: appSettings.screenCurvature
+    property real glowingLine: appSettings.glowingLine
 
-    property real chroma_color: appSettings.chroma_color;
+    property real chromaColor: appSettings.chromaColor;
 
-    property real rgb_shift: appSettings.rgb_shift * 0.2
+    property real rbgShift: appSettings.rbgShift * 0.2
 
-    property real brightness_flickering: appSettings.brightness_flickering
-    property real horizontal_sincronization: appSettings.horizontal_sincronization
+    property real flickering: appSettings.flickering
+    property real horizontalSync: appSettings.horizontalSync * 0.5
 
     property bool frameReflections: appSettings.frameReflections
 
-    property real disp_top: (frame.displacementTop * appSettings.window_scaling) / height
-    property real disp_bottom: (frame.displacementBottom * appSettings.window_scaling) / height
-    property real disp_left: (frame.displacementLeft * appSettings.window_scaling) / width
-    property real disp_right: (frame.displacementRight * appSettings.window_scaling) / width
+    property real disp_top: (frame.displacementTop * appSettings.windowScaling) / height
+    property real disp_bottom: (frame.displacementBottom * appSettings.windowScaling) / height
+    property real disp_left: (frame.displacementLeft * appSettings.windowScaling) / width
+    property real disp_right: (frame.displacementRight * appSettings.windowScaling) / width
 
     property real screen_brightness: appSettings.brightness * 1.5 + 0.5
 
@@ -66,7 +66,7 @@ ShaderEffect {
     }
 
     property alias time: timeManager.time
-    property variant noiseSource: noiseShaderSource
+    property ShaderEffectSource noiseSource: noiseShaderSource
 
     // If something goes wrong activate the fallback version of the shader.
     property bool fallBack: false
@@ -112,11 +112,11 @@ ShaderEffect {
         (!fallBack ? "
             uniform sampler2D noiseSource;" : "") +
 
-        (!fallBack && brightness_flickering !== 0.0 ?"
+        (!fallBack && flickering !== 0.0 ?"
             varying lowp float brightness;
-            uniform lowp float brightness_flickering;" : "") +
-        (!fallBack && horizontal_sincronization !== 0.0 ?"
-            uniform lowp float horizontal_sincronization;
+            uniform lowp float flickering;" : "") +
+        (!fallBack && horizontalSync !== 0.0 ?"
+            uniform lowp float horizontalSync;
             varying lowp float distortionScale;
             varying lowp float distortionFreq;" : "") +
 
@@ -126,16 +126,16 @@ ShaderEffect {
             qt_TexCoord0.y = (qt_MultiTexCoord0.y - disp_top) / (1.0 - disp_top - disp_bottom);
             vec2 coords = vec2(fract(time/(1024.0*2.0)), fract(time/(1024.0*1024.0)));" +
 
-            (!fallBack && (brightness_flickering !== 0.0 || horizontal_sincronization !== 0.0) ?
+            (!fallBack && (flickering !== 0.0 || horizontalSync !== 0.0) ?
                 "vec4 initialNoiseTexel = texture2D(noiseSource, coords);"
             : "") +
-            (!fallBack && brightness_flickering !== 0.0 ? "
-                brightness = 1.0 + (initialNoiseTexel.g - 0.5) * brightness_flickering;"
+            (!fallBack && flickering !== 0.0 ? "
+                brightness = 1.0 + (initialNoiseTexel.g - 0.5) * flickering;"
             : "") +
 
-            (!fallBack && horizontal_sincronization !== 0.0 ? "
-                float randval = horizontal_sincronization - initialNoiseTexel.r;
-                distortionScale = step(0.0, randval) * randval * horizontal_sincronization;
+            (!fallBack && horizontalSync !== 0.0 ? "
+                float randval = horizontalSync - initialNoiseTexel.r;
+                distortionScale = step(0.0, randval) * randval * horizontalSync;
                 distortionFreq = mix(4.0, 40.0, initialNoiseTexel.g);"
             : "") +
 
@@ -148,50 +148,50 @@ ShaderEffect {
         uniform highp float time;
         varying highp vec2 qt_TexCoord0;
 
-        uniform highp vec4 font_color;
-        uniform highp vec4 background_color;
+        uniform highp vec4 fontColor;
+        uniform highp vec4 backgroundColor;
         uniform lowp float screen_brightness;
 
         uniform highp vec2 virtual_resolution;
         uniform highp float dispX;
         uniform highp float dispY;" +
 
-        (bloom_strength !== 0 ? "
+        (bloom !== 0 ? "
             uniform highp sampler2D bloomSource;
-            uniform lowp float bloom_strength;" : "") +
-        (motion_blur !== 0 ? "
+            uniform lowp float bloom;" : "") +
+        (burnIn !== 0 ? "
             uniform sampler2D blurredSource;" : "") +
-        (noise_strength !== 0 ? "
-            uniform highp float noise_strength;" : "") +
-        (((noise_strength !== 0 || jitter !== 0 || rgb_shift)
-          ||(fallBack && (brightness_flickering || horizontal_sincronization))) ? "
+        (staticNoise !== 0 ? "
+            uniform highp float staticNoise;" : "") +
+        (((staticNoise !== 0 || jitter !== 0 || rbgShift)
+          ||(fallBack && (flickering || horizontalSync))) ? "
             uniform lowp sampler2D noiseSource;
             uniform highp vec2 scaleNoiseSize;" : "") +
-        (screen_distorsion !== 0 ? "
-            uniform highp float screen_distorsion;" : "") +
-        (glowing_line_strength !== 0 ? "
-            uniform highp float glowing_line_strength;" : "") +
-        (chroma_color !== 0 ? "
-            uniform lowp float chroma_color;" : "") +
+        (screenCurvature !== 0 ? "
+            uniform highp float screenCurvature;" : "") +
+        (glowingLine !== 0 ? "
+            uniform highp float glowingLine;" : "") +
+        (chromaColor !== 0 ? "
+            uniform lowp float chromaColor;" : "") +
         (jitter !== 0 ? "
             uniform lowp float jitter;" : "") +
-        (rgb_shift !== 0 ? "
-            uniform lowp float rgb_shift;" : "") +
+        (rbgShift !== 0 ? "
+            uniform lowp float rbgShift;" : "") +
 
-        (fallBack && horizontal_sincronization !== 0 ? "
-            uniform lowp float horizontal_sincronization;" : "") +
-        (fallBack && brightness_flickering !== 0.0 ?"
-            uniform lowp float brightness_flickering;" : "") +
-        (!fallBack && brightness_flickering !== 0 ? "
+        (fallBack && horizontalSync !== 0 ? "
+            uniform lowp float horizontalSync;" : "") +
+        (fallBack && flickering !== 0.0 ?"
+            uniform lowp float flickering;" : "") +
+        (!fallBack && flickering !== 0 ? "
             varying lowp float brightness;"
         : "") +
-        (!fallBack && horizontal_sincronization !== 0 ? "
+        (!fallBack && horizontalSync !== 0 ? "
             varying lowp float distortionScale;
             varying lowp float distortionFreq;" : "") +
 
-        (glowing_line_strength !== 0 ? "
+        (glowingLine !== 0 ? "
             float randomPass(vec2 coords){
-                return fract(smoothstep(-0.2, 0.0, coords.y - 3.0 * fract(time * 0.0001))) * glowing_line_strength;
+                return fract(smoothstep(-0.2, 0.0, coords.y - 3.0 * fract(time * 0.0001))) * glowingLine;
             }" : "") +
 
         "highp float getScanlineIntensity(vec2 coords) {
@@ -214,36 +214,38 @@ ShaderEffect {
             "float distance = length(cc);" +
 
             //FallBack if there are problems
-            (fallBack && (brightness_flickering !== 0.0 || horizontal_sincronization !== 0.0) ?
+            (fallBack && (flickering !== 0.0 || horizontalSync !== 0.0) ?
                 "vec2 initialCoords = vec2(fract(time/(1024.0*2.0)), fract(time/(1024.0*1024.0)));
                  vec4 initialNoiseTexel = texture2D(noiseSource, initialCoords);"
             : "") +
-            (fallBack && brightness_flickering !== 0.0 ? "
-                float brightness = 1.0 + (initialNoiseTexel.g - 0.5) * brightness_flickering;"
+            (fallBack && flickering !== 0.0 ? "
+                float brightness = 1.0 + (initialNoiseTexel.g - 0.5) * flickering;"
             : "") +
-            (fallBack && horizontal_sincronization !== 0.0 ? "
-                float randval = horizontal_sincronization - initialNoiseTexel.r;
-                float distortionScale = step(0.0, randval) * randval * horizontal_sincronization;
+            (fallBack && horizontalSync !== 0.0 ? "
+                float randval = horizontalSync - initialNoiseTexel.r;
+                float distortionScale = step(0.0, randval) * randval * horizontalSync;
                 float distortionFreq = mix(4.0, 40.0, initialNoiseTexel.g);"
             : "") +
 
-            (noise_strength ? "
-                float noise = noise_strength;" : "") +
+            (staticNoise ? "
+                float noise = staticNoise;" : "") +
 
-            (screen_distorsion !== 0 ? "
-                float distortion = dot(cc, cc) * screen_distorsion;
-                vec2 coords = (qt_TexCoord0 - cc * (1.0 + distortion) * distortion);"
+            (screenCurvature !== 0 ? "
+                float distortion = dot(cc, cc) * screenCurvature;
+                vec2 staticCoords = (qt_TexCoord0 - cc * (1.0 + distortion) * distortion);"
             :"
-                vec2 coords = qt_TexCoord0;") +
+                vec2 staticCoords = qt_TexCoord0;") +
 
-            (horizontal_sincronization !== 0 ? "
+            "vec2 coords = staticCoords;" +
+
+            (horizontalSync !== 0 ? "
                 float dst = sin((coords.y + time * 0.001) * distortionFreq);
                 coords.x += dst * distortionScale;" +
-                (noise_strength ? "
-                    noise += distortionScale * 3.0;" : "")
+                (staticNoise ? "
+                    noise += distortionScale * 7.0;" : "")
             : "") +
 
-            (jitter !== 0 || noise_strength !== 0 ?
+            (jitter !== 0 || staticNoise !== 0 ?
                 "vec4 noiseTexel = texture2D(noiseSource, scaleNoiseSize * coords + vec2(fract(time / 51.0), fract(time / 237.0)));"
             : "") +
 
@@ -254,54 +256,54 @@ ShaderEffect {
 
             "float color = 0.0;" +
 
-            (noise_strength !== 0 ? "
+            (staticNoise !== 0 ? "
                 float noiseVal = noiseTexel.a;
                 color += noiseVal * noise * (1.0 - distance * 1.3);" : "") +
 
-            (glowing_line_strength !== 0 ? "
-                color += randomPass(coords) * glowing_line_strength;" : "") +
+            (glowingLine !== 0 ? "
+                color += randomPass(coords) * glowingLine;" : "") +
 
             "vec3 txt_color = texture2D(source, txt_coords).rgb;" +
 
-            (motion_blur !== 0 ? "
+            (burnIn !== 0 ? "
                 vec4 txt_blur = texture2D(blurredSource, txt_coords);
                 txt_color = txt_color + txt_blur.rgb * txt_blur.a;"
             : "") +
 
              "float greyscale_color = rgb2grey(txt_color) + color;" +
 
-            (chroma_color !== 0 ?
-                (rgb_shift !== 0 ? "
+            (chromaColor !== 0 ?
+                (rbgShift !== 0 ? "
                     float rgb_noise = abs(texture2D(noiseSource, vec2(fract(time/(1024.0 * 256.0)), fract(time/(1024.0*1024.0)))).a - 0.5);
-                    float rcolor = texture2D(source, txt_coords + vec2(0.1, 0.0) * rgb_shift * rgb_noise).r;
-                    float bcolor = texture2D(source, txt_coords - vec2(0.1, 0.0) * rgb_shift * rgb_noise).b;
+                    float rcolor = texture2D(source, txt_coords + vec2(0.1, 0.0) * rbgShift * rgb_noise).r;
+                    float bcolor = texture2D(source, txt_coords - vec2(0.1, 0.0) * rbgShift * rgb_noise).b;
                     txt_color.r = rcolor;
                     txt_color.b = bcolor;
                     greyscale_color = 0.33 * (rcolor + bcolor);" : "") +
 
-                "vec3 mixedColor = mix(font_color.rgb, txt_color * font_color.rgb, chroma_color);
-                 vec3 finalBackColor = mix(background_color.rgb, mixedColor, greyscale_color);
-                 vec3 finalColor = mix(finalBackColor, font_color.rgb, color).rgb;"
+                "vec3 mixedColor = mix(fontColor.rgb, txt_color * fontColor.rgb, chromaColor);
+                 vec3 finalBackColor = mix(backgroundColor.rgb, mixedColor, greyscale_color);
+                 vec3 finalColor = mix(finalBackColor, fontColor.rgb, color).rgb;"
             :
-                "vec3 finalColor = mix(background_color.rgb, font_color.rgb, greyscale_color);") +
+                "vec3 finalColor = mix(backgroundColor.rgb, fontColor.rgb, greyscale_color);") +
 
             "finalColor *= getScanlineIntensity(coords);" +
 
-            (bloom_strength !== 0 ?
+            (bloom !== 0 ?
                 "vec4 bloomFullColor = texture2D(bloomSource, coords);
                  vec3 bloomColor = bloomFullColor.rgb;
                  float bloomAlpha = bloomFullColor.a;" +
-                (chroma_color !== 0 ?
-                    "bloomColor = font_color.rgb * mix(vec3(rgb2grey(bloomColor)), bloomColor, chroma_color);"
+                (chromaColor !== 0 ?
+                    "bloomColor = fontColor.rgb * mix(vec3(rgb2grey(bloomColor)), bloomColor, chromaColor);"
                 :
-                    "bloomColor = font_color.rgb * rgb2grey(bloomColor);") +
-                "finalColor += bloomColor * bloom_strength * bloomAlpha;"
+                    "bloomColor = fontColor.rgb * rgb2grey(bloomColor);") +
+                "finalColor += bloomColor * bloom * bloomAlpha;"
             : "") +
 
-            "finalColor *= smoothstep(-dispX, 0.0, coords.x) - smoothstep(1.0, 1.0 + dispX, coords.x);
-             finalColor *= smoothstep(-dispY, 0.0, coords.y) - smoothstep(1.0, 1.0 + dispY, coords.y);" +
+            "finalColor *= smoothstep(-dispX, 0.0, staticCoords.x) - smoothstep(1.0, 1.0 + dispX, staticCoords.x);
+             finalColor *= smoothstep(-dispY, 0.0, staticCoords.y) - smoothstep(1.0, 1.0 + dispY, staticCoords.y);" +
 
-            (brightness_flickering !== 0 ? "
+            (flickering !== 0 ? "
                 finalColor *= brightness;" : "") +
 
             "gl_FragColor = vec4(finalColor * screen_brightness, qt_Opacity);" +
