@@ -105,9 +105,9 @@ Item{
         id: staticLight
         property alias source: framesource
         property alias normals: framesourcenormals
-        property real screen_distorsion: appSettings.screenCurvature
+        property real screenCurvature: appSettings.screenCurvature
         property size curvature_coefficients: Qt.size(width / mainShader.width, height / mainShader.height)
-        property real ambientLight: appSettings.ambientLight
+        property real ambientLight: appSettings.ambientLight * 0.9 + 0.1
         property color fontColor: appSettings.fontColor
         property color backgroundColor: appSettings.backgroundColor
         property color reflectionColor: Utils.mix(fontColor, backgroundColor, 0.2)
@@ -122,7 +122,7 @@ Item{
         fragmentShader: "
             uniform highp sampler2D normals;
             uniform highp sampler2D source;
-            uniform lowp float screen_distorsion;
+            uniform lowp float screenCurvature;
             uniform highp vec2 curvature_coefficients;
             uniform lowp float ambientLight;
             uniform highp float qt_Opacity;
@@ -133,7 +133,7 @@ Item{
 
             vec2 distortCoordinates(vec2 coords){
                 vec2 cc = (coords - vec2(0.5)) * curvature_coefficients;
-                float dist = dot(cc, cc) * screen_distorsion;
+                float dist = dot(cc, cc) * screenCurvature;
                 return (coords + cc * (1.0 + dist) * dist);
             }
 

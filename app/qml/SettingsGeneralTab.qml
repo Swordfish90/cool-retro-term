@@ -78,7 +78,11 @@ Tab{
                         enabled: currentIndex >= 0 && !appSettings.profilesList.get(currentIndex).builtin
                         onClicked: {
                             appSettings.profilesList.remove(currentIndex);
-                            currentIndex = -1; // Unselect the profile.
+                            profilesView.selection.clear();
+
+                            // TODO This is a very ugly workaround. The view didn't update on Qt 5.3.2.
+                            profilesView.model = 0;
+                            profilesView.model = appSettings.profilesList;
                         }
                     }
                     Item {

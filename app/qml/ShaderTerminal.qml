@@ -37,7 +37,7 @@ ShaderEffect {
     property size scaleNoiseSize: Qt.size((width) / (noiseTexture.width * appSettings.windowScaling * appSettings.fontScaling),
                                           (height) / (noiseTexture.height * appSettings.windowScaling * appSettings.fontScaling))
 
-    property real screen_distorsion: appSettings.screenCurvature
+    property real screenCurvature: appSettings.screenCurvature
     property real glowingLine: appSettings.glowingLine
 
     property real chromaColor: appSettings.chromaColor;
@@ -45,7 +45,7 @@ ShaderEffect {
     property real rbgShift: appSettings.rbgShift * 0.2
 
     property real flickering: appSettings.flickering
-    property real horizontalSync: appSettings.horizontalSync
+    property real horizontalSync: appSettings.horizontalSync * 0.5
 
     property bool frameReflections: appSettings.frameReflections
 
@@ -66,7 +66,7 @@ ShaderEffect {
     }
 
     property alias time: timeManager.time
-    property variant noiseSource: noiseShaderSource
+    property ShaderEffectSource noiseSource: noiseShaderSource
 
     // If something goes wrong activate the fallback version of the shader.
     property bool fallBack: false
@@ -167,8 +167,8 @@ ShaderEffect {
           ||(fallBack && (flickering || horizontalSync))) ? "
             uniform lowp sampler2D noiseSource;
             uniform highp vec2 scaleNoiseSize;" : "") +
-        (screen_distorsion !== 0 ? "
-            uniform highp float screen_distorsion;" : "") +
+        (screenCurvature !== 0 ? "
+            uniform highp float screenCurvature;" : "") +
         (glowingLine !== 0 ? "
             uniform highp float glowingLine;" : "") +
         (chromaColor !== 0 ? "
@@ -230,8 +230,8 @@ ShaderEffect {
             (staticNoise ? "
                 float noise = staticNoise;" : "") +
 
-            (screen_distorsion !== 0 ? "
-                float distortion = dot(cc, cc) * screen_distorsion;
+            (screenCurvature !== 0 ? "
+                float distortion = dot(cc, cc) * screenCurvature;
                 vec2 staticCoords = (qt_TexCoord0 - cc * (1.0 + distortion) * distortion);"
             :"
                 vec2 staticCoords = qt_TexCoord0;") +
@@ -242,7 +242,7 @@ ShaderEffect {
                 float dst = sin((coords.y + time * 0.001) * distortionFreq);
                 coords.x += dst * distortionScale;" +
                 (staticNoise ? "
-                    noise += distortionScale * 3.0;" : "")
+                    noise += distortionScale * 7.0;" : "")
             : "") +
 
             (jitter !== 0 || staticNoise !== 0 ?
