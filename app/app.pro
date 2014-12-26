@@ -2,7 +2,12 @@ QT += qml quick widgets sql
 TARGET = cool-retro-term 
 
 DESTDIR = $$OUT_PWD/../
-SOURCES = main.cpp
+
+HEADERS += \
+    fileio.h
+
+SOURCES = main.cpp \
+    fileio.cpp
 
 macx:ICON = icons/crt.icns
 

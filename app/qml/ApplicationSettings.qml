@@ -208,7 +208,7 @@ QtObject{
         return stringify(settings);
     }
 
-    function composeProfileString(){
+    function composeProfileObject(){
         var settings = {
             backgroundColor: _backgroundColor,
             fontColor: _fontColor,
@@ -232,7 +232,11 @@ QtObject{
             fontName: fontNames[rasterization],
             fontWidth: fontWidth
         }
-        return stringify(settings);
+        return settings;
+    }
+
+    function composeProfileString() {
+        return stringify(composeProfileObject());
     }
 
     function loadSettings(){

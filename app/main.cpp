@@ -9,6 +9,7 @@
 #include <QDebug>
 #include <stdlib.h>
 
+#include <fileio.h>
 
 QString getNamedArgument(QStringList args, QString name, QString defaultName)
 {
@@ -26,6 +27,7 @@ int main(int argc, char *argv[])
     setenv("QT_QPA_PLATFORMTHEME", "", 1);
     QApplication app(argc, argv);
     QQmlApplicationEngine engine;
+    FileIO fileIO;
 
     // Manage command line arguments from the cpp side
     QStringList args = app.arguments();
@@ -52,6 +54,7 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("defaultCmdArgs", commandArgs);
 
     engine.rootContext()->setContextProperty("workdir", getNamedArgument(args, "--workdir", "$HOME"));
+    engine.rootContext()->setContextProperty("fileIO", &fileIO);
 
     // Manage import paths for Linux and OSX.
     QStringList importPathList = engine.importPathList();

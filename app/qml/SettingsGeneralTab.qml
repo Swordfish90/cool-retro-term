@@ -21,6 +21,7 @@
 import QtQuick 2.2
 import QtQuick.Controls 1.1
 import QtQuick.Layouts 1.1
+import QtQuick.Dialogs 1.1
 
 Tab{
     ColumnLayout{
@@ -77,9 +78,61 @@ Tab{
                             profilesView.activated(currentIndex);
                         }
                     }
+                    Button{
+                        text: qsTr("Import")
+                        onClicked: {
+                            fileDialog.selectExisting = true;
+                            fileDialog.callBack = function (url) {loadFile(url);};
+                            fileDialog.open();
+                        }
+                        function loadFile(url) {
+                            if (true)
+                                console.log("Loading file: " + url);
+                            var profileStirng = fileIO.read(url);
+                            appSettings.loadProfileString(profileStirng);
+                        }
+                    }
+                    Button{
+                        text: qsTr("Export")
+                        onClicked: {
+                            fileDialog.selectExisting = false;
+                            fileDialog.callBack = function (url) {storeFile(url);};
+                            fileDialog.open();
+                        }
+                        function storeFile(url) {
+                            if (true)
+                                console.log("Storing file: " + url);
+                            var profileObject = appSettings.composeProfileObject();
+                            fileIO.write(url, JSON.stringify(profileObject, undefined, 2));
+                        }
+                    }
                     InsertNameDialog{
                         id: insertname
                         onNameSelected: appSettings.addNewCustomProfile(name)
+                    }
+                    Loader {
+                        property var callBack
+                        property bool selectExisting: false
+                        id: fileDialog
+
+                        sourceComponent: FileDialog{
+                            nameFilters: ["Json files (*.json)"]
+                            selectMultiple: false
+                            selectFolder: false
+                            selectExisting: fileDialog.selectExisting
+                            onAccepted: callBack(fileUrl);
+                        }
+
+                        onSelectExistingChanged: reload()
+
+                        function open() {
+                            item.open();
+                        }
+
+                        function reload() {
+                            active = false;
+                            active = true;
+                        }
                     }
                 }
             }
