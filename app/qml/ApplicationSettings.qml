@@ -76,8 +76,6 @@ QtObject{
 
     property int rasterization: no_rasterization
 
-    property int profilesIndex: 0
-
     // FONTS //////////////////////////////////////////////////////////////////
 
     property real fontScaling: 1.0
@@ -347,10 +345,6 @@ QtObject{
             customProfiles.push({text: profile.text, obj_string: profile.obj_string, builtin: false})
         }
         return stringify(customProfiles);
-    }
-
-    function loadCurrentProfile(){
-        loadProfile(profilesIndex);
     }
 
     function loadProfile(index){

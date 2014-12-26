@@ -26,45 +26,61 @@ Tab{
     ColumnLayout{
         anchors.fill: parent
         GroupBox{
+            anchors {left: parent.left; right: parent.right}
             Layout.fillWidth: true
+            Layout.fillHeight: true
             title: qsTr("Profile")
-            ColumnLayout{
+            RowLayout {
                 anchors.fill: parent
-                ComboBox{
-                    id: profilesbox
+                TableView {
+                    id: profilesView
                     Layout.fillWidth: true
+                    anchors { top: parent.top; bottom: parent.bottom; }
                     model: appSettings.profilesList
-                    currentIndex: appSettings.profilesIndex
+                    headerVisible: false
+                    TableViewColumn {
+                        title: qsTr("Profile")
+                        role: "text"
+                        width: parent.width * 0.5
+                    }
+                    onActivated: {
+                        appSettings.loadProfile(row);
+                    }
                 }
-                RowLayout{
-                    Layout.fillWidth: true
+                ColumnLayout {
+                    anchors { top: parent.top; bottom: parent.bottom }
+                    Layout.fillWidth: false
                     Button{
                         Layout.fillWidth: true
+                        property alias currentIndex: profilesView.currentRow
+                        enabled: currentIndex >= 0
                         text: qsTr("Load")
                         onClicked: {
-                            appSettings.profilesIndex = profilesbox.currentIndex
-                            appSettings.loadCurrentProfile();
-                            appSettings.handleFontChanged();
+                            var index = profilesView.currentRow;
+                            if (index >= 0)
+                                appSettings.loadProfile(index);
                         }
                     }
                     Button{
                         Layout.fillWidth: true
-                        text: qsTr("Save New Profile")
+                        text: qsTr("New")
                         onClicked: insertname.show()
                     }
                     Button{
                         Layout.fillWidth: true
-                        text: qsTr("Remove Selected")
-                        enabled: !appSettings.profilesList.get(profilesbox.currentIndex).builtin
+                        text: qsTr("Remove")
+                        property alias currentIndex: profilesView.currentRow
+
+                        enabled: currentIndex >= 0 && !appSettings.profilesList.get(currentIndex).builtin
                         onClicked: {
-                            appSettings.profilesList.remove(profilesbox.currentIndex)
-                            profilesbox.currentIndex = profilesbox.currentIndex - 1
+                            appSettings.profilesList.remove(profilesView.currentRow);
+                            profilesView.activated(currentIndex);
                         }
                     }
-                }
-                InsertNameDialog{
-                    id: insertname
-                    onNameSelected: appSettings.addNewCustomProfile(name)
+                    InsertNameDialog{
+                        id: insertname
+                        onNameSelected: appSettings.addNewCustomProfile(name)
+                    }
                 }
             }
         }
