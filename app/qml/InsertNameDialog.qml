@@ -49,12 +49,6 @@ Window{
         var profile_list = appSettings.profilesList;
         if (name === "")
             return 1;
-
-        for (var i = 0; i < profile_list.count; i++){
-            if(profile_list.get(i).text === name)
-                return 2;
-        }
-
         return 0;
     }
 
@@ -82,9 +76,6 @@ Window{
                     switch(validateName(name)){
                     case 1:
                         errorDialog.showError(qsTr("The name you inserted is empty. Please choose a different one."));
-                        break;
-                    case 2:
-                        errorDialog.showError(qsTr("The name you inserted already exists. Please choose a different one."));
                         break;
                     default:
                         nameSelected(name);
