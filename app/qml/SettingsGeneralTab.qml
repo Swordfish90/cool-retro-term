@@ -81,6 +81,10 @@ Tab{
                             currentIndex = -1; // Unselect the profile.
                         }
                     }
+                    Item {
+                        // Spacing
+                        Layout.fillHeight: true
+                    }
                     Button{
                         Layout.fillWidth: true
                         text: qsTr("Import")

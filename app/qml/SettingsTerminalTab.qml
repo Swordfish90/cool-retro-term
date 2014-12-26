@@ -28,7 +28,7 @@ Tab{
         GroupBox{
             property var rasterization: [qsTr("Default"), qsTr("Scanlines"), qsTr("Pixels")][appSettings.rasterization]
             title: qsTr("Font" + "(" + rasterization + ")")
-            Layout.fillWidth: true
+            anchors { left: parent.left; right: parent.right }
             GridLayout{
                 anchors.fill: parent
                 columns: 2
@@ -101,9 +101,23 @@ Tab{
         }
         GroupBox{
             title: qsTr("Colors")
-            Layout.fillWidth: true
+            anchors { left: parent.left; right: parent.right }
             ColumnLayout{
                 anchors.fill: parent
+                ColumnLayout{
+                    Layout.fillWidth: true
+                    CheckableSlider{
+                        name: qsTr("Chroma Color")
+                        onNewValue: appSettings.chromaColor = newValue
+                        value: appSettings.chromaColor
+                    }
+                    CheckableSlider{
+                        name: qsTr("Saturation Color")
+                        onNewValue: appSettings.saturationColor = newValue
+                        value: appSettings.saturationColor
+                        enabled: appSettings.chromaColor !== 0
+                    }
+                }
                 RowLayout{
                     Layout.fillWidth: true
                     ColorButton{
@@ -119,20 +133,6 @@ Tab{
                         Layout.fillWidth: true
                         onColorSelected: appSettings._backgroundColor = color;
                         button_color: appSettings._backgroundColor
-                    }
-                }
-                ColumnLayout{
-                    Layout.fillWidth: true
-                    CheckableSlider{
-                        name: qsTr("Chroma Color")
-                        onNewValue: appSettings.chromaColor = newValue
-                        value: appSettings.chromaColor
-                    }
-                    CheckableSlider{
-                        name: qsTr("Saturation Color")
-                        onNewValue: appSettings.saturationColor = newValue
-                        value: appSettings.saturationColor
-                        enabled: appSettings.chromaColor !== 0
                     }
                 }
             }
