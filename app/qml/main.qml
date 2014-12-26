@@ -82,12 +82,12 @@ ApplicationWindow{
     Action{
         id: copyAction
         text: qsTr("Copy")
-        shortcut: Qt.platform.os === "osx" ? "Ctrl+C" : "Ctrl+Shift+C"
+        shortcut: Qt.platform.os === "osx" ? StandardKey.Copy : "Ctrl+Shift+C"
     }
     Action{
         id: pasteAction
         text: qsTr("Paste")
-        shortcut: Qt.platform.os === "osx" ? "Ctrl+V" : "Ctrl+Shift+V"
+        shortcut: Qt.platform.os === "osx" ? StandardKey.Paste : "Ctrl+Shift+V"
     }
     Action{
         id: zoomIn
