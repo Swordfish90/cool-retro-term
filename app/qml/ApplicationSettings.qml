@@ -23,7 +23,7 @@ import QtQuick 2.2
 import "utils.js" as Utils
 
 QtObject{
-    property string version: "0.9"
+    property string version: "1.0.0 RC1"
 
     // GENERAL SETTINGS ///////////////////////////////////////////////////
 
