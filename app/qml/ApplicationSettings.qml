@@ -356,8 +356,7 @@ QtObject{
         loadProfileString(profile.obj_string);
     }
 
-    function addNewCustomProfile(name){
-        var profileString = composeProfileString();
+    function appendCustomProfile(name, profileString) {
         profilesList.append({text: name, obj_string: profileString, builtin: false});
     }
 

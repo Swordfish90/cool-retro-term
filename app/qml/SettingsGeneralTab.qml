@@ -53,6 +53,14 @@ Tab{
                     Layout.fillWidth: false
                     Button{
                         Layout.fillWidth: true
+                        text: qsTr("New")
+                        onClicked: {
+                            insertname.profileName = "";
+                            insertname.show()
+                        }
+                    }
+                    Button{
+                        Layout.fillWidth: true
                         property alias currentIndex: profilesView.currentRow
                         enabled: currentIndex >= 0
                         text: qsTr("Load")
@@ -64,21 +72,17 @@ Tab{
                     }
                     Button{
                         Layout.fillWidth: true
-                        text: qsTr("New")
-                        onClicked: insertname.show()
-                    }
-                    Button{
-                        Layout.fillWidth: true
                         text: qsTr("Remove")
                         property alias currentIndex: profilesView.currentRow
 
                         enabled: currentIndex >= 0 && !appSettings.profilesList.get(currentIndex).builtin
                         onClicked: {
-                            appSettings.profilesList.remove(profilesView.currentRow);
-                            profilesView.activated(currentIndex);
+                            appSettings.profilesList.remove(currentIndex);
+                            currentIndex = -1; // Unselect the profile.
                         }
                     }
                     Button{
+                        Layout.fillWidth: true
                         text: qsTr("Import")
                         onClicked: {
                             fileDialog.selectExisting = true;
@@ -86,105 +90,103 @@ Tab{
                             fileDialog.open();
                         }
                         function loadFile(url) {
-                            if (true)
-                                console.log("Loading file: " + url);
-                            var profileStirng = fileIO.read(url);
-                            appSettings.loadProfileString(profileStirng);
+                            try {
+                                if (appSettings.verbose)
+                                    console.log("Loading file: " + url);
+
+                                var profileObject = JSON.parse(fileIO.read(url));
+                                var name = profileObject.name;
+
+                                if (!name)
+                                    throw "Profile doesn't have a name";
+
+                                delete profileObject.name;
+
+                                appSettings.appendCustomProfile(name, JSON.stringify(profileObject));
+                            } catch (err) {
+                                console.log(err);
+                                messageDialog.text = qsTr("There has been an error reading the file.")
+                                messageDialog.open();
+                            }
                         }
                     }
                     Button{
+                        property alias currentIndex: profilesView.currentRow
+
+                        Layout.fillWidth: true
+
                         text: qsTr("Export")
+                        enabled: currentIndex >= 0 && !appSettings.profilesList.get(currentIndex).builtin
                         onClicked: {
                             fileDialog.selectExisting = false;
                             fileDialog.callBack = function (url) {storeFile(url);};
                             fileDialog.open();
                         }
                         function storeFile(url) {
-                            if (true)
-                                console.log("Storing file: " + url);
-                            var profileObject = appSettings.composeProfileObject();
-                            fileIO.write(url, JSON.stringify(profileObject, undefined, 2));
-                        }
-                    }
-                    InsertNameDialog{
-                        id: insertname
-                        onNameSelected: appSettings.addNewCustomProfile(name)
-                    }
-                    Loader {
-                        property var callBack
-                        property bool selectExisting: false
-                        id: fileDialog
+                            try {
+                                var urlString = url.toString();
 
-                        sourceComponent: FileDialog{
-                            nameFilters: ["Json files (*.json)"]
-                            selectMultiple: false
-                            selectFolder: false
-                            selectExisting: fileDialog.selectExisting
-                            onAccepted: callBack(fileUrl);
-                        }
+                                // Fix the extension if it's missing.
+                                var extension = urlString.substring(urlString.length - 5, urlString.length);
+                                var urlTail = (extension === ".json" ? "" : ".json");
+                                url += urlTail;
 
-                        onSelectExistingChanged: reload()
+                                if (true)
+                                    console.log("Storing file: " + url);
 
-                        function open() {
-                            item.open();
-                        }
+                                var profileObject = appSettings.profilesList.get(currentIndex);
+                                var profileSettings = JSON.parse(profileObject.obj_string);
+                                profileSettings["name"] = profileObject.text;
 
-                        function reload() {
-                            active = false;
-                            active = true;
+                                var result = fileIO.write(url, JSON.stringify(profileSettings, undefined, 2));
+                                if (!result)
+                                    throw "The file could not be written.";
+                            } catch (err) {
+                                console.log(err);
+                                messageDialog.text = qsTr("There has been an error storing the file.")
+                                messageDialog.open();
+                            }
                         }
                     }
                 }
             }
         }
-        GroupBox{
-            title: qsTr("Lights")
-            Layout.fillWidth: true
-            GridLayout{
-                anchors.fill: parent
-                columns: 2
-                Text{ text: qsTr("Brightness") }
-                SimpleSlider{
-                    onValueChanged: appSettings.brightness = value
-                    value: appSettings.brightness
-                }
-                Text{ text: qsTr("Contrast") }
-                SimpleSlider{
-                    onValueChanged: appSettings.contrast = value
-                    value: appSettings.contrast
-                }
-                Text{ text: qsTr("Opacity") }
-                SimpleSlider{
-                    onValueChanged: appSettings.windowOpacity = value
-                    value: appSettings.windowOpacity
-                }
+        // DIALOGS ////////////////////////////////////////////////////////////////
+        InsertNameDialog{
+            id: insertname
+            onNameSelected: {
+                appSettings.appendCustomProfile(name, appSettings.composeProfileString());
             }
         }
-        GroupBox{
-            title: qsTr("Frame")
-            Layout.fillWidth: true
-            RowLayout{
-                anchors.fill: parent
-                ComboBox{
-                    id: framescombobox
-                    Layout.fillWidth: true
-                    model: appSettings.framesList
-                    currentIndex: appSettings.framesIndex
-                    onActivated: {
-                        appSettings.frameName = appSettings.framesList.get(index).name;
-                    }
-                    function updateIndex(){
-                        var name = appSettings.frameName;
-                        var index = appSettings.getFrameIndexByName(name);
-                        if (index !== undefined)
-                            currentIndex = index;
-                    }
-                    Component.onCompleted: updateIndex();
-                    Connections {
-                        target: appSettings
-                        onFrameNameChanged: framescombobox.updateIndex();
-                    }
-                }
+        MessageDialog {
+            id: messageDialog
+            title: qsTr("File Error")
+            onAccepted: {
+                messageDialog.close();
+            }
+        }
+        Loader {
+            property var callBack
+            property bool selectExisting: false
+            id: fileDialog
+
+            sourceComponent: FileDialog{
+                nameFilters: ["Json files (*.json)"]
+                selectMultiple: false
+                selectFolder: false
+                selectExisting: fileDialog.selectExisting
+                onAccepted: callBack(fileUrl);
+            }
+
+            onSelectExistingChanged: reload()
+
+            function open() {
+                item.open();
+            }
+
+            function reload() {
+                active = false;
+                active = true;
             }
         }
     }

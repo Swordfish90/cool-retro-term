@@ -42,6 +42,12 @@ Window {
             anchors.fill: parent
             anchors.margins: tabmargins
         }
+        SettingsScreenTab{
+            id: screenTab
+            title: qsTr("Screen")
+            anchors.fill: parent
+            anchors.margins: tabmargins
+        }
         SettingsTerminalTab{
             id: terminalTab
             title: qsTr("Terminal")

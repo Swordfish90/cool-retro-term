@@ -31,6 +31,7 @@ Window{
     modality: Qt.ApplicationModal
     title: qsTr("Save new profile")
 
+    property alias profileName: namefield.text
     signal nameSelected(string name)
 
     MessageDialog {

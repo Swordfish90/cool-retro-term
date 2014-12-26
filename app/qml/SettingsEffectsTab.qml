@@ -28,6 +28,7 @@ Tab{
         anchors.fill: parent
         ColumnLayout{
             anchors.fill: parent
+            spacing: 2
             CheckableSlider{
                 name: qsTr("Bloom")
                 onNewValue: appSettings.bloom = newValue

@@ -26,21 +26,8 @@ Tab{
     ColumnLayout{
         anchors.fill: parent
         GroupBox{
-            title: qsTr("Rasterization Mode")
-            Layout.fillWidth: true
-            ComboBox {
-                id: rasterizationBox
-                property string selectedElement: model[currentIndex]
-                anchors.fill: parent
-                model: [qsTr("Default"), qsTr("Scanlines"), qsTr("Pixels")]
-                currentIndex: appSettings.rasterization
-                onCurrentIndexChanged: {
-                    appSettings.rasterization = currentIndex
-                }
-            }
-        }
-        GroupBox{
-            title: qsTr("Font") + " (" + rasterizationBox.selectedElement + ")"
+            property var rasterization: [qsTr("Default"), qsTr("Scanlines"), qsTr("Pixels")][appSettings.rasterization]
+            title: qsTr("Font" + "(" + rasterization + ")")
             Layout.fillWidth: true
             GridLayout{
                 anchors.fill: parent
