@@ -121,18 +121,24 @@ Tab{
                 RowLayout{
                     Layout.fillWidth: true
                     ColorButton{
+                        property color settingsColor: appSettings._fontColor
+                        onSettingsColorChanged: color = settingsColor
+
                         name: qsTr("Font")
                         height: 50
                         Layout.fillWidth: true
-                        onColorSelected: appSettings._fontColor = color;
-                        button_color: appSettings._fontColor
+                        onColorChanged: appSettings._fontColor = color
+                        Component.onCompleted: { color = settingsColor; }
                     }
                     ColorButton{
+                        property color settingsColor: appSettings._backgroundColor
+                        onSettingsColorChanged: color = settingsColor
+
                         name: qsTr("Background")
                         height: 50
                         Layout.fillWidth: true
-                        onColorSelected: appSettings._backgroundColor = color;
-                        button_color: appSettings._backgroundColor
+                        onColorChanged: appSettings._backgroundColor = color
+                        Component.onCompleted: { color = settingsColor;}
                     }
                 }
             }

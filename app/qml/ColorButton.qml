@@ -22,8 +22,8 @@ import QtQuick 2.2
 import QtQuick.Dialogs 1.1
 
 Item {
-    signal colorSelected (color color)
-    property color button_color
+    id: rootItem
+    property alias color: colorDialog.color
     property string name
 
     ColorDialog {
@@ -31,15 +31,11 @@ Item {
         title: qsTr("Choose a color")
         modality: Qt.ApplicationModal
         visible: false
-
-        //This is a workaround to a Qt 5.2 bug.
-        onCurrentColorChanged: colorDialog.color = colorDialog.currentColor;
-        onAccepted: colorSelected(color)
     }
     Rectangle{
         anchors.fill: parent
         radius: 10
-        color: button_color
+        color: rootItem.color
         border.color: "black"
         Glossy {}
         Rectangle {
@@ -52,7 +48,7 @@ Item {
         Text{
             anchors.centerIn: parent
             z: parent.z + 1
-            text: name + ":  " + button_color
+            text: name + ":  " + rootItem.color
         }
     }
     MouseArea{
