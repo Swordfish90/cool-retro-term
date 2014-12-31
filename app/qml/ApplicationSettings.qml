@@ -81,6 +81,8 @@ QtObject{
     property real fontScaling: 1.0
     property real fontWidth: 1.0
 
+    property bool lowResolutionFont: false
+
     property var fontNames: ["HERMIT", "COMMODORE_PET", "COMMODORE_PET"]
     property var fontlist: fontManager.item.fontlist
 
@@ -134,6 +136,8 @@ QtObject{
         var lineSpacing = fontManager.item.lineSpacing;
         var screenScaling = fontManager.item.screenScaling;
         var fontWidth = fontManager.item.defaultFontWidth * appSettings.fontWidth;
+
+        lowResolutionFont = fontManager.item.lowResolutionFont;
 
         terminalFontChanged(fontSource, pixelSize, lineSpacing, screenScaling, fontWidth);
     }

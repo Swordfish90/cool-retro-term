@@ -29,6 +29,7 @@ QtObject{
     property int lineSpacing: _font.lineSpacing
     property real screenScaling: scaling * _font.baseScaling
     property real defaultFontWidth: fontlist.get(selectedFontIndex).fontWidth
+    property bool lowResolutionFont: true
 
     property ListModel fontlist: ListModel{
         ListElement{

@@ -83,7 +83,7 @@ Item{
 
         colorScheme: "cool-retro-term"
 
-        smooth: appSettings.rasterization === appSettings.no_rasterization
+        smooth: !appSettings.lowResolutionFont
         enableBold: false
         fullCursorHeight: true
 
@@ -115,7 +115,7 @@ Item{
         function handleFontChange(fontSource, pixelSize, lineSpacing, screenScaling, fontWidth){
             fontLoader.source = fontSource;
 
-            kterminal.antialiasText = appSettings.rasterization === appSettings.no_rasterization
+            kterminal.antialiasText = !appSettings.lowResolutionFont;
             font.pixelSize = pixelSize;
             font.family = fontLoader.name;
 

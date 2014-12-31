@@ -25,14 +25,121 @@ QtObject{
     property real scaling
     property var source: fontlist.get(selectedFontIndex).source
     property var _font: fontlist.get(selectedFontIndex)
-    property int pixelSize: _font.pixelSize * scaling
-    property int lineSpacing: pixelSize * _font.lineSpacing
-    property real screenScaling: 1.0
+    property bool lowResolutionFont: _font.lowResolutionFont
+
+    property int pixelSize: lowResolutionFont
+                                 ? _font.pixelSize
+                                 : _font.pixelSize * scaling
+
+    property int lineSpacing: lowResolutionFont
+                                  ? _font.lineSpacing
+                                  : pixelSize * _font.lineSpacing
+
+    property real screenScaling: lowResolutionFont
+                                     ? _font.baseScaling * scaling
+                                     : 1.0
+
     property real defaultFontWidth: fontlist.get(selectedFontIndex).fontWidth
 
-    //In this configuration lineSpacing is proportional to pixelSize.
+    // There are two kind of fonts: low resolution and high resolution.
+    // Low resolution font sets the lowResolutionFont property to true.
+    // They are rendered at a fixed pixel size and the texture is upscaled
+    // to fill the screen (they are much faster to render).
+    // High resolution fonts are instead drawn on a texture which has the
+    // size of the screen, and the scaling directly controls their pixels size.
+    // Those are slower to render but are not pixelated.
 
     property ListModel fontlist: ListModel{
+        ListElement{
+            name: "TERMINUS_SCALED"
+            text: "Terminus (Pixelated) (Modern)"
+            source: "fonts/modern-terminus/TerminusTTF-4.38.2.ttf"
+            lineSpacing: 1
+            pixelSize: 12
+            baseScaling: 3.0
+            fontWidth: 1.0
+            lowResolutionFont: true
+        }
+        ListElement{
+            name: "PRO_FONT_SCALED"
+            text: "Pro Font (Pixelated) (Modern)"
+            source: "fonts/modern-pro-font-win-tweaked/ProFontWindows.ttf"
+            lineSpacing: 1
+            pixelSize: 12
+            baseScaling: 3.0
+            fontWidth: 1.0
+            lowResolutionFont: true
+        }
+        ListElement{
+            name: "COMMODORE_PET_SCALED"
+            text: "Commodore PET (Pixelated) (1977)"
+            source: "fonts/1977-commodore-pet/COMMODORE_PET.ttf"
+            lineSpacing: 2
+            pixelSize: 8
+            baseScaling: 4.0
+            fontWidth: 0.7
+            lowResolutionFont: true
+        }
+        ListElement{
+            name: "PROGGY_TINY_SCALED"
+            text: "Proggy Tiny (Pixelated) (Modern)"
+            source: "fonts/modern-proggy-tiny/ProggyTiny.ttf"
+            lineSpacing: 1
+            pixelSize: 16
+            baseScaling: 4.0
+            fontWidth: 0.9
+            lowResolutionFont: true
+        }
+        ListElement{
+            name: "APPLE_II_SCALED"
+            text: "Apple ][ (Pixelated) (1977)"
+            source: "fonts/1977-apple2/PrintChar21.ttf"
+            lineSpacing: 2
+            pixelSize: 8
+            baseScaling: 4.0
+            fontWidth: 0.8
+            lowResolutionFont: true
+        }
+        ListElement{
+            name: "ATARI_400_SCALED"
+            text: "Atari 400-800 (Pixelated) (1979)"
+            source: "fonts/1979-atari-400-800/ATARI400800_original.TTF"
+            lineSpacing: 3
+            pixelSize: 8
+            baseScaling: 4.0
+            fontWidth: 0.7
+            lowResolutionFont: true
+        }
+        ListElement{
+            name: "COMMODORE_64_SCALED"
+            text: "Commodore 64 (Pixelated) (1982)"
+            source: "fonts/1982-commodore64/C64_Pro_Mono_v1.0-STYLE.ttf"
+            lineSpacing: 3
+            pixelSize: 8
+            baseScaling: 4.0
+            fontWidth: 0.7
+            lowResolutionFont: true
+        }
+        ListElement{
+            name: "ATARI_ST_SCALED"
+            text: "Atari ST (Pixelated) (1985)"
+            source: "fonts/1985-atari-st/AtariST8x16SystemFont.ttf"
+            lineSpacing: 3
+            pixelSize: 16
+            baseScaling: 2.0
+            fontWidth: 1.0
+            lowResolutionFont: true
+        }
+        ListElement{
+            name: "IBM_DOS"
+            text: "IBM DOS (Pixelated) (1985)"
+            source: "fonts/1985-ibm-pc-vga/Perfect DOS VGA 437 Win.ttf"
+            lineSpacing: 3
+            pixelSize: 16
+            baseScaling: 2.0
+            fontWidth: 1.0
+            lowResolutionFont: true
+        }
         ListElement{
             name: "HERMIT"
             text: "Hermit (Modern)"
@@ -40,6 +147,7 @@ QtObject{
             lineSpacing: 0.05
             pixelSize: 28
             fontWidth: 1.0
+            lowResolutionFont: false
         }
         ListElement{
             name: "TERMINUS"
@@ -48,6 +156,7 @@ QtObject{
             lineSpacing: 0.1
             pixelSize: 35
             fontWidth: 1.0
+            lowResolutionFont: false
         }
         ListElement{
             name: "ENVY_CODE_R"
@@ -56,6 +165,7 @@ QtObject{
             lineSpacing: 0.1
             pixelSize: 30
             fontWidth: 1.0
+            lowResolutionFont: false
         }
         ListElement{
             name: "PRO_FONT"
@@ -64,6 +174,7 @@ QtObject{
             lineSpacing: 0.1
             pixelSize: 35
             fontWidth: 1.0
+            lowResolutionFont: false
         }
         ListElement{
             name: "MONACO"
@@ -72,6 +183,7 @@ QtObject{
             lineSpacing: 0.1
             pixelSize: 30
             fontWidth: 1.0
+            lowResolutionFont: false
         }
         ListElement{
             name: "INCONSOLATA"
@@ -80,54 +192,7 @@ QtObject{
             lineSpacing: 0.1
             pixelSize: 35
             fontWidth: 1.0
-        }
-        ListElement{
-            name: "COMMODORE_PET"
-            text: "Commodore PET (1977)"
-            source: "fonts/1977-commodore-pet/COMMODORE_PET.ttf"
-            lineSpacing: 0.2
-            pixelSize: 26
-            fontWidth: 0.7
-        }
-        ListElement{
-            name: "APPLE_II"
-            text: "Apple ][ (1977)"
-            source: "fonts/1977-apple2/PrintChar21.ttf"
-            lineSpacing: 0.2
-            pixelSize: 26
-            fontWidth: 0.8
-        }
-        ListElement{
-            name: "ATARI_400"
-            text: "Atari 400-800 (1979)"
-            source: "fonts/1979-atari-400-800/ATARI400800_original.TTF"
-            lineSpacing: 0.3
-            pixelSize: 26
-            fontWidth: 0.7
-        }
-        ListElement{
-            name: "COMMODORE_64"
-            text: "Commodore 64 (1982)"
-            source: "fonts/1982-commodore64/C64_Pro_Mono_v1.0-STYLE.ttf"
-            lineSpacing: 0.3
-            pixelSize: 26
-            fontWidth: 0.7
-        }
-        ListElement{
-            name: "ATARI_ST"
-            text: "Atari ST (1985)"
-            source: "fonts/1985-atari-st/AtariST8x16SystemFont.ttf"
-            lineSpacing: 0.2
-            pixelSize: 32
-            fontWidth: 1.0
-        }
-        ListElement{
-            name: "IBM_DOS"
-            text: "IBM DOS (1985)"
-            source: "fonts/1985-ibm-pc-vga/Perfect DOS VGA 437 Win.ttf"
-            lineSpacing: 0.2
-            pixelSize: 32
-            fontWidth: 1.0
+            lowResolutionFont: false
         }
         ListElement{
             name: "IBM_3278"
@@ -136,6 +201,7 @@ QtObject{
             lineSpacing: 0.2
             pixelSize: 32
             fontWidth: 1.0
+            lowResolutionFont: false
         }
     }
 }
