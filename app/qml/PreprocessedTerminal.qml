@@ -237,6 +237,8 @@ Item{
 
             visible: false
 
+            smooth: !appSettings.lowResolutionFont
+
             function restartBlurSource(){
                 livetimer.restart();
             }
@@ -271,8 +273,13 @@ Item{
     Loader{
         id: blurredTerminalLoader
 
-        width: kterminal.width * scaleTexture * appSettings.burnInQuality
-        height: kterminal.height * scaleTexture * appSettings.burnInQuality
+        width: appSettings.lowResolutionFont
+                  ? kterminal.width
+                  : kterminal.width * scaleTexture * appSettings.burnInQuality
+        height: appSettings.lowResolutionFont
+                    ? kterminal.height
+                    : kterminal.height * scaleTexture * appSettings.burnInQuality
+
         active: mBlur !== 0
         asynchronous: true
 
