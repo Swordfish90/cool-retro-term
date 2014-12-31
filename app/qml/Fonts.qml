@@ -52,7 +52,7 @@ QtObject{
     property ListModel fontlist: ListModel{
         ListElement{
             name: "TERMINUS_SCALED"
-            text: "Terminus (Pixelated) (Modern)"
+            text: "Terminus (Modern)"
             source: "fonts/modern-terminus/TerminusTTF-4.38.2.ttf"
             lineSpacing: 1
             pixelSize: 12
@@ -62,7 +62,7 @@ QtObject{
         }
         ListElement{
             name: "PRO_FONT_SCALED"
-            text: "Pro Font (Pixelated) (Modern)"
+            text: "Pro Font (Modern)"
             source: "fonts/modern-pro-font-win-tweaked/ProFontWindows.ttf"
             lineSpacing: 1
             pixelSize: 12
@@ -72,57 +72,57 @@ QtObject{
         }
         ListElement{
             name: "COMMODORE_PET_SCALED"
-            text: "Commodore PET (Pixelated) (1977)"
+            text: "Commodore PET (1977)"
             source: "fonts/1977-commodore-pet/COMMODORE_PET.ttf"
             lineSpacing: 2
             pixelSize: 8
-            baseScaling: 4.0
+            baseScaling: 3.5
             fontWidth: 0.7
             lowResolutionFont: true
         }
         ListElement{
             name: "PROGGY_TINY_SCALED"
-            text: "Proggy Tiny (Pixelated) (Modern)"
+            text: "Proggy Tiny (Modern)"
             source: "fonts/modern-proggy-tiny/ProggyTiny.ttf"
             lineSpacing: 1
             pixelSize: 16
-            baseScaling: 4.0
+            baseScaling: 3.0
             fontWidth: 0.9
             lowResolutionFont: true
         }
         ListElement{
             name: "APPLE_II_SCALED"
-            text: "Apple ][ (Pixelated) (1977)"
+            text: "Apple ][ (1977)"
             source: "fonts/1977-apple2/PrintChar21.ttf"
             lineSpacing: 2
             pixelSize: 8
-            baseScaling: 4.0
+            baseScaling: 3.5
             fontWidth: 0.8
             lowResolutionFont: true
         }
         ListElement{
             name: "ATARI_400_SCALED"
-            text: "Atari 400-800 (Pixelated) (1979)"
+            text: "Atari 400-800 (1979)"
             source: "fonts/1979-atari-400-800/ATARI400800_original.TTF"
             lineSpacing: 3
             pixelSize: 8
-            baseScaling: 4.0
+            baseScaling: 3.5
             fontWidth: 0.7
             lowResolutionFont: true
         }
         ListElement{
             name: "COMMODORE_64_SCALED"
-            text: "Commodore 64 (Pixelated) (1982)"
+            text: "Commodore 64 (1982)"
             source: "fonts/1982-commodore64/C64_Pro_Mono_v1.0-STYLE.ttf"
             lineSpacing: 3
             pixelSize: 8
-            baseScaling: 4.0
+            baseScaling: 3.5
             fontWidth: 0.7
             lowResolutionFont: true
         }
         ListElement{
             name: "ATARI_ST_SCALED"
-            text: "Atari ST (Pixelated) (1985)"
+            text: "Atari ST (1985)"
             source: "fonts/1985-atari-st/AtariST8x16SystemFont.ttf"
             lineSpacing: 3
             pixelSize: 16
@@ -132,7 +132,7 @@ QtObject{
         }
         ListElement{
             name: "IBM_DOS"
-            text: "IBM DOS (Pixelated) (1985)"
+            text: "IBM DOS (1985)"
             source: "fonts/1985-ibm-pc-vga/Perfect DOS VGA 437 Win.ttf"
             lineSpacing: 3
             pixelSize: 16
@@ -142,7 +142,7 @@ QtObject{
         }
         ListElement{
             name: "HERMIT"
-            text: "Hermit (Modern)"
+            text: "Hermit (Modern) (HD)"
             source: "fonts/modern-hermit/Hermit-medium.otf"
             lineSpacing: 0.05
             pixelSize: 28
@@ -151,7 +151,7 @@ QtObject{
         }
         ListElement{
             name: "TERMINUS"
-            text: "Terminus (Modern)"
+            text: "Terminus (Modern) (HD)"
             source: "fonts/modern-terminus/TerminusTTF-4.38.2.ttf"
             lineSpacing: 0.1
             pixelSize: 35
@@ -159,17 +159,8 @@ QtObject{
             lowResolutionFont: false
         }
         ListElement{
-            name: "ENVY_CODE_R"
-            text: "Envy Code R (Modern)"
-            source: "fonts/modern-envy-code-r/Envy Code R.ttf"
-            lineSpacing: 0.1
-            pixelSize: 30
-            fontWidth: 1.0
-            lowResolutionFont: false
-        }
-        ListElement{
             name: "PRO_FONT"
-            text: "Pro Font (Modern)"
+            text: "Pro Font (Modern) (HD)"
             source: "fonts/modern-pro-font-win-tweaked/ProFontWindows.ttf"
             lineSpacing: 0.1
             pixelSize: 35
@@ -177,8 +168,17 @@ QtObject{
             lowResolutionFont: false
         }
         ListElement{
+            name: "ENVY_CODE_R"
+            text: "Envy Code R (Modern) (HD)"
+            source: "fonts/modern-envy-code-r/Envy Code R.ttf"
+            lineSpacing: 0.1
+            pixelSize: 30
+            fontWidth: 1.0
+            lowResolutionFont: false
+        }
+        ListElement{
             name: "MONACO"
-            text: "Monaco (Modern)"
+            text: "Monaco (Modern) (HD)"
             source: "fonts/modern-monaco/monaco.ttf"
             lineSpacing: 0.1
             pixelSize: 30
@@ -187,7 +187,7 @@ QtObject{
         }
         ListElement{
             name: "INCONSOLATA"
-            text: "Inconsolata (Modern)"
+            text: "Inconsolata (Modern) (HD)"
             source: "fonts/modern-inconsolata/Inconsolata.otf"
             lineSpacing: 0.1
             pixelSize: 35
@@ -196,7 +196,7 @@ QtObject{
         }
         ListElement{
             name: "IBM_3278"
-            text: "IBM 3278 (1971)"
+            text: "IBM 3278 (1971) (HD)"
             source: "fonts/1971-ibm-3278/3270Medium.ttf"
             lineSpacing: 0.2
             pixelSize: 32

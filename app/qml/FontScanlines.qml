@@ -51,6 +51,24 @@ QtObject{
             fontWidth: 0.9
         }
         ListElement{
+            name: "TERMINUS_SCALED"
+            text: "Terminus (Modern)"
+            source: "fonts/modern-terminus/TerminusTTF-4.38.2.ttf"
+            lineSpacing: 1
+            pixelSize: 12
+            baseScaling: 3.0
+            fontWidth: 1.0
+        }
+        ListElement{
+            name: "PRO_FONT_SCALED"
+            text: "Pro Font (Modern)"
+            source: "fonts/modern-pro-font-win-tweaked/ProFontWindows.ttf"
+            lineSpacing: 1
+            pixelSize: 12
+            baseScaling: 3.0
+            fontWidth: 1.0
+        }
+        ListElement{
             name: "APPLE_II"
             text: "Apple ][ (1977)"
             source: "fonts/1977-apple2/PrintChar21.ttf"
