@@ -120,8 +120,8 @@ Item{
             font.family = fontLoader.name;
 
             terminalContainer.fontWidth = fontWidth;
-            terminalContainer.screenScaling= screenScaling;
-            scaleTexture = Math.max(1.0, Math.round(screenScaling / 2));
+            terminalContainer.screenScaling = screenScaling;
+            scaleTexture = Math.max(1.0, Math.floor(screenScaling * appSettings.windowScaling));
 
             kterminal.lineSpacing = lineSpacing;
         }
@@ -237,8 +237,6 @@ Item{
 
             visible: false
 
-            smooth: !appSettings.lowResolutionFont
-
             function restartBlurSource(){
                 livetimer.restart();
             }
@@ -273,11 +271,13 @@ Item{
     Loader{
         id: blurredTerminalLoader
 
+        property int burnInScaling: scaleTexture * appSettings.burnInQuality
+
         width: appSettings.lowResolutionFont
-                  ? kterminal.width
+                  ? kterminal.width * Math.max(1, burnInScaling)
                   : kterminal.width * scaleTexture * appSettings.burnInQuality
         height: appSettings.lowResolutionFont
-                    ? kterminal.height
+                    ? kterminal.height * Math.max(1, burnInScaling)
                     : kterminal.height * scaleTexture * appSettings.burnInQuality
 
         active: mBlur !== 0
