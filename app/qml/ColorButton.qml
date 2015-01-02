@@ -22,8 +22,10 @@ import QtQuick 2.2
 import QtQuick.Dialogs 1.1
 
 Item {
+    id: rootItem
+
     signal colorSelected (color color)
-    property color button_color
+    property color color
     property string name
 
     ColorDialog {
@@ -33,13 +35,13 @@ Item {
         visible: false
 
         //This is a workaround to a Qt 5.2 bug.
-        onCurrentColorChanged: colorDialog.color = colorDialog.currentColor;
-        onAccepted: colorSelected(color)
+        onColorChanged: if (Qt.platform.os !== "osx") colorSelected(color)
+        onAccepted: if (Qt.platform.os === "osx") colorSelected(color)
     }
     Rectangle{
         anchors.fill: parent
         radius: 10
-        color: button_color
+        color: rootItem.color
         border.color: "black"
         Glossy {}
         Rectangle {
@@ -52,7 +54,7 @@ Item {
         Text{
             anchors.centerIn: parent
             z: parent.z + 1
-            text: name + ":  " + button_color
+            text: name + ":  " + rootItem.color
         }
     }
     MouseArea{
