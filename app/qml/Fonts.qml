@@ -25,117 +25,183 @@ QtObject{
     property real scaling
     property var source: fontlist.get(selectedFontIndex).source
     property var _font: fontlist.get(selectedFontIndex)
-    property int pixelSize: _font.pixelSize * scaling
-    property int lineSpacing: pixelSize * _font.lineSpacing
-    property real screenScaling: 1.0
+    property bool lowResolutionFont: _font.lowResolutionFont
+
+    property int pixelSize: lowResolutionFont
+                                 ? _font.pixelSize
+                                 : _font.pixelSize * scaling
+
+    property int lineSpacing: lowResolutionFont
+                                  ? _font.lineSpacing
+                                  : pixelSize * _font.lineSpacing
+
+    property real screenScaling: lowResolutionFont
+                                     ? _font.baseScaling * scaling
+                                     : 1.0
+
     property real defaultFontWidth: fontlist.get(selectedFontIndex).fontWidth
 
-    //In this configuration lineSpacing is proportional to pixelSize.
+    // There are two kind of fonts: low resolution and high resolution.
+    // Low resolution font sets the lowResolutionFont property to true.
+    // They are rendered at a fixed pixel size and the texture is upscaled
+    // to fill the screen (they are much faster to render).
+    // High resolution fonts are instead drawn on a texture which has the
+    // size of the screen, and the scaling directly controls their pixels size.
+    // Those are slower to render but are not pixelated.
 
     property ListModel fontlist: ListModel{
         ListElement{
-            name: "HERMIT"
-            text: "Hermit (Modern)"
-            source: "fonts/modern-hermit/Hermit-medium.otf"
-            lineSpacing: 0.05
-            pixelSize: 28
-            fontWidth: 1.0
-        }
-        ListElement{
-            name: "TERMINUS"
+            name: "TERMINUS_SCALED"
             text: "Terminus (Modern)"
             source: "fonts/modern-terminus/TerminusTTF-4.38.2.ttf"
-            lineSpacing: 0.1
-            pixelSize: 35
+            lineSpacing: 1
+            pixelSize: 12
+            baseScaling: 3.0
             fontWidth: 1.0
+            lowResolutionFont: true
         }
         ListElement{
-            name: "ENVY_CODE_R"
-            text: "Envy Code R (Modern)"
-            source: "fonts/modern-envy-code-r/Envy Code R.ttf"
-            lineSpacing: 0.1
-            pixelSize: 30
-            fontWidth: 1.0
-        }
-        ListElement{
-            name: "PRO_FONT"
+            name: "PRO_FONT_SCALED"
             text: "Pro Font (Modern)"
             source: "fonts/modern-pro-font-win-tweaked/ProFontWindows.ttf"
-            lineSpacing: 0.1
-            pixelSize: 35
+            lineSpacing: 1
+            pixelSize: 12
+            baseScaling: 3.0
             fontWidth: 1.0
+            lowResolutionFont: true
         }
         ListElement{
-            name: "MONACO"
-            text: "Monaco (Modern)"
-            source: "fonts/modern-monaco/monaco.ttf"
-            lineSpacing: 0.1
-            pixelSize: 30
-            fontWidth: 1.0
-        }
-        ListElement{
-            name: "INCONSOLATA"
-            text: "Inconsolata (Modern)"
-            source: "fonts/modern-inconsolata/Inconsolata.otf"
-            lineSpacing: 0.1
-            pixelSize: 35
-            fontWidth: 1.0
-        }
-        ListElement{
-            name: "COMMODORE_PET"
+            name: "COMMODORE_PET_SCALED"
             text: "Commodore PET (1977)"
             source: "fonts/1977-commodore-pet/COMMODORE_PET.ttf"
-            lineSpacing: 0.2
-            pixelSize: 26
+            lineSpacing: 2
+            pixelSize: 8
+            baseScaling: 3.5
             fontWidth: 0.7
+            lowResolutionFont: true
         }
         ListElement{
-            name: "APPLE_II"
+            name: "PROGGY_TINY_SCALED"
+            text: "Proggy Tiny (Modern)"
+            source: "fonts/modern-proggy-tiny/ProggyTiny.ttf"
+            lineSpacing: 1
+            pixelSize: 16
+            baseScaling: 3.0
+            fontWidth: 0.9
+            lowResolutionFont: true
+        }
+        ListElement{
+            name: "APPLE_II_SCALED"
             text: "Apple ][ (1977)"
             source: "fonts/1977-apple2/PrintChar21.ttf"
-            lineSpacing: 0.2
-            pixelSize: 26
+            lineSpacing: 2
+            pixelSize: 8
+            baseScaling: 3.5
             fontWidth: 0.8
+            lowResolutionFont: true
         }
         ListElement{
-            name: "ATARI_400"
+            name: "ATARI_400_SCALED"
             text: "Atari 400-800 (1979)"
             source: "fonts/1979-atari-400-800/ATARI400800_original.TTF"
-            lineSpacing: 0.3
-            pixelSize: 26
+            lineSpacing: 3
+            pixelSize: 8
+            baseScaling: 3.5
             fontWidth: 0.7
+            lowResolutionFont: true
         }
         ListElement{
-            name: "COMMODORE_64"
+            name: "COMMODORE_64_SCALED"
             text: "Commodore 64 (1982)"
             source: "fonts/1982-commodore64/C64_Pro_Mono_v1.0-STYLE.ttf"
-            lineSpacing: 0.3
-            pixelSize: 26
+            lineSpacing: 3
+            pixelSize: 8
+            baseScaling: 3.5
             fontWidth: 0.7
+            lowResolutionFont: true
         }
         ListElement{
-            name: "ATARI_ST"
+            name: "ATARI_ST_SCALED"
             text: "Atari ST (1985)"
             source: "fonts/1985-atari-st/AtariST8x16SystemFont.ttf"
-            lineSpacing: 0.2
-            pixelSize: 32
+            lineSpacing: 3
+            pixelSize: 16
+            baseScaling: 2.0
             fontWidth: 1.0
+            lowResolutionFont: true
         }
         ListElement{
             name: "IBM_DOS"
             text: "IBM DOS (1985)"
             source: "fonts/1985-ibm-pc-vga/Perfect DOS VGA 437 Win.ttf"
-            lineSpacing: 0.2
-            pixelSize: 32
+            lineSpacing: 3
+            pixelSize: 16
+            baseScaling: 2.0
             fontWidth: 1.0
+            lowResolutionFont: true
+        }
+        ListElement{
+            name: "HERMIT"
+            text: "HD: Hermit (Modern)"
+            source: "fonts/modern-hermit/Hermit-medium.otf"
+            lineSpacing: 0.05
+            pixelSize: 28
+            fontWidth: 1.0
+            lowResolutionFont: false
+        }
+        ListElement{
+            name: "TERMINUS"
+            text: "HD: Terminus (Modern)"
+            source: "fonts/modern-terminus/TerminusTTF-4.38.2.ttf"
+            lineSpacing: 0.1
+            pixelSize: 35
+            fontWidth: 1.0
+            lowResolutionFont: false
+        }
+        ListElement{
+            name: "PRO_FONT"
+            text: "HD: Pro Font (Modern)"
+            source: "fonts/modern-pro-font-win-tweaked/ProFontWindows.ttf"
+            lineSpacing: 0.1
+            pixelSize: 35
+            fontWidth: 1.0
+            lowResolutionFont: false
+        }
+        ListElement{
+            name: "ENVY_CODE_R"
+            text: "HD: Envy Code R (Modern)"
+            source: "fonts/modern-envy-code-r/Envy Code R.ttf"
+            lineSpacing: 0.1
+            pixelSize: 30
+            fontWidth: 1.0
+            lowResolutionFont: false
+        }
+        ListElement{
+            name: "MONACO"
+            text: "HD: Monaco (Modern)"
+            source: "fonts/modern-monaco/monaco.ttf"
+            lineSpacing: 0.1
+            pixelSize: 30
+            fontWidth: 1.0
+            lowResolutionFont: false
+        }
+        ListElement{
+            name: "INCONSOLATA"
+            text: "HD: Inconsolata (Modern)"
+            source: "fonts/modern-inconsolata/Inconsolata.otf"
+            lineSpacing: 0.1
+            pixelSize: 35
+            fontWidth: 1.0
+            lowResolutionFont: false
         }
         ListElement{
             name: "IBM_3278"
-            text: "IBM 3278 (1971)"
+            text: "HD: IBM 3278 (1971)"
             source: "fonts/1971-ibm-3278/3270Medium.ttf"
             lineSpacing: 0.2
             pixelSize: 32
             fontWidth: 1.0
+            lowResolutionFont: false
         }
     }
 }

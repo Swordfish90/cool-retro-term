@@ -83,7 +83,7 @@ Item{
 
         colorScheme: "cool-retro-term"
 
-        smooth: appSettings.rasterization === appSettings.no_rasterization
+        smooth: !appSettings.lowResolutionFont
         enableBold: false
         fullCursorHeight: true
 
@@ -115,13 +115,13 @@ Item{
         function handleFontChange(fontSource, pixelSize, lineSpacing, screenScaling, fontWidth){
             fontLoader.source = fontSource;
 
-            kterminal.antialiasText = appSettings.rasterization === appSettings.no_rasterization
+            kterminal.antialiasText = !appSettings.lowResolutionFont;
             font.pixelSize = pixelSize;
             font.family = fontLoader.name;
 
             terminalContainer.fontWidth = fontWidth;
-            terminalContainer.screenScaling= screenScaling;
-            scaleTexture = Math.max(1.0, Math.round(screenScaling / 2));
+            terminalContainer.screenScaling = screenScaling;
+            scaleTexture = Math.max(1.0, Math.floor(screenScaling * appSettings.windowScaling));
 
             kterminal.lineSpacing = lineSpacing;
         }
@@ -271,8 +271,15 @@ Item{
     Loader{
         id: blurredTerminalLoader
 
-        width: kterminal.width * scaleTexture * appSettings.burnInQuality
-        height: kterminal.height * scaleTexture * appSettings.burnInQuality
+        property int burnInScaling: scaleTexture * appSettings.burnInQuality
+
+        width: appSettings.lowResolutionFont
+                  ? kterminal.width * Math.max(1, burnInScaling)
+                  : kterminal.width * scaleTexture * appSettings.burnInQuality
+        height: appSettings.lowResolutionFont
+                    ? kterminal.height * Math.max(1, burnInScaling)
+                    : kterminal.height * scaleTexture * appSettings.burnInQuality
+
         active: mBlur !== 0
         asynchronous: true
 
