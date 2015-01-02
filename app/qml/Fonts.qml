@@ -142,7 +142,7 @@ QtObject{
         }
         ListElement{
             name: "HERMIT"
-            text: "Hermit (Modern) (HD)"
+            text: "HD: Hermit (Modern)"
             source: "fonts/modern-hermit/Hermit-medium.otf"
             lineSpacing: 0.05
             pixelSize: 28
@@ -151,7 +151,7 @@ QtObject{
         }
         ListElement{
             name: "TERMINUS"
-            text: "Terminus (Modern) (HD)"
+            text: "HD: Terminus (Modern)"
             source: "fonts/modern-terminus/TerminusTTF-4.38.2.ttf"
             lineSpacing: 0.1
             pixelSize: 35
@@ -160,7 +160,7 @@ QtObject{
         }
         ListElement{
             name: "PRO_FONT"
-            text: "Pro Font (Modern) (HD)"
+            text: "HD: Pro Font (Modern)"
             source: "fonts/modern-pro-font-win-tweaked/ProFontWindows.ttf"
             lineSpacing: 0.1
             pixelSize: 35
@@ -169,7 +169,7 @@ QtObject{
         }
         ListElement{
             name: "ENVY_CODE_R"
-            text: "Envy Code R (Modern) (HD)"
+            text: "HD: Envy Code R (Modern)"
             source: "fonts/modern-envy-code-r/Envy Code R.ttf"
             lineSpacing: 0.1
             pixelSize: 30
@@ -178,7 +178,7 @@ QtObject{
         }
         ListElement{
             name: "MONACO"
-            text: "Monaco (Modern) (HD)"
+            text: "HD: Monaco (Modern)"
             source: "fonts/modern-monaco/monaco.ttf"
             lineSpacing: 0.1
             pixelSize: 30
@@ -187,7 +187,7 @@ QtObject{
         }
         ListElement{
             name: "INCONSOLATA"
-            text: "Inconsolata (Modern) (HD)"
+            text: "HD: Inconsolata (Modern)"
             source: "fonts/modern-inconsolata/Inconsolata.otf"
             lineSpacing: 0.1
             pixelSize: 35
@@ -196,7 +196,7 @@ QtObject{
         }
         ListElement{
             name: "IBM_3278"
-            text: "IBM 3278 (1971) (HD)"
+            text: "HD: IBM 3278 (1971)"
             source: "fonts/1971-ibm-3278/3270Medium.ttf"
             lineSpacing: 0.2
             pixelSize: 32
