@@ -55,10 +55,10 @@ Tab{
                     Layout.fillWidth: true
                     id: txtslider
                     onValueChanged: if (enabled) appSettings.windowScaling = value;
-                    stepSize: 0.10
+                    stepSize: 0.05
                     enabled: false
                     Component.onCompleted: {
-                        minimumValue = 0.3 //Without this value gets set to 0.5
+                        minimumValue = 0.25 //Without this value gets set to 0.5
                         value = appSettings.windowScaling;
                         enabled = true;
                     }
@@ -80,10 +80,10 @@ Tab{
                     Layout.fillWidth: true
                     id: bloomSlider
                     onValueChanged: if (enabled) appSettings.bloomQuality = value;
-                    stepSize: 0.10
+                    stepSize: 0.05
                     enabled: false
                     Component.onCompleted: {
-                        minimumValue = 0.3
+                        minimumValue = 0.25
                         value = appSettings.bloomQuality;
                         enabled = true;
                     }
@@ -105,10 +105,10 @@ Tab{
                     Layout.fillWidth: true
                     id: burnInSlider
                     onValueChanged: if (enabled) appSettings.burnInQuality = value;
-                    stepSize: 0.10
+                    stepSize: 0.05
                     enabled: false
                     Component.onCompleted: {
-                        minimumValue = 0.3
+                        minimumValue = 0.25
                         value = appSettings.burnInQuality;
                         enabled = true;
                     }
