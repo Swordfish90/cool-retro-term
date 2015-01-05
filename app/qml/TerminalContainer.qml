@@ -1,6 +1,8 @@
 import QtQuick 2.2
 import QtGraphicalEffects 1.0
 
+import "utils.js" as Utils
+
 ShaderTerminal{
     property alias title: terminal.title
     property alias terminalSize: terminal.terminalSize
@@ -45,9 +47,10 @@ ShaderTerminal{
         asynchronous: true
         width: parent.width * appSettings.bloomQuality
         height: parent.height * appSettings.bloomQuality
+
         sourceComponent: FastBlur{
-            radius: 48 * appSettings.bloomQuality * appSettings.windowScaling
-            source: terminal.mainTerminal
+            radius: Utils.lint(16, 48, appSettings.bloomQuality * appSettings.windowScaling);
+            source: terminal.mainSource
             transparentBorder: true
         }
     }
