@@ -24,7 +24,16 @@ QString getNamedArgument(QStringList args, QString name)
 
 int main(int argc, char *argv[])
 {
+    // Some environmental variable are necessary on certain platforms.
+
+    // This disables QT appmenu under Ubuntu, which is not working with QML apps.
     setenv("QT_QPA_PLATFORMTHEME", "", 1);
+
+#if defined(Q_OS_MAC)
+    // This allows UTF-8 characters usage in OSX.
+    setenv("LC_CTYPE", "UTF-8", 1);
+#endif
+
     QApplication app(argc, argv);
     QQmlApplicationEngine engine;
     FileIO fileIO;
@@ -60,6 +69,7 @@ int main(int argc, char *argv[])
     QStringList importPathList = engine.importPathList();
     importPathList.prepend(QCoreApplication::applicationDirPath() + "/qmltermwidget");
     importPathList.prepend(QCoreApplication::applicationDirPath() + "/../PlugIns");
+    importPathList.prepend(QCoreApplication::applicationDirPath() + "/../../../qmltermwidget");
     engine.setImportPathList(importPathList);
 
     engine.load(QUrl("qrc:/main.qml"));
