@@ -23,6 +23,8 @@ import QtQuick.Controls 1.1
 
 import QMLTermWidget 1.0
 
+import "utils.js" as Utils
+
 Item{
     id: terminalContainer
 
@@ -43,10 +45,10 @@ Item{
     anchors.bottomMargin: frame.displacementBottom * appSettings.windowScaling
 
     //The blur effect has to take into account the framerate
-    property real mBlur: appSettings.burnIn
-    property real motionBlurCoefficient: (_maxBlurCoefficient * Math.sqrt(mBlur) + _minBlurCoefficient * (1 - Math.sqrt(mBlur)))
-    property real _minBlurCoefficient: 0.50
-    property real _maxBlurCoefficient: 0.90
+    property real mBlur: Math.sqrt(appSettings.burnIn)
+    property real motionBlurCoefficient: Utils.lint(_minBlurCoefficient, _maxBlurCoefficient, mBlur)
+    property real _minBlurCoefficient: 0.2
+    property real _maxBlurCoefficient: 0.02
 
     property size terminalSize: kterminal.terminalSize
     property size fontMetrics: kterminal.fontMetrics
@@ -83,7 +85,7 @@ Item{
 
         colorScheme: "cool-retro-term"
 
-        smooth: appSettings.rasterization === appSettings.no_rasterization
+        smooth: !appSettings.lowResolutionFont
         enableBold: false
         fullCursorHeight: true
 
@@ -115,13 +117,13 @@ Item{
         function handleFontChange(fontSource, pixelSize, lineSpacing, screenScaling, fontWidth){
             fontLoader.source = fontSource;
 
-            kterminal.antialiasText = appSettings.rasterization === appSettings.no_rasterization
+            kterminal.antialiasText = !appSettings.lowResolutionFont;
             font.pixelSize = pixelSize;
             font.family = fontLoader.name;
 
             terminalContainer.fontWidth = fontWidth;
-            terminalContainer.screenScaling= screenScaling;
-            scaleTexture = Math.max(1.0, Math.round(screenScaling / 2));
+            terminalContainer.screenScaling = screenScaling;
+            scaleTexture = Math.max(1.0, Math.floor(screenScaling * appSettings.windowScaling));
 
             kterminal.lineSpacing = lineSpacing;
         }
@@ -174,6 +176,7 @@ Item{
     MouseArea{
         acceptedButtons: Qt.LeftButton | Qt.MiddleButton | Qt.RightButton
         anchors.fill: parent
+        cursorShape: Qt.IBeamCursor
         onWheel:{
             if(wheel.modifiers & Qt.ControlModifier){
                wheel.angleDelta.y > 0 ? zoomIn.trigger() : zoomOut.trigger();
@@ -243,6 +246,12 @@ Item{
 
             Timer{
                 id: livetimer
+
+                // The interval assumes 60 fps. This is the time needed burnout a white pixel.
+                // We multiply 1.1 to have a little bit of margin over the theoretical value.
+                // This solution is not extremely clean, but it's probably the best to avoid measuring fps.
+
+                interval: (1 / motionBlurCoefficient) * 60 * 1.1
                 running: true
                 onTriggered: _blurredSourceEffect.live = false;
             }
@@ -271,15 +280,22 @@ Item{
     Loader{
         id: blurredTerminalLoader
 
-        width: kterminal.width * scaleTexture * appSettings.burnInQuality
-        height: kterminal.height * scaleTexture * appSettings.burnInQuality
+        property int burnInScaling: scaleTexture * appSettings.burnInQuality
+
+        width: appSettings.lowResolutionFont
+                  ? kterminal.width * Math.max(1, burnInScaling)
+                  : kterminal.width * scaleTexture * appSettings.burnInQuality
+        height: appSettings.lowResolutionFont
+                    ? kterminal.height * Math.max(1, burnInScaling)
+                    : kterminal.height * scaleTexture * appSettings.burnInQuality
+
         active: mBlur !== 0
         asynchronous: true
 
         sourceComponent: ShaderEffect {
             property variant txt_source: kterminalSource
             property variant blurredSource: blurredSourceLoader.item
-            property real blurCoefficient: (1.0 - motionBlurCoefficient)
+            property real blurCoefficient: motionBlurCoefficient
 
             blending: false
 
@@ -299,10 +315,10 @@ Item{
                 "void main() {" +
                     "vec2 coords = qt_TexCoord0;" +
                     "vec3 origColor = texture2D(txt_source, coords).rgb;" +
-                    "vec3 blur_color = texture2D(blurredSource, coords).rgb * (1.0 - blurCoefficient);" +
+                    "vec3 blur_color = texture2D(blurredSource, coords).rgb - vec3(blurCoefficient);" +
                     "vec3 color = min(origColor + blur_color, max(origColor, blur_color));" +
 
-                    "gl_FragColor = vec4(color, step(0.02, rgb2grey(color - origColor)));" +
+                    "gl_FragColor = vec4(color, rgb2grey(color - origColor));" +
                 "}"
 
             onStatusChanged: if (log) console.log(log) //Print warning messages

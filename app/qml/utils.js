@@ -1,5 +1,8 @@
 .pragma library
 
+function lint(a, b, t) {
+    return (1 - t) * a + (t) * b;
+}
 function mix(c1, c2, alpha){
     return Qt.rgba(c1.r * alpha + c2.r * (1-alpha),
                    c1.g * alpha + c2.g * (1-alpha),

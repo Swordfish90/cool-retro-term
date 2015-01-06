@@ -83,7 +83,7 @@ Item{
         sourceComponent: FastBlur{
             id: frameReflectionEffect
             radius: 128
-            source: terminal.kterminal
+            source: terminal.mainSource
             smooth: false
         }
     }

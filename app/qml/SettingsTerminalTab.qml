@@ -125,14 +125,14 @@ Tab{
                         height: 50
                         Layout.fillWidth: true
                         onColorSelected: appSettings._fontColor = color;
-                        button_color: appSettings._fontColor
+                        color: appSettings._fontColor
                     }
                     ColorButton{
                         name: qsTr("Background")
                         height: 50
                         Layout.fillWidth: true
                         onColorSelected: appSettings._backgroundColor = color;
-                        button_color: appSettings._backgroundColor
+                        color: appSettings._backgroundColor
                     }
                 }
             }

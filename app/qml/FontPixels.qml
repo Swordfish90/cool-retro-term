@@ -29,6 +29,7 @@ QtObject{
     property int lineSpacing: _font.lineSpacing
     property real screenScaling: scaling * _font.baseScaling
     property real defaultFontWidth: fontlist.get(selectedFontIndex).fontWidth
+    property bool lowResolutionFont: true
 
     property ListModel fontlist: ListModel{
         ListElement{
@@ -48,6 +49,24 @@ QtObject{
             pixelSize: 16
             baseScaling: 4.0
             fontWidth: 0.9
+        }
+        ListElement{
+            name: "TERMINUS_SCALED"
+            text: "Terminus (Modern)"
+            source: "fonts/modern-terminus/TerminusTTF-4.38.2.ttf"
+            lineSpacing: 1
+            pixelSize: 12
+            baseScaling: 3.0
+            fontWidth: 1.0
+        }
+        ListElement{
+            name: "PRO_FONT_SCALED"
+            text: "Pro Font (Modern)"
+            source: "fonts/modern-pro-font-win-tweaked/ProFontWindows.ttf"
+            lineSpacing: 1
+            pixelSize: 12
+            baseScaling: 3.0
+            fontWidth: 1.0
         }
         ListElement{
             name: "APPLE_II"

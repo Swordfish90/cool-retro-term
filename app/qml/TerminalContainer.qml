@@ -1,6 +1,8 @@
 import QtQuick 2.2
 import QtGraphicalEffects 1.0
 
+import "utils.js" as Utils
+
 ShaderTerminal{
     property alias title: terminal.title
     property alias terminalSize: terminal.terminalSize
@@ -45,9 +47,10 @@ ShaderTerminal{
         asynchronous: true
         width: parent.width * appSettings.bloomQuality
         height: parent.height * appSettings.bloomQuality
+
         sourceComponent: FastBlur{
-            radius: 48 * appSettings.bloomQuality * appSettings.windowScaling
-            source: terminal.mainTerminal
+            radius: Utils.lint(16, 48, appSettings.bloomQuality * appSettings.windowScaling);
+            source: terminal.mainSource
             transparentBorder: true
         }
     }
@@ -67,8 +70,8 @@ ShaderTerminal{
     bloomSource: bloomSourceLoader.item
 
     // This shader might be useful in the future. Since we used it only for a couple
-    // of calculations is probably best to move those in the main shader. If in
-    // we will need to store another fullScreen channel this might be handy.
+    // of calculations is probably best to move those in the main shader. If in the future
+    // we need to store another fullScreen channel this might be handy.
 
 //    ShaderEffect {
 //        id: rasterizationEffect
