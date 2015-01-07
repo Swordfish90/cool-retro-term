@@ -71,6 +71,16 @@ QtObject{
             lowResolutionFont: true
         }
         ListElement{
+            name: "EXCELSIOR_SCALED"
+            text: "Fixedsys Excelsior (Modern)"
+            source: "fonts/modern-fixedsys-excelsior/FSEX301-L2.ttf"
+            lineSpacing: 0
+            pixelSize: 16
+            baseScaling: 2.4
+            fontWidth: 1.0
+            lowResolutionFont: true
+        }
+        ListElement{
             name: "COMMODORE_PET_SCALED"
             text: "Commodore PET (1977)"
             source: "fonts/1977-commodore-pet/COMMODORE_PET.ttf"
