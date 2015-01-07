@@ -76,7 +76,7 @@ QtObject{
             source: "fonts/modern-fixedsys-excelsior/FSEX301-L2.ttf"
             lineSpacing: 0
             pixelSize: 16
-            baseScaling: 2.0
+            baseScaling: 2.4
             fontWidth: 1.0
             lowResolutionFont: true
         }
