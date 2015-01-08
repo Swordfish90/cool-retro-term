@@ -22,6 +22,8 @@ import QtQuick 2.2
 import QtQuick.Controls 1.1
 import QtQuick.Layouts 1.1
 
+import "Components"
+
 Tab{
     ColumnLayout{
         anchors.fill: parent
@@ -32,7 +34,7 @@ Tab{
             GridLayout{
                 anchors.fill: parent
                 columns: 2
-                Text{ text: qsTr("Name") }
+                Label{ text: qsTr("Name") }
                 ComboBox{
                     id: fontChanger
                     Layout.fillWidth: true
@@ -54,7 +56,7 @@ Tab{
                     }
                     Component.onCompleted: updateIndex();
                 }
-                Text{ text: qsTr("Scaling") }
+                Label{ text: qsTr("Scaling") }
                 RowLayout{
                     Layout.fillWidth: true
                     Slider{
@@ -74,11 +76,11 @@ Tab{
                             onFontScalingChanged: fontScalingChanger.value = appSettings.fontScaling;
                         }
                     }
-                    Text{
+                    SizedLabel{
                         text: Math.round(fontScalingChanger.value * 100) + "%"
                     }
                 }
-                Text{ text: qsTr("Font Width") }
+                Label{ text: qsTr("Font Width") }
                 RowLayout{
                     Layout.fillWidth: true
                     Slider{
@@ -93,7 +95,7 @@ Tab{
                             maximumValue = 1.5;
                         }
                     }
-                    Text{
+                    SizedLabel{
                         text: Math.round(widthChanger.value * 100) + "%"
                     }
                 }

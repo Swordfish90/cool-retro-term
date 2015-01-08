@@ -22,6 +22,8 @@ import QtQuick 2.2
 import QtQuick.Controls 1.1
 import QtQuick.Layouts 1.1
 
+import "Components"
+
 Tab{
     ColumnLayout{
         anchors.fill: parent
@@ -47,10 +49,10 @@ Tab{
                     maximumValue: 60
                     minimumValue: 1
                     enabled: appSettings.fps !== 0
-                    value: appSettings.fps !== 0 ? appSettings.fps : 60
+                    value: appSettings.fps !== 0 ? appSettings.fps : 24
                 }
-                Text{text: slider.value}
-                Text{text: qsTr("Texture Quality")}
+                SizedLabel { text: slider.value }
+                Label{text: qsTr("Texture Quality")}
                 Slider{
                     Layout.fillWidth: true
                     id: txtslider
@@ -63,7 +65,7 @@ Tab{
                         enabled = true;
                     }
                 }
-                Text{text: Math.round(txtslider.value * 100) + "%"}
+                SizedLabel{text: Math.round(txtslider.value * 100) + "%"}
             }
         }
         GroupBox{
@@ -74,8 +76,7 @@ Tab{
             GridLayout{
                 id: bloomQualityContainer
                 anchors.fill: parent
-
-                Text{text: qsTr("Bloom Quality")}
+                Label{text: qsTr("Bloom Quality")}
                 Slider{
                     Layout.fillWidth: true
                     id: bloomSlider
@@ -88,7 +89,7 @@ Tab{
                         enabled = true;
                     }
                 }
-                Text{text: Math.round(bloomSlider.value * 100) + "%"}
+                SizedLabel{text: Math.round(bloomSlider.value * 100) + "%"}
             }
         }
         GroupBox{
@@ -100,7 +101,7 @@ Tab{
                 id: blurQualityContainer
                 anchors.fill: parent
 
-                Text{text: qsTr("BurnIn Quality")}
+                Label{text: qsTr("BurnIn Quality")}
                 Slider{
                     Layout.fillWidth: true
                     id: burnInSlider
@@ -113,7 +114,7 @@ Tab{
                         enabled = true;
                     }
                 }
-                Text{text: Math.round(burnInSlider.value * 100) + "%"}
+                SizedLabel{text: Math.round(burnInSlider.value * 100) + "%"}
             }
         }
         GroupBox{

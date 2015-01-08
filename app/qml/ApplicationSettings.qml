@@ -19,6 +19,7 @@
 *******************************************************************************/
 
 import QtQuick 2.2
+import QtQuick.Controls 1.0
 
 import "utils.js" as Utils
 
@@ -455,4 +456,11 @@ QtObject{
         storeCustomProfiles();
         //storage.dropSettings(); //DROPS THE SETTINGS!.. REMEMBER TO DISABLE ONCE ENABLED!!
     }
+
+    // VARS ///////////////////////////////////////////////////////////////////
+
+    property Label _sampleLabel: Label {
+        text: "100%"
+    }
+    property real labelWidth: _sampleLabel.width
 }

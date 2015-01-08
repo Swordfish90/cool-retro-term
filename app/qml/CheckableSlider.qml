@@ -22,6 +22,8 @@ import QtQuick 2.2
 import QtQuick.Controls 1.1
 import QtQuick.Layouts 1.1
 
+import "Components"
+
 RowLayout {
     property alias name: check.text
 
@@ -35,7 +37,6 @@ RowLayout {
     id: setting_component
     anchors.left: parent.left
     anchors.right: parent.right
-    spacing: 25
 
     onValueChanged: {
         check.checked = !(value == 0);
@@ -45,7 +46,7 @@ RowLayout {
 
     CheckBox{
         id: check
-        implicitWidth: 150
+        implicitWidth: 160
         onClicked: {
             if(!checked){
                 checked = false;
@@ -66,16 +67,8 @@ RowLayout {
             newValue(value);
         }
     }
-    Text{
-        id: textfield
-        property string unformattedText: Math.round(((value - min_value) / (max_value - min_value)) * 100)
-        text: formatNumber(unformattedText)
-    }
-    function formatNumber(num) {
-        var n = "" + num;
-        while (n.length < 3) {
-            n = " " + n;
-        }
-        return n + "%";
+    SizedLabel {
+        anchors { top: parent.top; bottom: parent.bottom }
+        text: Math.round(((value - min_value) / (max_value - min_value)) * 100) + "%"
     }
 }

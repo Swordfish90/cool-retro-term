@@ -51,5 +51,6 @@
         <file>fonts/modern-inconsolata/Inconsolata.otf</file>
         <file>SettingsScreenTab.qml</file>
         <file>fonts/modern-fixedsys-excelsior/FSEX301-L2.ttf</file>
+        <file>Components/SizedLabel.qml</file>
     </qresource>
 </RCC>
