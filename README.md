@@ -31,6 +31,8 @@ Gentoo users can install from a 3rd-party repository preferably via layman:
 
 A word of warning: USE flags and keywords are to be added to portage's configuration files and every emerge operation should be executed with '-p' (short option for --pretend) appended to the command line first as per best practice!
 
+Ubuntu users of 14.04 LTS (Trusty) can use [this PPA](https://launchpad.net/~bugs-launchpad-net-falkensweb)
+
 ##Build instructions (Linux)
 
 ##Dependencies
