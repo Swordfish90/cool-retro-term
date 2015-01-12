@@ -18,10 +18,10 @@
 
 Name:       cool-retro-term
 Summary:    Cool Retro Terminal
-Version:    0.9
+Version:    1.0
 Release:    0%{?dist}
 Group:      System/X11/Terminals
-License:    GPLv3
+License:    GPL-3.0+
 URL:        https://github.com/Swordfish90/cool-retro-term
 
 # For this spec file to work, the cool-retro-term sources must be located
@@ -82,9 +82,7 @@ desktop-file-install                            \
 %{_bindir}/%{name}
 %{_libdir}/qt5/qml/
 %{_datadir}/applications/%{name}.desktop
-# FIXME: Icon
-# %{_datadir}/pixmaps/%{name}.png
-# %{_datadir}/icons/hicolor/*/*/*
+%{_datadir}/icons/hicolor/*/*/*
 
 %clean
 rm -rf %{buildroot}
