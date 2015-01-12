@@ -5,6 +5,7 @@
 #include <QStringList>
 
 #include <QtWidgets/QApplication>
+#include <QIcon>
 
 #include <QDebug>
 #include <stdlib.h>
@@ -37,6 +38,12 @@ int main(int argc, char *argv[])
     QApplication app(argc, argv);
     QQmlApplicationEngine engine;
     FileIO fileIO;
+
+#if !defined(Q_OS_MAC)
+    app.setWindowIcon(QIcon::fromTheme("cool-retro-term", QIcon(":../icons/32x32/cool-retro-term.png")));
+#else
+    app.setWindowIcon(QIcon(":../icons/32x32/cool-retro-term.png"));
+#endif
 
     // Manage command line arguments from the cpp side
     QStringList args = app.arguments();
