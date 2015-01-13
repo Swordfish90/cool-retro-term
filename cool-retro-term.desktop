@@ -2,7 +2,7 @@
 Comment=Use the command line the old way
 Exec=cool-retro-term
 GenericName=Terminal emulator
-Icon=utilities-terminal
+Icon=cool-retro-term
 MimeType=
 Name=Cool Retro Term
 Categories=Qt;System;Utility;TerminalEmulator;
