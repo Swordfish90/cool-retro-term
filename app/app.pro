@@ -32,8 +32,5 @@ unix {
     icon256.files = icons/256x256/cool-retro-term.png
     icon256.path = /usr/share/icons/hicolor/256x256/apps
 
-    pixmap.files = icons/128x128/cool-retro-term.png
-    pixmap.path = /usr/share/pixmaps
-
-    INSTALLS += icon32 icon64 icon128 icon256 pixmap
+    INSTALLS += icon32 icon64 icon128 icon256
 }
