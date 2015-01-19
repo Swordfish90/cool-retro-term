@@ -66,8 +66,8 @@ Tab{
                         stepSize: 0.05
                         enabled: false // Another trick to fix initial bad behavior.
                         Component.onCompleted: {
-                            minimumValue = 0.5;
-                            maximumValue = 2.5;
+                            minimumValue = appSettings.minimumFontScaling;
+                            maximumValue = appSettings.maximumFontScaling;
                             value = appSettings.fontScaling;
                             enabled = true;
                         }
