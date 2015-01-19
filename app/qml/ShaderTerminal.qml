@@ -26,8 +26,6 @@ ShaderEffect {
     property ShaderEffectSource blurredSource
     property ShaderEffectSource bloomSource
 
-    property real liveBlur: blurredSource && blurredSource.live ? 1.0 : 0.0
-
     property color fontColor: appSettings.fontColor
     property color backgroundColor: appSettings.backgroundColor
     property real bloom: appSettings.bloom * 2.5
@@ -162,8 +160,7 @@ ShaderEffect {
             uniform highp sampler2D bloomSource;
             uniform lowp float bloom;" : "") +
         (burnIn !== 0 ? "
-            uniform sampler2D blurredSource;
-            uniform lowp float liveBlur;" : "") +
+            uniform sampler2D blurredSource;" : "") +
         (staticNoise !== 0 ? "
             uniform highp float staticNoise;" : "") +
         (((staticNoise !== 0 || jitter !== 0 || rbgShift)
@@ -269,7 +266,7 @@ ShaderEffect {
             "vec3 txt_color = texture2D(source, txt_coords).rgb;" +
 
             (burnIn !== 0 ? "
-                vec4 txt_blur = liveBlur * texture2D(blurredSource, txt_coords);
+                vec4 txt_blur = texture2D(blurredSource, txt_coords);
                 txt_color = txt_color + txt_blur.rgb * txt_blur.a;"
             : "") +
 
