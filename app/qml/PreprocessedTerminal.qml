@@ -178,7 +178,7 @@ Item{
     MouseArea{
         acceptedButtons: Qt.LeftButton | Qt.MiddleButton | Qt.RightButton
         anchors.fill: parent
-        cursorShape: Qt.IBeamCursor
+        cursorShape: kterminal.terminalUsesMouse ? Qt.ArrowCursor : Qt.IBeamCursor
         onWheel:{
             if(wheel.modifiers & Qt.ControlModifier){
                wheel.angleDelta.y > 0 ? zoomIn.trigger() : zoomOut.trigger();
