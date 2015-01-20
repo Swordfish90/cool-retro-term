@@ -88,7 +88,6 @@ Tab{
                     Item {
                         // Spacing
                         Layout.fillHeight: true
-                        visible: false
                     }
                     Button{
                         Layout.fillWidth: true
