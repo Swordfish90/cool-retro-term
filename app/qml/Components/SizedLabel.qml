@@ -18,27 +18,18 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *******************************************************************************/
 
-import QtQuick 2.2
-import QtQuick.Controls 1.1
-import QtQuick.Layouts 1.1
 
-import "Components"
+import QtQuick 2.0
+import QtQuick.Controls 1.0
 
-RowLayout {
-    property alias value: slider.value
-    property alias stepSize: slider.stepSize
-    property alias minimumValue: slider.minimumValue
-    property alias maximumValue: slider.maximumValue
-    property real maxMultiplier: 100
+// This component is simply a label with a predifined size.
+// Used to improve alignment.
 
-    id: setting_component
-    spacing: 10
-    Slider{
-        id: slider
-        stepSize: parent.stepSize
-        Layout.fillWidth: true
-    }
-    SizedLabel{
-        text: Math.round(value * maxMultiplier) + "%"
+Item {
+    property alias text: textfield.text
+    width: appSettings.labelWidth
+    Label{
+        id: textfield
+        anchors { right: parent.right; verticalCenter: parent.verticalCenter }
     }
 }

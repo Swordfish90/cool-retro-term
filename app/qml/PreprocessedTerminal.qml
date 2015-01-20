@@ -44,11 +44,13 @@ Item{
     anchors.topMargin: frame.displacementTop * appSettings.windowScaling
     anchors.bottomMargin: frame.displacementBottom * appSettings.windowScaling
 
-    //The blur effect has to take into account the framerate
-    property real mBlur: Math.sqrt(appSettings.burnIn)
-    property real motionBlurCoefficient: Utils.lint(_minBlurCoefficient, _maxBlurCoefficient, mBlur)
-    property real _minBlurCoefficient: 0.2
-    property real _maxBlurCoefficient: 0.02
+    //Parameters for the burnIn effect.
+    property real burnIn: appSettings.burnIn
+    property real fps: appSettings.fps !== 0 ? appSettings.fps : 60
+    property real burnInFadeTime: Utils.lint(_minBurnInFadeTime, _maxBurnInFadeTime, burnIn)
+    property real motionBlurCoefficient: 1.0 / (fps * burnInFadeTime)
+    property real _minBurnInFadeTime: 0.16
+    property real _maxBurnInFadeTime: 1.6
 
     property size terminalSize: kterminal.terminalSize
     property size fontMetrics: kterminal.fontMetrics
@@ -176,7 +178,7 @@ Item{
     MouseArea{
         acceptedButtons: Qt.LeftButton | Qt.MiddleButton | Qt.RightButton
         anchors.fill: parent
-        cursorShape: Qt.IBeamCursor
+        cursorShape: kterminal.terminalUsesMouse ? Qt.ArrowCursor : Qt.IBeamCursor
         onWheel:{
             if(wheel.modifiers & Qt.ControlModifier){
                wheel.angleDelta.y > 0 ? zoomIn.trigger() : zoomOut.trigger();
@@ -228,13 +230,15 @@ Item{
     Loader{
         id: blurredSourceLoader
         asynchronous: true
-        active: mBlur !== 0
+        active: burnIn !== 0
 
         sourceComponent: ShaderEffectSource{
+            property bool updateBurnIn: false
+
             id: _blurredSourceEffect
             sourceItem: blurredTerminalLoader.item
             recursive: true
-            live: true
+            live: false
             hideSource: true
             wrapMode: kterminalSource.wrapMode
 
@@ -244,6 +248,13 @@ Item{
                 livetimer.restart();
             }
 
+            // This updates the burnin synched with the timer.
+            Connections {
+                target: updateBurnIn ? mainShader : null
+                ignoreUnknownSignals: false
+                onTimeChanged: _blurredSourceEffect.scheduleUpdate();
+            }
+
             Timer{
                 id: livetimer
 
@@ -251,14 +262,15 @@ Item{
                 // We multiply 1.1 to have a little bit of margin over the theoretical value.
                 // This solution is not extremely clean, but it's probably the best to avoid measuring fps.
 
-                interval: (1 / motionBlurCoefficient) * 60 * 1.1
+                interval: burnInFadeTime * 1000 * 1.1
                 running: true
-                onTriggered: _blurredSourceEffect.live = false;
+                onTriggered: _blurredSourceEffect.updateBurnIn = false;
             }
             Connections{
                 target: kterminal
                 onImagePainted:{
-                    _blurredSourceEffect.live = true;
+                    _blurredSourceEffect.scheduleUpdate();
+                    _blurredSourceEffect.updateBurnIn = true;
                     livetimer.restart();
                 }
             }
@@ -289,7 +301,7 @@ Item{
                     ? kterminal.height * Math.max(1, burnInScaling)
                     : kterminal.height * scaleTexture * appSettings.burnInQuality
 
-        active: mBlur !== 0
+        active: burnIn !== 0
         asynchronous: true
 
         sourceComponent: ShaderEffect {

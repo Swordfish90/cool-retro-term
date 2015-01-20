@@ -46,17 +46,17 @@ Tab{
             GridLayout{
                 anchors.fill: parent
                 columns: 2
-                Text{ text: qsTr("Brightness") }
+                Label{ text: qsTr("Brightness") }
                 SimpleSlider{
                     onValueChanged: appSettings.brightness = value
                     value: appSettings.brightness
                 }
-                Text{ text: qsTr("Contrast") }
+                Label{ text: qsTr("Contrast") }
                 SimpleSlider{
                     onValueChanged: appSettings.contrast = value
                     value: appSettings.contrast
                 }
-                Text{ text: qsTr("Opacity") }
+                Label{ text: qsTr("Opacity") }
                 SimpleSlider{
                     onValueChanged: appSettings.windowOpacity = value
                     value: appSettings.windowOpacity

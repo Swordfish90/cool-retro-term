@@ -21,12 +21,12 @@
 import QtQuick 2.2
 import QtGraphicalEffects 1.0
 
+import "utils.js" as Utils
+
 ShaderEffect {
     property ShaderEffectSource source
     property ShaderEffectSource blurredSource
     property ShaderEffectSource bloomSource
-
-    property real liveBlur: blurredSource && blurredSource.live ? 1.0 : 0.0
 
     property color fontColor: appSettings.fontColor
     property color backgroundColor: appSettings.backgroundColor
@@ -57,6 +57,12 @@ ShaderEffect {
     property real disp_right: (frame.displacementRight * appSettings.windowScaling) / width
 
     property real screen_brightness: appSettings.brightness * 1.5 + 0.5
+
+    // This is the average value of the abs(sin) function. Needed to avoid aliasing.
+    readonly property real absSinAvg: 0.63661828335466886
+    property size rasterizationSmooth: Qt.size(
+                                           Utils.clamp(2.0 * virtual_resolution.width / width, 0.0, 1.0),
+                                           Utils.clamp(2.0 * virtual_resolution.height / height, 0.0, 1.0))
 
     property real dispX
     property real dispY
@@ -155,6 +161,7 @@ ShaderEffect {
         uniform lowp float screen_brightness;
 
         uniform highp vec2 virtual_resolution;
+        uniform highp vec2 rasterizationSmooth;
         uniform highp float dispX;
         uniform highp float dispY;" +
 
@@ -162,8 +169,7 @@ ShaderEffect {
             uniform highp sampler2D bloomSource;
             uniform lowp float bloom;" : "") +
         (burnIn !== 0 ? "
-            uniform sampler2D blurredSource;
-            uniform lowp float liveBlur;" : "") +
+            uniform sampler2D blurredSource;" : "") +
         (staticNoise !== 0 ? "
             uniform highp float staticNoise;" : "") +
         (((staticNoise !== 0 || jitter !== 0 || rbgShift)
@@ -201,9 +207,11 @@ ShaderEffect {
             highp float result = 1.0;" +
 
            (appSettings.rasterization != appSettings.no_rasterization ?
-               "result *= abs(sin(coords.y * virtual_resolution.y * "+Math.PI+"));" : "") +
+               "float val = abs(sin(coords.y * virtual_resolution.y * "+Math.PI+"));
+                result *= mix(val, " + absSinAvg + ", rasterizationSmooth.y);" : "") +
            (appSettings.rasterization == appSettings.pixel_rasterization ?
-               "result *= abs(sin(coords.x * virtual_resolution.x * "+Math.PI+"));" : "") + "
+               "val = abs(sin(coords.x * virtual_resolution.x * "+Math.PI+"));
+                result *= mix(val, " + absSinAvg + ", rasterizationSmooth.x);" : "") + "
 
            return result;
         }
@@ -269,7 +277,7 @@ ShaderEffect {
             "vec3 txt_color = texture2D(source, txt_coords).rgb;" +
 
             (burnIn !== 0 ? "
-                vec4 txt_blur = liveBlur * texture2D(blurredSource, txt_coords);
+                vec4 txt_blur = texture2D(blurredSource, txt_coords);
                 txt_color = txt_color + txt_blur.rgb * txt_blur.a;"
             : "") +
 

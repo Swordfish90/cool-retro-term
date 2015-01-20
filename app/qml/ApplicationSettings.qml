@@ -19,13 +19,19 @@
 *******************************************************************************/
 
 import QtQuick 2.2
+import QtQuick.Controls 1.0
 
 import "utils.js" as Utils
 
 QtObject{
     property string version: "1.0.0 RC1"
 
-    // GENERAL SETTINGS ///////////////////////////////////////////////////
+    // STATIC CONSTANTS ////////////////////////////////////////////////////////
+
+    readonly property real minimumFontScaling: 0.25
+    readonly property real maximumFontScaling: 2.50
+
+    // GENERAL SETTINGS ///////////////////////////////////////////////////////
 
     property bool fullscreen: false
     property bool showMenubar: true
@@ -113,12 +119,12 @@ QtObject{
     }
 
     function incrementScaling(){
-        fontScaling = Math.min(fontScaling + 0.05, 2.50);
+        fontScaling = Math.min(fontScaling + 0.05, maximumFontScaling);
         handleFontChanged();
     }
 
     function decrementScaling(){
-        fontScaling = Math.max(fontScaling - 0.05, 0.50);
+        fontScaling = Math.max(fontScaling - 0.05, minimumFontScaling);
         handleFontChanged();
     }
 
@@ -455,4 +461,11 @@ QtObject{
         storeCustomProfiles();
         //storage.dropSettings(); //DROPS THE SETTINGS!.. REMEMBER TO DISABLE ONCE ENABLED!!
     }
+
+    // VARS ///////////////////////////////////////////////////////////////////
+
+    property Label _sampleLabel: Label {
+        text: "100%"
+    }
+    property real labelWidth: _sampleLabel.width
 }

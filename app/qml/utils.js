@@ -1,5 +1,11 @@
 .pragma library
-
+function clamp(x, min, max) {
+    if (x <= min)
+        return min;
+    if (x >= max)
+        return max;
+    return x;
+}
 function lint(a, b, t) {
     return (1 - t) * a + (t) * b;
 }
