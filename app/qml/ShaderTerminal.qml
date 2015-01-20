@@ -61,8 +61,8 @@ ShaderEffect {
     // This is the average value of the abs(sin) function. Needed to avoid aliasing.
     readonly property real absSinAvg: 0.63661828335466886
     property size rasterizationSmooth: Qt.size(
-                                           Utils.clamp(2.0 * virtual_resolution.width / width, 0.0, 1.0),
-                                           Utils.clamp(2.0 * virtual_resolution.height / height, 0.0, 1.0))
+                                           Utils.clamp(2.0 * virtual_resolution.width / (width * devicePixelRatio), 0.0, 1.0),
+                                           Utils.clamp(2.0 * virtual_resolution.height / (height * devicePixelRatio), 0.0, 1.0))
 
     property real dispX
     property real dispY

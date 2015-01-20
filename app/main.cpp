@@ -72,6 +72,8 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("workdir", getNamedArgument(args, "--workdir", "$HOME"));
     engine.rootContext()->setContextProperty("fileIO", &fileIO);
 
+    engine.rootContext()->setContextProperty("devicePixelRatio", app.devicePixelRatio());
+
     // Manage import paths for Linux and OSX.
     QStringList importPathList = engine.importPathList();
     importPathList.prepend(QCoreApplication::applicationDirPath() + "/qmltermwidget");
