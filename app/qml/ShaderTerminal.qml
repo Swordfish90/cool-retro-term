@@ -40,7 +40,7 @@ ShaderEffect {
                                           (height) / (noiseTexture.height * appSettings.windowScaling * appSettings.fontScaling))
 
     property real screenCurvature: appSettings.screenCurvature
-    property real glowingLine: appSettings.glowingLine
+    property real glowingLine: appSettings.glowingLine * 0.2
 
     property real chromaColor: appSettings.chromaColor;
 
@@ -200,7 +200,7 @@ ShaderEffect {
 
         (glowingLine !== 0 ? "
             float randomPass(vec2 coords){
-                return fract(smoothstep(-0.2, 0.0, coords.y - 3.0 * fract(time * 0.0001))) * glowingLine;
+                return fract(smoothstep(-120.0, 0.0, coords.y - (virtual_resolution.y + 120.0) * fract(time * 0.00015)));
             }" : "") +
 
         "highp float getScanlineIntensity(vec2 coords) {
@@ -272,7 +272,7 @@ ShaderEffect {
                 color += noiseVal * noise * (1.0 - distance * 1.3);" : "") +
 
             (glowingLine !== 0 ? "
-                color += randomPass(coords) * glowingLine;" : "") +
+                color += randomPass(coords * virtual_resolution) * glowingLine;" : "") +
 
             "vec3 txt_color = texture2D(source, txt_coords).rgb;" +
 
