@@ -24,7 +24,7 @@ import QtQuick.Controls 1.0
 import "utils.js" as Utils
 
 QtObject{
-    property string version: "1.0.0 RC1"
+    property string version: "1.0.0"
 
     // STATIC CONSTANTS ////////////////////////////////////////////////////////
 
@@ -89,7 +89,7 @@ QtObject{
 
     property bool lowResolutionFont: false
 
-    property var fontNames: ["HERMIT", "COMMODORE_PET", "COMMODORE_PET"]
+    property var fontNames: ["TERMINUS_SCALED", "COMMODORE_PET", "COMMODORE_PET"]
     property var fontlist: fontManager.item.fontlist
 
     signal terminalFontChanged(string fontSource, int pixelSize, int lineSpacing, real screenScaling, real fontWidth)

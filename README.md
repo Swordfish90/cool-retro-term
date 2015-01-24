@@ -4,14 +4,14 @@
 cool-retro-term is a terminal emulator which mimics the look and feel of the old cathode tube screens.
 It has been designed to be eye-candy, customizable, and reasonably lightweight.
 
-It uses the QML port of qtermwidget (Konsole) developed by me: https://github.com/Swordfish90/qmltermwidget
+It uses the QML port of qtermwidget (Konsole) developed by me: https://github.com/Swordfish90/qmltermwidget .
 
-This terminal emulator requires Qt 5.2 or higher to run.
+This terminal emulator works under Linux and OSX and requires Qt 5.2 or higher.
 
 ##Screenshots
-![Image](<http://i.imgur.com/NUfvnlu.png>)
-![Image](<http://i.imgur.com/4LpfLF8.png>)
-![Image](<http://i.imgur.com/MMmM6Ht.png>)
+![Image](<http://i.imgur.com/I6wq1cC.png>)
+![Image](<http://i.imgur.com/12EqlpL.png>)
+![Image](<http://i.imgur.com/Lx0acQz.jpg>)
 
 ##Get cool-retro-term
 You can either build cool-retro-term yourself (see below) or walk the easy way and install one of these packages:
@@ -32,6 +32,8 @@ Gentoo users can install from a 3rd-party repository preferably via layman:
 A word of warning: USE flags and keywords are to be added to portage's configuration files and every emerge operation should be executed with '-p' (short option for --pretend) appended to the command line first as per best practice!
 
 Ubuntu users of 14.04 LTS (Trusty) can use [this PPA](https://launchpad.net/~bugs-launchpad-net-falkensweb)
+
+OSX users can grab the latest dmg from the release page: https://github.com/Swordfish90/cool-retro-term/releases
 
 ##Build instructions (Linux)
 
