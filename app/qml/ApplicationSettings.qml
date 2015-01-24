@@ -89,7 +89,7 @@ QtObject{
 
     property bool lowResolutionFont: false
 
-    property var fontNames: ["HERMIT", "COMMODORE_PET", "COMMODORE_PET"]
+    property var fontNames: ["TERMINUS_SCALED", "COMMODORE_PET", "COMMODORE_PET"]
     property var fontlist: fontManager.item.fontlist
 
     signal terminalFontChanged(string fontSource, int pixelSize, int lineSpacing, real screenScaling, real fontWidth)
