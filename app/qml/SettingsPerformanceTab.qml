@@ -36,22 +36,25 @@ Tab{
                 anchors.fill: parent
                 rows: 2
                 columns: 3
-                CheckBox{
-                    property int fps: checked ? slider.value : 0
-                    onFpsChanged: appSettings.fps = fps
-                    checked: appSettings.fps !== 0
-                    text: qsTr("Effects FPS")
-                }
+                Label{text: qsTr("Effects FPS")}
                 Slider{
-                    id: slider
                     Layout.fillWidth: true
+                    id: fpsSlider
+                    onValueChanged: {
+                        if (enabled) {
+                            appSettings.fps = value !== 60 ? value + 1 : 0;
+                        }
+                    }
                     stepSize: 1
-                    maximumValue: 60
-                    minimumValue: 1
-                    enabled: appSettings.fps !== 0
-                    value: appSettings.fps !== 0 ? appSettings.fps : 24
+                    enabled: false
+                    Component.onCompleted: {
+                        minimumValue = 0;
+                        maximumValue = 60;
+                        value = appSettings.fps !== 0 ? appSettings.fps - 1 : 60;
+                        enabled = true;
+                    }
                 }
-                SizedLabel { text: slider.value }
+                SizedLabel{text: appSettings.fps !== 0 ? appSettings.fps : qsTr("Max")}
                 Label{text: qsTr("Texture Quality")}
                 Slider{
                     Layout.fillWidth: true
