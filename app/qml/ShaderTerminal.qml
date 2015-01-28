@@ -151,8 +151,6 @@ ShaderEffect {
         }"
 
     fragmentShader: "
-        precision highp float;
-
         uniform sampler2D source;
         uniform highp float qt_Opacity;
         uniform highp float time;
