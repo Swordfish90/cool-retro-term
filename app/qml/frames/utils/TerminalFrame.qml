@@ -120,7 +120,9 @@ Item{
         blending: true
 
         fragmentShader: "
-            precision highp float;
+            #ifdef GL_ES
+                precision mediump float;
+            #endif
 
             uniform highp sampler2D normals;
             uniform highp sampler2D source;
