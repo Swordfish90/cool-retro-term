@@ -151,6 +151,10 @@ ShaderEffect {
         }"
 
     fragmentShader: "
+        #ifdef GL_ES
+            precision mediump float;
+        #endif
+
         uniform sampler2D source;
         uniform highp float qt_Opacity;
         uniform highp float time;

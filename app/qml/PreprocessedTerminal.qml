@@ -312,6 +312,10 @@ Item{
             blending: false
 
             fragmentShader:
+                "#ifdef GL_ES
+                    precision mediump float;
+                #endif\n" +
+
                 "uniform lowp float qt_Opacity;" +
                 "uniform lowp sampler2D txt_source;" +
 

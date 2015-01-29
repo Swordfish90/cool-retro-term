@@ -120,6 +120,10 @@ Item{
         blending: true
 
         fragmentShader: "
+            #ifdef GL_ES
+                precision mediump float;
+            #endif
+
             uniform highp sampler2D normals;
             uniform highp sampler2D source;
             uniform lowp float screenCurvature;
@@ -181,6 +185,10 @@ Item{
             blending: true
 
             fragmentShader: "
+                #ifdef GL_ES
+                    precision mediump float;
+                #endif
+
                 uniform sampler2D lightMask;
                 uniform sampler2D reflectionSource;
                 uniform lowp float diffuseComponent;
