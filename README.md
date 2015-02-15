@@ -24,10 +24,13 @@ Arch users can install this [package](https://aur.archlinux.org/packages/cool-re
 
 Gentoo users can install from a 3rd-party repository preferably via layman:
 
-    # USE="subversion git" emerge app-portage/layman
-    # wget --no-check-certificate https://www.gerczei.eu/files/gerczei.xml -O /etc/layman/overlays/gerczei.xml
-    # layman -f -a qt -a gerczei
-    # ACCEPT_KEYWORDS="~*" emerge x11-terms/cool-retro-term::gerczei
+    USE="subversion git" emerge app-portage/layman
+    wget --no-check-certificate https://www.gerczei.eu/files/gerczei.xml -O /etc/layman/overlays/gerczei.xml
+    layman -f -a qt -a gerczei # existing users should sync to ensure availability via 'layman -s gerczei' instead
+    ACCEPT_KEYWORDS="~*" emerge =x11-terms/cool-retro-term-1.0.0::gerczei # live ebuild (-9999
+    ) also remains available
+
+In addition to the live ebuild, the first release has now also been added to the repository.
 
 A word of warning: USE flags and keywords are to be added to portage's configuration files and every emerge operation should be executed with '-p' (short option for --pretend) appended to the command line first as per best practice!
 
