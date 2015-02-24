@@ -114,12 +114,26 @@ qmake && make
 1. Install [Xcode](https://developer.apple.com/xcode/) and agree to the licence agreement
 2. Enter the following commands into the terminal:
 
+**Brew**
+
 ```sh
 brew install qt5
 git clone --recursive https://github.com/Swordfish90/cool-retro-term.git
 export CPPFLAGS="-I/usr/local/opt/qt5/include"
 export LDFLAGS="-L/usr/local/opt/qt5/lib"
 export PATH=/usr/local/opt/qt5/bin:$PATH
+cd cool-retro-term
+qmake && make
+mkdir cool-retro-term.app/Contents/PlugIns
+cp -r qmltermwidget/QMLTermWidget cool-retro-term.app/Contents/PlugIns
+open cool-retro-term.app
+```
+
+**MacPorts**
+
+```sh
+sudo port install qt5-mac
+git clone --recursive https://github.com/Swordfish90/cool-retro-term.git
 cd cool-retro-term
 qmake && make
 mkdir cool-retro-term.app/Contents/PlugIns
