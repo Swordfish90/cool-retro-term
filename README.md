@@ -22,6 +22,12 @@ Arch users can install this [package](https://aur.archlinux.org/packages/cool-re
 
     yaourt -S aur/cool-retro-term-git
 
+or use:
+
+    pacman -S cool-retro-term
+
+to install precompiled from community repository.
+
 Gentoo users can now install the first release "1.0" from a 3rd-party repository preferably via layman:
 
     USE="subversion git" emerge app-portage/layman
