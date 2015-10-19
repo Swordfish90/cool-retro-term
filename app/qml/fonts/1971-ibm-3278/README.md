@@ -1,8 +1,7 @@
 3270font: A font for the nostalgic
 ==================================
-https://github.com/rbanffy/3270font
 
-![Screenshot](https://raw.github.com/wiki/rbanffy/3270font/emacs.png)
+![Screenshot](https://raw.githubusercontent.com/wiki/rbanffy/3270font/emacs.png)
 
 A little bit of history
 -----------------------
@@ -13,8 +12,8 @@ from a 3270 terminal. I built it because I felt terminals deserve to be
 pretty. The .sfd font file contains a x3270 bitmap font that was used
 for guidance.
 
-![Using with the Cathode terminal program]
-(https://raw.github.com/wiki/rbanffy/3270font/cathode.png)
+![Using with the cool-old-tern (now cool-retro-term) terminal program]
+(https://raw.githubusercontent.com/wiki/rbanffy/3270font/cool-retro-term.png)
 
 The format
 ----------
@@ -27,22 +26,29 @@ from http://fontforge.org/. I encourage you to drop by and read the
 tutorials.
 
 ![Powerline-shell compatible!]
-(https://raw.github.com/wiki/rbanffy/3270font/powerline.png)
+(https://raw.githubusercontent.com/wiki/rbanffy/3270font/powerline.png)
 
 Adobe Type 1, TTF, OTF and WOFF versions are available for download on
-http://s3.amazonaws.com/rbanffy/3270_fonts.zip for those who would just
-like to use them.
+http://s3.amazonaws.com/rbanffy/3270_fonts_1aeb375.zip for those who
+would just like to use them.
 
-![Using it on OSX]
-(https://raw.github.com/wiki/rbanffy/3270font/osx_terminal.png)
+![Using it on OSX (don't forget to turn antialiasing on)]
+(https://raw.githubusercontent.com/wiki/rbanffy/3270font/osx_terminal.png)
+
+If you are running Windows, you'll probably need something like
+Cygwin, but, in the end, the font works correctly (with some very
+minor hinting issues).
+
+![Works on Windows]
+(https://raw.githubusercontent.com/wiki/rbanffy/3270font/windows_7.png)
 
 Generating derived files
 ------------------------
 
 The script `generate_derived.pe` calls FontForge and generates
-PostScript, OTF, TTF and WOFF versions of the base font, as well as a 
-slightly more condensed .sfd file with the base font narrowed to 488 
-units, with no glyph rescaling and its corresponding PostScript, TTF, 
+PostScript, OTF, TTF and WOFF versions of the base font, as well as a
+slightly more condensed .sfd file with the base font narrowed to 488
+units, with no glyph rescaling and its corresponding PostScript, TTF,
 OTF and WOFF versions.
 
 Contributing
@@ -69,5 +75,8 @@ museum for advice.
 Known problems
 --------------
 
-I have received errors when installing the OTF, TTF, and PFM fonts on
-Windows 7 and 8 (didn't try others).
+Not all symbols in the 3270 charset have Unicode counterparts. When
+possible, they are duplicated in the Unicode space. The 3270-only
+symbols are at the end of the font.
+
+Please refer to http://x3270.bgp.nu/Charset.html for a complete map.
