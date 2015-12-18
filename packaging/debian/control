@@ -3,6 +3,7 @@ Maintainer: Jeka Der <jekader@gmail.com>
 Section: misc
 Priority: optional
 Standards-Version: 3.9.6
+Homepage: https://github.com/Swordfish90/cool-retro-term
 Build-Depends: debhelper (>= 9),qmlscene,
  qt5-qmake, qtdeclarative5-dev, qml-module-qtquick-controls,
  qml-module-qtgraphicaleffects, qml-module-qtquick-dialogs,
