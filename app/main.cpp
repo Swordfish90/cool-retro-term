@@ -55,7 +55,7 @@ int main(int argc, char *argv[])
         qDebug() << "  --fullscreen        Run cool-retro-term in fullscreen.";
         qDebug() << "  -p|--profile <prof> Run cool-retro-term with the given profile.";
         qDebug() << "  -h|--help           Print this help.";
-        qDebug() << "  --verbose           Print additional informations such as profiles and settings.";
+        qDebug() << "  --verbose           Print additional information such as profiles and settings.";
         return 0;
     }
 
