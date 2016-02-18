@@ -138,10 +138,10 @@ open cool-retro-term.app
 **MacPorts**
 
 ```sh
-sudo port install qt5-mac
+sudo port install qt5
 git clone --recursive https://github.com/Swordfish90/cool-retro-term.git
 cd cool-retro-term
-qmake && make
+/opt/local/libexec/qt5/bin/qmake && make
 mkdir cool-retro-term.app/Contents/PlugIns
 cp -r qmltermwidget/QMLTermWidget cool-retro-term.app/Contents/PlugIns
 open cool-retro-term.app
