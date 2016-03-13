@@ -178,15 +178,6 @@ QtObject{
             lowResolutionFont: false
         }
         ListElement{
-            name: "ENVY_CODE_R"
-            text: "HD: Envy Code R (Modern)"
-            source: "fonts/modern-envy-code-r/Envy Code R.ttf"
-            lineSpacing: 0.1
-            pixelSize: 30
-            fontWidth: 1.0
-            lowResolutionFont: false
-        }
-        ListElement{
             name: "MONACO"
             text: "HD: Monaco (Modern)"
             source: "fonts/modern-monaco/monaco.ttf"
