@@ -31,7 +31,7 @@ to install precompiled from community repository.
 Gentoo users can now install the first release "1.0" from a 3rd-party repository preferably via layman:
 
     USE="subversion git" emerge app-portage/layman
-    wget --no-check-certificate https://www.gerczei.eu/files/gerczei.xml -O /etc/layman/overlays/gerczei.xml
+    wget https://www.gerczei.eu/files/gerczei.xml -O /etc/layman/overlays/gerczei.xml
     layman -f -a qt -a gerczei # those who've added the repo already should sync instead via 'layman -s gerczei'
     ACCEPT_KEYWORDS="~*" emerge =x11-terms/cool-retro-term-1.0.0-r1::gerczei
 
