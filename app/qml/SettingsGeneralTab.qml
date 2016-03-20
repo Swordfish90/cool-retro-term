@@ -159,6 +159,34 @@ Tab{
                 }
             }
         }
+
+        GroupBox{
+            anchors {left: parent.left; right: parent.right}
+            title: qsTr("Command")
+            ColumnLayout {
+                anchors.fill: parent
+                CheckBox{
+                    id: useCustomCommand
+                    text: qsTr("Use custom command instead of shell at startup")
+                    checked: appSettings.useCustomCommand
+                    onCheckedChanged: appSettings.useCustomCommand = checked
+                }
+                // workaround for QTBUG-31627 for pre 5.3.0
+                Binding{
+                    target: useCustomCommand
+                    property: "checked"
+                    value: appSettings.useCustomCommand
+                }
+                TextField{
+                    id: customCommand
+                    text: appSettings.customCommand
+                    enabled: useCustomCommand.checked
+                    onEditingFinished: appSettings.customCommand = text
+                    anchors {left: parent.left; right: parent.right}
+                }
+            }
+        }
+
         // DIALOGS ////////////////////////////////////////////////////////////////
         InsertNameDialog{
             id: insertname
