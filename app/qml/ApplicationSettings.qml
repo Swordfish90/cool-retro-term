@@ -97,6 +97,8 @@ QtObject{
 
     signal terminalFontChanged(string fontSource, int pixelSize, int lineSpacing, real screenScaling, real fontWidth)
 
+    signal initializedSettings()
+
     property Loader fontManager: Loader{
         states: [
             State { when: rasterization == no_rasterization
@@ -463,6 +465,8 @@ QtObject{
             fullscreen = true;
             showMenubar = false;
         }
+
+        initializedSettings();
     }
     Component.onDestruction: {
         storeSettings();

@@ -129,13 +129,17 @@ Item{
 
             kterminal.lineSpacing = lineSpacing;
         }
-        Component.onCompleted: {
-            appSettings.terminalFontChanged.connect(handleFontChange);
+        function startSession() {
+            appSettings.initializedSettings.disconnect(startSession);
 
             // Retrieve the variable set in main.cpp if arguments are passed.
             if (defaultCmd) {
                 ksession.setShellProgram(defaultCmd);
                 ksession.setArgs(defaultCmdArgs);
+            } else if (appSettings.useCustomCommand) {
+                var args = Utils.tokenizeCommandLine(appSettings.customCommand);
+                ksession.setShellProgram(args[0]);
+                ksession.setArgs(args.slice(1));
             } else if (!defaultCmd && Qt.platform.os === "osx") {
                 // OSX Requires the following default parameters for auto login.
                 ksession.setArgs(["-i", "-l"]);
@@ -146,6 +150,10 @@ Item{
 
             ksession.startShellProgram();
             forceActiveFocus();
+        }
+        Component.onCompleted: {
+            appSettings.terminalFontChanged.connect(handleFontChange);
+            appSettings.initializedSettings.connect(startSession);
         }
     }
     Component {

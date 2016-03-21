@@ -21,3 +21,74 @@ function strToColor(s){
     var b = parseInt(s.substring(5,7), 16) / 256;
     return Qt.rgba(r, g, b, 1.0);
 }
+
+/* Tokenizes a command into program and arguments, taking into account quoted
+ * strings and backslashes.
+ * Based on GLib's tokenizer, used by Gnome Terminal
+ */
+function tokenizeCommandLine(s){
+    var args = [];
+    var currentToken = "";
+    var quoteChar = "";
+    var escaped = false;
+    var nextToken = function() {
+        args.push(currentToken);
+        currentToken = "";
+    }
+    var appendToCurrentToken = function(c) {
+        currentToken += c;
+    }
+
+    for (var i = 0; i < s.length; i++) {
+
+        // char followed by backslash, append literally
+        if (escaped) {
+            escaped = false;
+            appendToCurrentToken(s[i]);
+
+        // char inside quotes, either close or append
+        } else if (quoteChar) {
+            escaped = s[i] === '\\';
+            if (quoteChar === s[i]) {
+                quoteChar = "";
+                nextToken();
+            } else if (!escaped) {
+                appendToCurrentToken(s[i]);
+            }
+
+        // regular char
+        } else {
+            escaped = s[i] === '\\';
+            switch (s[i]) {
+            case '\\':
+                // begin escape
+                break;
+            case '\n':
+                // newlines always delimits
+                nextToken();
+                break;
+            case ' ':
+            case '\t':
+                // delimit on new whitespace
+                if (currentToken) {
+                    nextToken();
+                }
+                break;
+            case '\'':
+            case '"':
+                // begin quoted section
+                quoteChar = s[i];
+                break;
+            default:
+                appendToCurrentToken(s[i]);
+            }
+        }
+    }
+
+    // ignore last token if broken quotes/backslash
+    if (currentToken && !escaped && !quoteChar) {
+        nextToken();
+    }
+
+    return args;
+}
