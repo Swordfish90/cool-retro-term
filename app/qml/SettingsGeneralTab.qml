@@ -171,7 +171,7 @@ Tab{
                     checked: appSettings.useCustomCommand
                     onCheckedChanged: appSettings.useCustomCommand = checked
                 }
-                // workaround for QTBUG-31627 for pre 5.3.0
+                // Workaround for QTBUG-31627 for pre 5.3.0
                 Binding{
                     target: useCustomCommand
                     property: "checked"
@@ -179,10 +179,16 @@ Tab{
                 }
                 TextField{
                     id: customCommand
+                    anchors {left: parent.left; right: parent.right}
                     text: appSettings.customCommand
                     enabled: useCustomCommand.checked
                     onEditingFinished: appSettings.customCommand = text
-                    anchors {left: parent.left; right: parent.right}
+
+                    // Save text even if user forgets to press enter or unfocus
+                    function saveSetting() {
+                        appSettings.customCommand = text;
+                    }
+                    Component.onCompleted: settings_window.closing.connect(saveSetting)
                 }
             }
         }
