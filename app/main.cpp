@@ -61,6 +61,11 @@ int main(int argc, char *argv[])
         return 0;
     }
 
+    if (args.contains("-v") || args.contains("--version")) {
+        qDebug() << "cool-retro-term 0.9";
+	return 0;
+    }
+
     // Manage default command
     QStringList cmdList;
     if (args.contains("-e")) {
