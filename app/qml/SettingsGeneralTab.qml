@@ -159,6 +159,40 @@ Tab{
                 }
             }
         }
+
+        GroupBox{
+            anchors {left: parent.left; right: parent.right}
+            title: qsTr("Command")
+            ColumnLayout {
+                anchors.fill: parent
+                CheckBox{
+                    id: useCustomCommand
+                    text: qsTr("Use custom command instead of shell at startup")
+                    checked: appSettings.useCustomCommand
+                    onCheckedChanged: appSettings.useCustomCommand = checked
+                }
+                // Workaround for QTBUG-31627 for pre 5.3.0
+                Binding{
+                    target: useCustomCommand
+                    property: "checked"
+                    value: appSettings.useCustomCommand
+                }
+                TextField{
+                    id: customCommand
+                    anchors {left: parent.left; right: parent.right}
+                    text: appSettings.customCommand
+                    enabled: useCustomCommand.checked
+                    onEditingFinished: appSettings.customCommand = text
+
+                    // Save text even if user forgets to press enter or unfocus
+                    function saveSetting() {
+                        appSettings.customCommand = text;
+                    }
+                    Component.onCompleted: settings_window.closing.connect(saveSetting)
+                }
+            }
+        }
+
         // DIALOGS ////////////////////////////////////////////////////////////////
         InsertNameDialog{
             id: insertname
