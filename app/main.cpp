@@ -81,7 +81,12 @@ int main(int argc, char *argv[])
     importPathList.prepend(QCoreApplication::applicationDirPath() + "/../../../qmltermwidget");
     engine.setImportPathList(importPathList);
 
-    engine.load(QUrl("qrc:/main.qml"));
+    engine.load(QUrl(QStringLiteral ("qrc:/main.qml")));
+
+    if (engine.rootObjects().isEmpty()) {
+        qDebug() << "Cannot load QML interface";
+        return EXIT_FAILURE;
+    }
 
     // Quit the application when the engine closes.
     QObject::connect((QObject*) &engine, SIGNAL(quit()), (QObject*) &app, SLOT(quit()));

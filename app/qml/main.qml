@@ -21,7 +21,6 @@
 import QtQuick 2.2
 import QtQuick.Window 2.1
 import QtQuick.Controls 1.1
-import Qt.labs.settings 1.0
 import QtGraphicalEffects 1.0
 
 ApplicationWindow{
@@ -29,22 +28,32 @@ ApplicationWindow{
 
     width: 1024
     height: 768
+
+    // Save window properties automatically
+    onXChanged: appSettings.x = x
+    onYChanged: appSettings.y = y
+    onWidthChanged: appSettings.width = width
+    onHeightChanged: appSettings.height = height
+
+    // Load saved window geometry and show the window
+    Component.onCompleted: {        
+        appSettings.handleFontChanged();
+
+        x = appSettings.x
+        y = appSettings.y
+        width = appSettings.width
+        height = appSettings.height
+
+        visible = true
+    }
+
     minimumWidth: 320
     minimumHeight: 240
 
-    visible: true
+    visible: false
 
     property bool fullscreen: appSettings.fullscreen
     onFullscreenChanged: visibility = (fullscreen ? Window.FullScreen : Window.Windowed)
-
-    // Save window size automatically
-    Settings {
-        category: "MainWindow"
-        property alias x: terminalWindow.x
-        property alias y: terminalWindow.y
-        property alias width: terminalWindow.width
-        property alias height: terminalWindow.height
-    }
 
     //Workaround: Without __contentItem a ugly thin border is visible.
     menuBar: CRTMainMenuBar{
@@ -150,7 +159,6 @@ ApplicationWindow{
             terminalSize: terminalContainer.terminalSize
         }
     }
-    Component.onCompleted: appSettings.handleFontChanged();
     onClosing: {
         // OSX Since we are currently supporting only one window
         // quit the application when it is closed.

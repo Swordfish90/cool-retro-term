@@ -33,6 +33,11 @@ QtObject{
 
     // GENERAL SETTINGS ///////////////////////////////////////////////////////
 
+    property int x: 100
+    property int y: 100
+    property int width: 1024
+    property int height: 768
+
     property bool fullscreen: false
     property bool showMenubar: true
 
@@ -211,6 +216,10 @@ QtObject{
     function composeSettingsString(){
         var settings = {
             fps: fps,
+            x: x,
+            y: y,
+            width: width,
+            height: height,
             windowScaling: windowScaling,
             showTerminalSize: showTerminalSize,
             fontScaling: fontScaling,
@@ -290,6 +299,11 @@ QtObject{
 
         fps = settings.fps !== undefined ? settings.fps: fps
         windowScaling = settings.windowScaling !== undefined ? settings.windowScaling : windowScaling
+
+        x = settings.x !== undefined ? settings.x : x
+        y = settings.y !== undefined ? settings.y : y
+        width = settings.width !== undefined ? settings.width : width
+        height = settings.height !== undefined ? settings.height : height
 
         fontNames = settings.fontNames !== undefined ? settings.fontNames : fontNames
         fontScaling = settings.fontScaling !== undefined ? settings.fontScaling : fontScaling
