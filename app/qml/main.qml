@@ -40,6 +40,8 @@ ApplicationWindow{
     // Save window size automatically
     Settings {
         category: "MainWindow"
+        property alias x: terminalWindow.x
+        property alias y: terminalWindow.y
         property alias width: terminalWindow.width
         property alias height: terminalWindow.height
     }
