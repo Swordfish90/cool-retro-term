@@ -21,6 +21,7 @@
 import QtQuick 2.2
 import QtQuick.Window 2.1
 import QtQuick.Controls 1.1
+import Qt.labs.settings 1.0
 import QtGraphicalEffects 1.0
 
 ApplicationWindow{
@@ -35,6 +36,13 @@ ApplicationWindow{
 
     property bool fullscreen: appSettings.fullscreen
     onFullscreenChanged: visibility = (fullscreen ? Window.FullScreen : Window.Windowed)
+
+    // Save window size automatically
+    Settings {
+        category: "MainWindow"
+        property alias width: terminalWindow.width
+        property alias height: terminalWindow.height
+    }
 
     //Workaround: Without __contentItem a ugly thin border is visible.
     menuBar: CRTMainMenuBar{
