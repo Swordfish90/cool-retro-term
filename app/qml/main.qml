@@ -28,10 +28,29 @@ ApplicationWindow{
 
     width: 1024
     height: 768
+
+    // Save window properties automatically
+    onXChanged: appSettings.x = x
+    onYChanged: appSettings.y = y
+    onWidthChanged: appSettings.width = width
+    onHeightChanged: appSettings.height = height
+
+    // Load saved window geometry and show the window
+    Component.onCompleted: {        
+        appSettings.handleFontChanged();
+
+        x = appSettings.x
+        y = appSettings.y
+        width = appSettings.width
+        height = appSettings.height
+
+        visible = true
+    }
+
     minimumWidth: 320
     minimumHeight: 240
 
-    visible: true
+    visible: false
 
     property bool fullscreen: appSettings.fullscreen
     onFullscreenChanged: visibility = (fullscreen ? Window.FullScreen : Window.Windowed)
@@ -140,7 +159,6 @@ ApplicationWindow{
             terminalSize: terminalContainer.terminalSize
         }
     }
-    Component.onCompleted: appSettings.handleFontChanged();
     onClosing: {
         // OSX Since we are currently supporting only one window
         // quit the application when it is closed.
