@@ -62,7 +62,7 @@ int main(int argc, char *argv[])
     }
 
     if (args.contains("-v") || args.contains("--version")) {
-        qDebug() << "cool-retro-term 0.9";
+        qDebug() << "cool-retro-term 1.0";
 	return 0;
     }
 
