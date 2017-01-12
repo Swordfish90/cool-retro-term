@@ -26,6 +26,7 @@
         <file>InsertNameDialog.qml</file>
         <file>SettingsEffectsTab.qml</file>
         <file>main.qml</file>
+        <file>root.qml</file>
         <file>SettingsTerminalTab.qml</file>
         <file>FontScanlines.qml</file>
         <file>fonts/1982-commodore64/C64_Pro_Mono_v1.0-STYLE.ttf</file>
