@@ -1,0 +1,5 @@
+cool-retro-term (1.0.0-1) unstable; urgency=medium
+
+  * Initial release (Closes: #nnnn)  <nnnn is the bug number of your ITP>
+
+ -- Dmitry Yu Okunev <dyokunev@ut.mephi.ru>  Thu, 26 Jan 2017 17:59:58 +0300
