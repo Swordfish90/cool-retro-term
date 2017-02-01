@@ -1,0 +1,8 @@
+#!/usr/bin/make -f
+
+%:
+	dh $@ 
+
+override_dh_auto_configure:
+	qmake -makefile -nocache "QMAKE_CFLAGS_RELEASE=-g -O2 -std=c++11 -pipe" "QMAKE_CFLAGS_DEBUG=-g -O2 -std=c++11 -pipe" "QMAKE_CXXFLAGS_RELEASE=-g -O2 -std=c++11 -pipe" "QMAKE_CXXFLAGS_DEBUG=-g -O2 -std=c++11 -pipe" QMAKE_STRIP=: PREFIX=/usr
+

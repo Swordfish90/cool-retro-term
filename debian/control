@@ -1,0 +1,17 @@
+Source: cool-retro-term
+Section: extra
+Priority: optional
+Maintainer: Dmitry Yu Okunev <dyokunev@ut.mephi.ru>
+Build-Depends: debhelper (>=9), build-essential, qmlscene, qt5-qmake, qt5-default, qtdeclarative5-dev, qml-module-qtquick-controls, qml-module-qtgraphicaleffects, qml-module-qtquick-dialogs, qml-module-qtquick-localstorage, qml-module-qtquick-window2
+Standards-Version: 3.9.8
+Homepage: https://github.com/Swordfish90/cool-retro-term
+#Vcs-Git: git://anonscm.debian.org/collab-maint/cool-retro-term.git
+#Vcs-Browser: https://anonscm.debian.org/cgit/collab-maint/cool-retro-term.git
+
+Package: cool-retro-term
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: terminal that looks like an old cathode tube screen
+ cool-retro-term is a terminal emulator which mimics the look and
+ feel of the old cathode tube screens. It has been designed to be
+ eye-candy, customizable, and reasonably lightweight.
