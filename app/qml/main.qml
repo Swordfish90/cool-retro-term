@@ -62,7 +62,7 @@ ApplicationWindow{
         __contentItem.visible: mainMenu.visible
     }
 
-    color: "#00000000"
+    color: "#000000"
     title: terminalContainer.title || qsTr("cool-retro-term")
 
     Action {
