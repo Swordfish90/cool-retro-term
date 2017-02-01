@@ -22,7 +22,7 @@
 import QtQuick 2.0
 import QtQuick.Controls 1.0
 
-// This component is simply a label with a predifined size.
+// This component is simply a label with a predefined size.
 // Used to improve alignment.
 
 Item {
