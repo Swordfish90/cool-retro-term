@@ -1,4 +1,24 @@
 #!/usr/bin/make -f
-%:
-	dh $@
 
+export QT_SELECT = 5
+
+export DEB_BUILD_MAINT_OPTIONS = hardening=+all
+DPKG_EXPORT_BUILDFLAGS = 1
+include /usr/share/dpkg/buildflags.mk
+
+%:
+	dh $@ --parallel
+
+ver := $(shell dpkg-parsechangelog --show-field 'Version')
+
+debian/cool-retro-term.1: cool-retro-term
+	help2man --no-info \
+		 --no-discard-stderr \
+		 --version-string="$(ver)" \
+		 --name="Terminal for X with a highly-configurable highly-retro look." \
+		 --section=1 \
+	    ./$< \
+	    > $@
+
+override_dh_auto_install: debian/cool-retro-term.1
+	dh_auto_install

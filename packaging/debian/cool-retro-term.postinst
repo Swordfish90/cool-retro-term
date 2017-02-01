@@ -1,0 +1,16 @@
+#! /bin/sh
+
+set -e
+
+case "$1" in
+    configure)
+        # Alternatives
+        update-alternatives --quiet \
+            --install /usr/bin/x-terminal-emulator \
+	      x-terminal-emulator /usr/bin/cool-retro-term 20 \
+            --slave /usr/share/man/man1/x-terminal-emulator.1.gz \
+	      x-terminal-emulator.1.gz /usr/share/man/man1/cool-retro-term.1.gz
+        ;;
+esac
+
+#DEBHELPER#

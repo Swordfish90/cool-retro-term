@@ -2,7 +2,7 @@ Source: cool-retro-term
 Maintainer: Jeka Der <jekader@gmail.com>
 Section: x11
 Priority: optional
-Standards-Version: 3.9.6
+Standards-Version: 3.9.7
 Homepage: https://github.com/Swordfish90/cool-retro-term
 Vcs-Git: git://github.com/barak/cool-retro-term.git
 Vcs-Browser: https://github.com/barak/cool-retro-term
