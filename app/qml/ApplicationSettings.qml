@@ -444,6 +444,11 @@ QtObject{
             obj_string: '{"ambientLight":0.2,"backgroundColor":"#000000","bloom":0.45,"brightness":0.5,"flickering":0.20,"contrast":0.85,"fontName":"TERMINUS_SCALED","fontColor":"#0ccc68","frameName":"NO_FRAME","glowingLine":0.16,"horizontalSync":0.1,"jitter":0.20,"burnIn":0.25,"staticNoise":0.20,"rasterization":0,"screenCurvature":0.05,"windowOpacity":0.60,"chromaColor":0,"saturationColor":0,"rbgShift":0,"fontWidth":1.0,"useCustomCommand":false,"customCommand":""}'
             builtin: true
         }
+        ListElement{
+            text: "Kindle"
+            obj_string: '{"ambientLight":0,"backgroundColor":"#d4ddc4","bloom":0,"brightness":0.3704,"burnIn":0.4038,"chromaColor":0,"contrast":1,"flickering":0,"fontColor":"#1e1e1e","fontName":"INCONSOLATA","fontWidth":1,"frameName":"NO_FRAME","glowingLine":0,"horizontalSync":0,"jitter":0,"rasterization":0,"rbgShift":0,"saturationColor":0,"screenCurvature":0,"staticNoise":0,"windowOpacity":1,"name":"Kindle"}'
+            builtin: true
+        }
     }
 
     function getProfileIndexByName(name) {
