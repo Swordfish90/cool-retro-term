@@ -9,7 +9,6 @@ install:
 
 script:
   - source /opt/qt58/bin/qt58-env.sh
-  - cd cool-retro-term
   - qmake
   - make -j2
   - mkdir -p appdir/usr/share/appdata appdir/usr/bin
@@ -24,3 +23,7 @@ script:
   - ./linuxdeployqt-continuous-x86_64.AppImage appdir/usr/bin/cool-retro-term -qmldir=.
   - export VERSION=$(git rev-list --count HEAD).$(git describe --tags | cut -d - -f 3)
   - ./linuxdeployqt-continuous-x86_64.AppImage appdir/usr/bin/cool-retro-term -qmldir=. -appimage
+
+# See https://github.com/probonopd/uploadtool/ for a way to upload to GitHub Releases automatically
+after_success:
+  - curl --upload-file ./Cool_Retro_Term-*.AppImage https://transfer.sh/Cool_Retro_Term-$VERSION-x86_64.AppImage
