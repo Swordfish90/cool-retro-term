@@ -20,9 +20,9 @@ script:
   - cp -r qmltermwidget/QMLTermWidget/ appdir/usr/qml/ # Workaround for https://github.com/probonopd/linuxdeployqt/issues/78
   - wget -c https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage
   - chmod a+x linuxdeployqt-continuous-x86_64.AppImage 
-  - ./linuxdeployqt-continuous-x86_64.AppImage appdir/usr/bin/cool-retro-term -qmldir=.
+  - ./linuxdeployqt-continuous-x86_64.AppImage appdir/usr/bin/cool-retro-term -qmldir=./app/qml/ -qmldir=./qmltermwidget/
   - export VERSION=$(git rev-list --count HEAD).$(git describe --tags | cut -d - -f 3)
-  - ./linuxdeployqt-3-x86_64.AppImage appdir/usr/bin/cool-retro-term -qmldir=. -appimage
+  - ./linuxdeployqt-3-x86_64.AppImage appdir/usr/bin/cool-retro-term -qmldir=./app/qml/ -qmldir=./qmltermwidget/ -appimage
 
 # See https://github.com/probonopd/uploadtool/ for a way to upload to GitHub Releases automatically
 after_success:
