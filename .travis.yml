@@ -22,7 +22,7 @@ script:
   - chmod a+x linuxdeployqt-*.AppImage 
   - ./linuxdeployqt-*.AppImage appdir/usr/bin/cool-retro-term -qmldir=./app/qml/ -qmldir=./qmltermwidget/
   - export VERSION=$(git rev-list --count HEAD).$(git describe --tags | cut -d - -f 3)
-  - ./linuxdeployqt-*.AppImage appdir/usr/bin/cool-retro-term -qmldir=./app/qml/ -qmldir=./qmltermwidget/ -appimage
+  - ./linuxdeployqt-*.AppImage appdir/usr/bin/cool-retro-term -qmldir=./app/qml/ -qmldir=./qmltermwidget/ -appimage -verbose=3 2>&1 | grep "name or path is empty" -C 3
 
 # See https://github.com/probonopd/uploadtool/ for a way to upload to GitHub Releases automatically
 after_success:
