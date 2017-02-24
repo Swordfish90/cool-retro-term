@@ -24,9 +24,8 @@ script:
   - wget -c https://github.com/probonopd/linuxdeployqt/releases/download/3/linuxdeployqt-3-x86_64.AppImage
   - chmod a+x linuxdeployqt-*.AppImage 
   - ./linuxdeployqt-*.AppImage appdir/usr/bin/cool-retro-term -qmldir=./app/qml/ -qmldir=./qmltermwidget/ -verbose=3 2>&1 | grep "path:" -C 3
-  - export VERSION=$(git rev-list --count HEAD).$(git describe --tags | cut -d - -f 3)
   - ./linuxdeployqt-*.AppImage appdir/usr/bin/cool-retro-term -qmldir=./app/qml/ -qmldir=./qmltermwidget/ -appimage
   
 # See https://github.com/probonopd/uploadtool/ for a way to upload to GitHub Releases automatically
 after_success:
-  - curl --upload-file ./Cool_Retro_Term-*.AppImage https://transfer.sh/Cool_Retro_Term-$VERSION-x86_64.AppImage
+  - curl --upload-file ./Cool_Retro_Term-*.AppImage https://transfer.sh/Cool_Retro_Term-git$(git rev-parse --short HEAD)-x86_64.AppImage
