@@ -17,9 +17,9 @@ script:
   - cp ./cool-retro-term.desktop appdir/
   - cp ./app/icons/128x128/cool-retro-term.png appdir/
   - cp -r ./app/qml appdir/usr/
-  - cp -r /opt/qt*/qml/QtGraphicalEffects appdir/usr/qml/ # Workaround for https://github.com/probonopd/linuxdeployqt/issues/78
-  - cp -r /opt/qt*/qml/QtQuick.2 appdir/usr/qml/ # Workaround for https://github.com/probonopd/linuxdeployqt/issues/78
-  - mkdir -p appdir/usr/qml/QtQuick/ ; cp -r /opt/qt*/qml/QtQuick/Controls appdir/usr/qml/QtQuick/ # Workaround for https://github.com/probonopd/linuxdeployqt/issues/78
+  - # cp -r /opt/qt*/qml/QtGraphicalEffects appdir/usr/qml/ # Workaround for https://github.com/probonopd/linuxdeployqt/issues/78
+  - # cp -r /opt/qt*/qml/QtQuick.2 appdir/usr/qml/ # Workaround for https://github.com/probonopd/linuxdeployqt/issues/78
+  - # mkdir -p appdir/usr/qml/QtQuick/ ; cp -r /opt/qt*/qml/QtQuick/Controls appdir/usr/qml/QtQuick/ # Workaround for https://github.com/probonopd/linuxdeployqt/issues/78
   - cp -r ./qmltermwidget/QMLTermWidget appdir/usr/qml/ # Workaround for https://github.com/probonopd/linuxdeployqt/issues/78
   - wget -c https://github.com/probonopd/linuxdeployqt/releases/download/3/linuxdeployqt-3-x86_64.AppImage
   - chmod a+x linuxdeployqt-*.AppImage 
