@@ -1,6 +1,6 @@
-#cool-retro-term
+# cool-retro-term
 
-##Description
+## Description
 cool-retro-term is a terminal emulator which mimics the look and feel of the old cathode tube screens.
 It has been designed to be eye-candy, customizable, and reasonably lightweight.
 
@@ -8,12 +8,12 @@ It uses the QML port of qtermwidget (Konsole) developed by me: https://github.co
 
 This terminal emulator works under Linux and OSX and requires Qt 5.2 or higher.
 
-##Screenshots
+## Screenshots
 ![Image](<http://i.imgur.com/I6wq1cC.png>)
 ![Image](<http://i.imgur.com/12EqlpL.png>)
 ![Image](<http://i.imgur.com/Lx0acQz.jpg>)
 
-##Get cool-retro-term
+## Get cool-retro-term
 You can either build cool-retro-term yourself (see below) or walk the easy way and install one of these packages:
 
 Users of Fedora and openSUSE can grab a package from [Open Build Service](http://software.opensuse.org/package/cool-retro-term).
@@ -43,9 +43,9 @@ Ubuntu users of 14.04 LTS (Trusty) up to 15.10 (Wily) can use [this PPA](https:/
 
 OSX users can grab the latest dmg from the release page: https://github.com/Swordfish90/cool-retro-term/releases
 
-##Build instructions (Linux)
+## Build instructions (Linux)
 
-##Dependencies
+## Dependencies
 Make sure to install these first.
 
 ---
@@ -104,7 +104,7 @@ Install Qt directly from here http://qt-project.org/downloads . Once done export
     export PATH=/opt/Qt5.3.1/5.3/gcc_64/bin/:$PATH
 ---
 
-###Compile
+### Compile
 Once you installed all dependencies (Qt is installed and in your path) you need to compile and run the application: 
 
 ```bash
@@ -121,7 +121,7 @@ qmake && make
 ./cool-retro-term
 ```
 
-##Build instructions (OSX)
+## Build instructions (OSX)
 
 1. Install [Xcode](https://developer.apple.com/xcode/) and agree to the licence agreement
 2. Enter the following commands into the terminal:
@@ -153,7 +153,7 @@ cp -r qmltermwidget/QMLTermWidget cool-retro-term.app/Contents/PlugIns
 open cool-retro-term.app
 ```
 
-##Donations
+## Donations
 I made this project in my spare time because I love what I'm doing. If you are enjoying it and you want to buy me a beer click [here](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=flscogna%40gmail%2ecom&lc=IT&item_name=Filippo%20Scognamiglio&currency_code=EUR&bn=PP%2dDonationsBF%3abtn_donate_LG%2egif%3aNonHosted) .
 
 You can also add "bounties" on your favourite issues. More information on the [Bountysource](https://www.bountysource.com/teams/crt/issues) page.
