@@ -4,10 +4,8 @@ Upstream-Contact: Filippo Scognamiglio <flscogna@gmail.com>
 Source: https://github.com/Swordfish90/cool-retro-term
 
 Files: *
-Copyright: 2014 Filippo Scognamiglio
+Copyright: 2013-2017 Filippo Scognamiglio
 License: GPL-3
  On Debian systems, the full text of the GNU General Public
  License version 3 can be found in the file
  `/usr/share/common-licenses/GPL-3'.
-
-

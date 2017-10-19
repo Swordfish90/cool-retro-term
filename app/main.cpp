@@ -48,6 +48,8 @@ int main(int argc, char *argv[])
     // Manage command line arguments from the cpp side
     QStringList args = app.arguments();
     if (args.contains("-h") || args.contains("--help")) {
+        // BUG: This usage help text goes to stderr, should go to stdout.
+        // BUG: First line of output is surrounded by double quotes.
         qDebug() << "Usage: " + args.at(0) + " [--default-settings] [--workdir <dir>] [--program <prog>] [-p|--profile <prof>] [--fullscreen] [-h|--help]";
         qDebug() << "  --default-settings  Run cool-retro-term with the default settings";
         qDebug() << "  --workdir <dir>     Change working directory to 'dir'";
@@ -57,6 +59,11 @@ int main(int argc, char *argv[])
         qDebug() << "  -h|--help           Print this help.";
         qDebug() << "  --verbose           Print additional information such as profiles and settings.";
         return 0;
+    }
+
+    if (args.contains("-v") || args.contains("--version")) {
+        qDebug() << "cool-retro-term 1.0";
+	return 0;
     }
 
     // Manage default command
