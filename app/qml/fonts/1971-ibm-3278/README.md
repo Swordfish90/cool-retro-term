@@ -16,26 +16,28 @@ hand-copied from a 3270 series terminal. I built it because I felt
 terminals deserve to be pretty. The .sfd font file contains a x3270
 bitmap font that was used for guidance.
 
-![Using with the cool-old-tern (now cool-retro-term) terminal program]
-(https://raw.githubusercontent.com/wiki/rbanffy/3270font/cool-retro-term.png)
+![Using with the cool-old-tern (now cool-retro-term) terminal program](
+https://raw.githubusercontent.com/wiki/rbanffy/3270font/cool-retro-term.png)
 
 Getting it
 ----------
 
 If you are running Debian or Ubuntu and you don't want to mess with
 building your font files, you can simply `apt-get install fonts-3270`
-(It's available from the Debian and Ubuntu package repos at
+(It's available from the Debian
+(https://packages.debian.org/sid/fonts/fonts-3270) and Ubuntu
+(http://packages.ubuntu.com/zesty/fonts-3270) package repos at
 https://packages.debian.org/sid/fonts/fonts-3270 and
 http://packages.ubuntu.com/xenial/fonts/fonts-3270, although the
 packaged version may not be the latest version, but it's good enough for
 most purposes. For those who don't have the luxury of a proper
 system-managed package, Adobe Type 1, TTF, OTF and WOFF versions are
 available for download on
-http://s3.amazonaws.com/3270font/3270_fonts_ef53755.zip (although this
+http://s3.amazonaws.com/3270font/3270_fonts_d250fd9.zip (although this
 URL may not always reflect the latest version).
 
-![ASCII is so 60's]
-(https://raw.githubusercontent.com/wiki/rbanffy/3270font/cyrillic.png)
+![ASCII is so 60's](
+https://raw.githubusercontent.com/wiki/rbanffy/3270font/cyrillic.png)
 
 The format
 ----------
@@ -47,18 +49,17 @@ fontforge` or even `port install fontforge`. On others, you may need to
 grab your copy from http://fontforge.org/. I encourage you to drop by
 and read the tutorials.
 
-![Powerline-shell compatible!]
-(https://raw.githubusercontent.com/wiki/rbanffy/3270font/powerline.png)
+![Powerline-shell compatible!](
+https://raw.githubusercontent.com/wiki/rbanffy/3270font/powerline.png)
 
-![Using it on OSX (don't forget to turn antialiasing on)]
-(https://raw.githubusercontent.com/wiki/rbanffy/3270font/osx_terminal.png)
+![Using it on OSX (don't forget to turn antialiasing on)](https://raw.githubusercontent.com/wiki/rbanffy/3270font/osx_terminal.png)
 
 If you are running Windows, you'll probably need something like
 Cygwin, but, in the end, the font works correctly (with some very
 minor hinting issues).
 
-![Works on Windows]
-(https://raw.githubusercontent.com/wiki/rbanffy/3270font/windows_7.png)
+![Works on Windows](
+https://raw.githubusercontent.com/wiki/rbanffy/3270font/windows_7.png)
 
 Generating usable font files
 ----------------------------
@@ -73,8 +74,8 @@ slightly more condensed .sfd file with the base font narrowed to 488
 units, with no glyph rescaling (or cropping - we need to fix that) and
 its corresponding PostScript, TTF, OTF and WOFF versions.
 
-![For your favorite editor]
-(https://raw.githubusercontent.com/wiki/rbanffy/3270font/symbols.png)
+![For your favorite editor](
+https://raw.githubusercontent.com/wiki/rbanffy/3270font/symbols.png)
 
 Contributing
 ------------
