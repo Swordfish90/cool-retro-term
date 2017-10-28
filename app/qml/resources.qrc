@@ -48,6 +48,7 @@
         <file>fonts/modern-monaco/monaco.ttf</file>
         <file>fonts/modern-hermit/Hermit-medium.otf</file>
         <file>fonts/modern-inconsolata/Inconsolata.otf</file>
+        <file>fonts/modern-fira-code/FiraCode-Regular.ttf</file>
         <file>SettingsScreenTab.qml</file>
         <file>fonts/modern-fixedsys-excelsior/FSEX301-L2.ttf</file>
         <file>../icons/32x32/cool-retro-term.png</file>
