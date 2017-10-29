@@ -6,7 +6,7 @@ It has been designed to be eye-candy, customizable, and reasonably lightweight.
 
 It uses the QML port of qtermwidget (Konsole) developed by me: https://github.com/Swordfish90/qmltermwidget .
 
-This terminal emulator works under Linux and OSX and requires Qt 5.2 or higher.
+This terminal emulator works under Linux and macOS and requires Qt 5.2 or higher.
 
 ## Screenshots
 ![Image](<http://i.imgur.com/I6wq1cC.png>)
@@ -41,7 +41,7 @@ A word of warning: USE flags and keywords are to be added to portage's configura
 
 Ubuntu users of 14.04 LTS (Trusty) up to 15.10 (Wily) can use [this PPA](https://launchpad.net/~bugs-launchpad-net-falkensweb)
 
-OSX users can grab the latest dmg from the release page: https://github.com/Swordfish90/cool-retro-term/releases
+macOS users can grab the latest dmg from the release page: https://github.com/Swordfish90/cool-retro-term/releases
 
 ## Build instructions (Linux)
 
@@ -127,7 +127,7 @@ qmake && make
 ./cool-retro-term
 ```
 
-## Build instructions (OSX)
+## Build instructions (macOS)
 
 1. Install [Xcode](https://developer.apple.com/xcode/) and agree to the licence agreement
 2. Enter the following commands into the terminal:
