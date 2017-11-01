@@ -31,6 +31,9 @@ Window{
     modality: Qt.ApplicationModal
     title: qsTr("Save new profile")
 
+    SystemPalette { id: myPalette; colorGroup: SystemPalette.Active }
+    color: myPalette.window 
+
     property alias profileName: namefield.text
     signal nameSelected(string name)
 

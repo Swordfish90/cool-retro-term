@@ -28,9 +28,12 @@ Window {
     id: settings_window
     title: qsTr("Settings")
     width: 580
-    height: 400
+    height: 600
 
     property int tabmargins: 15
+
+    SystemPalette { id: myPalette; colorGroup: SystemPalette.Active }
+    color: myPalette.window  
 
     TabView{
         id: tabView
