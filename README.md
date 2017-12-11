@@ -16,7 +16,9 @@ This terminal emulator works under Linux and OSX and requires Qt 5.2 or higher.
 ## Get cool-retro-term
 You can either build cool-retro-term yourself (see below) or walk the easy way and install one of these packages:
 
-Users of Fedora and openSUSE can grab a package from [Open Build Service](http://software.opensuse.org/package/cool-retro-term).
+Fedora has the `cool-retro-term` in the offcial repositories. All you have to do is `sudo dnf install cool-retro-term`.
+
+Users of openSUSE can grab a package from [Open Build Service](http://software.opensuse.org/package/cool-retro-term).
 
 Arch users can install this [package](https://aur.archlinux.org/packages/cool-retro-term-git/) directly via the [AUR](https://aur.archlinux.org):
 
