@@ -41,6 +41,8 @@ QtObject{
     property bool fullscreen: false
     property bool showMenubar: true
 
+    property string wintitle: "cool-retro-term"
+
     property real windowOpacity: 1.0
     property real ambientLight: 0.2
     property real contrast: 0.85
@@ -478,6 +480,10 @@ QtObject{
         if (args.indexOf("--fullscreen") !== -1) {
             fullscreen = true;
             showMenubar = false;
+        }
+
+        if (args.indexOf("-T") !== -1) {
+            wintitle = args[args.indexOf("-T") + 1]
         }
 
         initializedSettings();

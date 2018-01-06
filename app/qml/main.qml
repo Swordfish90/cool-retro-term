@@ -62,8 +62,10 @@ ApplicationWindow{
         __contentItem.visible: mainMenu.visible
     }
 
+    property string wintitle: appSettings.wintitle
+
     color: "#00000000"
-    title: terminalContainer.title || qsTr("cool-retro-term")
+    title: terminalContainer.title || qsTr(appSettings.wintitle)
 
     Action {
         id: showMenubarAction
