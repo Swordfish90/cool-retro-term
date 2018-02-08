@@ -41,6 +41,8 @@ A word of warning: USE flags and keywords are to be added to portage's configura
 
 Ubuntu users of 14.04 LTS (Trusty) up to 15.10 (Wily) can use [this PPA](https://launchpad.net/~bugs-launchpad-net-falkensweb)
 
+Ubuntu users of 17.10 (Artful) should use [this PPA](https://launchpad.net/%7Evantuz/+archive/ubuntu/cool-retro-term)
+
 OSX users can grab the latest dmg from the release page: https://github.com/Swordfish90/cool-retro-term/releases
 
 ## Build instructions (Linux)
@@ -88,7 +90,7 @@ or:
 **Arch Linux**
 
     sudo pacman -S qt5-base qt5-declarative qt5-quickcontrols qt5-graphicaleffects
-    
+
 ---
 
 **openSUSE**
@@ -106,12 +108,12 @@ Install dependencies:
 **Anyone else**
 
 Install Qt directly from here http://qt-project.org/downloads . Once done export them in you path (replace "_/opt/Qt5.3.1/5.3/gcc_64/bin_" with your correct folder):
-    
+
     export PATH=/opt/Qt5.3.1/5.3/gcc_64/bin/:$PATH
 ---
 
 ### Compile
-Once you installed all dependencies (Qt is installed and in your path) you need to compile and run the application: 
+Once you installed all dependencies (Qt is installed and in your path) you need to compile and run the application:
 
 ```bash
 # Get it from GitHub
