@@ -69,6 +69,15 @@ QtObject{
             fontWidth: 1.0
         }
         ListElement{
+          name: "FIRA_CODE_SCALED"
+          text: "Fira Code (Modern)"
+          source: "fonts/modern-fira-code/FiraCode-Regular.ttf"
+          lineSpacing: 1
+          pixelSize: 12
+          baseScaling: 3.0
+          fontWidth: 1.0
+        }
+        ListElement{
             name: "APPLE_II"
             text: "Apple ][ (1977)"
             source: "fonts/1977-apple2/PrintChar21.ttf"
