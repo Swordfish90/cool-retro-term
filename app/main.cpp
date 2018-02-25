@@ -54,6 +54,7 @@ int main(int argc, char *argv[])
         qDebug() << "  --default-settings  Run cool-retro-term with the default settings";
         qDebug() << "  --workdir <dir>     Change working directory to 'dir'";
         qDebug() << "  -e <cmd>            Command to execute. This option will catch all following arguments, so use it as the last option.";
+        qDebug() << "  -T <title>          Set window title to 'title'.";
         qDebug() << "  --fullscreen        Run cool-retro-term in fullscreen.";
         qDebug() << "  -p|--profile <prof> Run cool-retro-term with the given profile.";
         qDebug() << "  -h|--help           Print this help.";

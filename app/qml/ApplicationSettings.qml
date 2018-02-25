@@ -41,6 +41,8 @@ QtObject{
     property bool fullscreen: false
     property bool showMenubar: true
 
+    property string wintitle: "cool-retro-term"
+
     property real windowOpacity: 1.0
     property real ambientLight: 0.2
     property real contrast: 0.85
@@ -440,6 +442,11 @@ QtObject{
             builtin: true
         }
         ListElement{
+            text: "Knight TV"
+	    obj_string: '{"ambientLight":0.16,"backgroundColor":"#000000","bloom":0.45,"brightness":0.5,"burnIn":0.3,"chromaColor":0,"contrast":0.85,"customCommand":"","flickering":0.1,"fontColor":"#0ccc68","fontName":"Knight_TV","fontWidth":1,"frameName":"SIMPLE_WHITE_FRAME","glowingLine":0,"horizontalSync":0.16,"jitter":0,"rasterization":0,"rbgShift":0,"saturationColor":0,"screenCurvature":0.07,"staticNoise":0,"useCustomCommand":false,"windowOpacity":1}'
+            builtin: true
+        }
+        ListElement{
             text: "Transparent Green"
             obj_string: '{"ambientLight":0.2,"backgroundColor":"#000000","bloom":0.45,"brightness":0.5,"flickering":0.20,"contrast":0.85,"fontName":"TERMINUS_SCALED","fontColor":"#0ccc68","frameName":"NO_FRAME","glowingLine":0.16,"horizontalSync":0.1,"jitter":0.20,"burnIn":0.25,"staticNoise":0.20,"rasterization":0,"screenCurvature":0.05,"windowOpacity":0.60,"chromaColor":0,"saturationColor":0,"rbgShift":0,"fontWidth":1.0,"useCustomCommand":false,"customCommand":""}'
             builtin: true
@@ -478,6 +485,10 @@ QtObject{
         if (args.indexOf("--fullscreen") !== -1) {
             fullscreen = true;
             showMenubar = false;
+        }
+
+        if (args.indexOf("-T") !== -1) {
+            wintitle = args[args.indexOf("-T") + 1]
         }
 
         initializedSettings();
