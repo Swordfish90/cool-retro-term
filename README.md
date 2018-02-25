@@ -1,12 +1,16 @@
 # cool-retro-term
 
+|> Default Amber|C:\ IBM DOS|$ Default Green|
+|---|---|---|
+|![Default Amber Cool Retro Term](https://user-images.githubusercontent.com/121322/32070717-16708784-ba42-11e7-8572-a8fcc10d7f7d.gif)|![IBM DOS](https://user-images.githubusercontent.com/121322/32070716-16567e5c-ba42-11e7-9e64-ba96dfe9b64d.gif)|![Default Green Cool Retro Term](https://user-images.githubusercontent.com/121322/32070715-163a1c94-ba42-11e7-80bb-41fbf10fc634.gif)|
+
 ## Description
 cool-retro-term is a terminal emulator which mimics the look and feel of the old cathode tube screens.
 It has been designed to be eye-candy, customizable, and reasonably lightweight.
 
 It uses the QML port of qtermwidget (Konsole) developed by me: https://github.com/Swordfish90/qmltermwidget .
 
-This terminal emulator works under Linux and OSX and requires Qt 5.2 or higher.
+This terminal emulator works under Linux and macOS and requires Qt 5.2 or higher.
 
 ## Screenshots
 ![Image](<http://i.imgur.com/I6wq1cC.png>)
@@ -45,7 +49,7 @@ Ubuntu users of 14.04 LTS (Trusty) up to 15.10 (Wily) can use [this PPA](https:/
 
 Ubuntu 17.10 can use [this PPA](https://launchpad.net/%7Evantuz/+archive/ubuntu/cool-retro-term)
 
-OSX users can grab the latest dmg from the release page: https://github.com/Swordfish90/cool-retro-term/releases
+macOS users can grab the latest dmg from the release page: https://github.com/Swordfish90/cool-retro-term/releases
 
 ## Build instructions (Linux)
 
@@ -143,7 +147,7 @@ qmake && make
 ./cool-retro-term
 ```
 
-## Build instructions (OSX)
+## Build instructions (macOS)
 
 1. Install [Xcode](https://developer.apple.com/xcode/) and agree to the licence agreement
 2. Enter the following commands into the terminal:
