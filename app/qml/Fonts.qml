@@ -204,5 +204,15 @@ QtObject{
             fontWidth: 1.0
             lowResolutionFont: false
         }
+        ListElement{
+            name: "Knight_TV"
+            text: "Knight TV (1975)"
+            source: "fonts/1975-knight-tv/KnightTVMedium.ttf"
+            lineSpacing: 0.2
+            pixelSize: 10
+            fontWidth: 1.0
+            baseScaling: 3.0
+            lowResolutionFont: true
+        }
     }
 }
