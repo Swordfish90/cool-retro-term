@@ -53,8 +53,7 @@ int main(int argc, char *argv[])
     QStringList args = app.arguments();
     if (args.contains("-h") || args.contains("--help")) {
         // BUG: This usage help text goes to stderr, should go to stdout.
-        // BUG: First line of output is surrounded by double quotes.
-        qDebug() << "Usage: " + args.at(0) + " [--default-settings] [--workdir <dir>] [--program <prog>] [-p|--profile <prof>] [--fullscreen] [-h|--help]";
+        qDebug() << "Usage:" << qPrintable(args.at(0)) << "[--default-settings] [--workdir <dir>] [--program <prog>] [-p|--profile <prof>] [--fullscreen] [-h|--help]";
         qDebug() << "  --default-settings  Run cool-retro-term with the default settings";
         qDebug() << "  --workdir <dir>     Change working directory to 'dir'";
         qDebug() << "  -e <cmd>            Command to execute. This option will catch all following arguments, so use it as the last option.";
