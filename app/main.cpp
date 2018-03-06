@@ -36,6 +36,10 @@ int main(int argc, char *argv[])
 #endif
 
     QApplication app(argc, argv);
+    // set application attributes
+    // Has no effects, see https://bugreports.qt.io/browse/QTBUG-51293
+    // app.setAttribute(Qt::AA_MacDontSwapCtrlAndMeta, true);
+
     QQmlApplicationEngine engine;
     FileIO fileIO;
 
