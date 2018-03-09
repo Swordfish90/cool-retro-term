@@ -49,3 +49,4 @@ parts:
       - qml-module-qtquick-dialogs 
       - qtdeclarative5-localstorage-plugin 
       - qtdeclarative5-window-plugin
+      - libgl1-mesa-dev
