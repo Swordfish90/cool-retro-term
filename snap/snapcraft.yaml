@@ -1,5 +1,5 @@
 name: cool-retro-term # check to see if it's available
-version: '0.7' # this is freakin' awesome
+version: '0.11' # this is freakin' awesome
 summary: cool-retro-term is a terminal emulator. # 79 char long summary
 description: |
   First off, this is freakin' awesome. cool-retro-term is a terminal emulator which mimics the look and feel of the old cathode tube screens. It has been designed to be eye-candy, customizable, and reasonably lightweight.
@@ -10,9 +10,18 @@ apps:
   cool-retro-term:
     command: desktop-launch $SNAP/usr/bin/cool-retro-term
     desktop: usr/share/applications/cool-retro-term.desktop
+      
+parts:
+  my-part:
+    source: https://github.com/kz6fittycent/cool-retro-term-1
+    source-type: git
+    plugin: qmake # See 'snapcraft plugins'
+    qt-version: qt5
+    after: [desktop-qt5]
     plugs:
       - unity7
       - x11
+      - desktop
       - home
       - network
       - network-bind
@@ -24,15 +33,6 @@ apps:
       - firewall-control
       - process-control
       - system-observe
-      # them plugs, tho...
-      
-parts:
-  my-part:
-    source: https://github.com/Swordfish90/cool-retro-term
-    source-type: git
-    plugin: qmake # See 'snapcraft plugins'
-    qt-version: qt5
-    after: [desktop-qt5]
     
     build-packages:
       - build-essential 
@@ -49,16 +49,3 @@ parts:
       - qml-module-qtquick-dialogs 
       - qtdeclarative5-localstorage-plugin 
       - qtdeclarative5-window-plugin
-      - libxkbcommon0 
-      - ttf-ubuntu-font-family
-      - dmz-cursor-theme
-      - light-themes
-      - adwaita-icon-theme
-      - gnome-themes-standard
-      - shared-mime-info
-      - libqt5gui5
-      - libgdk-pixbuf2.0-0
-      - libqt5svg5 # for loading icon themes which are svg
-      - appmenu-qt5
-      - locales-all
-      # make things prettier, maybe...
