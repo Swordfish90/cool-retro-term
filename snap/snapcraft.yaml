@@ -1,5 +1,5 @@
 name: cool-retro-term # check to see if it's available
-version: '0.11' # this is freakin' awesome
+version: '0.12' # this is freakin' awesome
 summary: cool-retro-term is a terminal emulator. # 79 char long summary
 description: |
   First off, this is freakin' awesome. cool-retro-term is a terminal emulator which mimics the look and feel of the old cathode tube screens. It has been designed to be eye-candy, customizable, and reasonably lightweight.
@@ -10,14 +10,6 @@ apps:
   cool-retro-term:
     command: desktop-launch $SNAP/usr/bin/cool-retro-term
     desktop: usr/share/applications/cool-retro-term.desktop
-      
-parts:
-  my-part:
-    source: https://github.com/kz6fittycent/cool-retro-term-1
-    source-type: git
-    plugin: qmake # See 'snapcraft plugins'
-    qt-version: qt5
-    after: [desktop-qt5]
     plugs:
       - unity7
       - x11
@@ -33,6 +25,14 @@ parts:
       - firewall-control
       - process-control
       - system-observe
+      
+parts:
+  my-part:
+    source: https://github.com/kz6fittycent/cool-retro-term-1
+    source-type: git
+    plugin: qmake # See 'snapcraft plugins'
+    qt-version: qt5
+    after: [desktop-qt5]
     
     build-packages:
       - build-essential 
