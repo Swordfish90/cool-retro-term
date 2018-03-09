@@ -4,7 +4,7 @@ summary: cool-retro-term is a terminal emulator. # 79 char long summary
 description: |
   First off, this is freakin' awesome. cool-retro-term is a terminal emulator which mimics the look and feel of the old cathode tube screens. It has been designed to be eye-candy, customizable, and reasonably lightweight.
 grade: stable # must be 'stable' to release into candidate/stable channels
-confinement: strict # use 'strict' once you have the right plugs
+confinement: --devmode # use 'strict' once you have the right plugs
 
 apps:
   cool-retro-term:
