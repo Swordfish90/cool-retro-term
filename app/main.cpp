@@ -1,3 +1,5 @@
+#include <iostream>
+
 #include <QtQml/QQmlApplicationEngine>
 #include <QtGui/QGuiApplication>
 
@@ -23,8 +25,20 @@ QString getNamedArgument(QStringList args, QString name)
     return getNamedArgument(args, name, "");
 }
 
+void messageHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg)
+{
+  (void) type;
+  (void) context;
+  std::cout << msg.toStdString() << std::endl;
+}
+
+
 int main(int argc, char *argv[])
 {
+    // Install message handler
+    qInstallMessageHandler(messageHandler);
+
+
     // Some environmental variable are necessary on certain platforms.
 
     // This disables QT appmenu under Ubuntu, which is not working with QML apps.
@@ -51,10 +65,9 @@ int main(int argc, char *argv[])
 
     // Manage command line arguments from the cpp side
     QStringList args = app.arguments();
-    if (args.contains("-h") || args.contains("--help")) {
-        // BUG: This usage help text goes to stderr, should go to stdout.
-        // BUG: First line of output is surrounded by double quotes.
-        qDebug() << "Usage: " + args.at(0) + " [--default-settings] [--workdir <dir>] [--program <prog>] [-p|--profile <prof>] [--fullscreen] [-h|--help]";
+    if (args.contains("-h") || args.contains("--help"))
+    {
+        qDebug().noquote() << "Usage: " + args.at(0) + " [--default-settings] [--workdir <dir>] [--program <prog>] [-p|--profile <prof>] [--fullscreen] [-h|--help]";
         qDebug() << "  --default-settings  Run cool-retro-term with the default settings";
         qDebug() << "  --workdir <dir>     Change working directory to 'dir'";
         qDebug() << "  -e <cmd>            Command to execute. This option will catch all following arguments, so use it as the last option.";
