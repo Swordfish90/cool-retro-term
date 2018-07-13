@@ -77,7 +77,7 @@ Window{
             Text{
                 anchors.horizontalCenter: parent.horizontalCenter
                 horizontalAlignment: Text.AlignHCenter
-                text: appSettings.version + "\n" +
+                text: applicationVersion + "\n" +
                       qsTr("Author: ") + "Filippo Scognamiglio\n" +
                       qsTr("Email: ")  + "flscogna@gmail.com\n" +
                       qsTr("Source: ") + "https://github.com/Swordfish90/cool-retro-term\n"

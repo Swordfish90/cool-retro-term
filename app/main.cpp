@@ -36,6 +36,10 @@ int main(int argc, char *argv[])
 #endif
 
     QApplication app(argc, argv);
+
+    app.setApplicationName("cool-retro-term");
+    app.setApplicationVersion("1.0.1");
+
     // set application attributes
     // Has no effects, see https://bugreports.qt.io/browse/QTBUG-51293
     // app.setAttribute(Qt::AA_MacDontSwapCtrlAndMeta, true);
@@ -67,7 +71,7 @@ int main(int argc, char *argv[])
     }
 
     if (args.contains("-v") || args.contains("--version")) {
-        qDebug() << "cool-retro-term 1.0.1";
+        qDebug().noquote() << app.applicationName() << app.applicationVersion();
 	return 0;
     }
 
@@ -85,6 +89,7 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("fileIO", &fileIO);
 
     engine.rootContext()->setContextProperty("devicePixelRatio", app.devicePixelRatio());
+    engine.rootContext()->setContextProperty("applicationVersion", app.applicationVersion());
 
     // Manage import paths for Linux and OSX.
     QStringList importPathList = engine.importPathList();
