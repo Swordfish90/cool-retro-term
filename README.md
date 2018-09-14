@@ -108,7 +108,7 @@ or:
 **Arch Linux**
 
     sudo pacman -S qt5-base qt5-declarative qt5-quickcontrols qt5-graphicaleffects
-    
+
 ---
 
 **openSUSE**
@@ -122,16 +122,22 @@ Install dependencies:
     sudo zypper install libqt5-qtbase-devel libqt5-qtdeclarative-devel libqt5-qtquickcontrols libqt5-qtgraphicaleffects
 
 ---
+**Docker**
+Docker users running X-Server can run cool-retro-term in an isolated Docker container using the following command.  Please note that hardware and x-server resources need to be  mounted inside the container in order for the container to have access to hardware acceleration and X-server resources:
+
+```sh
+docker run -it --privileged --rm -e DISPLAY=$DISPLAY -e XDG_RUNTIME_DIR=/run/user/1000 -e XAUTHORITY=$XAUTHORITY -v /run/user/1000:/run/user/1000 -v /tmp/.X11-unix:/tmp/.X11-unix -v /dev/dri:/dev/dri quay.io/aric49/crt:latest
+```
 
 **Anyone else**
 
 Install Qt directly from here http://qt-project.org/downloads . Once done export them in you path (replace "_/opt/Qt5.3.1/5.3/gcc_64/bin_" with your correct folder):
-    
+
     export PATH=/opt/Qt5.3.1/5.3/gcc_64/bin/:$PATH
 ---
 
 ### Compile
-Once you installed all dependencies (Qt is installed and in your path) you need to compile and run the application: 
+Once you installed all dependencies (Qt is installed and in your path) you need to compile and run the application:
 
 ```bash
 # Get it from GitHub
@@ -177,6 +183,16 @@ cd cool-retro-term
 mkdir cool-retro-term.app/Contents/PlugIns
 cp -r qmltermwidget/QMLTermWidget cool-retro-term.app/Contents/PlugIns
 open cool-retro-term.app
+```
+
+## Build Instructions Docker
+Clone the primary repository with the `--recursive` flag, and perform a Docker build.  Docker will automatically compile the code inside a Docker container.  To run the docker container, you need to mount X-Server resources and your video card inside the Docker container so that Docker can initiate the GUI and successfully start cool-retro-term with hardware acceleration:
+
+```sh
+git clone --recursive https://github.com/Swordfish90/cool-retro-term.git
+docker build -t cool-retro-term:1
+docker run -it --privileged --rm -e DISPLAY=$DISPLAY -e XDG_RUNTIME_DIR=/run/user/1000 -e XAUTHORITY=$XAUTHORITY -v /run/user/1000:/run/user/1000 -v /tmp/.X11-unix:/tmp/.X11-unix -v /dev/dri:/dev/dri cool-retro-term:1
+
 ```
 
 ## Donations
