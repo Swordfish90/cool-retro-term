@@ -7,7 +7,6 @@ COPY . /app
 WORKDIR /app
 RUN qmake && make
 
-#Add user to /etc/sudoers with sudo permissions
 RUN adduser user --home /home/user
 WORKDIR /app
 RUN chmod +x /app/cool-retro-term
