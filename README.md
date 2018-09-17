@@ -123,10 +123,14 @@ Install dependencies:
 
 ---
 **Docker**
-Docker users running X-Server can run cool-retro-term in an isolated Docker container using the following command.  Please note that hardware and x-server resources need to be  mounted inside the container in order for the container to have access to hardware acceleration and X-server resources:
+Docker users running X-Server can run cool-retro-term in an isolated Docker container using the following command.  Please note that hardware and x-server resources need to be  mounted inside the container in order for the container to have access to hardware acceleration and X-server resources.  Furthermore, preserving user profile settings within the cool-retro-term container requires a volume mount from your local home directory to the `user` home directory within the container:
 
 ```sh
-docker run -it --privileged --rm -e DISPLAY=$DISPLAY -e XDG_RUNTIME_DIR=/run/user/1000 -e XAUTHORITY=$XAUTHORITY -v /run/user/1000:/run/user/1000 -v /tmp/.X11-unix:/tmp/.X11-unix -v /dev/dri:/dev/dri quay.io/aric49/crt:latest
+#Create the application settings directory:
+mkdir -p ~/.local/share/cool-retro-term
+
+#Run cool-retro-term:
+docker run -it --privileged --rm -e DISPLAY=$DISPLAY -e XDG_RUNTIME_DIR=/run/user/1000 -e XAUTHORITY=$XAUTHORITY -v /run/user/1000:/run/user/1000 -v /tmp/.X11-unix:/tmp/.X11-unix -v /dev/dri:/dev/dri -v ~/.local/share/cool-retro-term:/home/user/.local/share/cool-retro-term quay.io/aric49/crt:latest
 ```
 
 **Anyone else**
