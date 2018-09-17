@@ -193,9 +193,14 @@ open cool-retro-term.app
 Clone the primary repository with the `--recursive` flag, and perform a Docker build.  Docker will automatically compile the code inside a Docker container.  To run the docker container, you need to mount X-Server resources and your video card inside the Docker container so that Docker can initiate the GUI and successfully start cool-retro-term with hardware acceleration:
 
 ```sh
+#Git clone
 git clone --recursive https://github.com/Swordfish90/cool-retro-term.git
+
+#Docker Build
 docker build -t cool-retro-term:1
-docker run -it --privileged --rm -e DISPLAY=$DISPLAY -e XDG_RUNTIME_DIR=/run/user/1000 -e XAUTHORITY=$XAUTHORITY -v /run/user/1000:/run/user/1000 -v /tmp/.X11-unix:/tmp/.X11-unix -v /dev/dri:/dev/dri cool-retro-term:1
+
+#Run the built image. 
+docker run -it --privileged --rm -e DISPLAY=$DISPLAY -e XDG_RUNTIME_DIR=/run/user/1000 -e XAUTHORITY=$XAUTHORITY -v /run/user/1000:/run/user/1000 -v /tmp/.X11-unix:/tmp/.X11-unix -v /dev/dri:/dev/dri -v ~/.local/share/cool-retro-term:/home/user/.local/share/cool-retro-term cool-retro-term:1
 
 ```
 
