@@ -49,6 +49,14 @@ Ubuntu users of 14.04 LTS (Trusty) up to 15.10 (Wily) can use [this PPA](https:/
 
 Ubuntu 17.10 can use [this PPA](https://launchpad.net/%7Evantuz/+archive/ubuntu/cool-retro-term)
 
+FreeBSD users can install a prebuit binary package:
+
+    pkg install cool-retro-term
+    
+or build cool-retro-term themselves from source using the [Ports framework](https://www.freebsd.org/doc/handbook/ports-using.html):
+
+    cd /usr/ports/x11/cool-retro-term/ && make install clean
+
 macOS users can grab the latest dmg from the release page: https://github.com/Swordfish90/cool-retro-term/releases
 
 ## Build instructions (Linux)
