@@ -102,7 +102,7 @@ QtObject{
     property var fontNames: ["TERMINUS_SCALED", "COMMODORE_PET", "COMMODORE_PET"]
     property var fontlist: fontManager.item.fontlist
 
-    signal terminalFontChanged(string fontSource, int pixelSize, int lineSpacing, real screenScaling, real fontWidth)
+    signal terminalFontChanged(string fontFamily, int pixelSize, int lineSpacing, real screenScaling, real fontWidth)
 
     signal initializedSettings()
 
@@ -119,12 +119,15 @@ QtObject{
         onLoaded: handleFontChanged()
     }
 
+    property FontLoader fontLoader: FontLoader { }
+
     onFontScalingChanged: handleFontChanged();
     onFontWidthChanged: handleFontChanged();
 
     function getIndexByName(name) {
         for (var i = 0; i < fontlist.count; i++) {
-            if (name === fontlist.get(i).name)
+            var requestedName = fontlist.get(i).name;
+            if (name === requestedName)
                 return i;
         }
         return 0; // If the font is not available default to 0.
@@ -154,10 +157,17 @@ QtObject{
         var lineSpacing = fontManager.item.lineSpacing;
         var screenScaling = fontManager.item.screenScaling;
         var fontWidth = fontManager.item.defaultFontWidth * appSettings.fontWidth;
+        var fontFamily = fontManager.item.family;
+        var isSystemFont = fontManager.item.isSystemFont;
 
         lowResolutionFont = fontManager.item.lowResolutionFont;
 
-        terminalFontChanged(fontSource, pixelSize, lineSpacing, screenScaling, fontWidth);
+        if (!isSystemFont) {
+            fontLoader.source = fontSource;
+            fontFamily = fontLoader.name;
+        }
+
+        terminalFontChanged(fontFamily, pixelSize, lineSpacing, screenScaling, fontWidth);
     }
 
     // FRAMES /////////////////////////////////////////////////////////////////
@@ -496,7 +506,7 @@ QtObject{
     Component.onDestruction: {
         storeSettings();
         storeCustomProfiles();
-        //storage.dropSettings(); //DROPS THE SETTINGS!.. REMEMBER TO DISABLE ONCE ENABLED!!
+//        storage.dropSettings(); //DROPS THE SETTINGS!.. REMEMBER TO DISABLE ONCE ENABLED!!
     }
 
     // VARS ///////////////////////////////////////////////////////////////////

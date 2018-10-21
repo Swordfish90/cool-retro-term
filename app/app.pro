@@ -4,10 +4,12 @@ TARGET = cool-retro-term
 DESTDIR = $$OUT_PWD/../
 
 HEADERS += \
-    fileio.h
+    fileio.h \
+    monospacefontmanager.h
 
 SOURCES = main.cpp \
-    fileio.cpp
+    fileio.cpp \
+    monospacefontmanager.cpp
 
 macx:ICON = icons/crt.icns
 

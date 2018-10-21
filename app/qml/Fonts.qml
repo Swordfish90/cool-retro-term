@@ -41,6 +41,10 @@ QtObject{
 
     property real defaultFontWidth: fontlist.get(selectedFontIndex).fontWidth
 
+    property string family: fontlist.get(selectedFontIndex).family
+
+    property bool isSystemFont: fontlist.get(selectedFontIndex).isSystemFont
+
     // There are two kind of fonts: low resolution and high resolution.
     // Low resolution font sets the lowResolutionFont property to true.
     // They are rendered at a fixed pixel size and the texture is upscaled
@@ -49,7 +53,7 @@ QtObject{
     // size of the screen, and the scaling directly controls their pixels size.
     // Those are slower to render but are not pixelated.
 
-    property ListModel fontlist: ListModel{
+    property ListModel fontlist: ListModel {
         ListElement{
             name: "TERMINUS_SCALED"
             text: "Terminus (Modern)"
@@ -59,6 +63,8 @@ QtObject{
             baseScaling: 3.0
             fontWidth: 1.0
             lowResolutionFont: true
+            isSystemFont: false
+            family: ""
         }
         ListElement{
             name: "PRO_FONT_SCALED"
@@ -69,6 +75,8 @@ QtObject{
             baseScaling: 3.0
             fontWidth: 1.0
             lowResolutionFont: true
+            isSystemFont: false
+            family: ""
         }
         ListElement{
             name: "EXCELSIOR_SCALED"
@@ -79,6 +87,8 @@ QtObject{
             baseScaling: 2.4
             fontWidth: 1.0
             lowResolutionFont: true
+            isSystemFont: false
+            family: ""
         }
         ListElement{
             name: "COMMODORE_PET_SCALED"
@@ -89,6 +99,8 @@ QtObject{
             baseScaling: 3.5
             fontWidth: 0.7
             lowResolutionFont: true
+            isSystemFont: false
+            family: ""
         }
         ListElement{
             name: "PROGGY_TINY_SCALED"
@@ -99,6 +111,8 @@ QtObject{
             baseScaling: 3.0
             fontWidth: 0.9
             lowResolutionFont: true
+            isSystemFont: false
+            family: ""
         }
         ListElement{
             name: "APPLE_II_SCALED"
@@ -109,6 +123,8 @@ QtObject{
             baseScaling: 3.5
             fontWidth: 0.8
             lowResolutionFont: true
+            isSystemFont: false
+            family: ""
         }
         ListElement{
             name: "ATARI_400_SCALED"
@@ -119,6 +135,8 @@ QtObject{
             baseScaling: 3.5
             fontWidth: 0.7
             lowResolutionFont: true
+            isSystemFont: false
+            family: ""
         }
         ListElement{
             name: "COMMODORE_64_SCALED"
@@ -129,6 +147,8 @@ QtObject{
             baseScaling: 3.5
             fontWidth: 0.7
             lowResolutionFont: true
+            isSystemFont: false
+            family: ""
         }
         ListElement{
             name: "ATARI_ST_SCALED"
@@ -139,6 +159,8 @@ QtObject{
             baseScaling: 2.0
             fontWidth: 1.0
             lowResolutionFont: true
+            isSystemFont: false
+            family: ""
         }
         ListElement{
             name: "IBM_DOS"
@@ -149,6 +171,8 @@ QtObject{
             baseScaling: 2.0
             fontWidth: 1.0
             lowResolutionFont: true
+            isSystemFont: false
+            family: ""
         }
         ListElement{
             name: "HERMIT"
@@ -158,6 +182,8 @@ QtObject{
             pixelSize: 28
             fontWidth: 1.0
             lowResolutionFont: false
+            isSystemFont: false
+            family: ""
         }
         ListElement{
             name: "TERMINUS"
@@ -167,6 +193,8 @@ QtObject{
             pixelSize: 35
             fontWidth: 1.0
             lowResolutionFont: false
+            isSystemFont: false
+            family: ""
         }
         ListElement{
             name: "PRO_FONT"
@@ -176,6 +204,8 @@ QtObject{
             pixelSize: 35
             fontWidth: 1.0
             lowResolutionFont: false
+            isSystemFont: false
+            family: ""
         }
         ListElement{
             name: "MONACO"
@@ -185,6 +215,8 @@ QtObject{
             pixelSize: 30
             fontWidth: 1.0
             lowResolutionFont: false
+            isSystemFont: false
+            family: ""
         }
         ListElement{
             name: "INCONSOLATA"
@@ -194,6 +226,8 @@ QtObject{
             pixelSize: 35
             fontWidth: 1.0
             lowResolutionFont: false
+            isSystemFont: false
+            family: ""
         }
         ListElement{
             name: "IBM_3278"
@@ -203,6 +237,8 @@ QtObject{
             pixelSize: 32
             fontWidth: 1.0
             lowResolutionFont: false
+            isSystemFont: false
+            family: ""
         }
         ListElement{
             name: "Knight_TV"
@@ -213,6 +249,33 @@ QtObject{
             fontWidth: 1.0
             baseScaling: 3.0
             lowResolutionFont: true
+            isSystemFont: false
+            family: ""
+        }
+    }
+
+    Component.onCompleted: addSystemFonts()
+
+    function addSystemFonts() {
+        var families = monospaceSystemFonts;
+        for (var i = 0; i < families.length; i++) {
+            console.log("Adding system font: ", families[i])
+            fontlist.append(convertToListElement(families[i]))
+        }
+    }
+
+    function convertToListElement(family) {
+        return {
+            name: "System: " + family,
+            text: qsTr("System: ") + family,
+            source: "",
+            lineSpacing: 0.1,
+            pixelSize: 30,
+            fontWidth: 1.0,
+            baseScaling: 1.0,
+            lowResolutionFont: false,
+            isSystemFont: true,
+            family: family
         }
     }
 }

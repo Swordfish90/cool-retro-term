@@ -114,14 +114,10 @@ Item{
             }
         }
 
-        FontLoader{ id: fontLoader }
-
-        function handleFontChange(fontSource, pixelSize, lineSpacing, screenScaling, fontWidth){
-            fontLoader.source = fontSource;
-
+        function handleFontChanged(fontFamily, pixelSize, lineSpacing, screenScaling, fontWidth) {
             kterminal.antialiasText = !appSettings.lowResolutionFont;
             font.pixelSize = pixelSize;
-            font.family = fontLoader.name;
+            font.family = fontFamily;
 
             terminalContainer.fontWidth = fontWidth;
             terminalContainer.screenScaling = screenScaling;
@@ -129,6 +125,7 @@ Item{
 
             kterminal.lineSpacing = lineSpacing;
         }
+
         function startSession() {
             appSettings.initializedSettings.disconnect(startSession);
 
@@ -152,7 +149,7 @@ Item{
             forceActiveFocus();
         }
         Component.onCompleted: {
-            appSettings.terminalFontChanged.connect(handleFontChange);
+            appSettings.terminalFontChanged.connect(handleFontChanged);
             appSettings.initializedSettings.connect(startSession);
         }
     }
