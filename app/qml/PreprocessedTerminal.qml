@@ -329,8 +329,8 @@ Item{
                  uniform lowp sampler2D blurredSource;
                  uniform highp float blurCoefficient;" +
 
-                "float rgb2grey(vec3 v){
-                    return dot(v, vec3(0.21, 0.72, 0.04));
+                "float max3(vec3 v) {
+                     return max (max (v.x, v.y), v.z);
                 }" +
 
                 "void main() {" +
@@ -339,7 +339,7 @@ Item{
                     "vec3 blur_color = texture2D(blurredSource, coords).rgb - vec3(blurCoefficient);" +
                     "vec3 color = min(origColor + blur_color, max(origColor, blur_color));" +
 
-                    "gl_FragColor = vec4(color, rgb2grey(color - origColor));" +
+                    "gl_FragColor = vec4(color, max3(color - origColor));" +
                 "}"
 
             onStatusChanged: if (log) console.log(log) //Print warning messages

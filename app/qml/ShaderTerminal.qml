@@ -44,7 +44,7 @@ ShaderEffect {
 
     property real chromaColor: appSettings.chromaColor;
 
-    property real rbgShift: appSettings.rbgShift * 0.2
+    property real rbgShift: appSettings.rbgShift * 0.2 * (appSettings.chromaColor !== 0 ? 1.0 : 0.0)
 
     property real flickering: appSettings.flickering
     property real horizontalSync: appSettings.horizontalSync * 0.5
@@ -280,6 +280,15 @@ ShaderEffect {
 
             "vec3 txt_color = texture2D(source, txt_coords).rgb;" +
 
+            (rbgShift !== 0 ? "
+                float rgb_noise = abs(texture2D(noiseSource, vec2(fract(time/(1024.0 * 128.0)), fract(time/(1024.0*512.0)))).a - 0.5);
+                vec2 baseDisplacement = vec2(0.02, 0.0) * rbgShift;
+                vec2 randomDisplacement = vec2(0.05, 0.0) * rbgShift * rgb_noise;
+                float rcolor = texture2D(source, txt_coords + baseDisplacement + randomDisplacement).r;
+                float bcolor = texture2D(source, txt_coords - baseDisplacement - randomDisplacement).b;
+                txt_color.r = rcolor;
+                txt_color.b = bcolor;" : "") +
+
             (burnIn !== 0 ? "
                 vec4 txt_blur = texture2D(blurredSource, txt_coords);
                 txt_color = txt_color + txt_blur.rgb * txt_blur.a;"
@@ -288,13 +297,6 @@ ShaderEffect {
              "float greyscale_color = rgb2grey(txt_color) + color;" +
 
             (chromaColor !== 0 ?
-                (rbgShift !== 0 ? "
-                    float rgb_noise = abs(texture2D(noiseSource, vec2(fract(time/(1024.0 * 256.0)), fract(time/(1024.0*1024.0)))).a - 0.5);
-                    float rcolor = texture2D(source, txt_coords + vec2(0.1, 0.0) * rbgShift * rgb_noise).r;
-                    float bcolor = texture2D(source, txt_coords - vec2(0.1, 0.0) * rbgShift * rgb_noise).b;
-                    txt_color.r = rcolor;
-                    txt_color.b = bcolor;
-                    greyscale_color = 0.33 * (rcolor + bcolor);" : "") +
 
                 "vec3 mixedColor = mix(fontColor.rgb, txt_color * fontColor.rgb, chromaColor);
                  vec3 finalBackColor = mix(backgroundColor.rgb, mixedColor, greyscale_color);
