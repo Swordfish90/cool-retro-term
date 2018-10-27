@@ -35,8 +35,7 @@ RowLayout {
     signal newValue(real newValue);
 
     id: setting_component
-    anchors.left: parent.left
-    anchors.right: parent.right
+    Layout.fillWidth: true
 
     onValueChanged: {
         check.checked = !(value == 0);
@@ -68,7 +67,7 @@ RowLayout {
         }
     }
     SizedLabel {
-        anchors { top: parent.top; bottom: parent.bottom }
+        Layout.fillHeight: true
         text: Math.round(((value - min_value) / (max_value - min_value)) * 100) + "%"
     }
 }

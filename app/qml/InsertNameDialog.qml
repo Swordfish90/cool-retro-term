@@ -65,8 +65,7 @@ Window{
             }
         }
         RowLayout{
-            anchors.right: parent.right
-            anchors.bottom: parent.bottom
+            Layout.alignment: Qt.AlignBottom | Qt.AlignRight
             Button{
                 id: okbutton
                 text: qsTr("OK")

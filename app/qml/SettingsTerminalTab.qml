@@ -29,8 +29,8 @@ Tab{
         anchors.fill: parent
         GroupBox{
             property var rasterization: [qsTr("Default"), qsTr("Scanlines"), qsTr("Pixels")][appSettings.rasterization]
-            title: qsTr("Font" + "(" + rasterization + ")")
-            anchors { left: parent.left; right: parent.right }
+            title: qsTr("Font " + "(" + rasterization + ")")
+            Layout.fillWidth: true
             GridLayout{
                 anchors.fill: parent
                 columns: 2
@@ -103,7 +103,7 @@ Tab{
         }
         GroupBox{
             title: qsTr("Colors")
-            anchors { left: parent.left; right: parent.right }
+            Layout.fillWidth: true
             ColumnLayout{
                 anchors.fill: parent
                 ColumnLayout{

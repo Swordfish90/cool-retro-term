@@ -27,7 +27,6 @@ Tab{
     ColumnLayout{
         anchors.fill: parent
         GroupBox{
-            anchors {left: parent.left; right: parent.right}
             Layout.fillWidth: true
             Layout.fillHeight: true
             title: qsTr("Profile")
@@ -36,7 +35,7 @@ Tab{
                 TableView {
                     id: profilesView
                     Layout.fillWidth: true
-                    anchors { top: parent.top; bottom: parent.bottom; }
+                    Layout.fillHeight: true
                     model: appSettings.profilesList
                     headerVisible: false
                     TableViewColumn {
@@ -49,7 +48,7 @@ Tab{
                     }
                 }
                 ColumnLayout {
-                    anchors { top: parent.top; bottom: parent.bottom }
+                    Layout.fillHeight: true
                     Layout.fillWidth: false
                     Button{
                         Layout.fillWidth: true
@@ -161,7 +160,7 @@ Tab{
         }
 
         GroupBox{
-            anchors {left: parent.left; right: parent.right}
+            Layout.fillWidth: true
             title: qsTr("Command")
             ColumnLayout {
                 anchors.fill: parent
@@ -179,7 +178,7 @@ Tab{
                 }
                 TextField{
                     id: customCommand
-                    anchors {left: parent.left; right: parent.right}
+                    Layout.fillWidth: true
                     text: appSettings.customCommand
                     enabled: useCustomCommand.checked
                     onEditingFinished: appSettings.customCommand = text

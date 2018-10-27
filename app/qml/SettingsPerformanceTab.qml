@@ -30,8 +30,6 @@ Tab{
         GroupBox{
             title: qsTr("General")
             Layout.fillWidth: true
-            anchors.left: parent.left
-            anchors.right: parent.right
             GridLayout{
                 anchors.fill: parent
                 rows: 2
@@ -74,8 +72,6 @@ Tab{
         GroupBox{
             title: qsTr("Bloom")
             Layout.fillWidth: true
-            anchors.left: parent.left
-            anchors.right: parent.right
             GridLayout{
                 id: bloomQualityContainer
                 anchors.fill: parent
@@ -98,8 +94,6 @@ Tab{
         GroupBox{
             title: qsTr("BurnIn")
             Layout.fillWidth: true
-            anchors.left: parent.left
-            anchors.right: parent.right
             GridLayout{
                 id: blurQualityContainer
                 anchors.fill: parent
@@ -123,8 +117,6 @@ Tab{
         GroupBox{
             title: qsTr("Frame")
             Layout.fillWidth: true
-            anchors.left: parent.left
-            anchors.right: parent.right
             CheckBox{
                 checked: appSettings._frameReflections
                 text: qsTr("Frame Reflections")
