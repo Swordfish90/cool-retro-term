@@ -28,15 +28,9 @@
         <file>main.qml</file>
         <file>SettingsTerminalTab.qml</file>
         <file>FontScanlines.qml</file>
-        <file>fonts/1982-commodore64/C64_Pro_Mono_v1.0-STYLE.ttf</file>
         <file>fonts/1977-apple2/PrintChar21.ttf</file>
         <file>fonts/1971-ibm-3278/3270Medium.ttf</file>
-        <file>fonts/1975-knight-tv/KnightTVMedium.ttf</file>
-        <file>fonts/1985-atari-st/AtariST8x16SystemFont.ttf</file>
         <file>fonts/modern-terminus/TerminusTTF-4.38.2.ttf</file>
-        <file>fonts/1977-commodore-pet/COMMODORE_PET.ttf</file>
-        <file>fonts/1979-atari-400-800/ATARI400800_original.TTF</file>
-        <file>fonts/1985-ibm-pc-vga/Perfect DOS VGA 437 Win.ttf</file>
         <file>Storage.qml</file>
         <file>CRTMainMenuBar.qml</file>
         <file>SettingsPerformanceTab.qml</file>
@@ -46,12 +40,16 @@
         <file>images/allNoise512.png</file>
         <file>fonts/modern-proggy-tiny/ProggyTiny.ttf</file>
         <file>fonts/modern-pro-font-win-tweaked/ProFontWindows.ttf</file>
-        <file>fonts/modern-monaco/monaco.ttf</file>
         <file>fonts/modern-hermit/Hermit-medium.otf</file>
         <file>fonts/modern-inconsolata/Inconsolata.otf</file>
         <file>SettingsScreenTab.qml</file>
         <file>fonts/modern-fixedsys-excelsior/FSEX301-L2.ttf</file>
         <file>../icons/32x32/cool-retro-term.png</file>
         <file>Components/SizedLabel.qml</file>
+        <file>fonts/1979-atari-400-800/AtariClassic-Regular.ttf</file>
+        <file>fonts/1982-commodore64/C64_Pro_Mono-STYLE.ttf</file>
+        <file>fonts/1981-ibm-pc/PxPlus_IBM_BIOS.ttf</file>
+        <file>fonts/1985-ibm-pc-vga/PxPlus_IBM_VGA8.ttf</file>
+        <file>fonts/1977-commodore-pet/PetMe.ttf</file>
     </qresource>
 </RCC>

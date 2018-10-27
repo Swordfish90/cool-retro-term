@@ -93,8 +93,8 @@ QtObject{
         ListElement{
             name: "COMMODORE_PET_SCALED"
             text: "Commodore PET (1977)"
-            source: "fonts/1977-commodore-pet/COMMODORE_PET.ttf"
-            lineSpacing: 2
+            source: "fonts/1977-commodore-pet/PetMe.ttf"
+            lineSpacing: 3
             pixelSize: 8
             baseScaling: 3.5
             fontWidth: 0.7
@@ -129,11 +129,23 @@ QtObject{
         ListElement{
             name: "ATARI_400_SCALED"
             text: "Atari 400-800 (1979)"
-            source: "fonts/1979-atari-400-800/ATARI400800_original.TTF"
+            source: "fonts/1979-atari-400-800/AtariClassic-Regular.ttf"
             lineSpacing: 3
             pixelSize: 8
             baseScaling: 3.5
             fontWidth: 0.7
+            lowResolutionFont: true
+            isSystemFont: false
+            family: ""
+        }
+        ListElement{
+            name: "IBM_PC_SCALED"
+            text: "IBM PC (1981)"
+            source: "fonts/1981-ibm-pc/PxPlus_IBM_BIOS.ttf"
+            lineSpacing: 3
+            pixelSize: 8
+            baseScaling: 4.0
+            fontWidth: 0.8
             lowResolutionFont: true
             isSystemFont: false
             family: ""
@@ -141,7 +153,7 @@ QtObject{
         ListElement{
             name: "COMMODORE_64_SCALED"
             text: "Commodore 64 (1982)"
-            source: "fonts/1982-commodore64/C64_Pro_Mono_v1.0-STYLE.ttf"
+            source: "fonts/1982-commodore64/C64_Pro_Mono-STYLE.ttf"
             lineSpacing: 3
             pixelSize: 8
             baseScaling: 3.5
@@ -151,21 +163,9 @@ QtObject{
             family: ""
         }
         ListElement{
-            name: "ATARI_ST_SCALED"
-            text: "Atari ST (1985)"
-            source: "fonts/1985-atari-st/AtariST8x16SystemFont.ttf"
-            lineSpacing: 3
-            pixelSize: 16
-            baseScaling: 2.0
-            fontWidth: 1.0
-            lowResolutionFont: true
-            isSystemFont: false
-            family: ""
-        }
-        ListElement{
             name: "IBM_DOS"
             text: "IBM DOS (1985)"
-            source: "fonts/1985-ibm-pc-vga/Perfect DOS VGA 437 Win.ttf"
+            source: "fonts/1985-ibm-pc-vga/PxPlus_IBM_VGA8.ttf"
             lineSpacing: 3
             pixelSize: 16
             baseScaling: 2.0
@@ -208,17 +208,6 @@ QtObject{
             family: ""
         }
         ListElement{
-            name: "MONACO"
-            text: "HD: Monaco (Modern)"
-            source: "fonts/modern-monaco/monaco.ttf"
-            lineSpacing: 0.1
-            pixelSize: 30
-            fontWidth: 1.0
-            lowResolutionFont: false
-            isSystemFont: false
-            family: ""
-        }
-        ListElement{
             name: "INCONSOLATA"
             text: "HD: Inconsolata (Modern)"
             source: "fonts/modern-inconsolata/Inconsolata.otf"
@@ -237,18 +226,6 @@ QtObject{
             pixelSize: 32
             fontWidth: 1.0
             lowResolutionFont: false
-            isSystemFont: false
-            family: ""
-        }
-        ListElement{
-            name: "Knight_TV"
-            text: "Knight TV (1975)"
-            source: "fonts/1975-knight-tv/KnightTVMedium.ttf"
-            lineSpacing: 0.2
-            pixelSize: 10
-            fontWidth: 1.0
-            baseScaling: 3.0
-            lowResolutionFont: true
             isSystemFont: false
             family: ""
         }
