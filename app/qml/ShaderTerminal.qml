@@ -220,6 +220,10 @@ ShaderEffect {
            return result;
         }
 
+        float min2(vec2 v) {
+            return min(v.x, v.y);
+        }
+
         float rgb2grey(vec3 v){
             return dot(v, vec3(0.21, 0.72, 0.04));
         }" +
@@ -279,6 +283,7 @@ ShaderEffect {
                 color += randomPass(coords * virtual_resolution) * glowingLine;" : "") +
 
             "vec3 txt_color = texture2D(source, txt_coords).rgb;" +
+            "txt_color *= min2(step(vec2(0.0), staticCoords) - step(vec2(1.0), staticCoords));" +
 
             (rbgShift !== 0 ? "
                 float rgb_noise = abs(texture2D(noiseSource, vec2(fract(time/(1024.0 * 128.0)), fract(time/(1024.0*512.0)))).a - 0.5);
