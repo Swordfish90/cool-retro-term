@@ -296,7 +296,7 @@ ShaderEffect {
 
             (burnIn !== 0 ? "
                 vec4 txt_blur = texture2D(blurredSource, txt_coords);
-                txt_color = txt_color + txt_blur.rgb * txt_blur.a;"
+                txt_color = max(txt_color, txt_blur.rgb * txt_blur.a);"
             : "") +
 
              "float greyscale_color = rgb2grey(txt_color) + color;" +
