@@ -44,7 +44,7 @@ ShaderEffect {
 
     property real chromaColor: appSettings.chromaColor;
 
-    property real rbgShift: appSettings.rbgShift * 0.2 * (appSettings.chromaColor !== 0 ? 1.0 : 0.0)
+    property real rbgShift: (appSettings.rbgShift / width) * (appSettings.chromaColor !== 0 ? 1.0 : 0.0)
 
     property real flickering: appSettings.flickering
     property real horizontalSync: appSettings.horizontalSync * 0.5
@@ -264,7 +264,7 @@ ShaderEffect {
                     noise += distortionScale * 7.0;" : "")
             : "") +
 
-            (jitter !== 0 || staticNoise !== 0 ?
+            (jitter !== 0 || staticNoise !== 0 || rbgShift !== 0 ?
                 "vec4 noiseTexel = texture2D(noiseSource, scaleNoiseSize * coords + vec2(fract(time / 51.0), fract(time / 237.0)));"
             : "") +
 
@@ -286,13 +286,14 @@ ShaderEffect {
             "txt_color *= min2(step(vec2(0.0), staticCoords) - step(vec2(1.0), staticCoords));" +
 
             (rbgShift !== 0 ? "
-                float rgb_noise = abs(texture2D(noiseSource, vec2(fract(time/(1024.0 * 128.0)), fract(time/(1024.0*512.0)))).a - 0.5);
-                vec2 baseDisplacement = vec2(0.02, 0.0) * rbgShift;
-                vec2 randomDisplacement = vec2(0.05, 0.0) * rbgShift * rgb_noise;
-                float rcolor = texture2D(source, txt_coords + baseDisplacement + randomDisplacement).r;
-                float bcolor = texture2D(source, txt_coords - baseDisplacement - randomDisplacement).b;
-                txt_color.r = rcolor;
-                txt_color.b = bcolor;" : "") +
+                vec2 displacement = vec2(32.0, 0.0) * rbgShift * noiseTexel.r;
+                vec3 rightColor = texture2D(source, txt_coords + displacement).rgb;
+                vec3 leftColor = texture2D(source, txt_coords - displacement).rgb;
+                vec3 rgbShiftColor = vec3(0.0);
+                rgbShiftColor.r = leftColor.r * 0.15 + rightColor.r * 0.7 + txt_color.r * 0.15;
+                rgbShiftColor.g = leftColor.g * 0.15 + rightColor.g * 0.15 + txt_color.g * 0.7;
+                rgbShiftColor.b = leftColor.b * 0.7 + rightColor.b * 0.15 + txt_color.b * 0.15;
+                txt_color = max(txt_color, (rgbShiftColor - txt_color));" : "") +
 
             (burnIn !== 0 ? "
                 vec4 txt_blur = texture2D(blurredSource, txt_coords);
