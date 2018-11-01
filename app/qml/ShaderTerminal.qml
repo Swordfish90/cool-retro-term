@@ -30,7 +30,7 @@ ShaderEffect {
 
     property color fontColor: appSettings.fontColor
     property color backgroundColor: appSettings.backgroundColor
-    property real bloom: appSettings.bloom * 2.5
+    property real bloom: appSettings.bloom * 2.0
 
     property real burnIn: appSettings.burnIn
 
@@ -320,7 +320,7 @@ ShaderEffect {
                     "bloomColor = fontColor.rgb * mix(vec3(rgb2grey(bloomColor)), bloomColor, chromaColor);"
                 :
                     "bloomColor = fontColor.rgb * rgb2grey(bloomColor);") +
-                "finalColor += bloomColor * bloom * bloomAlpha;"
+                "finalColor += clamp(bloomColor * bloom * bloomAlpha, 0.0, 0.5);"
             : "") +
 
             "finalColor *= smoothstep(-dispX, 0.0, staticCoords.x) - smoothstep(1.0, 1.0 + dispX, staticCoords.x);
