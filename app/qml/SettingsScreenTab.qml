@@ -33,7 +33,7 @@ Tab{
                 id: rasterizationBox
                 property string selectedElement: model[currentIndex]
                 anchors.fill: parent
-                model: [qsTr("Default"), qsTr("Scanlines"), qsTr("Pixels")]
+                model: [qsTr("Default"), qsTr("Scanlines"), qsTr("Pixels"), qsTr("Subpixels")]
                 currentIndex: appSettings.rasterization
                 onCurrentIndexChanged: {
                     appSettings.rasterization = currentIndex

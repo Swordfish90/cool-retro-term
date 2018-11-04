@@ -27,6 +27,7 @@ ShaderEffect {
     property ShaderEffectSource source
     property ShaderEffectSource blurredSource
     property ShaderEffectSource bloomSource
+    property ShaderEffectSource rasterizationSource
 
     property color fontColor: appSettings.fontColor
     property color backgroundColor: appSettings.backgroundColor
@@ -57,12 +58,6 @@ ShaderEffect {
     property real disp_right: (frame.displacementRight * appSettings.windowScaling) / width
 
     property real screen_brightness: appSettings.brightness * 1.5 + 0.5
-
-    // This is the average value of the abs(sin) function. Needed to avoid aliasing.
-    readonly property real absSinAvg: 0.63661828335466886
-    property size rasterizationSmooth: Qt.size(
-                                           Utils.clamp(2.0 * virtual_resolution.width / (width * devicePixelRatio), 0.0, 1.0),
-                                           Utils.clamp(2.0 * virtual_resolution.height / (height * devicePixelRatio), 0.0, 1.0))
 
     property real dispX
     property real dispY
@@ -165,9 +160,11 @@ ShaderEffect {
         uniform lowp float screen_brightness;
 
         uniform highp vec2 virtual_resolution;
-        uniform highp vec2 rasterizationSmooth;
         uniform highp float dispX;
         uniform highp float dispY;" +
+
+        (appSettings.rasterization != appSettings.no_rasterization ?
+            "uniform lowp sampler2D rasterizationSource;" : "") +
 
         (bloom !== 0 ? "
             uniform highp sampler2D bloomSource;
@@ -207,20 +204,7 @@ ShaderEffect {
                 return fract(smoothstep(-120.0, 0.0, coords.y - (virtual_resolution.y + 120.0) * fract(time * 0.00015)));
             }" : "") +
 
-        "highp float getScanlineIntensity(vec2 coords) {
-            highp float result = 1.0;" +
-
-           (appSettings.rasterization != appSettings.no_rasterization ?
-               "float val = abs(sin(coords.y * virtual_resolution.y * "+Math.PI+"));
-                result *= mix(val, " + absSinAvg + ", rasterizationSmooth.y);" : "") +
-           (appSettings.rasterization == appSettings.pixel_rasterization ?
-               "val = abs(sin(coords.x * virtual_resolution.x * "+Math.PI+"));
-                result *= mix(val, " + absSinAvg + ", rasterizationSmooth.x);" : "") + "
-
-           return result;
-        }
-
-        float min2(vec2 v) {
+        "float min2(vec2 v) {
             return min(v.x, v.y);
         }
 
@@ -310,7 +294,9 @@ ShaderEffect {
             :
                 "vec3 finalColor = mix(backgroundColor.rgb, fontColor.rgb, greyscale_color);") +
 
-            "finalColor *= getScanlineIntensity(coords);" +
+            (appSettings.rasterization != appSettings.no_rasterization ? "
+                finalColor *= texture2D(rasterizationSource, staticCoords * (virtual_resolution)).rgb;
+            " : "") +
 
             (bloom !== 0 ?
                 "vec4 bloomFullColor = texture2D(bloomSource, coords);
