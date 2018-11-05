@@ -79,7 +79,6 @@ Tab{
                 name: qsTr("RGB Shift")
                 onNewValue: appSettings.rbgShift = newValue;
                 value: appSettings.rbgShift;
-                enabled: appSettings.chromaColor !== 0
             }
         }
     }
