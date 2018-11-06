@@ -296,13 +296,12 @@ ShaderEffect {
                 txt_color = max(txt_color, txt_blur.rgb * txt_blur.a);"
             : "") +
 
-             "float greyscale_color = rgb2grey(txt_color) + color;" +
+             "txt_color += fontColor.rgb * color;" +
+             "float greyscale_color = rgb2grey(txt_color);" +
 
             (chromaColor !== 0 ?
-
-                "vec3 mixedColor = mix(fontColor.rgb, txt_color * fontColor.rgb, chromaColor);
-                 vec3 finalBackColor = mix(backgroundColor.rgb, mixedColor, greyscale_color);
-                 vec3 finalColor = mix(finalBackColor, fontColor.rgb, color).rgb;"
+                "vec3 foregroundColor = mix(fontColor.rgb, txt_color * fontColor.rgb / greyscale_color, chromaColor);
+                 vec3 finalColor = mix(backgroundColor.rgb, foregroundColor, greyscale_color);"
             :
                 "vec3 finalColor = mix(backgroundColor.rgb, fontColor.rgb, greyscale_color);") +
 
