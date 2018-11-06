@@ -286,9 +286,9 @@ ShaderEffect {
                 vec2 displacement = vec2(12.0, 0.0) * rbgShift * (0.6 * constantNoise.r + 0.4);
                 vec3 rightColor = texture2D(source, txt_coords + displacement).rgb;
                 vec3 leftColor = texture2D(source, txt_coords - displacement).rgb;
-                txt_color.r = leftColor.r * 0.25 + rightColor.r * 0.50 + txt_color.r * 0.25;
-                txt_color.g = leftColor.g * 0.25 + rightColor.g * 0.25 + txt_color.g * 0.50;
-                txt_color.b = leftColor.b * 0.50 + rightColor.b * 0.25 + txt_color.b * 0.25;
+                txt_color.r = leftColor.r * 0.10 + rightColor.r * 0.30 + txt_color.r * 0.60;
+                txt_color.g = leftColor.g * 0.20 + rightColor.g * 0.20 + txt_color.g * 0.60;
+                txt_color.b = leftColor.b * 0.30 + rightColor.b * 0.10 + txt_color.b * 0.60;
             " : "") +
 
             (burnIn !== 0 ? "
