@@ -30,9 +30,9 @@ Item{
 
     property size virtualResolution: Qt.size(kterminal.width, kterminal.height)
     property alias mainTerminal: kterminal
-    property ShaderEffectSource mainSource: kterminalSource
-    property ShaderEffectSource blurredSource: blurredSourceLoader.item
 
+    property ShaderEffectSource mainSource: kterminalSource
+    property BurnInEffect burnInEffect: burnInEffect
     property real fontWidth: 1.0
     property real screenScaling: 1.0
     property real scaleTexture: 1.0
@@ -43,14 +43,6 @@ Item{
     anchors.rightMargin: frame.displacementRight * appSettings.windowScaling
     anchors.topMargin: frame.displacementTop * appSettings.windowScaling
     anchors.bottomMargin: frame.displacementBottom * appSettings.windowScaling
-
-    //Parameters for the burnIn effect.
-    property real burnIn: appSettings.burnIn
-    property real fps: appSettings.fps !== 0 ? appSettings.fps : 60
-    property real burnInFadeTime: Utils.lint(_minBurnInFadeTime, _maxBurnInFadeTime, burnIn)
-    property real motionBlurCoefficient: 1.0 / (fps * burnInFadeTime)
-    property real _minBurnInFadeTime: 0.16
-    property real _maxBurnInFadeTime: 1.6
 
     property size terminalSize: kterminal.terminalSize
     property size fontMetrics: kterminal.fontMetrics
@@ -232,117 +224,8 @@ Item{
         visible: false
         textureSize: Qt.size(kterminal.width * scaleTexture, kterminal.height * scaleTexture);
     }
-    Loader{
-        id: blurredSourceLoader
-        asynchronous: true
-        active: burnIn !== 0
 
-        sourceComponent: ShaderEffectSource{
-            property bool updateBurnIn: false
-
-            id: _blurredSourceEffect
-            sourceItem: blurredTerminalLoader.item
-            recursive: true
-            live: false
-            hideSource: true
-            wrapMode: kterminalSource.wrapMode
-
-            visible: false
-
-            function restartBlurSource(){
-                livetimer.restart();
-            }
-
-            // This updates the burnin synched with the timer.
-            Connections {
-                target: updateBurnIn ? mainShader : null
-                ignoreUnknownSignals: false
-                onTimeChanged: _blurredSourceEffect.scheduleUpdate();
-            }
-
-            Timer{
-                id: livetimer
-
-                // The interval assumes 60 fps. This is the time needed burnout a white pixel.
-                // We multiply 1.1 to have a little bit of margin over the theoretical value.
-                // This solution is not extremely clean, but it's probably the best to avoid measuring fps.
-
-                interval: burnInFadeTime * 1000 * 1.1
-                running: true
-                onTriggered: _blurredSourceEffect.updateBurnIn = false;
-            }
-            Connections{
-                target: kterminal
-                onImagePainted:{
-                    _blurredSourceEffect.scheduleUpdate();
-                    _blurredSourceEffect.updateBurnIn = true;
-                    livetimer.restart();
-                }
-            }
-            // Restart blurred source settings change.
-            Connections{
-                target: appSettings
-                onBurnInChanged: _blurredSourceEffect.restartBlurSource();
-                onTerminalFontChanged: _blurredSourceEffect.restartBlurSource();
-                onRasterizationChanged: _blurredSourceEffect.restartBlurSource();
-                onBurnInQualityChanged: _blurredSourceEffect.restartBlurSource();
-            }
-            Connections {
-                target: kterminalScrollbar
-                onOpacityChanged: _blurredSourceEffect.restartBlurSource();
-            }
-        }
-    }
-
-    Loader{
-        id: blurredTerminalLoader
-
-        property int burnInScaling: scaleTexture * appSettings.burnInQuality
-
-        width: appSettings.lowResolutionFont
-                  ? kterminal.width * Math.max(1, burnInScaling)
-                  : kterminal.width * scaleTexture * appSettings.burnInQuality
-        height: appSettings.lowResolutionFont
-                    ? kterminal.height * Math.max(1, burnInScaling)
-                    : kterminal.height * scaleTexture * appSettings.burnInQuality
-
-        active: burnIn !== 0
-        asynchronous: true
-
-        sourceComponent: ShaderEffect {
-            property variant txt_source: kterminalSource
-            property variant blurredSource: blurredSourceLoader.item
-            property real blurCoefficient: motionBlurCoefficient
-
-            blending: false
-
-            fragmentShader:
-                "#ifdef GL_ES
-                    precision mediump float;
-                #endif\n" +
-
-                "uniform lowp float qt_Opacity;" +
-                "uniform lowp sampler2D txt_source;" +
-
-                "varying highp vec2 qt_TexCoord0;
-
-                 uniform lowp sampler2D blurredSource;
-                 uniform highp float blurCoefficient;" +
-
-                "float max3(vec3 v) {
-                     return max (max (v.x, v.y), v.z);
-                }" +
-
-                "void main() {" +
-                    "vec2 coords = qt_TexCoord0;" +
-                    "vec3 origColor = texture2D(txt_source, coords).rgb;" +
-                    "vec3 blur_color = texture2D(blurredSource, coords).rgb - vec3(blurCoefficient);" +
-                    "vec3 color = min(origColor + blur_color, max(origColor, blur_color));" +
-
-                    "gl_FragColor = vec4(color, max3(color - origColor));" +
-                "}"
-
-            onStatusChanged: if (log) console.log(log) //Print warning messages
-        }
+    BurnInEffect {
+        id: burnInEffect
     }
 }

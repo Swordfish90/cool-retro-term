@@ -25,7 +25,7 @@ import "utils.js" as Utils
 
 ShaderEffect {
     property ShaderEffectSource source
-    property ShaderEffectSource blurredSource
+    property BurnInEffect burnInEffect
     property ShaderEffectSource bloomSource
     property ShaderEffectSource rasterizationSource
 
@@ -33,7 +33,10 @@ ShaderEffect {
     property color backgroundColor: appSettings.backgroundColor
     property real bloom: appSettings.bloom * 2.0
 
+    property ShaderEffectSource burnInSource: burnInEffect.source
     property real burnIn: appSettings.burnIn
+    property real burnInLastUpdate: burnInEffect.lastUpdate
+    property real burnInTime: burnInEffect.burnInFadeTime
 
     property real jitter: appSettings.jitter * 0.007
     property real staticNoise: appSettings.staticNoise
@@ -63,12 +66,7 @@ ShaderEffect {
     property real dispY
     property size virtual_resolution
 
-    TimeManager{
-        id: timeManager
-        enableTimer: terminalWindow.visible
-    }
-
-    property alias time: timeManager.time
+    property real time: timeManager.time
     property ShaderEffectSource noiseSource: noiseShaderSource
 
     // If something goes wrong activate the fallback version of the shader.
@@ -133,7 +131,7 @@ ShaderEffect {
             qt_TexCoord0.y = (qt_MultiTexCoord0.y - disp_top) / (1.0 - disp_top - disp_bottom);
             vec2 coords = vec2(fract(time/(1024.0*2.0)), fract(time/(1024.0*1024.0)));" +
 
-            (!fallBack && (flickering !== 0.0 || horizontalSync !== 0.0 || rgbShift !== 0) ?
+            (!fallBack && (flickering !== 0.0 || horizontalSync !== 0.0 || rbgShift !== 0) ?
                 "vec4 initialNoiseTexel = texture2D(noiseSource, coords);"
             : "") +
 
@@ -178,7 +176,9 @@ ShaderEffect {
             uniform highp sampler2D bloomSource;
             uniform lowp float bloom;" : "") +
         (burnIn !== 0 ? "
-            uniform sampler2D blurredSource;" : "") +
+            uniform sampler2D burnInSource;
+            uniform highp float burnInLastUpdate;
+            uniform highp float burnInTime;" : "") +
         (staticNoise !== 0 ? "
             uniform highp float staticNoise;" : "") +
         (((staticNoise !== 0 || jitter !== 0 || rbgShift)
@@ -228,7 +228,7 @@ ShaderEffect {
             "float distance = length(cc);" +
 
             //FallBack if there are problems
-            (fallBack && (flickering !== 0.0 || horizontalSync !== 0.0) ?
+            (fallBack && (flickering !== 0.0 || horizontalSync !== 0.0 || rbgShift !== 0.0) ?
                 "vec2 initialCoords = vec2(fract(time/(1024.0*2.0)), fract(time/(1024.0*1024.0)));
                  vec4 initialNoiseTexel = texture2D(noiseSource, initialCoords);"
             : "") +
@@ -292,8 +292,9 @@ ShaderEffect {
             " : "") +
 
             (burnIn !== 0 ? "
-                vec4 txt_blur = texture2D(blurredSource, txt_coords);
-                txt_color = max(txt_color, txt_blur.rgb * txt_blur.a);"
+                vec4 txt_blur = texture2D(burnInSource, txt_coords);
+                float blurDecay = clamp((time - burnInLastUpdate) * burnInTime, 0.0, 1.0);
+                txt_color = max(txt_color, txt_blur.rgb - vec3(blurDecay));"
             : "") +
 
              "txt_color += fontColor.rgb * color;" +

@@ -51,5 +51,6 @@
         <file>fonts/1981-ibm-pc/PxPlus_IBM_BIOS.ttf</file>
         <file>fonts/1985-ibm-pc-vga/PxPlus_IBM_VGA8.ttf</file>
         <file>fonts/1977-commodore-pet/PetMe.ttf</file>
+        <file>BurnInEffect.qml</file>
     </qresource>
 </RCC>

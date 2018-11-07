@@ -3,7 +3,7 @@ import QtGraphicalEffects 1.0
 
 import "utils.js" as Utils
 
-ShaderTerminal{
+ShaderTerminal {
     property alias title: terminal.title
     property alias terminalSize: terminal.terminalSize
 
@@ -13,10 +13,15 @@ ShaderTerminal{
     blending: false
 
     source: terminal.mainSource
-    blurredSource: terminal.blurredSource
+    burnInEffect: terminal.burnInEffect
     dispX: (12 / width) * appSettings.windowScaling
     dispY: (12 / height) * appSettings.windowScaling
     virtual_resolution: terminal.virtualResolution
+
+    TimeManager{
+        id: timeManager
+        enableTimer: terminalWindow.visible
+    }
 
     Loader{
         id: frame
