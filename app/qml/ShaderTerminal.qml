@@ -38,7 +38,9 @@ ShaderEffect {
     property real burnInLastUpdate: burnInEffect.lastUpdate
     property real burnInTime: burnInEffect.burnInFadeTime
 
-    property real jitter: appSettings.jitter * 0.007
+    property real jitter: appSettings.jitter
+    property size jitterDisplacement: Qt.size(0.007 * jitter, 0.002 * jitter)
+
     property real staticNoise: appSettings.staticNoise
     property size scaleNoiseSize: Qt.size((width) / (noiseTexture.width * appSettings.windowScaling * appSettings.fontScaling),
                                           (height) / (noiseTexture.height * appSettings.windowScaling * appSettings.fontScaling))
@@ -192,7 +194,7 @@ ShaderEffect {
         (chromaColor !== 0 ? "
             uniform lowp float chromaColor;" : "") +
         (jitter !== 0 ? "
-            uniform lowp float jitter;" : "") +
+            uniform lowp vec2 jitterDisplacement;" : "") +
         (rbgShift !== 0 ? "
             uniform lowp float rbgShift;" : "") +
 
@@ -267,7 +269,7 @@ ShaderEffect {
 
             (jitter !== 0 ? "
                 vec2 offset = vec2(noiseTexel.b, noiseTexel.a) - vec2(0.5);
-                vec2 txt_coords = coords + offset * jitter;"
+                vec2 txt_coords = coords + offset * jitterDisplacement;"
             :  "vec2 txt_coords = coords;") +
 
             "float color = 0.0;" +
