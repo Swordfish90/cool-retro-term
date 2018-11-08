@@ -55,6 +55,8 @@ ShaderEffect {
     property real flickering: appSettings.flickering
     property real horizontalSync: appSettings.horizontalSync * 0.5
 
+    property int rasterization: appSettings.rasterization
+
     property bool frameReflections: appSettings.frameReflections
 
     property real disp_top: (frame.displacementTop * appSettings.windowScaling) / height
@@ -62,7 +64,7 @@ ShaderEffect {
     property real disp_left: (frame.displacementLeft * appSettings.windowScaling) / width
     property real disp_right: (frame.displacementRight * appSettings.windowScaling) / width
 
-    property real screen_brightness: appSettings.brightness * 1.5 + 0.5
+    property real screen_brightness: Utils.lint(0.5, 1.5, appSettings.brightness)
 
     property real dispX
     property real dispY
@@ -171,7 +173,7 @@ ShaderEffect {
         uniform highp float dispX;
         uniform highp float dispY;" +
 
-        (appSettings.rasterization != appSettings.no_rasterization ?
+        (rasterization != appSettings.no_rasterization ?
             "uniform lowp sampler2D rasterizationSource;" : "") +
 
         (bloom !== 0 ? "
@@ -308,7 +310,8 @@ ShaderEffect {
             :
                 "vec3 finalColor = mix(backgroundColor.rgb, fontColor.rgb, greyscale_color);") +
 
-            (appSettings.rasterization != appSettings.no_rasterization ? "
+            (rasterization != appSettings.no_rasterization ? "
+                finalColor *= 2.0;
                 finalColor *= texture2D(rasterizationSource, staticCoords * (virtual_resolution)).rgb;
             " : "") +
 
