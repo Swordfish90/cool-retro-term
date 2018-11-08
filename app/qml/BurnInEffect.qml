@@ -114,7 +114,7 @@ Loader {
                 "void main() {
                     vec2 coords = qt_TexCoord0;
 
-                    vec3 txtColor = texture2D(txt_source, coords).rgb * 0.5;
+                    vec3 txtColor = texture2D(txt_source, coords).rgb;
                     vec4 accColor = texture2D(burnInSource, coords);
 
                     float prevMask = accColor.a;
@@ -124,7 +124,7 @@ Loader {
                     vec3 blurColor = accColor.rgb - vec3(blurDecay);
 
                     blurColor = clamp(blurColor, vec3(0.0), vec3(1.0));
-                    vec3 color = max(blurColor, txtColor);
+                    vec3 color = max(blurColor, txtColor * 0.5);
 
                     gl_FragColor = vec4(color, currMask);
                 }
