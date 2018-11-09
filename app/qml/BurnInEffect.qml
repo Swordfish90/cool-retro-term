@@ -73,7 +73,7 @@ Loader {
 
             Connections {
                 target: kterminalScrollbar
-                onOpacityChanged: burnInEffect.restartBlurSource()
+                onOpacityChanged: completelyUpdate()
             }
         }
 
@@ -118,13 +118,12 @@ Loader {
                     vec4 accColor = texture2D(burnInSource, coords);
 
                     float prevMask = accColor.a;
-                    float currMask = 1.0 - max3(txtColor);
+                    float currMask = max3(txtColor);
 
-                    highp float blurDecay = prevMask * clamp((lastUpdate - prevLastUpdate) * burnInTime, 0.0, 1.0);
+                    highp float blurDecay = clamp((lastUpdate - prevLastUpdate) * burnInTime, 0.0, 1.0);
+                    blurDecay = max(0.0, blurDecay - prevMask);
                     vec3 blurColor = accColor.rgb - vec3(blurDecay);
-
-                    blurColor = clamp(blurColor, vec3(0.0), vec3(1.0));
-                    vec3 color = max(blurColor, txtColor * 0.5);
+                    vec3 color = max(blurColor, txtColor);
 
                     gl_FragColor = vec4(color, currMask);
                 }
