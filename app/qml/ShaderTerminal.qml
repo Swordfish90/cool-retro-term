@@ -274,7 +274,7 @@ ShaderEffect {
                 vec2 txt_coords = coords + offset * jitterDisplacement;"
             :  "vec2 txt_coords = coords;") +
 
-            "float color = 0.0;" +
+            "float color = 0.0001;" +
 
             (staticNoise !== 0 ? "
                 float noiseVal = noiseTexel.a;
