@@ -27,7 +27,6 @@ ShaderEffect {
     property ShaderEffectSource source
     property BurnInEffect burnInEffect
     property ShaderEffectSource bloomSource
-    property ShaderEffectSource rasterizationSource
 
     property color fontColor: appSettings.fontColor
     property color backgroundColor: appSettings.backgroundColor
@@ -65,6 +64,10 @@ ShaderEffect {
     property real disp_right: (frame.displacementRight * appSettings.windowScaling) / width
 
     property real screen_brightness: Utils.lint(0.5, 1.5, appSettings.brightness)
+
+    property size rasterizationSmooth: Qt.size(
+                                           Utils.clamp(2.0 * virtual_resolution.width / (width * devicePixelRatio), 0.0, 1.0),
+                                           Utils.clamp(2.0 * virtual_resolution.height / (height * devicePixelRatio), 0.0, 1.0))
 
     property real dispX
     property real dispY
@@ -170,11 +173,9 @@ ShaderEffect {
         uniform lowp float screen_brightness;
 
         uniform highp vec2 virtual_resolution;
+        uniform highp vec2 rasterizationSmooth;
         uniform highp float dispX;
         uniform highp float dispY;" +
-
-        (rasterization != appSettings.no_rasterization ?
-            "uniform lowp sampler2D rasterizationSource;" : "") +
 
         (bloom !== 0 ? "
             uniform highp sampler2D bloomSource;
@@ -219,7 +220,24 @@ ShaderEffect {
                 return fract(smoothstep(-120.0, 0.0, coords.y - (virtual_resolution.y + 120.0) * fract(time * 0.00015)));
             }" : "") +
 
-        "float min2(vec2 v) {
+        "highp float getScanlineIntensity(vec2 coords) {
+            highp float result = 1.0;" +
+
+           (appSettings.rasterization != appSettings.no_rasterization ?
+               "float val = 0.0;
+                val += smoothstep(0.0, 0.5, fract(coords.y * virtual_resolution.y));
+                val -= smoothstep(0.5, 1.0, fract(coords.y * virtual_resolution.y));
+                result *= mix(val, 1.0, rasterizationSmooth.y);" : "") +
+           (appSettings.rasterization == appSettings.pixel_rasterization ?
+               "val = 0.0;
+                val += smoothstep(0.0, 0.5, fract(coords.x * virtual_resolution.x));
+                val -= smoothstep(0.5, 1.0, fract(coords.x * virtual_resolution.x));
+                result *= mix(val, 1.0, rasterizationSmooth.x);" : "") + "
+
+           return result;
+        }
+
+        float min2(vec2 v) {
             return min(v.x, v.y);
         }
 
@@ -310,10 +328,7 @@ ShaderEffect {
             :
                 "vec3 finalColor = mix(backgroundColor.rgb, fontColor.rgb, greyscale_color);") +
 
-            (rasterization != appSettings.no_rasterization ? "
-                finalColor *= 2.0;
-                finalColor *= texture2D(rasterizationSource, staticCoords * (virtual_resolution)).rgb;
-            " : "") +
+            "finalColor *= getScanlineIntensity(coords);" +
 
             (bloom !== 0 ?
                 "vec4 bloomFullColor = texture2D(bloomSource, coords);
