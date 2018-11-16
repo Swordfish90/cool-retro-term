@@ -1,5 +1,5 @@
 name: cool-retro-term # check to see if it's available
-version: '0.13' # this is freakin' awesome
+version: '0.14' # this is freakin' awesome
 summary: cool-retro-term is a terminal emulator. # 79 char long summary
 description: |
   First off, this is freakin' awesome. cool-retro-term is a terminal emulator which mimics the look and feel of the old cathode tube screens. It has been designed to be eye-candy, customizable, and reasonably lightweight.
@@ -50,3 +50,4 @@ parts:
       - qtdeclarative5-localstorage-plugin 
       - qtdeclarative5-window-plugin
       - libgl1-mesa-dev
+      - qtdeclarative5-dev-tools
