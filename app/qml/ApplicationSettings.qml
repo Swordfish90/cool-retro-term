@@ -94,7 +94,10 @@ QtObject{
 
     // FONTS //////////////////////////////////////////////////////////////////
 
+    readonly property real baseFontScaling: 0.75
     property real fontScaling: 1.0
+    property real totalFontScaling: baseFontScaling * fontScaling
+
     property real fontWidth: 1.0
 
     property bool lowResolutionFont: false
@@ -150,7 +153,7 @@ QtObject{
         if (index === undefined) return;
 
         fontManager.item.selectedFontIndex = index;
-        fontManager.item.scaling = fontScaling * windowScaling;
+        fontManager.item.scaling = totalFontScaling * windowScaling;
 
         var fontSource = fontManager.item.source;
         var pixelSize = fontManager.item.pixelSize;

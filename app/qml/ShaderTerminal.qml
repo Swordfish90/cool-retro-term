@@ -41,15 +41,15 @@ ShaderEffect {
     property size jitterDisplacement: Qt.size(0.007 * jitter, 0.002 * jitter)
 
     property real staticNoise: appSettings.staticNoise
-    property size scaleNoiseSize: Qt.size((width) / (noiseTexture.width * appSettings.windowScaling * appSettings.fontScaling),
-                                          (height) / (noiseTexture.height * appSettings.windowScaling * appSettings.fontScaling))
+    property size scaleNoiseSize: Qt.size((width) / (noiseTexture.width * appSettings.windowScaling * appSettings.totalFontScaling),
+                                          (height) / (noiseTexture.height * appSettings.windowScaling * appSettings.totalFontScaling))
 
     property real screenCurvature: appSettings.screenCurvature
     property real glowingLine: appSettings.glowingLine * 0.2
 
     property real chromaColor: appSettings.chromaColor;
 
-    property real rbgShift: (appSettings.rbgShift / width) * appSettings.fontScaling
+    property real rbgShift: (appSettings.rbgShift / width) * appSettings.totalFontScaling
 
     property real flickering: appSettings.flickering
     property real horizontalSync: appSettings.horizontalSync * 0.5
