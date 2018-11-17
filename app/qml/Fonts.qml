@@ -108,7 +108,7 @@ QtObject{
             source: "fonts/modern-proggy-tiny/ProggyTiny.ttf"
             lineSpacing: 1
             pixelSize: 16
-            baseScaling: 3.0
+            baseScaling: 3.3
             fontWidth: 0.9
             lowResolutionFont: true
             isSystemFont: false
@@ -118,7 +118,7 @@ QtObject{
             name: "APPLE_II_SCALED"
             text: "Apple ][ (1977)"
             source: "fonts/1977-apple2/PrintChar21.ttf"
-            lineSpacing: 2
+            lineSpacing: 3
             pixelSize: 8
             baseScaling: 3.5
             fontWidth: 0.8
@@ -144,7 +144,7 @@ QtObject{
             source: "fonts/1981-ibm-pc/PxPlus_IBM_BIOS.ttf"
             lineSpacing: 3
             pixelSize: 8
-            baseScaling: 4.0
+            baseScaling: 3.5
             fontWidth: 0.8
             lowResolutionFont: true
             isSystemFont: false
@@ -179,7 +179,7 @@ QtObject{
             text: "HD: Hermit (Modern)"
             source: "fonts/modern-hermit/Hermit-medium.otf"
             lineSpacing: 0.05
-            pixelSize: 28
+            pixelSize: 27
             fontWidth: 1.0
             lowResolutionFont: false
             isSystemFont: false

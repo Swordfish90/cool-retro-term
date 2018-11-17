@@ -38,7 +38,7 @@ QtObject{
             source: "fonts/1977-commodore-pet/PetMe.ttf"
             lineSpacing: 3
             pixelSize: 8
-            baseScaling: 4.0
+            baseScaling: 3.5
             fontWidth: 0.7
         }
         ListElement{
@@ -47,7 +47,7 @@ QtObject{
             source: "fonts/1981-ibm-pc/PxPlus_IBM_BIOS.ttf"
             lineSpacing: 3
             pixelSize: 8
-            baseScaling: 4.0
+            baseScaling: 3.5
             fontWidth: 0.8
         }
         ListElement{
@@ -56,7 +56,7 @@ QtObject{
             source: "fonts/modern-proggy-tiny/ProggyTiny.ttf"
             lineSpacing: 1
             pixelSize: 16
-            baseScaling: 4.0
+            baseScaling: 3.3
             fontWidth: 0.9
         }
         ListElement{
@@ -81,9 +81,9 @@ QtObject{
             name: "APPLE_II"
             text: "Apple ][ (1977)"
             source: "fonts/1977-apple2/PrintChar21.ttf"
-            lineSpacing: 2
+            lineSpacing: 3
             pixelSize: 8
-            baseScaling: 4.0
+            baseScaling: 3.5
             fontWidth: 0.8
         }
         ListElement{
@@ -92,7 +92,7 @@ QtObject{
             source: "fonts/1979-atari-400-800/AtariClassic-Regular.ttf"
             lineSpacing: 3
             pixelSize: 8
-            baseScaling: 4.0
+            baseScaling: 3.5
             fontWidth: 0.7
         }
         ListElement{
@@ -101,7 +101,7 @@ QtObject{
             source: "fonts/1982-commodore64/C64_Pro_Mono-STYLE.ttf"
             lineSpacing: 3
             pixelSize: 8
-            baseScaling: 4.0
+            baseScaling: 3.5
             fontWidth: 0.7
         }
     }
