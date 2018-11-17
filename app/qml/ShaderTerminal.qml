@@ -30,7 +30,7 @@ ShaderEffect {
 
     property color fontColor: appSettings.fontColor
     property color backgroundColor: appSettings.backgroundColor
-    property real bloom: appSettings.bloom * 2.0
+    property real bloom: appSettings.bloom * 2.5
 
     property ShaderEffectSource burnInSource: burnInEffect.source
     property real burnIn: appSettings.burnIn
