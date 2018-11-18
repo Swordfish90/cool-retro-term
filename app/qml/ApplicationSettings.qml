@@ -24,7 +24,9 @@ import QtQuick.Controls 1.0
 import "utils.js" as Utils
 
 QtObject{
-    property string version: "1.0.1"
+    readonly property string version: "1.0.1"
+    readonly property int profileVersion: 2
+
 
     // STATIC CONSTANTS ////////////////////////////////////////////////////////
 
@@ -108,6 +110,8 @@ QtObject{
     signal terminalFontChanged(string fontFamily, int pixelSize, int lineSpacing, real screenScaling, real fontWidth)
 
     signal initializedSettings()
+
+    signal showErrorMessage(string message)
 
     property Loader fontManager: Loader{
         states: [
@@ -329,6 +333,17 @@ QtObject{
 
         bloomQuality = settings.bloomQuality !== undefined ? settings.bloomQuality : bloomQuality;
         burnInQuality = settings.burnInQuality !== undefined ? settings.burnInQuality : burnInQuality;
+    }
+
+    function userLoadProfileString(profileString) {
+        var profile = JSON.parse(profileString);
+        var version = profile.version !== undefined ? profile.version : 1;
+
+        if (version === profileVersion) {
+            loadProfileString(profileString);
+        } else {
+            showErrorMessage("This profile is not supported on this version of CRT.")
+        }
     }
 
     function loadProfileString(profileString){
