@@ -65,10 +65,6 @@ ShaderEffect {
 
     property real screen_brightness: Utils.lint(0.5, 1.5, appSettings.brightness)
 
-    property size rasterizationSmooth: Qt.size(
-                                           Utils.clamp(2.0 * virtual_resolution.width / (width * devicePixelRatio), 0.0, 1.0),
-                                           Utils.clamp(2.0 * virtual_resolution.height / (height * devicePixelRatio), 0.0, 1.0))
-
     property real dispX
     property real dispY
     property size virtual_resolution
@@ -173,7 +169,6 @@ ShaderEffect {
         uniform lowp float screen_brightness;
 
         uniform highp vec2 virtual_resolution;
-        uniform highp vec2 rasterizationSmooth;
         uniform highp float dispX;
         uniform highp float dispY;" +
 
@@ -221,18 +216,19 @@ ShaderEffect {
             }" : "") +
 
         "highp float getScanlineIntensity(vec2 coords) {
-            highp float result = 1.0;" +
+            float result = 1.0;" +
 
            (appSettings.rasterization != appSettings.no_rasterization ?
                "float val = 0.0;
-                val += smoothstep(0.0, 0.5, fract(coords.y * virtual_resolution.y));
-                val -= smoothstep(0.5, 1.0, fract(coords.y * virtual_resolution.y));
-                result *= mix(val, 1.0, rasterizationSmooth.y);" : "") +
+                vec2 rasterizationCoords = fract(coords * virtual_resolution);
+                val += smoothstep(0.0, 0.5, rasterizationCoords.y);
+                val -= smoothstep(0.5, 1.0, rasterizationCoords.y);
+                result *= mix(0.5, 1.0, val);" : "") +
            (appSettings.rasterization == appSettings.pixel_rasterization ?
                "val = 0.0;
-                val += smoothstep(0.0, 0.5, fract(coords.x * virtual_resolution.x));
-                val -= smoothstep(0.5, 1.0, fract(coords.x * virtual_resolution.x));
-                result *= mix(val, 1.0, rasterizationSmooth.x);" : "") + "
+                val += smoothstep(0.0, 0.5, rasterizationCoords.x);
+                val -= smoothstep(0.5, 1.0, rasterizationCoords.x);
+                result *= mix(0.5, 1.0, val);" : "") + "
 
            return result;
         }
@@ -319,6 +315,8 @@ ShaderEffect {
                 txt_color = max(txt_color, 0.5 * (txt_blur.rgb - vec3(blurDecay)));"
             : "") +
 
+             "txt_color *= getScanlineIntensity(coords);" +
+
              "txt_color += fontColor.rgb * color;" +
              "float greyscale_color = rgb2grey(txt_color);" +
 
@@ -327,8 +325,6 @@ ShaderEffect {
                  vec3 finalColor = mix(backgroundColor.rgb, foregroundColor, greyscale_color);"
             :
                 "vec3 finalColor = mix(backgroundColor.rgb, fontColor.rgb, greyscale_color);") +
-
-            "finalColor *= getScanlineIntensity(coords);" +
 
             (bloom !== 0 ?
                 "vec4 bloomFullColor = texture2D(bloomSource, coords);
