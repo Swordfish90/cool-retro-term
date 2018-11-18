@@ -30,7 +30,6 @@
         <file>FontScanlines.qml</file>
         <file>fonts/1977-apple2/PrintChar21.ttf</file>
         <file>fonts/1971-ibm-3278/3270Medium.ttf</file>
-        <file>fonts/modern-terminus/TerminusTTF-4.38.2.ttf</file>
         <file>Storage.qml</file>
         <file>CRTMainMenuBar.qml</file>
         <file>SettingsPerformanceTab.qml</file>
@@ -52,5 +51,6 @@
         <file>fonts/1985-ibm-pc-vga/PxPlus_IBM_VGA8.ttf</file>
         <file>fonts/1977-commodore-pet/PetMe.ttf</file>
         <file>BurnInEffect.qml</file>
+        <file>fonts/modern-terminus/TerminusTTF-4.46.0.ttf</file>
     </qresource>
 </RCC>

@@ -57,7 +57,7 @@ QtObject{
         ListElement{
             name: "TERMINUS_SCALED"
             text: "Terminus (Modern)"
-            source: "fonts/modern-terminus/TerminusTTF-4.38.2.ttf"
+            source: "fonts/modern-terminus/TerminusTTF-4.46.0.ttf"
             lineSpacing: 1
             pixelSize: 12
             baseScaling: 3.0
@@ -188,7 +188,7 @@ QtObject{
         ListElement{
             name: "TERMINUS"
             text: "HD: Terminus (Modern)"
-            source: "fonts/modern-terminus/TerminusTTF-4.38.2.ttf"
+            source: "fonts/modern-terminus/TerminusTTF-4.46.0.ttf"
             lineSpacing: 0.1
             pixelSize: 35
             fontWidth: 1.0
