@@ -24,7 +24,9 @@ import QtQuick.Controls 1.0
 import "utils.js" as Utils
 
 QtObject{
-    property string version: "1.0.1"
+    readonly property string version: "1.0.1"
+    readonly property int profileVersion: 2
+
 
     // STATIC CONSTANTS ////////////////////////////////////////////////////////
 
