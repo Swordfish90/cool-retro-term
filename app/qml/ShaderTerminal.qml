@@ -310,7 +310,7 @@ ShaderEffect {
             " : "") +
 
             (burnIn !== 0 ? "
-                vec4 txt_blur = texture2D(burnInSource, txt_coords);
+                vec4 txt_blur = texture2D(burnInSource, staticCoords);
                 float blurDecay = clamp((time - burnInLastUpdate) * burnInTime, 0.0, 1.0);
                 txt_color = max(txt_color, 0.5 * (txt_blur.rgb - vec3(blurDecay)));"
             : "") +
