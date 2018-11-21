@@ -51,5 +51,4 @@ parts:
       - qtdeclarative5-window-plugin
       - libgl1-mesa-dev
       - qtdeclarative5-dev-tools
-      - qml-module-qtquick-controls
       - qml-module-qtquick-extras
