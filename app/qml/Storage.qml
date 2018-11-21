@@ -23,20 +23,9 @@ import QtQuick.LocalStorage 2.0
 
 QtObject {
     property bool initialized: false
-    property string dbVersion: "1.1"
 
     function getDatabase() {
-        try {
-            return _getDatabase(dbVersion);
-        } catch (error) {
-            console.log("Error while reading from settings database:", error);
-            updateAndResetDatabase(_getDatabase(""));
-            return _getDatabase(dbVersion);
-        }
-    }
-
-    function _getDatabase(version) {
-        return LocalStorage.openDatabaseSync("coolretroterm", version, "StorageDatabase", 100000);
+         return LocalStorage.openDatabaseSync("coolretroterm", "1.0", "StorageDatabase", 100000);
     }
 
     function initialize() {
@@ -85,22 +74,9 @@ QtObject {
 
     function dropSettings(){
         var db = getDatabase();
-        dropSettingsFromDB(db);
-    }
-
-    function updateAndResetDatabase(db) {
-        console.log("Updating and resetting database.");
-        db.changeVersion(db.version, dbVersion);
-
-        try {
-            dropSettingsFromDB(db);
-        } catch (error) {}
-    }
-
-    function dropSettingsFromDB(db) {
         db.transaction(
             function(tx) {
                 tx.executeSql('DROP TABLE settings');
-        });
+          });
     }
 }
