@@ -298,7 +298,6 @@ ShaderEffect {
                 color += randomPass(coords * virtual_resolution) * glowingLine;" : "") +
 
             "vec3 txt_color = texture2D(source, txt_coords).rgb;" +
-            "txt_color *= min2(step(vec2(0.0), staticCoords) - step(vec2(1.0), staticCoords));" +
 
             (rbgShift !== 0 ? "
                 vec2 displacement = vec2(12.0, 0.0) * rbgShift * (0.6 * constantNoise.r + 0.4);
@@ -315,6 +314,7 @@ ShaderEffect {
                 txt_color = max(txt_color, 0.5 * (txt_blur.rgb - vec3(blurDecay)));"
             : "") +
 
+             "txt_color *= min2(step(vec2(0.0), staticCoords) - step(vec2(1.0), staticCoords));" +
              "txt_color *= getScanlineIntensity(coords);" +
 
              "txt_color += fontColor.rgb * color;" +
