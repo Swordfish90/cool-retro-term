@@ -41,7 +41,7 @@ QtObject{
     property int height: 768
 
     property bool fullscreen: false
-    property bool showMenubar: true
+    property bool showMenubar: Qt.platform.os === "osx" ? true : false
 
     property string wintitle: "cool-retro-term"
 

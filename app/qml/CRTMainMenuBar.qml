@@ -11,7 +11,7 @@ MenuBar {
     }
     Menu {
         title: qsTr("Edit")
-        visible: defaultMenuBar.visible
+        visible: defaultMenuBar.visible && appSettings.showMenubar
         MenuItem {action: copyAction}
         MenuItem {action: pasteAction}
         MenuSeparator{visible: Qt.platform.os !== "osx"}

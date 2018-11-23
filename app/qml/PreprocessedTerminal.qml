@@ -149,13 +149,12 @@ Item{
         id: linuxContextMenu
         Menu{
             id: contextmenu
-            MenuItem{action: copyAction}
-            MenuItem{action: pasteAction}
-            MenuSeparator{}
-            MenuItem{action: fullscreenAction}
-            MenuItem{action: showMenubarAction}
-            MenuSeparator{visible: !appSettings.showMenubar}
-            CRTMainMenuBar{visible: !appSettings.showMenubar}
+            MenuItem { action: copyAction }
+            MenuItem { action: pasteAction }
+            MenuSeparator { visible: !appSettings.showMenubar }
+            MenuItem { action: showsettingsAction ; visible: !appSettings.showMenubar}
+            MenuSeparator { visible: !appSettings.showMenubar }
+            CRTMainMenuBar { visible: !appSettings.showMenubar }
         }
     }
     Component {
