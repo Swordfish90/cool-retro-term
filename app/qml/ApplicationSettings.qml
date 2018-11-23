@@ -30,6 +30,7 @@ QtObject{
 
     // STATIC CONSTANTS ////////////////////////////////////////////////////////
 
+    readonly property real screenCurvatureSize: 0.2
     readonly property real minimumFontScaling: 0.25
     readonly property real maximumFontScaling: 2.50
 

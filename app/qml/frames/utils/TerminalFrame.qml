@@ -105,7 +105,7 @@ Item{
         id: staticLight
         property alias source: framesource
         property alias normals: framesourcenormals
-        property real screenCurvature: appSettings.screenCurvature
+        property real screenCurvature: appSettings.screenCurvature * appSettings.screenCurvatureSize
         property size curvature_coefficients: Qt.size(width / mainShader.width, height / mainShader.height)
         property real ambientLight: appSettings.ambientLight * 0.9 + 0.1
         property color fontColor: appSettings.fontColor

@@ -44,7 +44,7 @@ ShaderEffect {
     property size scaleNoiseSize: Qt.size((width) / (noiseTexture.width * appSettings.windowScaling * appSettings.totalFontScaling),
                                           (height) / (noiseTexture.height * appSettings.windowScaling * appSettings.totalFontScaling))
 
-    property real screenCurvature: appSettings.screenCurvature
+    property real screenCurvature: appSettings.screenCurvature * appSettings.screenCurvatureSize
     property real glowingLine: appSettings.glowingLine * 0.2
 
     property real chromaColor: appSettings.chromaColor;

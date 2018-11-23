@@ -209,7 +209,7 @@ Item{
             y = y / height;
 
             var cc = Qt.size(0.5 - x, 0.5 - y);
-            var distortion = (cc.height * cc.height + cc.width * cc.width) * appSettings.screenCurvature;
+            var distortion = (cc.height * cc.height + cc.width * cc.width) * appSettings.screenCurvature * appSettings.screenCurvatureSize;
 
             return Qt.point((x - cc.width  * (1+distortion) * distortion) * kterminal.width,
                            (y - cc.height * (1+distortion) * distortion) * kterminal.height)
