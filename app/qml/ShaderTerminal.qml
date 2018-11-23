@@ -317,7 +317,7 @@ ShaderEffect {
              "txt_color *= min2(step(vec2(0.0), staticCoords) - step(vec2(1.0), staticCoords));" +
              "txt_color *= getScanlineIntensity(coords);" +
 
-             "txt_color += fontColor.rgb * color;" +
+             "txt_color += vec3(color);" +
              "float greyscale_color = rgb2grey(txt_color);" +
 
             (chromaColor !== 0 ?
