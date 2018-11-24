@@ -24,7 +24,7 @@ import QtQuick.Controls 1.0
 import "utils.js" as Utils
 
 QtObject{
-    readonly property string version: "1.0.1"
+    readonly property string version: "1.1.0"
     readonly property int profileVersion: 2
 
 
