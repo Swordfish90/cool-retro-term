@@ -17,14 +17,14 @@ This terminal emulator works under Linux and macOS and requires Qt 5.2 or higher
 ![Image](<http://i.imgur.com/12EqlpL.png>)
 ![Image](<http://i.imgur.com/Lx0acQz.jpg>)
 
-## Get cool-retro-term
-You can either build cool-retro-term yourself (see below) or walk the easy way and install one of these packages:
+## Install
+Walk the easy way and install cool-retro-term using one of these convenient packages:
 
-Fedora has the `cool-retro-term` in the offcial repositories. All you have to do is `sudo dnf install cool-retro-term`.
+**Fedora** has the `cool-retro-term` in the offcial repositories. All you have to do is `sudo dnf install cool-retro-term`.
 
-Users of openSUSE can grab a package from [Open Build Service](http://software.opensuse.org/package/cool-retro-term).
+Users of **openSUSE** can grab a package from [Open Build Service](http://software.opensuse.org/package/cool-retro-term).
 
-Arch users can install this [package](https://aur.archlinux.org/packages/cool-retro-term-git/) directly via the [AUR](https://aur.archlinux.org):
+**Arch** users can install this [package](https://aur.archlinux.org/packages/cool-retro-term-git/) directly via the [AUR](https://aur.archlinux.org):
 
     yaourt -S aur/cool-retro-term-git
 
@@ -34,7 +34,7 @@ or use:
 
 to install precompiled from community repository.
 
-Gentoo users can now install the second release "1.0.1" from a 3rd-party repository preferably via layman:
+**Gentoo** users can now install the second release "1.0.1" from a 3rd-party repository preferably via layman:
 
     USE="git" emerge app-portage/layman
     wget https://www.gerczei.eu/files/gerczei.xml -O /etc/layman/overlays/gerczei.xml
@@ -45,13 +45,15 @@ The live ebuild (version 9999-r1) tracking the bleeding-edge WIP codebase also r
 
 A word of warning: USE flags and keywords are to be added to portage's configuration files and every emerge operation should be executed with '-p' (short option for --pretend) appended to the command line first as per best practice!
 
-Ubuntu users of 14.04 LTS (Trusty) up to 15.10 (Wily) can use [this PPA](https://launchpad.net/~bugs-launchpad-net-falkensweb).
+Users of **Ubuntu 14.04 LTS (Trusty) up to 15.10 (Wily)** can use [this PPA](https://launchpad.net/~bugs-launchpad-net-falkensweb).
 
-Ubuntu 17.10 can use [this PPA](https://launchpad.net/%7Evantuz/+archive/ubuntu/cool-retro-term)
+**Ubuntu 17.10** can use [this PPA](https://launchpad.net/%7Evantuz/+archive/ubuntu/cool-retro-term)
 
-macOS users can grab the latest dmg from the release page: https://github.com/Swordfish90/cool-retro-term/releases
+**macOS** users can grab the latest dmg from the release page: https://github.com/Swordfish90/cool-retro-term/releases
 
 ## Build instructions (Linux)
+
+Build cool-retro-term yourself, you know, the retro way.
 
 ## Dependencies
 Make sure to install these first.
