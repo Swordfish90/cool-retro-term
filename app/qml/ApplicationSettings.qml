@@ -245,7 +245,9 @@ QtObject{
             frameReflections: _frameReflections,
             showMenubar: showMenubar,
             bloomQuality: bloomQuality,
-            burnInQuality: burnInQuality
+            burnInQuality: burnInQuality,
+            useCustomCommand: useCustomCommand,
+            customCommand: customCommand
         }
         return stringify(settings);
     }
@@ -272,9 +274,7 @@ QtObject{
             ambientLight: ambientLight,
             windowOpacity: windowOpacity,
             fontName: fontNames[rasterization],
-            fontWidth: fontWidth,
-            useCustomCommand: useCustomCommand,
-            customCommand: customCommand
+            fontWidth: fontWidth
         }
         return settings;
     }
@@ -332,6 +332,9 @@ QtObject{
 
         bloomQuality = settings.bloomQuality !== undefined ? settings.bloomQuality : bloomQuality;
         burnInQuality = settings.burnInQuality !== undefined ? settings.burnInQuality : burnInQuality;
+
+        useCustomCommand = settings.useCustomCommand !== undefined ? settings.useCustomCommand : useCustomCommand
+        customCommand = settings.customCommand !== undefined ? settings.customCommand : customCommand
     }
 
     function loadProfileString(profileString){
@@ -366,9 +369,6 @@ QtObject{
 
         fontNames[rasterization] = settings.fontName !== undefined ? settings.fontName : fontNames[rasterization];
         fontWidth = settings.fontWidth !== undefined ? settings.fontWidth : fontWidth;
-
-        useCustomCommand = settings.useCustomCommand !== undefined ? settings.useCustomCommand : useCustomCommand
-        customCommand = settings.customCommand !== undefined ? settings.customCommand : customCommand
 
         handleFontChanged();
     }
@@ -427,7 +427,6 @@ QtObject{
                   "burnIn": 0.2517,
                   "chromaColor": 0.2483,
                   "contrast": 0.7959,
-                  "customCommand": "",
                   "flickering": 0.1,
                   "fontColor": "#ff8100",
                   "fontName": "TERMINUS_SCALED",
@@ -441,7 +440,6 @@ QtObject{
                   "saturationColor": 0.2483,
                   "screenCurvature": 0.1997,
                   "staticNoise": 0.1198,
-                  "useCustomCommand": false,
                   "windowOpacity": 1
                 }'
             builtin: true
@@ -457,7 +455,6 @@ QtObject{
                   "burnIn": 0.2517,
                   "chromaColor": 0.0,
                   "contrast": 0.7959,
-                  "customCommand": "",
                   "flickering": 0.1,
                   "fontColor": "#0ccc68",
                   "fontName": "TERMINUS_SCALED",
@@ -471,7 +468,6 @@ QtObject{
                   "saturationColor": 0.0,
                   "screenCurvature": 0.1997,
                   "staticNoise": 0.1198,
-                  "useCustomCommand": false,
                   "windowOpacity": 1
                 }'
             builtin: true
@@ -487,7 +483,6 @@ QtObject{
                   "burnIn": 0.3,
                   "chromaColor": 0.5,
                   "contrast": 0.6,
-                  "customCommand": "",
                   "flickering": 0.1,
                   "fontColor": "#7cff4f",
                   "fontName": "PRO_FONT_SCALED",
@@ -501,7 +496,6 @@ QtObject{
                   "saturationColor": 0.5,
                   "screenCurvature": 0.2,
                   "staticNoise": 0.15,
-                  "useCustomCommand": false,
                   "windowOpacity": 1
                 }'
             builtin: true
@@ -517,7 +511,6 @@ QtObject{
                   "burnIn": 0.1024,
                   "chromaColor": 0.7517,
                   "contrast": 0.7473,
-                  "customCommand": "",
                   "flickering": 0.1962,
                   "fontColor": "#ffffff",
                   "fontName": "COMMODORE_PET",
@@ -531,7 +524,6 @@ QtObject{
                   "saturationColor": 0,
                   "screenCurvature": 0,
                   "staticNoise": 0.1545,
-                  "useCustomCommand": false,
                   "windowOpacity": 1
                 }'
             builtin: true
@@ -547,7 +539,6 @@ QtObject{
                   "burnIn": 0.5017,
                   "chromaColor": 0,
                   "contrast": 0.85,
-                  "customCommand": "",
                   "flickering": 0.2,
                   "fontColor": "#00d56d",
                   "fontName": "APPLE_II",
@@ -561,7 +552,6 @@ QtObject{
                   "saturationColor": 0,
                   "screenCurvature": 0.8976,
                   "staticNoise": 0.099,
-                  "useCustomCommand": false,
                   "windowOpacity": 1
                 }'
             builtin: true
@@ -577,7 +567,6 @@ QtObject{
                   "burnIn": 0.4983,
                   "chromaColor": 0,
                   "contrast": 0.7473,
-                  "customCommand": "",
                   "flickering": 0.9,
                   "fontColor": "#00ff3e",
                   "fontName": "COMMODORE_PET",
@@ -591,7 +580,6 @@ QtObject{
                   "saturationColor": 0,
                   "screenCurvature": 0.3003,
                   "staticNoise": 0.2969,
-                  "useCustomCommand": false,
                   "windowOpacity": 1
                 }'
             builtin: true
@@ -607,7 +595,6 @@ QtObject{
                   "burnIn": 0.0469,
                   "chromaColor": 1,
                   "contrast": 0.85,
-                  "customCommand": "",
                   "flickering": 0.0955,
                   "fontColor": "#ffffff",
                   "fontName": "IBM_DOS",
@@ -621,7 +608,6 @@ QtObject{
                   "saturationColor": 0,
                   "screenCurvature": 0.401,
                   "staticNoise": 0.0503,
-                  "useCustomCommand": false,
                   "windowOpacity": 1
                 }'
             builtin: true
@@ -637,7 +623,6 @@ QtObject{
                   "burnIn": 0.6,
                   "chromaColor": 0,
                   "contrast": 0.85,
-                  "customCommand": "",
                   "flickering": 0,
                   "fontColor": "#0ccc68",
                   "fontName": "IBM_3278",
@@ -651,7 +636,6 @@ QtObject{
                   "saturationColor": 0,
                   "screenCurvature": 0.1997,
                   "staticNoise": 0,
-                  "useCustomCommand": false,
                   "windowOpacity": 1
                 }'
             builtin: true
@@ -667,7 +651,6 @@ QtObject{
                   "burnIn": 0.0955,
                   "chromaColor": 1,
                   "contrast": 0.85,
-                  "customCommand": "",
                   "flickering": 0.2,
                   "fontColor": "#729fcf",
                   "fontName": "TERMINUS",
@@ -681,7 +664,6 @@ QtObject{
                   "saturationColor": 0.4983,
                   "screenCurvature": 0.05,
                   "staticNoise": 0.0955,
-                  "useCustomCommand": false,
                   "windowOpacity": 0.7
                 }'
             builtin: true
