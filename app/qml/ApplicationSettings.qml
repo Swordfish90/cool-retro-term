@@ -46,20 +46,23 @@ QtObject{
 
     property string wintitle: "cool-retro-term"
 
-    property real windowOpacity: 1.0
-    property real ambientLight: 0.2
-    property real contrast: 0.85
-    property real brightness: 0.5
-
     property bool showTerminalSize: true
     property real windowScaling: 1.0
 
     property real fps: 24
     property bool verbose: false
 
+    property real bloomQuality: 0.5
+    property real burnInQuality: 0.5
+
     onWindowScalingChanged: handleFontChanged();
 
     // PROFILE SETTINGS ///////////////////////////////////////////////////////
+
+    property real windowOpacity: 1.0
+    property real ambientLight: 0.2
+    property real contrast: 0.80
+    property real brightness: 0.5
 
     property bool useCustomCommand: false
     property string customCommand: ""
@@ -70,19 +73,16 @@ QtObject{
     property color fontColor: Utils.mix(Utils.strToColor(saturatedColor), Utils.strToColor(_backgroundColor), 0.7 + (contrast * 0.3))
     property color backgroundColor: Utils.mix(Utils.strToColor(_backgroundColor), Utils.strToColor(saturatedColor), 0.7 + (contrast * 0.3))
 
-    property real staticNoise: 0.1
-    property real screenCurvature: 0.1
+    property real staticNoise: 0.12
+    property real screenCurvature: 0.2
     property real glowingLine: 0.2
-    property real burnIn: 0.40
-    property real bloom: 0.65
+    property real burnIn: 0.25
+    property real bloom: 0.55
 
-    property real bloomQuality: 0.5
-    property real burnInQuality: 0.5
+    property real chromaColor: 0.25
+    property real saturationColor: 0.25
 
-    property real chromaColor: 0.0
-    property real saturationColor: 0.0
-
-    property real jitter: 0.18
+    property real jitter: 0.2
 
     property real horizontalSync: 0.08
     property real flickering: 0.1
@@ -419,52 +419,271 @@ QtObject{
     property ListModel profilesList: ListModel{
         ListElement{
             text: "Default Amber"
-            obj_string: '{"ambientLight":0.16,"backgroundColor":"#000000","bloom":0.65,"brightness":0.5,"flickering":0.1,"contrast":0.85,"fontName":"TERMINUS_SCALED","fontColor":"#ff8100","frameName":"SIMPLE_WHITE_FRAME","glowingLine":0.2,"horizontalSync":0.16,"jitter":0.18,"burnIn":0.4,"staticNoise":0.1,"rasterization":0,"screenCurvature":0.1,"windowOpacity":1,"chromaColor":0,"saturationColor":0,"rbgShift":0,"fontWidth":1.0,"useCustomCommand":false,"customCommand":""}'
+            obj_string: '{
+                  "ambientLight": 0.2,
+                  "backgroundColor": "#000000",
+                  "bloom": 0.5538,
+                  "brightness": 0.5,
+                  "burnIn": 0.2517,
+                  "chromaColor": 0.2483,
+                  "contrast": 0.7959,
+                  "customCommand": "",
+                  "flickering": 0.1,
+                  "fontColor": "#ff8100",
+                  "fontName": "TERMINUS_SCALED",
+                  "fontWidth": 1,
+                  "frameName": "SIMPLE_WHITE_FRAME",
+                  "glowingLine": 0.2,
+                  "horizontalSync": 0.08,
+                  "jitter": 0.1997,
+                  "rasterization": 0,
+                  "rbgShift": 0,
+                  "saturationColor": 0.2483,
+                  "screenCurvature": 0.1997,
+                  "staticNoise": 0.1198,
+                  "useCustomCommand": false,
+                  "windowOpacity": 1
+                }'
             builtin: true
         }
         ListElement{
-            text: "Default Green"
-            obj_string: '{"ambientLight":0.16,"backgroundColor":"#000000","bloom":0.4,"brightness":0.5,"flickering":0.1,"contrast":0.85,"fontName":"TERMINUS_SCALED","fontColor":"#0ccc68","frameName":"SIMPLE_WHITE_FRAME","glowingLine":0.2,"horizontalSync":0.16,"jitter":0.18,"burnIn":0.45,"staticNoise":0.1,"rasterization":0,"screenCurvature":0.1,"windowOpacity":1,"chromaColor":0,"saturationColor":0,"rbgShift":0,"fontWidth":1.0,"useCustomCommand":false,"customCommand":""}'
+            text: "Monochrome Green"
+            obj_string: '
+                {
+                  "ambientLight": 0.2,
+                  "backgroundColor": "#000000",
+                  "bloom": 0.5538,
+                  "brightness": 0.5,
+                  "burnIn": 0.2517,
+                  "chromaColor": 0.0,
+                  "contrast": 0.7959,
+                  "customCommand": "",
+                  "flickering": 0.1,
+                  "fontColor": "#0ccc68",
+                  "fontName": "TERMINUS_SCALED",
+                  "fontWidth": 1,
+                  "frameName": "SIMPLE_WHITE_FRAME",
+                  "glowingLine": 0.2,
+                  "horizontalSync": 0.08,
+                  "jitter": 0.1997,
+                  "rasterization": 0,
+                  "rbgShift": 0,
+                  "saturationColor": 0.0,
+                  "screenCurvature": 0.1997,
+                  "staticNoise": 0.1198,
+                  "useCustomCommand": false,
+                  "windowOpacity": 1
+                }'
             builtin: true
         }
         ListElement{
-            text: "Default Scanlines"
-            obj_string: '{"ambientLight":0.16,"backgroundColor":"#000000","bloom":0.4,"brightness":0.5,"flickering":0.1,"contrast":0.85,"fontName":"COMMODORE_PET","fontColor":"#00ff5b","frameName":"SIMPLE_WHITE_FRAME","glowingLine":0.2,"horizontalSync":0.14,"jitter":0.11,"burnIn":0.4,"staticNoise":0.05,"rasterization":1,"screenCurvature":0.1,"windowOpacity":1,"chromaColor":0,"saturationColor":0,"rbgShift":0,"fontWidth":1.0,"useCustomCommand":false,"customCommand":""}'
+            text: "Green Scanlines"
+            obj_string: '
+                {
+                  "ambientLight": 0,
+                  "backgroundColor": "#000000",
+                  "bloom": 0.6,
+                  "brightness": 0.5,
+                  "burnIn": 0.3,
+                  "chromaColor": 0.5,
+                  "contrast": 0.6,
+                  "customCommand": "",
+                  "flickering": 0.1,
+                  "fontColor": "#7cff4f",
+                  "fontName": "PRO_FONT_SCALED",
+                  "fontWidth": 1,
+                  "frameName": "NO_FRAME",
+                  "glowingLine": 0.2,
+                  "horizontalSync": 0.151,
+                  "jitter": 0.11,
+                  "rasterization": 1,
+                  "rbgShift": 0,
+                  "saturationColor": 0.5,
+                  "screenCurvature": 0.2,
+                  "staticNoise": 0.15,
+                  "useCustomCommand": false,
+                  "windowOpacity": 1
+                }'
             builtin: true
         }
         ListElement{
             text: "Default Pixelated"
-            obj_string: '{"ambientLight":0.16,"backgroundColor":"#000000","bloom":0,"brightness":0.5,"flickering":0.2,"contrast":0.85,"fontName":"COMMODORE_PET","fontColor":"#ffffff","frameName":"ROUGH_BLACK_FRAME","glowingLine":0.2,"horizontalSync":0.2,"jitter":0,"burnIn":0.45,"staticNoise":0.19,"rasterization":2,"screenCurvature":0.05,"windowOpacity":1,"chromaColor":0,"saturationColor":0,"rbgShift":0,"fontWidth":1.0,"useCustomCommand":false,"customCommand":""}'
+            obj_string: '
+                {
+                  "ambientLight": 0,
+                  "backgroundColor": "#000000",
+                  "bloom": 0.4045,
+                  "brightness": 0.6041,
+                  "burnIn": 0.1024,
+                  "chromaColor": 0.7517,
+                  "contrast": 0.7473,
+                  "customCommand": "",
+                  "flickering": 0.1962,
+                  "fontColor": "#ffffff",
+                  "fontName": "COMMODORE_PET",
+                  "fontWidth": 1,
+                  "frameName": "NO_FRAME",
+                  "glowingLine": 0.2,
+                  "horizontalSync": 0.151,
+                  "jitter": 0,
+                  "rasterization": 2,
+                  "rbgShift": 0,
+                  "saturationColor": 0,
+                  "screenCurvature": 0,
+                  "staticNoise": 0.1545,
+                  "useCustomCommand": false,
+                  "windowOpacity": 1
+                }'
             builtin: true
         }
         ListElement{
             text: "Apple ]["
-            obj_string: '{"ambientLight":0.16,"backgroundColor":"#000000","bloom":0.5,"brightness":0.5,"flickering":0.2,"contrast":0.85,"fontName":"APPLE_II","fontColor":"#2fff91","frameName":"SIMPLE_WHITE_FRAME","glowingLine":0.22,"horizontalSync":0.16,"jitter":0.1,"burnIn":0.65,"staticNoise":0.08,"rasterization":1,"screenCurvature":0.18,"windowOpacity":1,"chromaColor":0,"saturationColor":0,"rbgShift":0,"fontWidth":1.0,"useCustomCommand":false,"customCommand":""}'
+            obj_string:
+                '{
+                  "ambientLight": 0.3038,
+                  "backgroundColor": "#000000",
+                  "bloom": 0.5,
+                  "brightness": 0.5,
+                  "burnIn": 0.5017,
+                  "chromaColor": 0,
+                  "contrast": 0.85,
+                  "customCommand": "",
+                  "flickering": 0.2,
+                  "fontColor": "#00d56d",
+                  "fontName": "APPLE_II",
+                  "fontWidth": 1,
+                  "frameName": "SIMPLE_WHITE_FRAME",
+                  "glowingLine": 0.22,
+                  "horizontalSync": 0.16,
+                  "jitter": 0.1,
+                  "rasterization": 1,
+                  "rbgShift": 0,
+                  "saturationColor": 0,
+                  "screenCurvature": 0.8976,
+                  "staticNoise": 0.099,
+                  "useCustomCommand": false,
+                  "windowOpacity": 1
+                }'
             builtin: true
         }
         ListElement{
             text: "Vintage"
-            obj_string: '{"ambientLight":0.5,"backgroundColor":"#000000","bloom":0.4,"brightness":0.5,"flickering":0.9,"contrast":0.80,"fontName":"COMMODORE_PET","fontColor":"#00ff3e","frameName":"ROUGH_BLACK_FRAME","glowingLine":0.3,"horizontalSync":0.42,"jitter":0.4,"burnIn":0.75,"staticNoise":0.2,"rasterization":1,"screenCurvature":0.1,"windowOpacity":1,"chromaColor":0,"saturationColor":0,"rbgShift":0,"fontWidth":1.0,"useCustomCommand":false,"customCommand":""}'
+            obj_string: '
+                {
+                  "ambientLight": 0.5,
+                  "backgroundColor": "#000000",
+                  "bloom": 0.4983,
+                  "brightness": 0.5014,
+                  "burnIn": 0.4983,
+                  "chromaColor": 0,
+                  "contrast": 0.7473,
+                  "customCommand": "",
+                  "flickering": 0.9,
+                  "fontColor": "#00ff3e",
+                  "fontName": "COMMODORE_PET",
+                  "fontWidth": 1,
+                  "frameName": "ROUGH_BLACK_FRAME",
+                  "glowingLine": 0.3,
+                  "horizontalSync": 0.42,
+                  "jitter": 0.4,
+                  "rasterization": 1,
+                  "rbgShift": 0.2969,
+                  "saturationColor": 0,
+                  "screenCurvature": 0.3003,
+                  "staticNoise": 0.2969,
+                  "useCustomCommand": false,
+                  "windowOpacity": 1
+                }'
             builtin: true
         }
         ListElement{
             text: "IBM Dos"
-            obj_string: '{"ambientLight":0.16,"backgroundColor":"#000000","bloom":0.4,"brightness":0.5,"flickering":0.07,"contrast":0.85,"fontName":"IBM_DOS","fontColor":"#ffffff","frameName":"SIMPLE_WHITE_FRAME","glowingLine":0.13,"horizontalSync":0,"jitter":0.16,"burnIn":0.3,"staticNoise":0.03,"rasterization":0,"screenCurvature":0.1,"windowOpacity":1,"chromaColor":1,"saturationColor":0,"rbgShift":0.35,"fontWidth":1.0,"useCustomCommand":false,"customCommand":""}'
+            obj_string:
+                '{
+                  "ambientLight": 0.151,
+                  "backgroundColor": "#000000",
+                  "bloom": 0.2969,
+                  "brightness": 0.5,
+                  "burnIn": 0.0469,
+                  "chromaColor": 1,
+                  "contrast": 0.85,
+                  "customCommand": "",
+                  "flickering": 0.0955,
+                  "fontColor": "#ffffff",
+                  "fontName": "IBM_DOS",
+                  "fontWidth": 1,
+                  "frameName": "SIMPLE_WHITE_FRAME",
+                  "glowingLine": 0.1545,
+                  "horizontalSync": 0,
+                  "jitter": 0.1545,
+                  "rasterization": 0,
+                  "rbgShift": 0.3524,
+                  "saturationColor": 0,
+                  "screenCurvature": 0.401,
+                  "staticNoise": 0.0503,
+                  "useCustomCommand": false,
+                  "windowOpacity": 1
+                }'
             builtin: true
         }
         ListElement{
             text: "IBM 3278"
-            obj_string: '{"ambientLight":0.1,"backgroundColor":"#000000","bloom":0.15,"brightness":0.5,"flickering":0,"contrast":0.85,"fontName":"IBM_3278","fontColor":"#0ccc68","frameName":"SIMPLE_WHITE_FRAME","glowingLine":0,"horizontalSync":0,"jitter":0,"burnIn":0.6,"staticNoise":0,"rasterization":0,"screenCurvature":0.1,"windowOpacity":1,"chromaColor":0,"saturationColor":0,"rbgShift":0,"fontWidth":1.0,"useCustomCommand":false,"customCommand":""}'
+            obj_string:
+                '{
+                  "ambientLight": 0.1,
+                  "backgroundColor": "#000000",
+                  "bloom": 0.2969,
+                  "brightness": 0.5,
+                  "burnIn": 0.6,
+                  "chromaColor": 0,
+                  "contrast": 0.85,
+                  "customCommand": "",
+                  "flickering": 0,
+                  "fontColor": "#0ccc68",
+                  "fontName": "IBM_3278",
+                  "fontWidth": 1,
+                  "frameName": "SIMPLE_WHITE_FRAME",
+                  "glowingLine": 0,
+                  "horizontalSync": 0,
+                  "jitter": 0,
+                  "rasterization": 0,
+                  "rbgShift": 0,
+                  "saturationColor": 0,
+                  "screenCurvature": 0.1997,
+                  "staticNoise": 0,
+                  "useCustomCommand": false,
+                  "windowOpacity": 1
+                }'
             builtin: true
         }
         ListElement{
-            text: "Knight TV"
-	    obj_string: '{"ambientLight":0.16,"backgroundColor":"#000000","bloom":0.45,"brightness":0.5,"burnIn":0.3,"chromaColor":0,"contrast":0.85,"customCommand":"","flickering":0.1,"fontColor":"#0ccc68","fontName":"Knight_TV","fontWidth":1,"frameName":"SIMPLE_WHITE_FRAME","glowingLine":0,"horizontalSync":0.16,"jitter":0,"rasterization":0,"rbgShift":0,"saturationColor":0,"screenCurvature":0.07,"staticNoise":0,"useCustomCommand":false,"windowOpacity":1}'
-            builtin: true
-        }
-        ListElement{
-            text: "Transparent Green"
-            obj_string: '{"ambientLight":0.2,"backgroundColor":"#000000","bloom":0.45,"brightness":0.5,"flickering":0.20,"contrast":0.85,"fontName":"TERMINUS_SCALED","fontColor":"#0ccc68","frameName":"NO_FRAME","glowingLine":0.16,"horizontalSync":0.1,"jitter":0.20,"burnIn":0.25,"staticNoise":0.20,"rasterization":0,"screenCurvature":0.05,"windowOpacity":0.60,"chromaColor":0,"saturationColor":0,"rbgShift":0,"fontWidth":1.0,"useCustomCommand":false,"customCommand":""}'
+            text: "Futuristic"
+            obj_string:
+                '{
+                  "ambientLight": 0,
+                  "backgroundColor": "#000000",
+                  "bloom": 0.5017,
+                  "brightness": 0.5014,
+                  "burnIn": 0.0955,
+                  "chromaColor": 1,
+                  "contrast": 0.85,
+                  "customCommand": "",
+                  "flickering": 0.2,
+                  "fontColor": "#729fcf",
+                  "fontName": "TERMINUS",
+                  "fontWidth": 1,
+                  "frameName": "NO_FRAME",
+                  "glowingLine": 0.1476,
+                  "horizontalSync": 0,
+                  "jitter": 0.099,
+                  "rasterization": 0,
+                  "rbgShift": 0,
+                  "saturationColor": 0.4983,
+                  "screenCurvature": 0.05,
+                  "staticNoise": 0.0955,
+                  "useCustomCommand": false,
+                  "windowOpacity": 0.7
+                }'
             builtin: true
         }
     }
