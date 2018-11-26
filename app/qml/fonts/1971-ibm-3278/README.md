@@ -33,7 +33,7 @@ packaged version may not be the latest version, but it's good enough for
 most purposes. For those who don't have the luxury of a proper
 system-managed package, Adobe Type 1, TTF, OTF and WOFF versions are
 available for download on
-http://s3.amazonaws.com/3270font/3270_fonts_d250fd9.zip (although this
+http://s3.amazonaws.com/3270font/3270_fonts_4cfe95c.zip (although this
 URL may not always reflect the latest version).
 
 ![ASCII is so 60's](
@@ -52,7 +52,8 @@ and read the tutorials.
 ![Powerline-shell compatible!](
 https://raw.githubusercontent.com/wiki/rbanffy/3270font/powerline.png)
 
-![Using it on OSX (don't forget to turn antialiasing on)](https://raw.githubusercontent.com/wiki/rbanffy/3270font/osx_terminal.png)
+![Using it on OSX (don't forget to turn antialiasing on)](
+https://raw.githubusercontent.com/wiki/rbanffy/3270font/osx_terminal.png)
 
 If you are running Windows, you'll probably need something like
 Cygwin, but, in the end, the font works correctly (with some very
@@ -82,13 +83,15 @@ Contributing
 
 I fear GitHub's pull-request mechanism may not be very
 FontForge-friendly. If you want to contribute (there are a lot of
-missing glyphs, such as the APL set and most non-latin alphabets which
-most likely were never built into 3270 terminals), the best workflow
-would be to make add the encoding slots (if needed), add/make the
-changes, reencode it in "Unicode, Full", compact it and validate
-it. Check if the `git diff` command gives out something sensible (does
-not change things you didn't intend to) and make a pull request. If, in
-doubt, get in touch and we will figure out how to do it right.
+missing glyphs, such as most non-latin alphabets which most likely were
+never built into 3270 terminals), the best workflow would probably be to
+add the encoding slots (if needed), add/make the changes, remove the
+unchanged glyphs and save it as a different file. If, in doubt, get in
+touch and we will figure out how to do it right.
+
+In order to generate the sample image and the grids for FontForge,
+you'll need a Python 3 environment with PIL or pillow installed. The
+requirements.txt file lists everything you need to do it.
 
 Known problems
 --------------
@@ -99,3 +102,20 @@ symbols are at the end of the font, along with some glyphs useful for
 building others.
 
 Please refer to http://x3270.bgp.nu/Charset.html for a complete map.
+
+Future improvements
+-------------------
+
+A grid generator is provided for producing various grid sizes for the
+font. Those grids are not used yet, but they are intended to be used to
+align font features to provide better rendering at common font size
+choices. The captures below exemplify these choices:
+
+![x3270 with 32 pixel font (used as bitmap template for the font)](
+https://raw.githubusercontent.com/wiki/rbanffy/3270font/measurements_x3270_32.png)
+
+![x3270 with 20 pixel font](
+https://raw.githubusercontent.com/wiki/rbanffy/3270font/measurements_x3270_20.png)
+
+![Gnome Terminal on Ubuntu 17.10](
+https://raw.githubusercontent.com/wiki/rbanffy/3270font/measurements_gnome_terminal.png)
