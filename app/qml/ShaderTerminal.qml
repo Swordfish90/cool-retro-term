@@ -56,17 +56,10 @@ ShaderEffect {
 
     property int rasterization: appSettings.rasterization
 
-    property bool frameReflections: appSettings.frameReflections
-
-    property real disp_top: (frame.displacementTop * appSettings.windowScaling) / height
-    property real disp_bottom: (frame.displacementBottom * appSettings.windowScaling) / height
-    property real disp_left: (frame.displacementLeft * appSettings.windowScaling) / width
-    property real disp_right: (frame.displacementRight * appSettings.windowScaling) / width
-
     property real screen_brightness: Utils.lint(0.5, 1.5, appSettings.brightness)
 
-    property real dispX
-    property real dispY
+    property real ambientLight: appSettings.ambientLight * 0.2
+
     property size virtual_resolution
 
     property real time: timeManager.time
@@ -103,11 +96,6 @@ ShaderEffect {
         uniform highp mat4 qt_Matrix;
         uniform highp float time;
 
-        uniform highp float disp_left;
-        uniform highp float disp_right;
-        uniform highp float disp_top;
-        uniform highp float disp_bottom;
-
         attribute highp vec4 qt_Vertex;
         attribute highp vec2 qt_MultiTexCoord0;
 
@@ -130,8 +118,7 @@ ShaderEffect {
 
         "
         void main() {
-            qt_TexCoord0.x = (qt_MultiTexCoord0.x - disp_left) / (1.0 - disp_left - disp_right);
-            qt_TexCoord0.y = (qt_MultiTexCoord0.y - disp_top) / (1.0 - disp_top - disp_bottom);
+            qt_TexCoord0 = qt_MultiTexCoord0;
             vec2 coords = vec2(fract(time/(1024.0*2.0)), fract(time/(1024.0*1024.0)));" +
 
             (!fallBack && (flickering !== 0.0 || horizontalSync !== 0.0 || rbgShift !== 0) ?
@@ -168,9 +155,7 @@ ShaderEffect {
         uniform highp vec4 backgroundColor;
         uniform lowp float screen_brightness;
 
-        uniform highp vec2 virtual_resolution;
-        uniform highp float dispX;
-        uniform highp float dispY;" +
+        uniform highp vec2 virtual_resolution;" +
 
         (bloom !== 0 ? "
             uniform highp sampler2D bloomSource;
@@ -195,6 +180,8 @@ ShaderEffect {
             uniform lowp vec2 jitterDisplacement;" : "") +
         (rbgShift !== 0 ? "
             uniform lowp float rbgShift;" : "") +
+        (ambientLight !== 0 ? "
+            uniform lowp float ambientLight;" : "") +
 
         (fallBack && horizontalSync !== 0 ? "
             uniform lowp float horizontalSync;" : "") +
@@ -266,7 +253,8 @@ ShaderEffect {
 
             (screenCurvature !== 0 ? "
                 float distortion = dot(cc, cc) * screenCurvature;
-                vec2 staticCoords = (qt_TexCoord0 - cc * (1.0 + distortion) * distortion);"
+                vec2 curvatureCoords = (qt_TexCoord0 - cc * (1.0 + distortion) * distortion);
+                vec2 staticCoords = -curvatureCoords + vec2(2.0) * step(vec2(0.0), curvatureCoords) * curvatureCoords - vec2(2.0) * step(vec2(1.0), curvatureCoords) * curvatureCoords;"
             :"
                 vec2 staticCoords = qt_TexCoord0;") +
 
@@ -314,7 +302,6 @@ ShaderEffect {
                 txt_color = max(txt_color, 0.5 * (txt_blur.rgb - vec3(blurDecay)));"
             : "") +
 
-             "txt_color *= min2(step(vec2(0.0), staticCoords) - step(vec2(1.0), staticCoords));" +
              "txt_color *= getScanlineIntensity(coords);" +
 
              "txt_color += vec3(color);" +
@@ -337,11 +324,17 @@ ShaderEffect {
                 "finalColor += clamp(bloomColor * bloom * bloomAlpha, 0.0, 0.5);"
             : "") +
 
-            "finalColor *= smoothstep(-dispX, 0.0, staticCoords.x) - smoothstep(1.0, 1.0 + dispX, staticCoords.x);
-             finalColor *= smoothstep(-dispY, 0.0, staticCoords.y) - smoothstep(1.0, 1.0 + dispY, staticCoords.y);" +
+            (screenCurvature !== 0 ? "
+                vec2 curvatureMask = step(vec2(0.0), curvatureCoords) - step(vec2(1.0), curvatureCoords);
+                finalColor *= clamp(0.0, 1.0, curvatureMask.x + curvatureMask.y);"
+            :"") +
 
             (flickering !== 0 ? "
                 finalColor *= brightness;" : "") +
+
+            (ambientLight !== 0 ? "
+                finalColor += vec3(ambientLight) * (1.0 - distance) * (1.0 - distance);" : "") +
+
 
             "gl_FragColor = vec4(finalColor * screen_brightness, qt_Opacity);" +
         "}"

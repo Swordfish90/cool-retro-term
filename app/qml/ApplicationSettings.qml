@@ -27,10 +27,9 @@ QtObject{
     readonly property string version: "1.1.0"
     readonly property int profileVersion: 2
 
-
     // STATIC CONSTANTS ////////////////////////////////////////////////////////
 
-    readonly property real screenCurvatureSize: 0.2
+    readonly property real screenCurvatureSize: 0.4
     readonly property real minimumFontScaling: 0.25
     readonly property real maximumFontScaling: 2.50
 
@@ -176,52 +175,6 @@ QtObject{
         terminalFontChanged(fontFamily, pixelSize, lineSpacing, screenScaling, fontWidth);
     }
 
-    // FRAMES /////////////////////////////////////////////////////////////////
-
-    property ListModel framesList: ListModel{
-        ListElement{
-            name: "NO_FRAME"
-            text: "No frame"
-            source: ""
-            reflections: false
-        }
-        ListElement{
-            name: "SIMPLE_WHITE_FRAME"
-            text: "Simple white frame"
-            source: "./frames/WhiteSimpleFrame.qml"
-            reflections: true
-        }
-        ListElement{
-            name: "ROUGH_BLACK_FRAME"
-            text: "Rough black frame"
-            source: "./frames/BlackRoughFrame.qml"
-            reflections: true
-        }
-    }
-
-    function getFrameIndexByName(name) {
-        for (var i = 0; i < framesList.count; i++) {
-            if (name === framesList.get(i).name)
-                return i;
-        }
-        return 0; // If the frame is not available default to 0.
-    }
-
-    property string frameSource: "./frames/WhiteSimpleFrame.qml"
-    property string frameName: "SIMPLE_WHITE_FRAME"
-
-    property bool _frameReflections: false
-    property bool reflectionsAllowed: true
-    property bool frameReflections: _frameReflections && reflectionsAllowed
-
-    onFrameNameChanged: {
-        var index = getFrameIndexByName(frameName);
-        frameSource = framesList.get(index).source;
-        reflectionsAllowed = framesList.get(index).reflections;
-    }
-
-    // DB STORAGE /////////////////////////////////////////////////////////////
-
     property Storage storage: Storage{ }
 
     function stringify(obj) {
@@ -242,7 +195,6 @@ QtObject{
             showTerminalSize: showTerminalSize,
             fontScaling: fontScaling,
             fontNames: fontNames,
-            frameReflections: _frameReflections,
             showMenubar: showMenubar,
             bloomQuality: bloomQuality,
             burnInQuality: burnInQuality,
@@ -263,7 +215,6 @@ QtObject{
             saturationColor: saturationColor,
             screenCurvature: screenCurvature,
             glowingLine: glowingLine,
-            frameName: frameName,
             burnIn: burnIn,
             bloom: bloom,
             rasterization: rasterization,
@@ -326,8 +277,6 @@ QtObject{
         fontNames = settings.fontNames !== undefined ? settings.fontNames : fontNames
         fontScaling = settings.fontScaling !== undefined ? settings.fontScaling : fontScaling
 
-        _frameReflections = settings.frameReflections !== undefined ? settings.frameReflections : _frameReflections;
-
         showMenubar = settings.showMenubar !== undefined ? settings.showMenubar : showMenubar;
 
         bloomQuality = settings.bloomQuality !== undefined ? settings.bloomQuality : bloomQuality;
@@ -353,8 +302,6 @@ QtObject{
 
         burnIn = settings.burnIn !== undefined ? settings.burnIn : burnIn
         bloom = settings.bloom !== undefined ? settings.bloom : bloom
-
-        frameName = settings.frameName !== undefined ? settings.frameName : frameName;
 
         rasterization = settings.rasterization !== undefined ? settings.rasterization : rasterization;
 
@@ -431,7 +378,6 @@ QtObject{
                   "fontColor": "#ff8100",
                   "fontName": "TERMINUS_SCALED",
                   "fontWidth": 1,
-                  "frameName": "SIMPLE_WHITE_FRAME",
                   "glowingLine": 0.2,
                   "horizontalSync": 0.08,
                   "jitter": 0.1997,
@@ -459,7 +405,6 @@ QtObject{
                   "fontColor": "#0ccc68",
                   "fontName": "TERMINUS_SCALED",
                   "fontWidth": 1,
-                  "frameName": "SIMPLE_WHITE_FRAME",
                   "glowingLine": 0.2,
                   "horizontalSync": 0.08,
                   "jitter": 0.1997,
@@ -487,7 +432,6 @@ QtObject{
                   "fontColor": "#7cff4f",
                   "fontName": "PRO_FONT_SCALED",
                   "fontWidth": 1,
-                  "frameName": "NO_FRAME",
                   "glowingLine": 0.2,
                   "horizontalSync": 0.151,
                   "jitter": 0.11,
@@ -515,7 +459,6 @@ QtObject{
                   "fontColor": "#ffffff",
                   "fontName": "COMMODORE_PET",
                   "fontWidth": 1,
-                  "frameName": "NO_FRAME",
                   "glowingLine": 0.2,
                   "horizontalSync": 0.151,
                   "jitter": 0,
@@ -543,7 +486,6 @@ QtObject{
                   "fontColor": "#00d56d",
                   "fontName": "APPLE_II",
                   "fontWidth": 1,
-                  "frameName": "SIMPLE_WHITE_FRAME",
                   "glowingLine": 0.22,
                   "horizontalSync": 0.16,
                   "jitter": 0.1,
@@ -571,7 +513,6 @@ QtObject{
                   "fontColor": "#00ff3e",
                   "fontName": "COMMODORE_PET",
                   "fontWidth": 1,
-                  "frameName": "ROUGH_BLACK_FRAME",
                   "glowingLine": 0.3,
                   "horizontalSync": 0.42,
                   "jitter": 0.4,
@@ -599,7 +540,6 @@ QtObject{
                   "fontColor": "#ffffff",
                   "fontName": "IBM_DOS",
                   "fontWidth": 1,
-                  "frameName": "SIMPLE_WHITE_FRAME",
                   "glowingLine": 0.1545,
                   "horizontalSync": 0,
                   "jitter": 0.1545,
@@ -627,7 +567,6 @@ QtObject{
                   "fontColor": "#0ccc68",
                   "fontName": "IBM_3278",
                   "fontWidth": 1,
-                  "frameName": "SIMPLE_WHITE_FRAME",
                   "glowingLine": 0,
                   "horizontalSync": 0,
                   "jitter": 0,
@@ -655,7 +594,6 @@ QtObject{
                   "fontColor": "#729fcf",
                   "fontName": "TERMINUS",
                   "fontWidth": 1,
-                  "frameName": "NO_FRAME",
                   "glowingLine": 0.1476,
                   "horizontalSync": 0,
                   "jitter": 0.099,
