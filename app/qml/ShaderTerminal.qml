@@ -254,7 +254,7 @@ ShaderEffect {
             (screenCurvature !== 0 ? "
                 float distortion = dot(cc, cc) * screenCurvature;
                 vec2 curvatureCoords = (qt_TexCoord0 - cc * (1.0 + distortion) * distortion);
-                vec2 staticCoords = -curvatureCoords + vec2(2.0) * step(vec2(0.0), curvatureCoords) * curvatureCoords - vec2(2.0) * step(vec2(1.0), curvatureCoords) * curvatureCoords;"
+                vec2 staticCoords = - 2.0 * curvatureCoords + 3.0 * step(vec2(0.0), curvatureCoords) * curvatureCoords - 3.0 * step(vec2(1.0), curvatureCoords) * curvatureCoords;"
             :"
                 vec2 staticCoords = qt_TexCoord0;") +
 
