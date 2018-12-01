@@ -28,6 +28,8 @@ ShaderEffect {
     property BurnInEffect burnInEffect
     property ShaderEffectSource bloomSource
 
+    property ShaderEffectSource screenBuffer: frameBuffer
+
     property color fontColor: appSettings.fontColor
     property color backgroundColor: appSettings.backgroundColor
     property real bloom: appSettings.bloom * 2.5
@@ -59,6 +61,8 @@ ShaderEffect {
     property real screen_brightness: Utils.lint(0.5, 1.5, appSettings.brightness)
 
     property real ambientLight: appSettings.ambientLight * 0.2
+
+    property real shadowLength: 0.25 * screenCurvature * Utils.lint(0.50, 1.5, ambientLight)
 
     property size virtual_resolution
 
@@ -146,7 +150,7 @@ ShaderEffect {
             precision mediump float;
         #endif
 
-        uniform sampler2D source;
+        uniform sampler2D screenBuffer;
         uniform highp float qt_Opacity;
         uniform highp float time;
         varying highp vec2 qt_TexCoord0;
@@ -154,12 +158,10 @@ ShaderEffect {
         uniform highp vec4 fontColor;
         uniform highp vec4 backgroundColor;
         uniform lowp float screen_brightness;
+        uniform lowp float shadowLength;
 
         uniform highp vec2 virtual_resolution;" +
 
-        (bloom !== 0 ? "
-            uniform highp sampler2D bloomSource;
-            uniform lowp float bloom;" : "") +
         (burnIn !== 0 ? "
             uniform sampler2D burnInSource;
             uniform highp float burnInLastUpdate;
@@ -178,8 +180,6 @@ ShaderEffect {
             uniform lowp float chromaColor;" : "") +
         (jitter !== 0 ? "
             uniform lowp vec2 jitterDisplacement;" : "") +
-        (rbgShift !== 0 ? "
-            uniform lowp float rbgShift;" : "") +
         (ambientLight !== 0 ? "
             uniform lowp float ambientLight;" : "") +
 
@@ -202,30 +202,36 @@ ShaderEffect {
                 return fract(smoothstep(-120.0, 0.0, coords.y - (virtual_resolution.y + 120.0) * fract(time * 0.00015)));
             }" : "") +
 
-        "highp float getScanlineIntensity(vec2 coords) {
-            float result = 1.0;" +
-
-           (appSettings.rasterization != appSettings.no_rasterization ?
-               "float val = 0.0;
-                vec2 rasterizationCoords = fract(coords * virtual_resolution);
-                val += smoothstep(0.0, 0.5, rasterizationCoords.y);
-                val -= smoothstep(0.5, 1.0, rasterizationCoords.y);
-                result *= mix(0.5, 1.0, val);" : "") +
-           (appSettings.rasterization == appSettings.pixel_rasterization ?
-               "val = 0.0;
-                val += smoothstep(0.0, 0.5, rasterizationCoords.x);
-                val -= smoothstep(0.5, 1.0, rasterizationCoords.x);
-                result *= mix(0.5, 1.0, val);" : "") + "
-
-           return result;
-        }
-
-        float min2(vec2 v) {
+        "float min2(vec2 v) {
             return min(v.x, v.y);
         }
 
         float rgb2grey(vec3 v){
             return dot(v, vec3(0.21, 0.72, 0.04));
+        }
+
+        float isInScreen(vec2 v) {
+            return min2(step(0.0, v) - step(1.0, v));
+        }
+
+        vec2 barrel(vec2 v, vec2 cc) {" +
+
+            (screenCurvature !== 0 ? "
+                float distortion = dot(cc, cc) * screenCurvature;
+                return (v - cc * (1.0 + distortion) * distortion);"
+            :
+                "return v;") +
+        "}" +
+
+        "vec3 convertWithChroma(vec3 inColor) {
+           vec3 outColor = inColor;" +
+
+            (chromaColor !== 0 ?
+                "outColor = fontColor.rgb * mix(vec3(rgb2grey(inColor)), inColor, chromaColor);"
+            :
+                "outColor = fontColor.rgb * rgb2grey(inColor);") +
+
+        "  return outColor;
         }" +
 
         "void main() {" +
@@ -252,19 +258,22 @@ ShaderEffect {
                 float noise = staticNoise;" : "") +
 
             (screenCurvature !== 0 ? "
-                float distortion = dot(cc, cc) * screenCurvature;
-                vec2 curvatureCoords = (qt_TexCoord0 - cc * (1.0 + distortion) * distortion);
-                vec2 staticCoords = - 2.0 * curvatureCoords + 3.0 * step(vec2(0.0), curvatureCoords) * curvatureCoords - 3.0 * step(vec2(1.0), curvatureCoords) * curvatureCoords;"
+                vec2 curvatureCoords = barrel(qt_TexCoord0, cc);
+                float staticInScreen = min2(step(0.0, curvatureCoords) - step(1.0, curvatureCoords));
+                vec2 staticCoords = curvatureCoords;"
             :"
-                vec2 staticCoords = qt_TexCoord0;") +
+                vec2 staticCoords = qt_TexCoord0;
+                float staticInScreen = 1.0;") +
 
-            "vec2 coords = staticCoords;" +
+            "vec2 coords = qt_TexCoord0;" +
 
             (horizontalSync !== 0 ? "
                 float dst = sin((coords.y + time * 0.001) * distortionFreq);
                 coords.x += dst * distortionScale;" +
+
                 (staticNoise ? "
                     noise += distortionScale * 7.0;" : "")
+
             : "") +
 
             (jitter !== 0 || staticNoise !== 0 || rbgShift !== 0 ?
@@ -285,49 +294,21 @@ ShaderEffect {
             (glowingLine !== 0 ? "
                 color += randomPass(coords * virtual_resolution) * glowingLine;" : "") +
 
-            "vec3 txt_color = texture2D(source, txt_coords).rgb;" +
-
-            (rbgShift !== 0 ? "
-                vec2 displacement = vec2(12.0, 0.0) * rbgShift * (0.6 * constantNoise.r + 0.4);
-                vec3 rightColor = texture2D(source, txt_coords + displacement).rgb;
-                vec3 leftColor = texture2D(source, txt_coords - displacement).rgb;
-                txt_color.r = leftColor.r * 0.10 + rightColor.r * 0.30 + txt_color.r * 0.60;
-                txt_color.g = leftColor.g * 0.20 + rightColor.g * 0.20 + txt_color.g * 0.60;
-                txt_color.b = leftColor.b * 0.30 + rightColor.b * 0.10 + txt_color.b * 0.60;
-            " : "") +
+            "txt_coords = mix(qt_TexCoord0, txt_coords, staticInScreen);
+             float inScreen2 = isInScreen(barrel(txt_coords, cc));
+             vec3 origTxtColor = texture2D(screenBuffer, txt_coords).rgb;
+             vec3 txt_color = origTxtColor * inScreen2 + backgroundColor.rgb * (1.0 - inScreen2);" +
 
             (burnIn !== 0 ? "
                 vec4 txt_blur = texture2D(burnInSource, staticCoords);
                 float blurDecay = clamp((time - burnInLastUpdate) * burnInTime, 0.0, 1.0);
-                txt_color = max(txt_color, 0.5 * (txt_blur.rgb - vec3(blurDecay)));"
+                vec3 burnInColor = 0.5 * (txt_blur.rgb - vec3(blurDecay));
+                txt_color = max(txt_color, convertWithChroma(burnInColor));"
             : "") +
 
-             "txt_color *= getScanlineIntensity(coords);" +
+             "txt_color += fontColor.rgb * vec3(color);" +
 
-             "txt_color += vec3(color);" +
-             "float greyscale_color = rgb2grey(txt_color);" +
-
-            (chromaColor !== 0 ?
-                "vec3 foregroundColor = mix(fontColor.rgb, txt_color * fontColor.rgb / greyscale_color, chromaColor);
-                 vec3 finalColor = mix(backgroundColor.rgb, foregroundColor, greyscale_color);"
-            :
-                "vec3 finalColor = mix(backgroundColor.rgb, fontColor.rgb, greyscale_color);") +
-
-            (bloom !== 0 ?
-                "vec4 bloomFullColor = texture2D(bloomSource, coords);
-                 vec3 bloomColor = bloomFullColor.rgb;
-                 float bloomAlpha = bloomFullColor.a;" +
-                (chromaColor !== 0 ?
-                    "bloomColor = fontColor.rgb * mix(vec3(rgb2grey(bloomColor)), bloomColor, chromaColor);"
-                :
-                    "bloomColor = fontColor.rgb * rgb2grey(bloomColor);") +
-                "finalColor += clamp(bloomColor * bloom * bloomAlpha, 0.0, 0.5);"
-            : "") +
-
-            (screenCurvature !== 0 ? "
-                vec2 curvatureMask = step(vec2(0.0), curvatureCoords) - step(vec2(1.0), curvatureCoords);
-                finalColor *= clamp(0.0, 1.0, curvatureMask.x + curvatureMask.y);"
-            :"") +
+            "vec3 finalColor = txt_color;" +
 
             (flickering !== 0 ? "
                 finalColor *= brightness;" : "") +
@@ -336,7 +317,11 @@ ShaderEffect {
                 finalColor += vec3(ambientLight) * (1.0 - distance) * (1.0 - distance);" : "") +
 
 
-            "gl_FragColor = vec4(finalColor * screen_brightness, qt_Opacity);" +
+            "float inShadow = 1.0 - min2(smoothstep(0.0, shadowLength, staticCoords) - smoothstep(1.0 - shadowLength, 1.0, staticCoords));
+             finalColor = mix(finalColor, vec3(0.0), 0.35 * inShadow);
+
+             finalColor = mix(origTxtColor, finalColor, staticInScreen);
+             gl_FragColor = vec4(finalColor * screen_brightness, qt_Opacity);" +
         "}"
 
      onStatusChanged: {
@@ -348,5 +333,171 @@ ShaderEffect {
          if (status == ShaderEffect.Error) {
             fallBack = true;
          }
+     }
+
+     ShaderEffect {
+         id: frame
+
+         anchors.fill: parent
+
+         property ShaderEffectSource source: parent.source
+         property ShaderEffectSource bloomSource: parent.bloomSource
+
+         property color fontColor: parent.fontColor
+         property color backgroundColor: parent.backgroundColor
+         property real bloom: parent.bloom
+
+         property real screenCurvature: appSettings.screenCurvature * appSettings.screenCurvatureSize
+
+         property real chromaColor: appSettings.chromaColor;
+
+         property real rbgShift: (appSettings.rbgShift / width) * appSettings.totalFontScaling
+
+         property int rasterization: appSettings.rasterization
+
+         property real screen_brightness: Utils.lint(0.5, 1.5, appSettings.brightness)
+
+         property real ambientLight: appSettings.ambientLight * 0.2
+
+         property size virtual_resolution: parent.virtual_resolution
+
+         blending: false
+
+         //Print the number with a reasonable precision for the shader.
+         function str(num){
+             return num.toFixed(8);
+         }
+
+         fragmentShader: "
+             #ifdef GL_ES
+                 precision mediump float;
+             #endif
+
+             uniform sampler2D source;
+             uniform highp float qt_Opacity;
+             varying highp vec2 qt_TexCoord0;
+
+             uniform highp vec4 fontColor;
+             uniform highp vec4 backgroundColor;
+             uniform lowp float screen_brightness;
+
+             uniform highp vec2 virtual_resolution;" +
+
+             (bloom !== 0 ? "
+                 uniform highp sampler2D bloomSource;
+                 uniform lowp float bloom;" : "") +
+
+             (screenCurvature !== 0 ? "
+                 uniform highp float screenCurvature;" : "") +
+
+             (chromaColor !== 0 ? "
+                 uniform lowp float chromaColor;" : "") +
+
+             (rbgShift !== 0 ? "
+                 uniform lowp float rbgShift;" : "") +
+
+             (ambientLight !== 0 ? "
+                 uniform lowp float ambientLight;" : "") +
+
+             "highp float getScanlineIntensity(vec2 coords) {
+                 float result = 1.0;" +
+
+                (appSettings.rasterization != appSettings.no_rasterization ?
+                    "float val = 0.0;
+                     vec2 rasterizationCoords = fract(coords * virtual_resolution);
+                     val += smoothstep(0.0, 0.5, rasterizationCoords.y);
+                     val -= smoothstep(0.5, 1.0, rasterizationCoords.y);
+                     result *= mix(0.5, 1.0, val);" : "") +
+
+                (appSettings.rasterization == appSettings.pixel_rasterization ?
+                    "val = 0.0;
+                     val += smoothstep(0.0, 0.5, rasterizationCoords.x);
+                     val -= smoothstep(0.5, 1.0, rasterizationCoords.x);
+                     result *= mix(0.5, 1.0, val);" : "") + "
+
+                return result;
+             }
+
+             float min2(vec2 v) {
+                 return min(v.x, v.y);
+             }
+
+             float rgb2grey(vec3 v){
+                 return dot(v, vec3(0.21, 0.72, 0.04));
+             }" +
+
+             "vec3 convertWithChroma(vec3 inColor) {
+                vec3 outColor = inColor;" +
+
+                 (chromaColor !== 0 ?
+                     "outColor = fontColor.rgb * mix(vec3(rgb2grey(inColor)), inColor, chromaColor);"
+                 :
+                     "outColor = fontColor.rgb * rgb2grey(inColor);") +
+
+             "  return outColor;
+             }" +
+
+
+             "void main() {" +
+                 "vec2 cc = vec2(0.5) - qt_TexCoord0;" +
+
+                 (screenCurvature !== 0 ? "
+                     float distortion = dot(cc, cc) * screenCurvature;
+                     vec2 curvatureCoords = (qt_TexCoord0 - cc * (1.0 + distortion) * distortion);
+                     vec2 txt_coords = - 2.0 * curvatureCoords + 3.0 * step(vec2(0.0), curvatureCoords) * curvatureCoords - 3.0 * step(vec2(1.0), curvatureCoords) * curvatureCoords;"
+                 :"
+                     vec2 txt_coords = qt_TexCoord0;") +
+
+                 "vec3 txt_color = texture2D(source, txt_coords).rgb;" +
+
+                 (rbgShift !== 0 ? "
+                     vec2 displacement = vec2(12.0, 0.0) * rbgShift;
+                     vec3 rightColor = texture2D(source, txt_coords + displacement).rgb;
+                     vec3 leftColor = texture2D(source, txt_coords - displacement).rgb;
+                     txt_color.r = leftColor.r * 0.10 + rightColor.r * 0.30 + txt_color.r * 0.60;
+                     txt_color.g = leftColor.g * 0.20 + rightColor.g * 0.20 + txt_color.g * 0.60;
+                     txt_color.b = leftColor.b * 0.30 + rightColor.b * 0.10 + txt_color.b * 0.60;
+                 " : "") +
+
+                  "txt_color *= getScanlineIntensity(txt_coords);" +
+
+                  "txt_color += vec3(0.0001);" +
+                  "float greyscale_color = rgb2grey(txt_color);" +
+
+                 (chromaColor !== 0 ?
+                     "vec3 foregroundColor = mix(fontColor.rgb, txt_color * fontColor.rgb / greyscale_color, chromaColor);
+                      vec3 finalColor = mix(backgroundColor.rgb, foregroundColor, greyscale_color);"
+                 :
+                     "vec3 finalColor = mix(backgroundColor.rgb, fontColor.rgb, greyscale_color);") +
+
+                     (bloom !== 0 ?
+                         "vec4 bloomFullColor = texture2D(bloomSource, txt_coords);
+                          vec3 bloomColor = bloomFullColor.rgb;
+                          float bloomAlpha = bloomFullColor.a;
+                          bloomColor = convertWithChroma(bloomColor);
+                          finalColor += clamp(bloomColor * bloom * bloomAlpha, 0.0, 0.5);"
+                     : "") +
+
+                 (screenCurvature !== 0 ? "
+                     vec2 curvatureMask = step(vec2(0.0), curvatureCoords) - step(vec2(1.0), curvatureCoords);
+                     finalColor *= clamp(0.0, 1.0, curvatureMask.x + curvatureMask.y);"
+                 :"") +
+
+                 "gl_FragColor = vec4(finalColor * screen_brightness, qt_Opacity);" +
+             "}"
+
+         NewTerminalFrame {
+             anchors.fill: parent
+             blending: true
+         }
+     }
+
+     ShaderEffectSource {
+         id: frameBuffer
+
+         anchors.fill: parent
+         visible: false
+         sourceItem: frame
+         hideSource: true
      }
 }

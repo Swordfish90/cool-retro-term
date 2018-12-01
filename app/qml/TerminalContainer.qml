@@ -56,11 +56,11 @@ ShaderTerminal {
 
     bloomSource: bloomSourceLoader.item
 
-    NewTerminalFrame {
-        id: terminalFrame
-        anchors.fill: parent
-        blending: true
-    }
+//    NewTerminalFrame {
+//        id: terminalFrame
+//        anchors.fill: parent
+//        blending: true
+//    }
 
     // This shader might be useful in the future. Since we used it only for a couple
     // of calculations is probably best to move those in the main shader. If in the future
