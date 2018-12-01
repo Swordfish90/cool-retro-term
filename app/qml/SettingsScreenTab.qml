@@ -63,32 +63,5 @@ Tab{
                 }
             }
         }
-        GroupBox{
-            title: qsTr("Frame")
-            Layout.fillWidth: true
-            RowLayout{
-                anchors.fill: parent
-                ComboBox{
-                    id: framescombobox
-                    Layout.fillWidth: true
-                    model: appSettings.framesList
-                    currentIndex: appSettings.framesIndex
-                    onActivated: {
-                        appSettings.frameName = appSettings.framesList.get(index).name;
-                    }
-                    function updateIndex(){
-                        var name = appSettings.frameName;
-                        var index = appSettings.getFrameIndexByName(name);
-                        if (index !== undefined)
-                            currentIndex = index;
-                    }
-                    Component.onCompleted: updateIndex();
-                    Connections {
-                        target: appSettings
-                        onFrameNameChanged: framescombobox.updateIndex();
-                    }
-                }
-            }
-        }
     }
 }

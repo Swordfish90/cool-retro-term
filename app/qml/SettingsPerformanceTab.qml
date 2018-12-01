@@ -114,14 +114,5 @@ Tab{
                 SizedLabel{text: Math.round(burnInSlider.value * 100) + "%"}
             }
         }
-        GroupBox{
-            title: qsTr("Frame")
-            Layout.fillWidth: true
-            CheckBox{
-                checked: appSettings._frameReflections
-                text: qsTr("Frame Reflections")
-                onCheckedChanged: appSettings._frameReflections = checked
-            }
-        }
     }
 }
