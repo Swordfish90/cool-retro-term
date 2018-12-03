@@ -481,9 +481,13 @@ Item {
                  "gl_FragColor = vec4(finalColor, qt_Opacity);" +
              "}"
 
-         NewTerminalFrame {
+         Loader {
              anchors.fill: parent
-             blending: true
+             active: screenCurvature !== 0
+
+             sourceComponent: NewTerminalFrame {
+                 blending: true
+             }
          }
 
          onStatusChanged: {

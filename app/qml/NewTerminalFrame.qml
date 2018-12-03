@@ -13,8 +13,6 @@ ShaderEffect {
     property real screenCurvature: appSettings.screenCurvature * appSettings.screenCurvatureSize
     property real shadowLength: 0.5 * screenCurvature * Utils.lint(0.50, 1.5, _ambientLight)
 
-    visible: screenCurvature != 0
-
     fragmentShader: "
         #ifdef GL_ES
             precision mediump float;
