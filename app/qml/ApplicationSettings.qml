@@ -48,7 +48,7 @@ QtObject{
     property bool showTerminalSize: true
     property real windowScaling: 1.0
 
-    property real fps: 24
+    property real fps: 20
     property bool verbose: false
 
     property real bloomQuality: 0.5
