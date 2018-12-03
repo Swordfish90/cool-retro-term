@@ -10,8 +10,6 @@ ShaderTerminal {
     id: mainShader
     opacity: appSettings.windowOpacity * 0.3 + 0.7
 
-    blending: false
-
     source: terminal.mainSource
     burnInEffect: terminal.burnInEffect
     virtual_resolution: terminal.virtualResolution
