@@ -155,7 +155,7 @@ QtObject{
         if (index === undefined) return;
 
         fontManager.item.selectedFontIndex = index;
-        fontManager.item.scaling = totalFontScaling * windowScaling;
+        fontManager.item.scaling = totalFontScaling;
 
         var fontSource = fontManager.item.source;
         var pixelSize = fontManager.item.pixelSize;

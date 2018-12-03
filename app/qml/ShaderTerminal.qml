@@ -338,7 +338,8 @@ ShaderEffect {
      ShaderEffect {
          id: frame
 
-         anchors.fill: parent
+         width: parent.width * appSettings.windowScaling
+         height: parent.height * appSettings.windowScaling
 
          property ShaderEffectSource source: parent.source
          property ShaderEffectSource bloomSource: parent.bloomSource
@@ -494,8 +495,6 @@ ShaderEffect {
 
      ShaderEffectSource {
          id: frameBuffer
-
-         anchors.fill: parent
          visible: false
          sourceItem: frame
          hideSource: true

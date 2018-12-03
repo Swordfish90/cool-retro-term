@@ -36,7 +36,7 @@ ShaderTerminal {
         height: parent.height * appSettings.bloomQuality
 
         sourceComponent: FastBlur{
-            radius: Utils.lint(16, 64, appSettings.bloomQuality * appSettings.windowScaling);
+            radius: Utils.lint(16, 64, appSettings.bloomQuality);
             source: terminal.mainSource
             transparentBorder: true
         }
