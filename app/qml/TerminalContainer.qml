@@ -10,8 +10,6 @@ ShaderTerminal {
     id: mainShader
     opacity: appSettings.windowOpacity * 0.3 + 0.7
 
-    blending: false
-
     source: terminal.mainSource
     burnInEffect: terminal.burnInEffect
     virtual_resolution: terminal.virtualResolution
@@ -36,7 +34,7 @@ ShaderTerminal {
         height: parent.height * appSettings.bloomQuality
 
         sourceComponent: FastBlur{
-            radius: Utils.lint(16, 64, appSettings.bloomQuality * appSettings.windowScaling);
+            radius: Utils.lint(16, 64, appSettings.bloomQuality);
             source: terminal.mainSource
             transparentBorder: true
         }
@@ -56,11 +54,11 @@ ShaderTerminal {
 
     bloomSource: bloomSourceLoader.item
 
-    NewTerminalFrame {
-        id: terminalFrame
-        anchors.fill: parent
-        blending: true
-    }
+//    NewTerminalFrame {
+//        id: terminalFrame
+//        anchors.fill: parent
+//        blending: true
+//    }
 
     // This shader might be useful in the future. Since we used it only for a couple
     // of calculations is probably best to move those in the main shader. If in the future

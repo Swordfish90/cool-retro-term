@@ -48,7 +48,7 @@ QtObject{
     property bool showTerminalSize: true
     property real windowScaling: 1.0
 
-    property real fps: 24
+    property real fps: 20
     property bool verbose: false
 
     property real bloomQuality: 0.5
@@ -73,7 +73,7 @@ QtObject{
     property color backgroundColor: Utils.mix(Utils.strToColor(_backgroundColor), Utils.strToColor(saturatedColor), 0.7 + (contrast * 0.3))
 
     property real staticNoise: 0.12
-    property real screenCurvature: 0.2
+    property real screenCurvature: 0.3
     property real glowingLine: 0.2
     property real burnIn: 0.25
     property real bloom: 0.55
@@ -155,7 +155,7 @@ QtObject{
         if (index === undefined) return;
 
         fontManager.item.selectedFontIndex = index;
-        fontManager.item.scaling = totalFontScaling * windowScaling;
+        fontManager.item.scaling = totalFontScaling;
 
         var fontSource = fontManager.item.source;
         var pixelSize = fontManager.item.pixelSize;
@@ -384,7 +384,7 @@ QtObject{
                   "rasterization": 0,
                   "rbgShift": 0,
                   "saturationColor": 0.2483,
-                  "screenCurvature": 0.1997,
+                  "screenCurvature": 0.3,
                   "staticNoise": 0.1198,
                   "windowOpacity": 1
                 }'
@@ -411,7 +411,7 @@ QtObject{
                   "rasterization": 0,
                   "rbgShift": 0,
                   "saturationColor": 0.0,
-                  "screenCurvature": 0.1997,
+                  "screenCurvature": 0.3,
                   "staticNoise": 0.1198,
                   "windowOpacity": 1
                 }'
@@ -438,7 +438,7 @@ QtObject{
                   "rasterization": 1,
                   "rbgShift": 0,
                   "saturationColor": 0.5,
-                  "screenCurvature": 0.2,
+                  "screenCurvature": 0.3,
                   "staticNoise": 0.15,
                   "windowOpacity": 1
                 }'
@@ -466,7 +466,7 @@ QtObject{
                   "rbgShift": 0,
                   "saturationColor": 0,
                   "screenCurvature": 0,
-                  "staticNoise": 0.1545,
+                  "staticNoise": 0.15,
                   "windowOpacity": 1
                 }'
             builtin: true
@@ -492,7 +492,7 @@ QtObject{
                   "rasterization": 1,
                   "rbgShift": 0,
                   "saturationColor": 0,
-                  "screenCurvature": 0.8976,
+                  "screenCurvature": 0.5,
                   "staticNoise": 0.099,
                   "windowOpacity": 1
                 }'
@@ -519,7 +519,7 @@ QtObject{
                   "rasterization": 1,
                   "rbgShift": 0.2969,
                   "saturationColor": 0,
-                  "screenCurvature": 0.3003,
+                  "screenCurvature": 0.5,
                   "staticNoise": 0.2969,
                   "windowOpacity": 1
                 }'
@@ -546,7 +546,7 @@ QtObject{
                   "rasterization": 0,
                   "rbgShift": 0.3524,
                   "saturationColor": 0,
-                  "screenCurvature": 0.401,
+                  "screenCurvature": 0.4,
                   "staticNoise": 0.0503,
                   "windowOpacity": 1
                 }'
@@ -573,7 +573,7 @@ QtObject{
                   "rasterization": 0,
                   "rbgShift": 0,
                   "saturationColor": 0,
-                  "screenCurvature": 0.1997,
+                  "screenCurvature": 0.2,
                   "staticNoise": 0,
                   "windowOpacity": 1
                 }'
@@ -600,7 +600,7 @@ QtObject{
                   "rasterization": 0,
                   "rbgShift": 0,
                   "saturationColor": 0.4983,
-                  "screenCurvature": 0.05,
+                  "screenCurvature": 0,
                   "staticNoise": 0.0955,
                   "windowOpacity": 0.7
                 }'

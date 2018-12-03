@@ -28,7 +28,7 @@ Window {
     id: settings_window
     title: qsTr("Settings")
     width: 580
-    height: 400
+    height: 500
 
     property int tabmargins: 15
 
@@ -39,12 +39,6 @@ Window {
         SettingsGeneralTab{
             id: generalTab
             title: qsTr("General")
-            anchors.fill: parent
-            anchors.margins: tabmargins
-        }
-        SettingsScreenTab{
-            id: screenTab
-            title: qsTr("Screen")
             anchors.fill: parent
             anchors.margins: tabmargins
         }
