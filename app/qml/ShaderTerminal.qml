@@ -291,7 +291,7 @@ Item {
                  (burnIn !== 0 ? "
                      vec4 txt_blur = texture2D(burnInSource, staticCoords);
                      float blurDecay = clamp((time - burnInLastUpdate) * burnInTime, 0.0, 1.0);
-                     vec3 burnInColor = 0.5 * (txt_blur.rgb - vec3(blurDecay));
+                     vec3 burnInColor = 0.65 * (txt_blur.rgb - vec3(blurDecay));
                      txt_color = max(txt_color, convertWithChroma(burnInColor));"
                  : "") +
 
@@ -307,7 +307,8 @@ Item {
 
 
                  "float inShadow = 1.0 - min2(smoothstep(0.0, shadowLength, staticCoords) - smoothstep(1.0 - shadowLength, 1.0, staticCoords));
-                  finalColor = mix(finalColor, vec3(0.0), 0.45 * inShadow * inShadow);
+                  inShadow = pow(inShadow, 100.0) + 0.35 * inShadow * inShadow;  // Inner shadow and antialiasing when screen background is bright.
+                  finalColor = mix(finalColor, vec3(0.0), inShadow);
 
                   finalColor = mix(origTxtColor, finalColor, staticInScreen);
                   gl_FragColor = vec4(finalColor, qt_Opacity);" +
