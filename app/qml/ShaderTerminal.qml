@@ -123,7 +123,7 @@ Item {
                  qt_TexCoord0 = qt_MultiTexCoord0;
                  vec2 coords = vec2(fract(time/(1024.0*2.0)), fract(time/(1024.0*1024.0)));" +
 
-                 (!fallBack && (flickering !== 0.0 || horizontalSync !== 0.0 || rbgShift !== 0) ?
+                 (!fallBack && (flickering !== 0.0 || horizontalSync !== 0.0) ?
                      "vec4 initialNoiseTexel = texture2D(noiseSource, coords);"
                  : "") +
 
@@ -162,7 +162,7 @@ Item {
                  uniform highp float burnInTime;" : "") +
              (staticNoise !== 0 ? "
                  uniform highp float staticNoise;" : "") +
-             (((staticNoise !== 0 || jitter !== 0 || rbgShift)
+             (((staticNoise !== 0 || jitter !== 0)
                ||(fallBack && (flickering || horizontalSync))) ? "
                  uniform lowp sampler2D noiseSource;
                  uniform highp vec2 scaleNoiseSize;" : "") +
@@ -230,7 +230,7 @@ Item {
                  "float distance = length(cc);" +
 
                  //FallBack if there are problems
-                 (fallBack && (flickering !== 0.0 || horizontalSync !== 0.0 || rbgShift !== 0.0) ?
+                 (fallBack && (flickering !== 0.0 || horizontalSync !== 0.0) ?
                      "vec2 initialCoords = vec2(fract(time/(1024.0*2.0)), fract(time/(1024.0*1024.0)));
                       vec4 initialNoiseTexel = texture2D(noiseSource, initialCoords);"
                  : "") +
@@ -265,7 +265,7 @@ Item {
 
                  : "") +
 
-                 (jitter !== 0 || staticNoise !== 0 || rbgShift !== 0 ?
+                 (jitter !== 0 || staticNoise !== 0 ?
                      "vec4 noiseTexel = texture2D(noiseSource, scaleNoiseSize * coords + vec2(fract(time / 51.0), fract(time / 237.0)));"
                  : "") +
 
