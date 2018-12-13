@@ -44,6 +44,7 @@ Item {
 
          property ShaderEffectSource screenBuffer: frameBuffer
          property ShaderEffectSource burnInSource: burnInEffect.source
+         property ShaderEffectSource frameSource: terminalFrameLoader.item
 
          property color fontColor: parent.fontColor
          property color backgroundColor: parent.backgroundColor
@@ -167,7 +168,8 @@ Item {
                  uniform lowp sampler2D noiseSource;
                  uniform highp vec2 scaleNoiseSize;" : "") +
              (screenCurvature !== 0 ? "
-                 uniform highp float screenCurvature;" : "") +
+                 uniform highp float screenCurvature;
+                 uniform lowp sampler2D frameSource;" : "") +
              (glowingLine !== 0 ? "
                  uniform highp float glowingLine;" : "") +
              (chromaColor !== 0 ? "
@@ -247,12 +249,9 @@ Item {
                      float noise = staticNoise;" : "") +
 
                  (screenCurvature !== 0 ? "
-                     vec2 curvatureCoords = barrel(qt_TexCoord0, cc);
-                     float staticInScreen = min2(step(0.0, curvatureCoords) - step(1.0, curvatureCoords));
-                     vec2 staticCoords = curvatureCoords;"
+                     vec2 staticCoords = barrel(qt_TexCoord0, cc);"
                  :"
-                     vec2 staticCoords = qt_TexCoord0;
-                     float staticInScreen = 1.0;") +
+                     vec2 staticCoords = qt_TexCoord0;") +
 
                  "vec2 coords = qt_TexCoord0;" +
 
@@ -283,10 +282,7 @@ Item {
                  (glowingLine !== 0 ? "
                      color += randomPass(coords * virtual_resolution) * glowingLine;" : "") +
 
-                 "txt_coords = mix(qt_TexCoord0, txt_coords, staticInScreen);
-                  float inScreen2 = isInScreen(barrel(txt_coords, cc));
-                  vec3 origTxtColor = texture2D(screenBuffer, txt_coords).rgb;
-                  vec3 txt_color = mix(backgroundColor.rgb, origTxtColor, inScreen2);" +
+                 "vec3 txt_color = texture2D(screenBuffer, txt_coords).rgb;" +
 
                  (burnIn !== 0 ? "
                      vec4 txt_blur = texture2D(burnInSource, staticCoords);
@@ -305,13 +301,12 @@ Item {
                  (ambientLight !== 0 ? "
                      finalColor += vec3(ambientLight) * (1.0 - distance) * (1.0 - distance);" : "") +
 
+                 (screenCurvature !== 0 ?
+                    "vec4 frameColor = texture2D(frameSource, qt_TexCoord0);
+                     finalColor = mix(finalColor, frameColor.rgb, frameColor.a);"
+                 : "") +
 
-                 "float inShadow = 1.0 - min2(smoothstep(0.0, shadowLength, staticCoords) - smoothstep(1.0 - shadowLength, 1.0, staticCoords));
-                  inShadow = pow(inShadow, 100.0) + 0.35 * inShadow * inShadow;  // Inner shadow and antialiasing when screen background is bright.
-                  finalColor = mix(finalColor, vec3(0.0), inShadow);
-
-                  finalColor = mix(origTxtColor, finalColor, staticInScreen);
-                  gl_FragColor = vec4(finalColor, qt_Opacity);" +
+                 "gl_FragColor = vec4(finalColor, qt_Opacity);" +
              "}"
 
           onStatusChanged: {
@@ -324,6 +319,29 @@ Item {
                  fallBack = true;
               }
           }
+     }
+
+     Loader {
+         id: terminalFrameLoader
+
+         active: screenCurvature !== 0
+
+         width: staticShader.width
+         height: staticShader.height
+
+         sourceComponent: ShaderEffectSource {
+
+             sourceItem: terminalFrame
+             hideSource: true
+             visible: false
+             format: ShaderEffectSource.RGBA
+
+             NewTerminalFrame {
+                 id: terminalFrame
+                 blending: false
+                 anchors.fill: parent
+             }
+         }
      }
 
      ShaderEffect {
@@ -415,6 +433,10 @@ Item {
                  return min(v.x, v.y);
              }
 
+             float sum2(vec2 v) {
+                 return v.x + v.y;
+             }
+
              float rgb2grey(vec3 v){
                  return dot(v, vec3(0.21, 0.72, 0.04));
              }" +
@@ -457,11 +479,17 @@ Item {
                   "txt_color += vec3(0.0001);" +
                   "float greyscale_color = rgb2grey(txt_color);" +
 
+                 (screenCurvature !== 0 ? "
+                     float reflectionMask = sum2(step(vec2(0.0), curvatureCoords) - step(vec2(1.0), curvatureCoords));
+                     reflectionMask = clamp(0.0, 1.0, reflectionMask);"
+                 :
+                     "float reflectionMask = 1.0;") +
+
                  (chromaColor !== 0 ?
                      "vec3 foregroundColor = mix(fontColor.rgb, txt_color * fontColor.rgb / greyscale_color, chromaColor);
-                      vec3 finalColor = mix(backgroundColor.rgb, foregroundColor, greyscale_color);"
+                      vec3 finalColor = mix(backgroundColor.rgb, foregroundColor, greyscale_color * reflectionMask);"
                  :
-                     "vec3 finalColor = mix(backgroundColor.rgb, fontColor.rgb, greyscale_color);") +
+                     "vec3 finalColor = mix(backgroundColor.rgb, fontColor.rgb, greyscale_color * reflectionMask);") +
 
                      (bloom !== 0 ?
                          "vec4 bloomFullColor = texture2D(bloomSource, txt_coords);
@@ -473,22 +501,8 @@ Item {
 
                  "finalColor *= screen_brightness;" +
 
-                 (screenCurvature !== 0 ? "
-                     vec2 curvatureMask = step(vec2(0.0), curvatureCoords) - step(vec2(1.0), curvatureCoords);
-                     finalColor *= clamp(0.0, 1.0, curvatureMask.x + curvatureMask.y);"
-                 :"") +
-
                  "gl_FragColor = vec4(finalColor, qt_Opacity);" +
              "}"
-
-         Loader {
-             anchors.fill: parent
-             active: screenCurvature !== 0
-
-             sourceComponent: NewTerminalFrame {
-                 blending: true
-             }
-         }
 
          onStatusChanged: {
              // Print warning messages

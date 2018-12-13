@@ -13,6 +13,8 @@ ShaderEffect {
     property real screenCurvature: appSettings.screenCurvature * appSettings.screenCurvatureSize
     property real shadowLength: 0.5 * screenCurvature * Utils.lint(0.50, 1.5, _ambientLight)
 
+    property size aadelta: Qt.size(1.0 / width, 1.0 / height)
+
     fragmentShader: "
         #ifdef GL_ES
             precision mediump float;
@@ -22,6 +24,7 @@ ShaderEffect {
         uniform lowp float shadowLength;
         uniform highp float qt_Opacity;
         uniform lowp vec4 frameColor;
+        uniform mediump vec2 aadelta;
 
         varying highp vec2 qt_TexCoord0;
 
@@ -53,10 +56,10 @@ ShaderEffect {
             float outShadowLength = shadowLength;
 
             float outShadow = max2(1.0 - smoothstep(vec2(-outShadowLength), vec2(0.0), coords) + smoothstep(vec2(1.0), vec2(1.0 + outShadowLength), coords));
-            outShadow = clamp(0.0, 1.0, outShadow);
-            color += frameColor.rgb * sqrt(outShadow);
-            alpha = sum2(1.0 - step(0.0, coords) + step(1.0, coords));
-            alpha = clamp(alpha, 0.0, 1.0) * mix(1.0, 0.9, sqrt(outShadow));
+            outShadow = clamp(0.0, 1.0, sqrt(outShadow));
+            color += frameColor.rgb * outShadow;
+            alpha = sum2(1.0 - smoothstep(vec2(0.0), aadelta, coords) + smoothstep(vec2(1.0) - aadelta, vec2(1.0), coords));
+            alpha = clamp(alpha, 0.0, 1.0) * mix(1.0, 0.9, outShadow);
 
             gl_FragColor = vec4(color * alpha, alpha);
         }
