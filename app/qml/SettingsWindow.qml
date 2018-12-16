@@ -28,7 +28,7 @@ Window {
     id: settings_window
     title: qsTr("Settings")
     width: 580
-    height: 500
+    height: 400
 
     property int tabmargins: 15
 
@@ -36,27 +36,27 @@ Window {
         id: tabView
         anchors.fill: parent
         anchors.margins: 10
-        SettingsGeneralTab{
+        SettingsGeneralTab {
             id: generalTab
             title: qsTr("General")
             anchors.fill: parent
             anchors.margins: tabmargins
         }
-        SettingsTerminalTab{
+        SettingsTerminalTab {
             id: terminalTab
             title: qsTr("Terminal")
             anchors.fill: parent
             anchors.margins: tabmargins
         }
-        SettingsEffectsTab{
+        SettingsEffectsTab {
             id: effectsTab
             title: qsTr("Effects")
             anchors.fill: parent
             anchors.margins: tabmargins
         }
-        SettingsPerformanceTab{
+        SettingsAdvancedTab {
             id: performanceTab
-            title: qsTr("Performance")
+            title: qsTr("Advanced")
             anchors.fill: parent
             anchors.margins: tabmargins
         }

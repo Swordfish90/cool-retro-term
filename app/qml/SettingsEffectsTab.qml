@@ -87,34 +87,5 @@ Tab{
                 }
             }
         }
-
-        GroupBox{
-            title: qsTr("Lights")
-            Layout.fillWidth: true
-            GridLayout{
-                anchors.fill: parent
-                columns: 2
-                Label{ text: qsTr("Brightness") }
-                SimpleSlider{
-                    onValueChanged: appSettings.brightness = value
-                    value: appSettings.brightness
-                }
-                Label{ text: qsTr("Contrast") }
-                SimpleSlider{
-                    onValueChanged: appSettings.contrast = value
-                    value: appSettings.contrast
-                }
-                Label{ text: qsTr("Opacity") }
-                SimpleSlider{
-                    onValueChanged: appSettings.windowOpacity = value
-                    value: appSettings.windowOpacity
-                }
-                Label{ text: qsTr("Margin") }
-                SimpleSlider{
-                    onValueChanged: appSettings._margin = value
-                    value: appSettings._margin
-                }
-            }
-        }
     }
 }

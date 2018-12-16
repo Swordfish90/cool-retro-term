@@ -52,7 +52,7 @@ Tab{
                     Layout.fillWidth: false
                     Button{
                         Layout.fillWidth: true
-                        text: qsTr("New")
+                        text: qsTr("Save")
                         onClicked: {
                             insertname.profileName = "";
                             insertname.show()
@@ -164,34 +164,30 @@ Tab{
         }
 
         GroupBox{
+            title: qsTr("Screen")
             Layout.fillWidth: true
-            title: qsTr("Command")
-            ColumnLayout {
+            GridLayout{
                 anchors.fill: parent
-                CheckBox{
-                    id: useCustomCommand
-                    text: qsTr("Use custom command instead of shell at startup")
-                    checked: appSettings.useCustomCommand
-                    onCheckedChanged: appSettings.useCustomCommand = checked
+                columns: 2
+                Label{ text: qsTr("Brightness") }
+                SimpleSlider{
+                    onValueChanged: appSettings.brightness = value
+                    value: appSettings.brightness
                 }
-                // Workaround for QTBUG-31627 for pre 5.3.0
-                Binding{
-                    target: useCustomCommand
-                    property: "checked"
-                    value: appSettings.useCustomCommand
+                Label{ text: qsTr("Contrast") }
+                SimpleSlider{
+                    onValueChanged: appSettings.contrast = value
+                    value: appSettings.contrast
                 }
-                TextField{
-                    id: customCommand
-                    Layout.fillWidth: true
-                    text: appSettings.customCommand
-                    enabled: useCustomCommand.checked
-                    onEditingFinished: appSettings.customCommand = text
-
-                    // Save text even if user forgets to press enter or unfocus
-                    function saveSetting() {
-                        appSettings.customCommand = text;
-                    }
-                    Component.onCompleted: settings_window.closing.connect(saveSetting)
+                Label{ text: qsTr("Margin") }
+                SimpleSlider{
+                    onValueChanged: appSettings._margin = value
+                    value: appSettings._margin
+                }
+                Label{ text: qsTr("Opacity") }
+                SimpleSlider{
+                    onValueChanged: appSettings.windowOpacity = value
+                    value: appSettings.windowOpacity
                 }
             }
         }

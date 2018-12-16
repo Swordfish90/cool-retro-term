@@ -23,7 +23,7 @@
         <file>fonts/1971-ibm-3278/3270Medium.ttf</file>
         <file>Storage.qml</file>
         <file>CRTMainMenuBar.qml</file>
-        <file>SettingsPerformanceTab.qml</file>
+        <file>SettingsAdvancedTab.qml</file>
         <file>TerminalContainer.qml</file>
         <file>images/crt256.png</file>
         <file>utils.js</file>
