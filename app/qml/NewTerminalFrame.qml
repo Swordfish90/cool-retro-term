@@ -3,7 +3,7 @@ import QtQuick 2.0
 import "utils.js" as Utils
 
 ShaderEffect {
-    property color _staticFrameColor: "#dedede"
+    property color _staticFrameColor: "#ffffff"
     property color _backgroundColor: appSettings.backgroundColor
     property color _fontColor: appSettings.fontColor
     property color _lightColor: Utils.mix(_fontColor, _backgroundColor, 0.2)
@@ -42,6 +42,10 @@ ShaderEffect {
             return min(v.x, v.y);
         }
 
+        float prod2(vec2 v) {
+            return v.x * v.y;
+        }
+
         float sum2(vec2 v) {
             return v.x + v.y;
         }
@@ -54,12 +58,17 @@ ShaderEffect {
             float alpha = 0.0;
 
             float outShadowLength = shadowLength;
+            float inShadowLength = shadowLength * 0.5;
 
             float outShadow = max2(1.0 - smoothstep(vec2(-outShadowLength), vec2(0.0), coords) + smoothstep(vec2(1.0), vec2(1.0 + outShadowLength), coords));
             outShadow = clamp(0.0, 1.0, sqrt(outShadow));
             color += frameColor.rgb * outShadow;
             alpha = sum2(1.0 - smoothstep(vec2(0.0), aadelta, coords) + smoothstep(vec2(1.0) - aadelta, vec2(1.0), coords));
             alpha = clamp(alpha, 0.0, 1.0) * mix(1.0, 0.9, outShadow);
+
+            float inShadow = 1.0 - prod2(smoothstep(0.0, inShadowLength, coords) - smoothstep(1.0 - inShadowLength, 1.0, coords));
+            inShadow = 0.5 * inShadow * inShadow;
+            alpha = max(alpha, inShadow);
 
             gl_FragColor = vec4(color * alpha, alpha);
         }

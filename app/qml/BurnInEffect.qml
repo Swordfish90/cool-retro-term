@@ -36,12 +36,12 @@ Loader {
         property int burnInScaling: scaleTexture * appSettings.burnInQuality
 
         width: appSettings.lowResolutionFont
-               ? kterminal.width * Math.max(1, burnInScaling)
-               : kterminal.width * scaleTexture * appSettings.burnInQuality
+               ? kterminal.totalWidth * Math.max(1, burnInScaling)
+               : kterminal.totalWidth * scaleTexture * appSettings.burnInQuality
 
         height: appSettings.lowResolutionFont
-                ? kterminal.height * Math.max(1, burnInScaling)
-                : kterminal.height * scaleTexture * appSettings.burnInQuality
+                ? kterminal.totalHeight * Math.max(1, burnInScaling)
+                : kterminal.totalHeight * scaleTexture * appSettings.burnInQuality
 
         ShaderEffectSource {
             id: burnInEffectSource
@@ -52,7 +52,7 @@ Loader {
             live: false
             recursive: true
             hideSource: true
-            wrapMode: kterminalSource.wrapMode
+            wrapMode: ShaderEffectSource.ClampToEdge
 
             format: ShaderEffectSource.RGBA
 

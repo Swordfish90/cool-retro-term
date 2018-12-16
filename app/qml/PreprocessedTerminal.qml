@@ -28,7 +28,7 @@ import "utils.js" as Utils
 Item{
     id: terminalContainer
 
-    property size virtualResolution: Qt.size(kterminal.width, kterminal.height)
+    property size virtualResolution: Qt.size(kterminal.totalWidth, kterminal.totalHeight)
     property alias mainTerminal: kterminal
 
     property ShaderEffectSource mainSource: kterminalSource
@@ -69,6 +69,11 @@ Item{
 
     QMLTermWidget {
         id: kterminal
+
+        property real margin: appSettings.margin / screenScaling
+        property real totalWidth: 2 * margin + width
+        property real totalHeight: 2 * margin + height
+
         width: Math.floor(parent.width / (screenScaling * fontWidth))
         height: Math.floor(parent.height / screenScaling)
 
@@ -167,6 +172,8 @@ Item{
     property alias contextmenu: menuLoader.item
 
     MouseArea{
+        property real margin: appSettings.margin
+
         acceptedButtons: Qt.LeftButton | Qt.MiddleButton | Qt.RightButton
         anchors.fill: parent
         cursorShape: kterminal.terminalUsesMouse ? Qt.ArrowCursor : Qt.IBeamCursor
@@ -200,14 +207,14 @@ Item{
         }
 
         function correctDistortion(x, y){
-            x = x / width;
-            y = y / height;
+            x = (x - margin) / width;
+            y = (y - margin) / height;
 
             var cc = Qt.size(0.5 - x, 0.5 - y);
             var distortion = (cc.height * cc.height + cc.width * cc.width) * appSettings.screenCurvature * appSettings.screenCurvatureSize;
 
-            return Qt.point((x - cc.width  * (1+distortion) * distortion) * kterminal.width,
-                           (y - cc.height * (1+distortion) * distortion) * kterminal.height)
+            return Qt.point((x - cc.width  * (1+distortion) * distortion) * kterminal.totalWidth,
+                           (y - cc.height * (1+distortion) * distortion) * kterminal.totalHeight)
         }
     }
     ShaderEffectSource{
@@ -216,7 +223,8 @@ Item{
         hideSource: true
         wrapMode: ShaderEffectSource.Repeat
         visible: false
-        textureSize: Qt.size(kterminal.width * scaleTexture, kterminal.height * scaleTexture);
+        textureSize: Qt.size(kterminal.totalWidth * scaleTexture, kterminal.totalHeight * scaleTexture)
+        sourceRect: Qt.rect(-kterminal.margin, -kterminal.margin, kterminal.totalWidth, kterminal.totalHeight)
     }
 
     BurnInEffect {

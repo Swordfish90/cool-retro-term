@@ -109,6 +109,11 @@ Tab{
                     onValueChanged: appSettings.windowOpacity = value
                     value: appSettings.windowOpacity
                 }
+                Label{ text: qsTr("Margin") }
+                SimpleSlider{
+                    onValueChanged: appSettings._margin = value
+                    value: appSettings._margin
+                }
             }
         }
     }
