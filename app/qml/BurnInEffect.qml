@@ -58,7 +58,7 @@ Loader {
 
             // Enabling smooth with a low burnInQuality causes bad artifacts because the FBO
             // has different values when it's read back. This lowers the quality, but makes it more consistent.
-            smooth: appSettings.burnInQuality === 1.0
+            smooth: true //appSettings.burnInQuality === 1.0
 
             visible: false
 
