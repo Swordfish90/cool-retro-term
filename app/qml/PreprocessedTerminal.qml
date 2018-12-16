@@ -70,9 +70,9 @@ Item{
     QMLTermWidget {
         id: kterminal
 
-        property real margin: appSettings.margin / screenScaling
-        property real totalWidth: 2 * margin + width
-        property real totalHeight: 2 * margin + height
+        property int margin: appSettings.margin / screenScaling
+        property int totalWidth: 2 * margin + width
+        property int totalHeight: 2 * margin + height
 
         width: Math.floor(parent.width / (screenScaling * fontWidth))
         height: Math.floor(parent.height / screenScaling)
