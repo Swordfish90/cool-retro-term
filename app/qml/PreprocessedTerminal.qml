@@ -71,11 +71,11 @@ Item{
         id: kterminal
 
         property int margin: appSettings.margin / screenScaling
-        property int totalWidth: 2 * margin + width
-        property int totalHeight: 2 * margin + height
+        property int totalWidth: Math.floor(parent.width / (screenScaling * fontWidth))
+        property int totalHeight: Math.floor(parent.height / screenScaling)
 
-        width: Math.floor(parent.width / (screenScaling * fontWidth))
-        height: Math.floor(parent.height / screenScaling)
+        width: totalWidth - 2 * margin
+        height: totalHeight - 2 * margin
 
         colorScheme: "cool-retro-term"
 
