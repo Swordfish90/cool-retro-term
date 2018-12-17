@@ -108,8 +108,8 @@ Loader {
 
                  uniform highp float prevLastUpdate;" +
 
-                "float rgb2grey(vec3 v){
-                    return dot(v, vec3(0.21, 0.72, 0.04));
+                "float max3(vec3 v) {
+                    return max(v.x, max(v.y, v.z));
                 }" +
 
                 "void main() {
@@ -119,7 +119,7 @@ Loader {
                     vec4 accColor = texture2D(burnInSource, coords);
 
                     float prevMask = accColor.a;
-                    float currMask = rgb2grey(txtColor);
+                    float currMask = max3(txtColor);
 
                     highp float blurDecay = clamp((lastUpdate - prevLastUpdate) * burnInTime, 0.0, 1.0);
                     blurDecay = max(0.0, blurDecay - prevMask);
