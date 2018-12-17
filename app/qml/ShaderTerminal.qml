@@ -53,7 +53,8 @@ Item {
          property real ambientLight: parent.ambientLight
 
          property real flickering: appSettings.flickering
-         property real horizontalSync: appSettings.horizontalSync * 0.5
+         property real horizontalSync: appSettings.horizontalSync
+         property real horizontalSyncStrength: Utils.lint(0.1, 0.35, horizontalSync)
          property real glowingLine: appSettings.glowingLine * 0.2
          property real burnIn: appSettings.burnIn
          property real burnInLastUpdate: burnInEffect.lastUpdate
@@ -115,7 +116,7 @@ Item {
                  uniform lowp float flickering;" : "") +
 
              (!fallBack && horizontalSync !== 0.0 ?"
-                 uniform lowp float horizontalSync;
+                 uniform lowp float horizontalSyncStrength;
                  varying lowp float distortionScale;
                  varying lowp float distortionFreq;" : "") +
 
@@ -133,8 +134,8 @@ Item {
                  : "") +
 
                  (!fallBack && horizontalSync !== 0.0 ? "
-                     float randval = horizontalSync - initialNoiseTexel.r;
-                     distortionScale = step(0.0, randval) * randval * horizontalSync;
+                     float randval = horizontalSyncStrength - initialNoiseTexel.r;
+                     distortionScale = step(0.0, randval) * randval * horizontalSyncStrength;
                      distortionFreq = mix(4.0, 40.0, initialNoiseTexel.g);"
                  : "") +
 
@@ -180,7 +181,7 @@ Item {
                  uniform lowp float ambientLight;" : "") +
 
              (fallBack && horizontalSync !== 0 ? "
-                 uniform lowp float horizontalSync;" : "") +
+                 uniform lowp float horizontalSyncStrength;" : "") +
              (fallBack && flickering !== 0.0 ?"
                  uniform lowp float flickering;" : "") +
              (!fallBack && flickering !== 0 ? "
@@ -240,8 +241,8 @@ Item {
                      float brightness = 1.0 + (initialNoiseTexel.g - 0.5) * flickering;"
                  : "") +
                  (fallBack && horizontalSync !== 0.0 ? "
-                     float randval = horizontalSync - initialNoiseTexel.r;
-                     float distortionScale = step(0.0, randval) * randval * horizontalSync;
+                     float randval = horizontalSyncStrength - initialNoiseTexel.r;
+                     float distortionScale = step(0.0, randval) * randval * horizontalSyncStrength;
                      float distortionFreq = mix(4.0, 40.0, initialNoiseTexel.g);"
                  : "") +
 
