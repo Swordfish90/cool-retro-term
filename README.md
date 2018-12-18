@@ -13,9 +13,9 @@ It uses the QML port of qtermwidget (Konsole) developed by me: https://github.co
 This terminal emulator works under Linux and macOS and requires Qt 5.2 or higher.
 
 ## Screenshots
-![Image](<http://i.imgur.com/I6wq1cC.png>)
-![Image](<http://i.imgur.com/12EqlpL.png>)
-![Image](<http://i.imgur.com/Lx0acQz.jpg>)
+![Image](<https://i.imgur.com/TNumkDn.png>)
+![Image](<https://i.imgur.com/hfjWOM4.png>)
+![Image](<https://i.imgur.com/GYRDPzJ.jpg>)
 
 ## Get cool-retro-term
 You can either build cool-retro-term yourself (see below) or walk the easy way and install one of these packages:
