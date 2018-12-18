@@ -54,7 +54,7 @@ Item {
 
          property real flickering: appSettings.flickering
          property real horizontalSync: appSettings.horizontalSync
-         property real horizontalSyncStrength: Utils.lint(0.1, 0.35, horizontalSync)
+         property real horizontalSyncStrength: Utils.lint(0.05, 0.35, horizontalSync)
          property real glowingLine: appSettings.glowingLine * 0.2
          property real burnIn: appSettings.burnIn
          property real burnInLastUpdate: burnInEffect.lastUpdate
