@@ -482,7 +482,7 @@ Item {
 
                  (screenCurvature !== 0 ? "
                      float reflectionMask = sum2(step(vec2(0.0), curvatureCoords) - step(vec2(1.0), curvatureCoords));
-                     reflectionMask = clamp(0.0, 1.0, reflectionMask);"
+                     reflectionMask = clamp(reflectionMask, 0.0, 1.0);"
                  :
                      "float reflectionMask = 1.0;") +
 
