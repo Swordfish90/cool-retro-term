@@ -25,6 +25,13 @@ script:
   - ./linuxdeployqt-*.AppImage appdir/usr/bin/cool-retro-term -qmldir=./app/qml/ -qmldir=./qmltermwidget/ # -verbose=3 2>&1 | grep "path:" -C 3
   - ./linuxdeployqt-*.AppImage appdir/usr/bin/cool-retro-term -qmldir=./app/qml/ -qmldir=./qmltermwidget/ -verbose=2 -appimage
   
-# See https://github.com/probonopd/uploadtool/ for a way to upload to GitHub Releases automatically
 after_success:
-  - curl --upload-file ./Cool_Retro_Term-*.AppImage https://transfer.sh/Cool_Retro_Term-git.$(git rev-parse --short HEAD)-x86_64.AppImage
+  - find appdir -executable -type f -exec ldd {} \; | grep " => /usr" | cut -d " " -f 2-3 | sort | uniq
+  - # curl --upload-file Cool*.AppImage https://transfer.sh/Cool_Retro_Term-git.$(git rev-parse --short HEAD)-x86_64.AppImage
+  - wget -c https://github.com/probonopd/uploadtool/raw/master/upload.sh
+  - bash upload.sh Cool*.AppImage*
+  
+branches:
+  except:
+    - # Do not build tags that we create when we upload to GitHub Releases
+    - /^(?i:continuous)/
