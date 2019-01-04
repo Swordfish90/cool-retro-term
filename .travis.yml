@@ -11,8 +11,8 @@ install:
 script:
   - qmake CONFIG+=release PREFIX=/usr
   - make -j$(nproc)
-  - mkdir -p appdir/usr/share/appdata appdir/usr/bin
-  - cp packaging/appdata/cool-retro-term.appdata.xml appdir/usr/share/appdata/
+  - mkdir -p appdir/usr/share/metainfo appdir/usr/bin
+  - cp packaging/appdata/cool-retro-term.appdata.xml appdir/usr/share/metainfo/
   - cp cool-retro-term appdir/usr/bin/
   - cp ./cool-retro-term.desktop appdir/
   - cp ./app/icons/128x128/cool-retro-term.png appdir/
