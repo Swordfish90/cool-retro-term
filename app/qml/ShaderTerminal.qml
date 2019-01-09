@@ -24,6 +24,7 @@ import QtGraphicalEffects 1.0
 import "utils.js" as Utils
 
 Item {
+    property SlowBurnIn slowBurnInEffect
     property ShaderEffectSource source
     property BurnInEffect burnInEffect
     property ShaderEffectSource bloomSource
@@ -56,9 +57,16 @@ Item {
          property real horizontalSync: appSettings.horizontalSync
          property real horizontalSyncStrength: Utils.lint(0.05, 0.35, horizontalSync)
          property real glowingLine: appSettings.glowingLine * 0.2
-         property real burnIn: appSettings.burnIn
+
+         // Fast burnin properties
+         property real burnIn: appSettings.useFastBurnIn ? appSettings.burnIn : 0
          property real burnInLastUpdate: burnInEffect.lastUpdate
          property real burnInTime: burnInEffect.burnInFadeTime
+
+         // Slow burnin properties
+         property real slowBurnIn: appSettings.useFastBurnIn ? 0 : appSettings.burnIn
+         property ShaderEffectSource slowBurnInSource: slowBurnInEffect.source
+
          property real jitter: appSettings.jitter
          property size jitterDisplacement: Qt.size(0.007 * jitter, 0.002 * jitter)
          property real shadowLength: 0.25 * screenCurvature * Utils.lint(0.50, 1.5, ambientLight)
@@ -162,6 +170,8 @@ Item {
                  uniform sampler2D burnInSource;
                  uniform highp float burnInLastUpdate;
                  uniform highp float burnInTime;" : "") +
+             (slowBurnIn !== 0 ? "
+                 uniform sampler2D slowBurnInSource;" : "") +
              (staticNoise !== 0 ? "
                  uniform highp float staticNoise;" : "") +
              (((staticNoise !== 0 || jitter !== 0)
@@ -291,6 +301,11 @@ Item {
                      vec3 burnInColor = 0.65 * (txt_blur.rgb - vec3(blurDecay));
                      txt_color = max(txt_color, convertWithChroma(burnInColor));"
                  : "") +
+
+                 (slowBurnIn !== 0 ? "
+                     vec4 txt_blur = texture2D(slowBurnInSource, staticCoords);
+                     txt_color = max(txt_color, convertWithChroma(txt_blur.rgb * txt_blur.a));
+                 " : "") +
 
                   "txt_color += fontColor.rgb * vec3(color);" +
 

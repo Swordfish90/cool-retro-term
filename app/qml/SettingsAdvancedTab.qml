@@ -133,6 +133,12 @@ Tab{
                     }
                 }
                 SizedLabel{text: Math.round(burnInSlider.value * 100) + "%"}
+                CheckBox{
+                    Layout.columnSpan: 2
+                    text: qsTr("Burnin optimization (Might display timing artifacts)")
+                    checked: appSettings.useFastBurnIn
+                    onCheckedChanged: appSettings.useFastBurnIn = checked
+                }
             }
         }
     }

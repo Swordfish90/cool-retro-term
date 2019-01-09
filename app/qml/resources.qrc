@@ -43,5 +43,6 @@
         <file>BurnInEffect.qml</file>
         <file>fonts/modern-terminus/TerminusTTF-4.46.0.ttf</file>
         <file>NewTerminalFrame.qml</file>
+        <file>SlowBurnIn.qml</file>
     </qresource>
 </RCC>

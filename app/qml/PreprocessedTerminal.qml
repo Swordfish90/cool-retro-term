@@ -33,6 +33,7 @@ Item{
 
     property ShaderEffectSource mainSource: kterminalSource
     property BurnInEffect burnInEffect: burnInEffect
+    property SlowBurnIn slowBurnInEffect: slowBurnInEffect
     property real fontWidth: 1.0
     property real screenScaling: 1.0
     property real scaleTexture: 1.0
@@ -227,7 +228,26 @@ Item{
         sourceRect: Qt.rect(-kterminal.margin, -kterminal.margin, kterminal.totalWidth, kterminal.totalHeight)
     }
 
-    BurnInEffect {
-        id: burnInEffect
+    Item {
+        id: burnInContainer
+
+        property int burnInScaling: scaleTexture * appSettings.burnInQuality
+
+        width: Math.round(appSettings.lowResolutionFont
+               ? kterminal.totalWidth * Math.max(1, burnInScaling)
+               : kterminal.totalWidth * scaleTexture * appSettings.burnInQuality)
+
+        height: Math.round(appSettings.lowResolutionFont
+                ? kterminal.totalHeight * Math.max(1, burnInScaling)
+                : kterminal.totalHeight * scaleTexture * appSettings.burnInQuality)
+
+
+        BurnInEffect {
+            id: burnInEffect
+        }
+
+        SlowBurnIn {
+            id: slowBurnInEffect
+        }
     }
 }
