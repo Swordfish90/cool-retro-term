@@ -71,12 +71,23 @@ Item{
     QMLTermWidget {
         id: kterminal
 
+        property int textureResolutionScale: appSettings.lowResolutionFont ? devicePixelRatio : 1
         property int margin: appSettings.margin / screenScaling
         property int totalWidth: Math.floor(parent.width / (screenScaling * fontWidth))
         property int totalHeight: Math.floor(parent.height / screenScaling)
 
-        width: totalWidth - 2 * margin
-        height: totalHeight - 2 * margin
+        property int rawWidth: totalWidth - 2 * margin
+        property int rawHeight: totalHeight - 2 * margin
+
+        textureSize: Qt.size(width / textureResolutionScale, height / textureResolutionScale)
+
+        width: ensureMultiple(rawWidth, devicePixelRatio)
+        height: ensureMultiple(rawHeight, devicePixelRatio)
+
+        /** Ensure size is a multiple of factor. This is needed for pixel perfect scaling on highdpi screens. */
+        function ensureMultiple(size, factor) {
+            return Math.round(size / factor) * factor;
+        }
 
         colorScheme: "cool-retro-term"
 
