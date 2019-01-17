@@ -134,7 +134,7 @@ QtObject{
 
     property FontLoader fontLoader: FontLoader { }
 
-    onFontScalingChanged: handleFontChanged();
+    onTotalFontScalingChanged: handleFontChanged();
     onFontWidthChanged: handleFontChanged();
 
     function getIndexByName(name) {
