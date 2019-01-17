@@ -74,7 +74,7 @@ int main(int argc, char *argv[])
         return 0;
     }
 
-    QString appVersion("1.1.0");
+    QString appVersion("1.1.1");
 
     if (args.contains("-v") || args.contains("--version")) {
         qDebug() << ("cool-retro-term " + appVersion).toStdString().c_str();
