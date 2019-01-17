@@ -13,10 +13,12 @@ Loader {
     property real delay: (1.0 / appSettings.fps) * 1000
     property real burnIn: appSettings.burnIn
     property real burnInFadeTime: 1 / Utils.lint(_minBurnInFadeTime, _maxBurnInFadeTime, burnIn)
-    property real _minBurnInFadeTime: 160
-    property real _maxBurnInFadeTime: 1600
+    property real _minBurnInFadeTime: appSettings.minBurnInFadeTime
+    property real _maxBurnInFadeTime: appSettings.maxBurnInFadeTime
 
-    active: appSettings.burnIn !== 0
+    active: appSettings.useFastBurnIn && appSettings.burnIn !== 0
+
+    anchors.fill: parent
 
     function completelyUpdate() {
         prevLastUpdate = lastUpdate;
@@ -32,16 +34,6 @@ Loader {
 
     sourceComponent: Item {
         property alias source: burnInEffectSource
-
-        property int burnInScaling: scaleTexture * appSettings.burnInQuality
-
-        width: appSettings.lowResolutionFont
-               ? kterminal.totalWidth * Math.max(1, burnInScaling)
-               : kterminal.totalWidth * scaleTexture * appSettings.burnInQuality
-
-        height: appSettings.lowResolutionFont
-                ? kterminal.totalHeight * Math.max(1, burnInScaling)
-                : kterminal.totalHeight * scaleTexture * appSettings.burnInQuality
 
         ShaderEffectSource {
             id: burnInEffectSource
@@ -88,7 +80,6 @@ Loader {
             property real prevLastUpdate: burnInEffect.prevLastUpdate
 
             anchors.fill: parent
-
             blending: false
 
             fragmentShader:

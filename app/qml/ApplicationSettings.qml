@@ -33,6 +33,9 @@ QtObject{
     readonly property real minimumFontScaling: 0.25
     readonly property real maximumFontScaling: 2.50
 
+    readonly property real minBurnInFadeTime: 160
+    readonly property real maxBurnInFadeTime: 1600
+
     // GENERAL SETTINGS ///////////////////////////////////////////////////////
 
     property int x: 100
@@ -52,7 +55,9 @@ QtObject{
     property bool verbose: false
 
     property real bloomQuality: 0.5
+
     property real burnInQuality: 0.5
+    property bool useFastBurnIn: Qt.platform.os === "osx" ? false : true
 
     onWindowScalingChanged: handleFontChanged();
 
@@ -202,7 +207,8 @@ QtObject{
             bloomQuality: bloomQuality,
             burnInQuality: burnInQuality,
             useCustomCommand: useCustomCommand,
-            customCommand: customCommand
+            customCommand: customCommand,
+            useFastBurnIn: useFastBurnIn
         }
         return stringify(settings);
     }
@@ -288,6 +294,8 @@ QtObject{
 
         useCustomCommand = settings.useCustomCommand !== undefined ? settings.useCustomCommand : useCustomCommand
         customCommand = settings.customCommand !== undefined ? settings.customCommand : customCommand
+
+        useFastBurnIn = settings.useFastBurnIn !== undefined ? settings.useFastBurnIn : useFastBurnIn;
     }
 
     function loadProfileString(profileString){

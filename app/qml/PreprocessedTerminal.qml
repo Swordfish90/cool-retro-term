@@ -33,6 +33,7 @@ Item{
 
     property ShaderEffectSource mainSource: kterminalSource
     property BurnInEffect burnInEffect: burnInEffect
+    property SlowBurnIn slowBurnInEffect: slowBurnInEffect
     property real fontWidth: 1.0
     property real screenScaling: 1.0
     property real scaleTexture: 1.0
@@ -70,12 +71,23 @@ Item{
     QMLTermWidget {
         id: kterminal
 
+        property int textureResolutionScale: appSettings.lowResolutionFont ? devicePixelRatio : 1
         property int margin: appSettings.margin / screenScaling
         property int totalWidth: Math.floor(parent.width / (screenScaling * fontWidth))
         property int totalHeight: Math.floor(parent.height / screenScaling)
 
-        width: totalWidth - 2 * margin
-        height: totalHeight - 2 * margin
+        property int rawWidth: totalWidth - 2 * margin
+        property int rawHeight: totalHeight - 2 * margin
+
+        textureSize: Qt.size(width / textureResolutionScale, height / textureResolutionScale)
+
+        width: ensureMultiple(rawWidth, devicePixelRatio)
+        height: ensureMultiple(rawHeight, devicePixelRatio)
+
+        /** Ensure size is a multiple of factor. This is needed for pixel perfect scaling on highdpi screens. */
+        function ensureMultiple(size, factor) {
+            return Math.round(size / factor) * factor;
+        }
 
         colorScheme: "cool-retro-term"
 
@@ -227,7 +239,26 @@ Item{
         sourceRect: Qt.rect(-kterminal.margin, -kterminal.margin, kterminal.totalWidth, kterminal.totalHeight)
     }
 
-    BurnInEffect {
-        id: burnInEffect
+    Item {
+        id: burnInContainer
+
+        property int burnInScaling: scaleTexture * appSettings.burnInQuality
+
+        width: Math.round(appSettings.lowResolutionFont
+               ? kterminal.totalWidth * Math.max(1, burnInScaling)
+               : kterminal.totalWidth * scaleTexture * appSettings.burnInQuality)
+
+        height: Math.round(appSettings.lowResolutionFont
+                ? kterminal.totalHeight * Math.max(1, burnInScaling)
+                : kterminal.totalHeight * scaleTexture * appSettings.burnInQuality)
+
+
+        BurnInEffect {
+            id: burnInEffect
+        }
+
+        SlowBurnIn {
+            id: slowBurnInEffect
+        }
     }
 }

@@ -12,6 +12,7 @@ ShaderTerminal {
 
     source: terminal.mainSource
     burnInEffect: terminal.burnInEffect
+    slowBurnInEffect: terminal.slowBurnInEffect
     virtual_resolution: terminal.virtualResolution
 
     TimeManager{
