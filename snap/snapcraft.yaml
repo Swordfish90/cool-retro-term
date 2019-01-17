@@ -6,6 +6,8 @@ description: |
 grade: stable # must be 'stable' to release into candidate/stable channels
 confinement: classic # use 'strict' once you have the right plugs
 
+base: core18
+
 apps:
   cool-retro-term:
     command: desktop-launch $SNAP/usr/bin/cool-retro-term
@@ -27,13 +29,38 @@ apps:
       - system-observe
       
 parts:
+  desktop-qt5:
+    source: https://github.com/ubuntu/snapcraft-desktop-helpers.git
+    source-subdir: qt
+    plugin: make
+    make-parameters: ["FLAVOR=qt5"]
+    build-packages:
+      - build-essential
+      - qtbase5-dev
+      - dpkg-dev
+    stage-packages:
+      - libxkbcommon0
+      - ttf-ubuntu-font-family
+      - dmz-cursor-theme
+      - light-themes
+      - adwaita-icon-theme
+      - gnome-themes-standard
+      - shared-mime-info
+      - libqt5gui5
+      - libgdk-pixbuf2.0-0
+      - libqt5svg5 # for loading icon themes which are svg
+      - try: [appmenu-qt5] # not available on core18
+      - locales-all
+      - xdg-user-dirs
+      - fcitx-frontend-qt5
+
   my-part:
     source: https://github.com/Swordfish90/cool-retro-term
     source-type: git
     plugin: qmake # See 'snapcraft plugins'
     qt-version: qt5
     after: [desktop-qt5]
-    
+
     build-packages:
       - build-essential 
       - qmlscene 
@@ -44,11 +71,12 @@ parts:
     stage-packages: 
       - qmlscene
       - qml-module-qtquick-controls 
-      - qtdeclarative5-qtquick2-plugin 
-      - libqt5qml-graphicaleffects 
+      - qml-module-qtquick2
+      - qml-module-qtgraphicaleffects
       - qml-module-qtquick-dialogs 
-      - qtdeclarative5-localstorage-plugin 
-      - qtdeclarative5-window-plugin
+      - qml-module-qtquick-localstorage
+      - qml-module-qtquick-window2
       - libgl1-mesa-dev
       - qtdeclarative5-dev-tools
       - qml-module-qtquick-extras
+
