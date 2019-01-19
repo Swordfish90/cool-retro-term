@@ -10,8 +10,10 @@ base: core18
 
 apps:
   cool-retro-term:
-    command: desktop-launch $SNAP/usr/bin/cool-retro-term
+    command: bin/desktop-launch $SNAP/usr/bin/cool-retro-term
     desktop: usr/share/applications/cool-retro-term.desktop
+    environment:
+      QML2_IMPORT_PATH: $SNAP/usr/lib/x86_64-linux-gnu/qt5/qml
     plugs:
       - unity7
       - x11
