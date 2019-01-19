@@ -236,7 +236,9 @@ QtObject{
     function addSystemFonts() {
         var families = monospaceSystemFonts;
         for (var i = 0; i < families.length; i++) {
-            console.log("Adding system font: ", families[i])
+            if (verbose) {
+                console.log("Adding system font: ", families[i])
+            }
             fontlist.append(convertToListElement(families[i]))
         }
     }
