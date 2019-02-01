@@ -55,6 +55,11 @@ Users of **Ubuntu 14.04 LTS (Trusty) up to 15.10 (Wily)** can use [this PPA](htt
 
 **Ubuntu 17.10** can use [this PPA](https://launchpad.net/%7Evantuz/+archive/ubuntu/cool-retro-term)
 
+**Solus** users can install using `eopg`:
+```
+eopkg it cool-retro-term
+```
+
 **macOS** users can grab the latest dmg from the release page: https://github.com/Swordfish90/cool-retro-term/releases
 
 ## Build instructions (Linux)
