@@ -22,10 +22,12 @@ import QtQuick 2.2
 import QtQuick.LocalStorage 2.0
 
 QtObject {
+    readonly property string dbMajorVersion: "1"
+    readonly property string dbMinorVersion: "1.0"
     property bool initialized: false
 
     function getDatabase() {
-         return LocalStorage.openDatabaseSync("coolretroterm", "1.0", "StorageDatabase", 100000);
+         return LocalStorage.openDatabaseSync("coolretroterm" + dbMajorVersion, dbMinorVersion, "StorageDatabase", 100000);
     }
 
     function initialize() {

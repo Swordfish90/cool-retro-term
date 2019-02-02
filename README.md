@@ -13,18 +13,24 @@ It uses the QML port of qtermwidget (Konsole) developed by me: https://github.co
 This terminal emulator works under Linux and macOS and requires Qt 5.2 or higher.
 
 ## Screenshots
-![Image](<http://i.imgur.com/I6wq1cC.png>)
-![Image](<http://i.imgur.com/12EqlpL.png>)
-![Image](<http://i.imgur.com/Lx0acQz.jpg>)
+![Image](<https://i.imgur.com/TNumkDn.png>)
+![Image](<https://i.imgur.com/hfjWOM4.png>)
+![Image](<https://i.imgur.com/GYRDPzJ.jpg>)
 
-## Get cool-retro-term
-You can either build cool-retro-term yourself (see below) or walk the easy way and install one of these packages:
+## Install
+Walk the easy way and install cool-retro-term using one of these convenient packages:
 
-Fedora has the `cool-retro-term` in the offcial repositories. All you have to do is `sudo dnf install cool-retro-term`.
+Just grab the latest AppImage from the release page and make it executable and run it:
 
-Users of openSUSE can grab a package from [Open Build Service](http://software.opensuse.org/package/cool-retro-term).
+    wget https://github.com/Swordfish90/cool-retro-term/releases/download/1.1.1/Cool-Retro-Term-1.1.1-x86_64.AppImage
+    chmod a+x Cool-Retro-Term-1.1.1-x86_64.AppImage
+    ./Cool-Retro-Term-1.1.1-x86_64.AppImage
 
-Arch users can install this [package](https://aur.archlinux.org/packages/cool-retro-term-git/) directly via the [AUR](https://aur.archlinux.org):
+**Fedora** has the `cool-retro-term` in the offcial repositories. All you have to do is `sudo dnf install cool-retro-term`.
+
+Users of **openSUSE** can grab a package from [Open Build Service](http://software.opensuse.org/package/cool-retro-term).
+
+**Arch** users can install this [package](https://aur.archlinux.org/packages/cool-retro-term-git/) directly via the [AUR](https://aur.archlinux.org):
 
     yaourt -S aur/cool-retro-term-git
 
@@ -34,24 +40,26 @@ or use:
 
 to install precompiled from community repository.
 
-Gentoo users can now install the second release "1.0.1" from a 3rd-party repository preferably via layman:
+**Gentoo** users can now install the third release "1.1.0" from a 3rd-party repository preferably via layman:
 
     USE="git" emerge app-portage/layman
     wget https://www.gerczei.eu/files/gerczei.xml -O /etc/layman/overlays/gerczei.xml
     layman -f -a qt -a gerczei # those who've added the repo before 27/08/17 should remove, update and add it again as its source has changed
-    ACCEPT_KEYWORDS="~*" emerge =x11-terms/cool-retro-term-1.0.1::gerczei
+    ACCEPT_KEYWORDS="~*" emerge =x11-terms/cool-retro-term-1.1.0::gerczei
 
 The live ebuild (version 9999-r1) tracking the bleeding-edge WIP codebase also remains available.
 
 A word of warning: USE flags and keywords are to be added to portage's configuration files and every emerge operation should be executed with '-p' (short option for --pretend) appended to the command line first as per best practice!
 
-Ubuntu users of 14.04 LTS (Trusty) up to 15.10 (Wily) can use [this PPA](https://launchpad.net/~bugs-launchpad-net-falkensweb).
+Users of **Ubuntu 14.04 LTS (Trusty) up to 15.10 (Wily)** can use [this PPA](https://launchpad.net/~bugs-launchpad-net-falkensweb).
 
-Ubuntu 17.10 can use [this PPA](https://launchpad.net/%7Evantuz/+archive/ubuntu/cool-retro-term)
+**Ubuntu 17.10** can use [this PPA](https://launchpad.net/%7Evantuz/+archive/ubuntu/cool-retro-term)
 
-macOS users can grab the latest dmg from the release page: https://github.com/Swordfish90/cool-retro-term/releases
+**macOS** users can grab the latest dmg from the release page: https://github.com/Swordfish90/cool-retro-term/releases
 
 ## Build instructions (Linux)
+
+Build cool-retro-term yourself, you know, the retro way.
 
 ## Dependencies
 Make sure to install these first.
@@ -82,15 +90,9 @@ Make sure to install these first.
 
 ---
 
-**Debian Stretch and Jessie**
+**Debian Jessie and above**
 
-    sudo apt install build-essential qmlscene qt5-qmake qt5-default qtdeclarative5-dev qml-module-qtquick-controls qml-module-qtgraphicaleffects qml-module-qtquick-dialogs qml-module-qtquick-localstorage qml-module-qtquick-window2
-
----
-
-**Debian Stretch**
-
-    sudo apt-get install build-essential qmlscene qt5-qmake qt5-default qtdeclarative5-dev qml-module-qtquick-controls qml-module-qtgraphicaleffects qml-module-qtquick-dialogs qml-module-qtquick-localstorage qml-module-qtquick-window2 qml-module-qt-labs-settings qml-module-qt-labs-folderlistmodel
+    sudo apt install build-essential qmlscene qt5-qmake qt5-default qtdeclarative5-dev qml-module-qtquick-controls qml-module-qtgraphicaleffects qml-module-qtquick-dialogs qml-module-qtquick-localstorage qml-module-qtquick-window2 qml-module-qt-labs-settings qml-module-qt-labs-folderlistmodel
 
 ---
 

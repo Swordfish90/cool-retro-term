@@ -27,13 +27,26 @@ import "Components"
 Tab{
     ColumnLayout{
         anchors.fill: parent
+
         GroupBox{
-            property var rasterization: [qsTr("Default"), qsTr("Scanlines"), qsTr("Pixels")][appSettings.rasterization]
-            title: qsTr("Font" + "(" + rasterization + ")")
-            anchors { left: parent.left; right: parent.right }
+            title: qsTr("Font")
+            Layout.fillWidth: true
             GridLayout{
                 anchors.fill: parent
                 columns: 2
+                Label { text: qsTr("Rasterization") }
+                ComboBox {
+                    id: rasterizationBox
+
+                    property string selectedElement: model[currentIndex]
+
+                    Layout.fillWidth: true
+                    model: [qsTr("Default"), qsTr("Scanlines"), qsTr("Pixels")]
+                    currentIndex: appSettings.rasterization
+                    onCurrentIndexChanged: {
+                        appSettings.rasterization = currentIndex
+                    }
+                }
                 Label{ text: qsTr("Name") }
                 ComboBox{
                     id: fontChanger
@@ -103,7 +116,7 @@ Tab{
         }
         GroupBox{
             title: qsTr("Colors")
-            anchors { left: parent.left; right: parent.right }
+            Layout.fillWidth: true
             ColumnLayout{
                 anchors.fill: parent
                 ColumnLayout{

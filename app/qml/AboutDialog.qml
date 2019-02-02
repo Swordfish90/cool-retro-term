@@ -16,7 +16,7 @@ Window{
         anchors.margins: 15
         spacing: 15
         Text {
-            anchors.horizontalCenter: parent.horizontalCenter
+            Layout.alignment: Qt.AlignHCenter
             text: "cool-retro-term"
             font {bold: true; pointSize: 18}
         }
@@ -69,13 +69,13 @@ Window{
             Image{
                 Layout.fillWidth: true
                 Layout.fillHeight: true
-                anchors.horizontalCenter: parent.horizontalCenter
+                Layout.alignment: Qt.AlignHCenter
                 fillMode: Image.PreserveAspectFit
                 source: "images/crt256.png"
                 smooth: true
             }
             Text{
-                anchors.horizontalCenter: parent.horizontalCenter
+                Layout.alignment: Qt.AlignCenter
                 horizontalAlignment: Text.AlignHCenter
                 text: appSettings.version + "\n" +
                       qsTr("Author: ") + "Filippo Scognamiglio\n" +

@@ -35,10 +35,19 @@ QtObject{
         ListElement{
             name: "COMMODORE_PET"
             text: "Commodore PET (1977)"
-            source: "fonts/1977-commodore-pet/COMMODORE_PET.ttf"
-            lineSpacing: 2
+            source: "fonts/1977-commodore-pet/PetMe.ttf"
+            lineSpacing: 3
             pixelSize: 8
-            baseScaling: 4.0
+            baseScaling: 3.5
+            fontWidth: 0.8
+        }
+        ListElement{
+            name: "IBM_PC"
+            text: "IBM PC (1981)"
+            source: "fonts/1981-ibm-pc/PxPlus_IBM_BIOS.ttf"
+            lineSpacing: 3
+            pixelSize: 8
+            baseScaling: 3.5
             fontWidth: 0.8
         }
         ListElement{
@@ -47,13 +56,13 @@ QtObject{
             source: "fonts/modern-proggy-tiny/ProggyTiny.ttf"
             lineSpacing: 1
             pixelSize: 16
-            baseScaling: 4.0
+            baseScaling: 3.3
             fontWidth: 0.9
         }
         ListElement{
             name: "TERMINUS_SCALED"
             text: "Terminus (Modern)"
-            source: "fonts/modern-terminus/TerminusTTF-4.38.2.ttf"
+            source: "fonts/modern-terminus/TerminusTTF-4.46.0.ttf"
             lineSpacing: 1
             pixelSize: 12
             baseScaling: 3.0
@@ -74,25 +83,25 @@ QtObject{
             source: "fonts/1977-apple2/PrintChar21.ttf"
             lineSpacing: 2
             pixelSize: 8
-            baseScaling: 4.0
+            baseScaling: 3.5
             fontWidth: 0.9
         }
         ListElement{
             name: "ATARI_400"
             text: "Atari 400-800 (1979)"
-            source: "fonts/1979-atari-400-800/ATARI400800_original.TTF"
+            source: "fonts/1979-atari-400-800/AtariClassic-Regular.ttf"
             lineSpacing: 3
             pixelSize: 8
-            baseScaling: 4.0
+            baseScaling: 3.5
             fontWidth: 0.8
         }
         ListElement{
             name: "COMMODORE_64"
             text: "Commodore 64 (1982)"
-            source: "fonts/1982-commodore64/C64_Pro_Mono_v1.0-STYLE.ttf"
+            source: "fonts/1982-commodore64/C64_Pro_Mono-STYLE.ttf"
             lineSpacing: 3
             pixelSize: 8
-            baseScaling: 4.0
+            baseScaling: 3.5
             fontWidth: 0.8
         }
     }

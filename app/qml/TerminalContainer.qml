@@ -3,35 +3,21 @@ import QtGraphicalEffects 1.0
 
 import "utils.js" as Utils
 
-ShaderTerminal{
+ShaderTerminal {
     property alias title: terminal.title
     property alias terminalSize: terminal.terminalSize
 
     id: mainShader
     opacity: appSettings.windowOpacity * 0.3 + 0.7
 
-    blending: false
-
     source: terminal.mainSource
-    blurredSource: terminal.blurredSource
-    dispX: (12 / width) * appSettings.windowScaling
-    dispY: (12 / height) * appSettings.windowScaling
+    burnInEffect: terminal.burnInEffect
+    slowBurnInEffect: terminal.slowBurnInEffect
     virtual_resolution: terminal.virtualResolution
 
-    Loader{
-        id: frame
-        anchors.fill: parent
-
-        property real displacementLeft: item ? item.displacementLeft : 0
-        property real displacementTop: item ? item.displacementTop : 0
-        property real displacementRight: item ? item.displacementRight : 0
-        property real displacementBottom: item ? item.displacementBottom : 0
-
-        asynchronous: true
-        visible: status === Loader.Ready
-
-        z: 2.1
-        source: appSettings.frameSource
+    TimeManager{
+        id: timeManager
+        enableTimer: terminalWindow.visible
     }
 
     PreprocessedTerminal{
@@ -49,7 +35,7 @@ ShaderTerminal{
         height: parent.height * appSettings.bloomQuality
 
         sourceComponent: FastBlur{
-            radius: Utils.lint(16, 48, appSettings.bloomQuality * appSettings.windowScaling);
+            radius: Utils.lint(16, 64, appSettings.bloomQuality);
             source: terminal.mainSource
             transparentBorder: true
         }
@@ -68,6 +54,12 @@ ShaderTerminal{
     }
 
     bloomSource: bloomSourceLoader.item
+
+//    NewTerminalFrame {
+//        id: terminalFrame
+//        anchors.fill: parent
+//        blending: true
+//    }
 
     // This shader might be useful in the future. Since we used it only for a couple
     // of calculations is probably best to move those in the main shader. If in the future

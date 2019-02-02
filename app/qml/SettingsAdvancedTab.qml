@@ -27,15 +27,48 @@ import "Components"
 Tab{
     ColumnLayout{
         anchors.fill: parent
+
         GroupBox{
-            title: qsTr("General")
             Layout.fillWidth: true
-            anchors.left: parent.left
-            anchors.right: parent.right
+            title: qsTr("Command")
+            ColumnLayout {
+                anchors.fill: parent
+                CheckBox{
+                    id: useCustomCommand
+                    text: qsTr("Use custom command instead of shell at startup")
+                    checked: appSettings.useCustomCommand
+                    onCheckedChanged: appSettings.useCustomCommand = checked
+                }
+                // Workaround for QTBUG-31627 for pre 5.3.0
+                Binding{
+                    target: useCustomCommand
+                    property: "checked"
+                    value: appSettings.useCustomCommand
+                }
+                TextField{
+                    id: customCommand
+                    Layout.fillWidth: true
+                    text: appSettings.customCommand
+                    enabled: useCustomCommand.checked
+                    onEditingFinished: appSettings.customCommand = text
+
+                    // Save text even if user forgets to press enter or unfocus
+                    function saveSetting() {
+                        appSettings.customCommand = text;
+                    }
+                    Component.onCompleted: settings_window.closing.connect(saveSetting)
+                }
+            }
+        }
+
+        GroupBox{
+            title: qsTr("Performance")
+            Layout.fillWidth: true
             GridLayout{
                 anchors.fill: parent
                 rows: 2
                 columns: 3
+
                 Label{text: qsTr("Effects FPS")}
                 Slider{
                     Layout.fillWidth: true
@@ -54,6 +87,7 @@ Tab{
                         enabled = true;
                     }
                 }
+
                 SizedLabel{text: appSettings.fps !== 0 ? appSettings.fps : qsTr("Max")}
                 Label{text: qsTr("Texture Quality")}
                 Slider{
@@ -69,16 +103,7 @@ Tab{
                     }
                 }
                 SizedLabel{text: Math.round(txtslider.value * 100) + "%"}
-            }
-        }
-        GroupBox{
-            title: qsTr("Bloom")
-            Layout.fillWidth: true
-            anchors.left: parent.left
-            anchors.right: parent.right
-            GridLayout{
-                id: bloomQualityContainer
-                anchors.fill: parent
+
                 Label{text: qsTr("Bloom Quality")}
                 Slider{
                     Layout.fillWidth: true
@@ -93,16 +118,6 @@ Tab{
                     }
                 }
                 SizedLabel{text: Math.round(bloomSlider.value * 100) + "%"}
-            }
-        }
-        GroupBox{
-            title: qsTr("BurnIn")
-            Layout.fillWidth: true
-            anchors.left: parent.left
-            anchors.right: parent.right
-            GridLayout{
-                id: blurQualityContainer
-                anchors.fill: parent
 
                 Label{text: qsTr("BurnIn Quality")}
                 Slider{
@@ -118,17 +133,12 @@ Tab{
                     }
                 }
                 SizedLabel{text: Math.round(burnInSlider.value * 100) + "%"}
-            }
-        }
-        GroupBox{
-            title: qsTr("Frame")
-            Layout.fillWidth: true
-            anchors.left: parent.left
-            anchors.right: parent.right
-            CheckBox{
-                checked: appSettings._frameReflections
-                text: qsTr("Frame Reflections")
-                onCheckedChanged: appSettings._frameReflections = checked
+                CheckBox{
+                    Layout.columnSpan: 2
+                    text: qsTr("Burnin optimization (Might display timing artifacts)")
+                    checked: appSettings.useFastBurnIn
+                    onCheckedChanged: appSettings.useFastBurnIn = checked
+                }
             }
         }
     }

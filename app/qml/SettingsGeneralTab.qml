@@ -27,7 +27,6 @@ Tab{
     ColumnLayout{
         anchors.fill: parent
         GroupBox{
-            anchors {left: parent.left; right: parent.right}
             Layout.fillWidth: true
             Layout.fillHeight: true
             title: qsTr("Profile")
@@ -36,7 +35,7 @@ Tab{
                 TableView {
                     id: profilesView
                     Layout.fillWidth: true
-                    anchors { top: parent.top; bottom: parent.bottom; }
+                    Layout.fillHeight: true
                     model: appSettings.profilesList
                     headerVisible: false
                     TableViewColumn {
@@ -49,11 +48,11 @@ Tab{
                     }
                 }
                 ColumnLayout {
-                    anchors { top: parent.top; bottom: parent.bottom }
+                    Layout.fillHeight: true
                     Layout.fillWidth: false
                     Button{
                         Layout.fillWidth: true
-                        text: qsTr("New")
+                        text: qsTr("Save")
                         onClicked: {
                             insertname.profileName = "";
                             insertname.show()
@@ -108,12 +107,15 @@ Tab{
                                 if (!name)
                                     throw "Profile doesn't have a name";
 
+                                var version = profileObject.version !== undefined ? profileObject.version : 1;
+                                if (version !== appSettings.profileVersion)
+                                    throw "This profile is not supported on this version of CRT.";
+
                                 delete profileObject.name;
 
                                 appSettings.appendCustomProfile(name, JSON.stringify(profileObject));
                             } catch (err) {
-                                console.log(err);
-                                messageDialog.text = qsTr("There has been an error reading the file.")
+                                messageDialog.text = qsTr(err)
                                 messageDialog.open();
                             }
                         }
@@ -145,6 +147,7 @@ Tab{
                                 var profileObject = appSettings.profilesList.get(currentIndex);
                                 var profileSettings = JSON.parse(profileObject.obj_string);
                                 profileSettings["name"] = profileObject.text;
+                                profileSettings["version"] = appSettings.profileVersion;
 
                                 var result = fileIO.write(url, JSON.stringify(profileSettings, undefined, 2));
                                 if (!result)
@@ -161,34 +164,30 @@ Tab{
         }
 
         GroupBox{
-            anchors {left: parent.left; right: parent.right}
-            title: qsTr("Command")
-            ColumnLayout {
+            title: qsTr("Screen")
+            Layout.fillWidth: true
+            GridLayout{
                 anchors.fill: parent
-                CheckBox{
-                    id: useCustomCommand
-                    text: qsTr("Use custom command instead of shell at startup")
-                    checked: appSettings.useCustomCommand
-                    onCheckedChanged: appSettings.useCustomCommand = checked
+                columns: 2
+                Label{ text: qsTr("Brightness") }
+                SimpleSlider{
+                    onValueChanged: appSettings.brightness = value
+                    value: appSettings.brightness
                 }
-                // Workaround for QTBUG-31627 for pre 5.3.0
-                Binding{
-                    target: useCustomCommand
-                    property: "checked"
-                    value: appSettings.useCustomCommand
+                Label{ text: qsTr("Contrast") }
+                SimpleSlider{
+                    onValueChanged: appSettings.contrast = value
+                    value: appSettings.contrast
                 }
-                TextField{
-                    id: customCommand
-                    anchors {left: parent.left; right: parent.right}
-                    text: appSettings.customCommand
-                    enabled: useCustomCommand.checked
-                    onEditingFinished: appSettings.customCommand = text
-
-                    // Save text even if user forgets to press enter or unfocus
-                    function saveSetting() {
-                        appSettings.customCommand = text;
-                    }
-                    Component.onCompleted: settings_window.closing.connect(saveSetting)
+                Label{ text: qsTr("Margin") }
+                SimpleSlider{
+                    onValueChanged: appSettings._margin = value
+                    value: appSettings._margin
+                }
+                Label{ text: qsTr("Opacity") }
+                SimpleSlider{
+                    onValueChanged: appSettings.windowOpacity = value
+                    value: appSettings.windowOpacity
                 }
             }
         }
