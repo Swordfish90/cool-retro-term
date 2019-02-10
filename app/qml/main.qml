@@ -174,9 +174,5 @@ ApplicationWindow{
     }
     onClosing: {
         root.closeWindow()
-        // OSX Since we are currently supporting only one window
-        // quit the application when it is closed.
-        //if (Qt.platform.os === "osx")
-        //    Qt.quit()
     }
 }
