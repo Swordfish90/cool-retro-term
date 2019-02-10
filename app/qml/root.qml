@@ -36,7 +36,7 @@ QtObject {
             Qt.quit()
         }
     }
-	Component.onCompleted: {
+    Component.onCompleted: {
         terminalCount = 0
         root.newWindow()
     }
