@@ -68,21 +68,21 @@ ApplicationWindow{
     title: terminalContainer.title || qsTr(appSettings.wintitle)
 
 	Action {
-		id: newAction
-		text: qsTr("New Window")
-		shortcut: Qt.platform.os === "osx" ? StandardKey.New : "Ctrl+Shift+N"
-		onTriggered: {
-			root.newWindow()
-		}
-	}
-	Action {
-		id: closeAction
-		text: qsTr("Close Window")
-		shortcut: Qt.platform.os === "osx" ? StandardKey.Close : "Ctrl+Shift+W"
-		onTriggered: {
-			terminalWindow.close()
-		}
-	}
+        id: newAction
+        text: qsTr("New Window")
+        shortcut: Qt.platform.os === "osx" ? StandardKey.New : "Ctrl+Shift+N"
+        onTriggered: {
+            root.newWindow()
+        }
+    }
+    Action {
+        id: closeAction
+        text: qsTr("Close Window")
+        shortcut: Qt.platform.os === "osx" ? StandardKey.Close : "Ctrl+Shift+W"
+        onTriggered: {
+            terminalWindow.close()
+        }
+    }
     Action {
         id: showMenubarAction
         text: qsTr("Show Menubar")
