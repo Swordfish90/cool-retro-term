@@ -21,13 +21,23 @@ import QtQuick 2.2
 import QtQuick.Window 2.1
 
 QtObject {
-	id: root	
+	id: root
+    property int terminalCount
+   
 	function newWindow() {
 		var component = Qt.createComponent("main.qml")
 		var window = component.createObject()			
 		window.show()
+        terminalCount = terminalCount + 1
 	}
-	Component.onCompleted: {        
+    function closeWindow() {
+        terminalCount = terminalCount - 1
+        if (terminalCount == 0) {
+            Qt.quit()
+        }
+    }
+	Component.onCompleted: {
+        terminalCount = 0
 		root.newWindow()
 	}
 }
