@@ -26,7 +26,7 @@ Just grab the latest AppImage from the release page and make it executable and r
     chmod a+x Cool-Retro-Term-1.1.1-x86_64.AppImage
     ./Cool-Retro-Term-1.1.1-x86_64.AppImage
 
-**Fedora** has the `cool-retro-term` in the offcial repositories. All you have to do is `sudo dnf install cool-retro-term`.
+**Fedora** has the `cool-retro-term` in the official repositories. All you have to do is `sudo dnf install cool-retro-term`.
 
 Users of **openSUSE** can grab a package from [Open Build Service](http://software.opensuse.org/package/cool-retro-term).
 
