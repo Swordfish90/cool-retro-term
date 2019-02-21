@@ -27,7 +27,7 @@ import QtGraphicalEffects 1.0
 ApplicationWindow{
     style: ApplicationWindowStyle {
         background: Image {
-            source: "background.jpg"
+            source: "file:background.jpg"
             fillMode: Image.PreserveAspectFit
         }
     }
