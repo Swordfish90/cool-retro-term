@@ -24,6 +24,11 @@ import QtQuick.Controls 1.1
 import QtGraphicalEffects 1.0
 
 ApplicationWindow{
+    style: ApplicationWindowStyle {
+        background: BorderImage {
+            source: "background.png"
+        }
+    }
     id: terminalWindow
 
     width: 1024
