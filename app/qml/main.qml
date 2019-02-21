@@ -26,8 +26,9 @@ import QtGraphicalEffects 1.0
 
 ApplicationWindow{
     style: ApplicationWindowStyle {
-        background: BorderImage {
+        background: Image {
             source: "background.jpg"
+            fillMode: Image.PreserveAspectFit
         }
     }
     id: terminalWindow
@@ -42,7 +43,7 @@ ApplicationWindow{
     onHeightChanged: appSettings.height = height
 
     // Load saved window geometry and show the window
-    Component.onCompleted: {        
+    Component.onCompleted: {
         appSettings.handleFontChanged();
 
         x = appSettings.x
