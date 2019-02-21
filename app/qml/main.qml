@@ -28,7 +28,7 @@ ApplicationWindow{
     style: ApplicationWindowStyle {
         background: Image {
             source: "file:background.jpg"
-            fillMode: Image.PreserveAspectFitCrop
+            fillMode: Image.PreserveAspectCrop
         }
     }
     id: terminalWindow
