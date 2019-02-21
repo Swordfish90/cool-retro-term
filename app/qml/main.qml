@@ -26,7 +26,7 @@ import QtGraphicalEffects 1.0
 ApplicationWindow{
     style: ApplicationWindowStyle {
         background: BorderImage {
-            source: "background.png"
+            source: "background.jpg"
         }
     }
     id: terminalWindow
