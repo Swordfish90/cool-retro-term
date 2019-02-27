@@ -1,9 +1,9 @@
 [Desktop Entry]
 Comment=Use the command line the old way
-Exec=/opt/cool-retro-term/start.sh
+Exec=/opt/cool-cyber-term/start.sh
 GenericName=Terminal emulator
-Icon=/opt/cool-retro-term/cool-retro-term.png
-Name=Cool Retro Term
+Icon=/opt/cool-cyber-term/cool-retro-term.png
+Name=Cool Cyber Term
 Categories=System;TerminalEmulator;
 StartupNotify=true
 Terminal=false
