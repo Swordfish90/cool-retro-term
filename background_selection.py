@@ -2,7 +2,7 @@ import os
 import random
 
 image_dir = '/directory/to/image/folder'  # path to the background image folder
-install_dir = '/opt/cool-retro-term/'     # leave like this if you follow the install instructions
+install_dir = '/opt/cool-cyber-term/'     # leave like this if you follow the install instructions
 scale_perc = 0.18                         # downscale factor of background image (0.18 => 18% of original size) is used for pixellation
 opacity_perc = 0.7                        # opacity of the background image, so you still see your desktop 
 
