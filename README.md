@@ -28,6 +28,7 @@ git clone --recursive https://github.com/neurudan/cool-cyber-term.git
 
 # Move it!
 sudo mv cool-cyber-term /opt/
+sudo chmod -R a=rwx /opt/cool-cyber-term
 cd /opt/cool-cyber-term
 sudo cp cool-cyber-term.desktop /usr/share/applications
 
