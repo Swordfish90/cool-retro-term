@@ -65,6 +65,19 @@ eopkg it cool-retro-term
 brew cask install cool-retro-term
 ```
 
+**FreeBSD** users can install cool-retro-term with `pkg`:
+
+    pkg install cool-retro-term
+    
+## Build instructions (FreeBSD)
+
+Grab a copy of [the FreeBSD Ports Collection](https://www.freebsd.org/doc/en_US.ISO8859-1/books/handbook/ports-using.html), modify [`/usr/ports/x11/cool-retro-term/Makefile`](https://svnweb.freebsd.org/ports/head/x11/cool-retro-term/Makefile?view=markup) as you like, and then run `make install` to build and install the emulator:
+
+```
+cd /usr/ports/x11/cool-retro-term
+make install
+```
+
 ## Build instructions (Linux)
 
 Build cool-retro-term yourself, you know, the retro way.
