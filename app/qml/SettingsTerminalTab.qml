@@ -115,6 +115,24 @@ Tab{
             }
         }
         GroupBox{
+            title: qsTr("Cursor")
+            Layout.fillWidth: true
+            ColumnLayout {
+                anchors.fill: parent
+                CheckBox{
+                    id: blinkingCursor
+                    text: qsTr("Blinking Cursor")
+                    checked: appSettings.blinkingCursor
+                    onCheckedChanged: appSettings.blinkingCursor = checked
+                }
+                Binding{
+                    target: blinkingCursor
+                    property: "checked"
+                    value: appSettings.blinkingCursor
+                }
+            }
+        }
+        GroupBox{
             title: qsTr("Colors")
             Layout.fillWidth: true
             ColumnLayout{
