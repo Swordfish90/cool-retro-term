@@ -59,7 +59,7 @@ QtObject{
     property real burnInQuality: 0.5
     property bool useFastBurnIn: Qt.platform.os === "osx" ? false : true
 
-    property bool blinkingCursor: true
+    property bool blinkingCursor: false
 
     onWindowScalingChanged: handleFontChanged();
 
