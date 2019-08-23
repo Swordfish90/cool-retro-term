@@ -32,7 +32,7 @@ Users of **openSUSE** can grab a package from [Open Build Service](http://softwa
 
 **Arch** users can install this [package](https://aur.archlinux.org/packages/cool-retro-term-git/) directly via the [AUR](https://aur.archlinux.org):
 
-    yaourt -S aur/cool-retro-term-git
+    trizen -S aur/cool-retro-term-git
 
 or use:
 
