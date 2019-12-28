@@ -40,17 +40,6 @@ or use:
 
 to install precompiled from community repository.
 
-**Gentoo** users can now install the fourth release "1.1.1" from a 3rd-party repository preferably via layman:
-
-    USE="git" emerge app-portage/layman
-    wget https://www.gerczei.eu/files/gerczei.xml -O /etc/layman/overlays/gerczei.xml
-    layman -f -a qt -a gerczei # those who've added the repo before 27/08/17 should remove, update and add it again as its source has changed
-    ACCEPT_KEYWORDS="~*" emerge =x11-terms/cool-retro-term-1.1.1::gerczei
-
-The live ebuild (version 9999-r1) tracking the bleeding-edge WIP codebase also remains available.
-
-A word of warning: USE flags and keywords are to be added to portage's configuration files and every emerge operation should be executed with '-p' (short option for --pretend) appended to the command line first as per best practice!
-
 Users of **Ubuntu 14.04 LTS (Trusty) up to 15.10 (Wily)** can use [this PPA](https://launchpad.net/~bugs-launchpad-net-falkensweb).
 
 **Ubuntu 17.10** can use [this PPA](https://launchpad.net/%7Evantuz/+archive/ubuntu/cool-retro-term)
