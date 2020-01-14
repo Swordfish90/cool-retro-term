@@ -60,23 +60,24 @@ int main(int argc, char *argv[])
     // Manage command line arguments from the cpp side
     QStringList args = app.arguments();
     if (args.contains("-h") || args.contains("--help")) {
-        // BUG: This usage help text goes to stderr, should go to stdout.
-        qDebug().noquote() << "Usage: " + args.at(0) + " [--default-settings] [--workdir <dir>] [--program <prog>] [-p|--profile <prof>] [--fullscreen] [-h|--help]";
-        qDebug() << "  --default-settings  Run cool-retro-term with the default settings";
-        qDebug() << "  --workdir <dir>     Change working directory to 'dir'";
-        qDebug() << "  -e <cmd>            Command to execute. This option will catch all following arguments, so use it as the last option.";
-        qDebug() << "  -T <title>          Set window title to 'title'.";
-        qDebug() << "  --fullscreen        Run cool-retro-term in fullscreen.";
-        qDebug() << "  -p|--profile <prof> Run cool-retro-term with the given profile.";
-        qDebug() << "  -h|--help           Print this help.";
-        qDebug() << "  --verbose           Print additional information such as profiles and settings.";
+        QTextStream cout(stdout, QIODevice::WriteOnly);
+        cout << "Usage: " << args.at(0) << " [--default-settings] [--workdir <dir>] [--program <prog>] [-p|--profile <prof>] [--fullscreen] [-h|--help]" << endl;
+        cout << "  --default-settings  Run cool-retro-term with the default settings" << endl;
+        cout << "  --workdir <dir>     Change working directory to 'dir'" << endl;
+        cout << "  -e <cmd>            Command to execute. This option will catch all following arguments, so use it as the last option." << endl;
+        cout << "  -T <title>          Set window title to 'title'." << endl;
+        cout << "  --fullscreen        Run cool-retro-term in fullscreen." << endl;
+        cout << "  -p|--profile <prof> Run cool-retro-term with the given profile." << endl;
+        cout << "  -h|--help           Print this help." << endl;
+        cout << "  --verbose           Print additional information such as profiles and settings." << endl;
         return 0;
     }
 
     QString appVersion("1.1.1");
 
     if (args.contains("-v") || args.contains("--version")) {
-        qDebug() << ("cool-retro-term " + appVersion).toStdString().c_str();
+        QTextStream cout(stdout, QIODevice::WriteOnly);
+        cout << "cool-retro-term " << appVersion << endl;
 	return 0;
     }
 
