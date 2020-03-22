@@ -40,7 +40,7 @@ or use:
 
 to install precompiled from community repository.
 
-**Gentoo** users can now install the fourth release "1.1.1" from the official Gentoo reopistory:
+**Gentoo** users can now install the fourth release "1.1.1" from the official Gentoo repository:
 
     emerge x11-terms/cool-retro-term
 
