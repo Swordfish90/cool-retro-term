@@ -44,8 +44,6 @@ to install precompiled from community repository.
 
     emerge x11-terms/cool-retro-term
 
-The live ebuild (version 9999-r1) tracking the bleeding-edge WIP codebase also remains available.
-
 A word of warning: USE flags and keywords are to be added to portage's configuration files and every emerge operation should be executed with '-p' (short option for --pretend) appended to the command line first as per best practice!
 
 Users of **Ubuntu 14.04 LTS (Trusty) up to 15.10 (Wily)** can use [this PPA](https://launchpad.net/~bugs-launchpad-net-falkensweb).
