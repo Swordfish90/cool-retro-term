@@ -12,6 +12,8 @@ It uses the QML port of qtermwidget (Konsole) developed by me: https://github.co
 
 This terminal emulator works under Linux and macOS and requires Qt 5.2 or higher.
 
+Settings such as colors, fonts, and effects can be accessed via context menu.
+
 ## Screenshots
 ![Image](<https://i.imgur.com/TNumkDn.png>)
 ![Image](<https://i.imgur.com/hfjWOM4.png>)
