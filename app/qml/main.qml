@@ -67,6 +67,22 @@ ApplicationWindow{
     color: "#00000000"
     title: terminalContainer.title || qsTr(appSettings.wintitle)
 
+	Action {
+        id: newAction
+        text: qsTr("New Window")
+        shortcut: Qt.platform.os === "osx" ? StandardKey.New : "Ctrl+Shift+N"
+        onTriggered: {
+            root.newWindow()
+        }
+    }
+    Action {
+        id: closeAction
+        text: qsTr("Close Window")
+        shortcut: Qt.platform.os === "osx" ? StandardKey.Close : "Ctrl+Shift+W"
+        onTriggered: {
+            terminalWindow.close()
+        }
+    }
     Action {
         id: showMenubarAction
         text: qsTr("Show Menubar")
@@ -157,9 +173,6 @@ ApplicationWindow{
         }
     }
     onClosing: {
-        // OSX Since we are currently supporting only one window
-        // quit the application when it is closed.
-        if (Qt.platform.os === "osx")
-            Qt.quit()
+        root.closeWindow()
     }
 }

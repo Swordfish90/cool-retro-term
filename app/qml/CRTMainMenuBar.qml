@@ -10,6 +10,12 @@ MenuBar {
         MenuItem {action: quitAction}
     }
     Menu {
+        title: qsTr("Terminal")
+        visible: defaultMenuBar.visible
+        MenuItem {action: newAction}
+        MenuItem {action: closeAction}
+    }
+    Menu {
         title: qsTr("Edit")
         visible: defaultMenuBar.visible && appSettings.showMenubar
         MenuItem {action: copyAction}

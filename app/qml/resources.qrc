@@ -17,6 +17,7 @@
         <file>InsertNameDialog.qml</file>
         <file>SettingsEffectsTab.qml</file>
         <file>main.qml</file>
+        <file>root.qml</file>
         <file>SettingsTerminalTab.qml</file>
         <file>FontScanlines.qml</file>
         <file>fonts/1977-apple2/PrintChar21.ttf</file>
