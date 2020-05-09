@@ -94,6 +94,7 @@ Item{
         smooth: !appSettings.lowResolutionFont
         enableBold: false
         fullCursorHeight: true
+        blinkingCursor: appSettings.blinkingCursor
 
         session: QMLTermSession {
             id: ksession

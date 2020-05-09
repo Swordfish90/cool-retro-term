@@ -59,6 +59,8 @@ QtObject{
     property real burnInQuality: 0.5
     property bool useFastBurnIn: Qt.platform.os === "osx" ? false : true
 
+    property bool blinkingCursor: false
+
     onWindowScalingChanged: handleFontChanged();
 
     // PROFILE SETTINGS ///////////////////////////////////////////////////////
@@ -208,7 +210,8 @@ QtObject{
             burnInQuality: burnInQuality,
             useCustomCommand: useCustomCommand,
             customCommand: customCommand,
-            useFastBurnIn: useFastBurnIn
+            useFastBurnIn: useFastBurnIn,
+            blinkingCursor: blinkingCursor
         }
         return stringify(settings);
     }
@@ -296,6 +299,8 @@ QtObject{
         customCommand = settings.customCommand !== undefined ? settings.customCommand : customCommand
 
         useFastBurnIn = settings.useFastBurnIn !== undefined ? settings.useFastBurnIn : useFastBurnIn;
+
+        blinkingCursor = settings.blinkingCursor !== undefined ? settings.blinkingCursor : blinkingCursor
     }
 
     function loadProfileString(profileString){
