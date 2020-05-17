@@ -20,7 +20,7 @@
         <file>SettingsTerminalTab.qml</file>
         <file>FontScanlines.qml</file>
         <file>fonts/1977-apple2/PrintChar21.ttf</file>
-        <file>fonts/1971-ibm-3278/3270Medium.ttf</file>
+        <file>fonts/1971-ibm-3278/3270-Regular.ttf</file>
         <file>Storage.qml</file>
         <file>CRTMainMenuBar.qml</file>
         <file>SettingsAdvancedTab.qml</file>
