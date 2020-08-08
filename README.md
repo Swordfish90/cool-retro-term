@@ -46,7 +46,7 @@ Users of **Ubuntu 14.04 LTS (Trusty) up to 15.10 (Wily)** can use [this PPA](htt
 
 **Ubuntu 17.10** can use [this PPA](https://launchpad.net/%7Evantuz/+archive/ubuntu/cool-retro-term)
 
-**Solus** users can install using `eopg`:
+**Solus** users can install using `eopkg`:
 ```
 eopkg it cool-retro-term
 ```
