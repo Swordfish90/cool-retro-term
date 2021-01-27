@@ -51,9 +51,13 @@ Users of **Ubuntu 14.04 LTS (Trusty) up to 15.10 (Wily)** can use [this PPA](htt
 eopkg it cool-retro-term
 ```
 
-**macOS** users can grab the latest dmg from the [release page](https://github.com/Swordfish90/cool-retro-term/releases) or install via Homebrew:
+**macOS** users can grab the latest dmg from the [release page](https://github.com/Swordfish90/cool-retro-term/releases) or install via Homebrew or MacPorts:
 ```
 brew cask install cool-retro-term
+```
+or
+```
+port install cool-retro-term
 ```
 
 **FreeBSD** users can install cool-retro-term with `pkg`:
