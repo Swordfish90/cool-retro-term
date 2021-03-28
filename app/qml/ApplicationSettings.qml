@@ -42,6 +42,7 @@ QtObject{
     property int y: 100
     property int width: 1024
     property int height: 768
+    property real pixelRatio: 1.0
 
     property bool fullscreen: false
     property bool showMenubar: Qt.platform.os === "osx" ? true : false

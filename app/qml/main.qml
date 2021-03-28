@@ -30,8 +30,14 @@ ApplicationWindow{
     height: 768
 
     // Save window properties automatically
-    onXChanged: appSettings.x = x
-    onYChanged: appSettings.y = y
+    onXChanged: {
+        appSettings.x = x
+        appSettings.pixelRatio = Window.devicePixelRatio
+    }
+    onYChanged: {
+        appSettings.y = y
+        appSettings.pixelRatio = Window.devicePixelRatio
+    }
     onWidthChanged: appSettings.width = width
     onHeightChanged: appSettings.height = height
 
