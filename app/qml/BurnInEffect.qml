@@ -78,6 +78,8 @@ Loader {
             property real burnInTime: burnInFadeTime
             property real lastUpdate: burnInEffect.lastUpdate
             property real prevLastUpdate: burnInEffect.prevLastUpdate
+            property int rasterization: appSettings.rasterization
+            property size virtual_resolution: Qt.size(kterminal.totalWidth, kterminal.totalHeight)
 
             anchors.fill: parent
             blending: false
@@ -97,10 +99,31 @@ Loader {
 
                  uniform highp float lastUpdate;
 
-                 uniform highp float prevLastUpdate;" +
+                 uniform highp float prevLastUpdate;
+
+                 uniform highp vec2 virtual_resolution;" +
 
                 "float rgb2grey(vec3 v){
                     return dot(v, vec3(0.21, 0.72, 0.04));
+                }" +
+
+                "highp float getScanlineIntensity(vec2 coords) {
+                 float result = 1.0;" +
+
+                (appSettings.rasterization != appSettings.no_rasterization ?
+                    "float val = 0.0;
+                     vec2 rasterizationCoords = fract(coords * virtual_resolution);
+                     val += smoothstep(0.0, 0.5, rasterizationCoords.y);
+                     val -= smoothstep(0.5, 1.0, rasterizationCoords.y);
+                     result *= mix(0.5, 1.0, val);" : "") +
+
+                (appSettings.rasterization == appSettings.pixel_rasterization ?
+                    "val = 0.0;
+                     val += smoothstep(0.0, 0.5, rasterizationCoords.x);
+                     val -= smoothstep(0.5, 1.0, rasterizationCoords.x);
+                     result *= mix(0.5, 1.0, val);" : "") + "
+
+                return result;
                 }" +
 
                 "void main() {
@@ -111,7 +134,7 @@ Loader {
 
                     float prevMask = accColor.a;
                     float currMask = rgb2grey(txtColor);
-
+                    txtColor *= getScanlineIntensity(coords);
                     highp float blurDecay = clamp((lastUpdate - prevLastUpdate) * burnInTime, 0.0, 1.0);
                     blurDecay = max(0.0, blurDecay - prevMask);
                     vec3 blurColor = accColor.rgb - vec3(blurDecay);
