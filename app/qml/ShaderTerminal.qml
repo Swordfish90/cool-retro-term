@@ -378,6 +378,7 @@ Item {
          property real chromaColor: appSettings.chromaColor;
 
          property real rbgShift: (appSettings.rbgShift / width) * appSettings.totalFontScaling // TODO FILIPPO width here is wrong.
+         property real scanlineBlur: (appSettings.scanlineBlur / width) * appSettings.totalFontScaling
 
          property int rasterization: appSettings.rasterization
 
@@ -423,6 +424,9 @@ Item {
              (rbgShift !== 0 ? "
                  uniform lowp float rbgShift;" : "") +
 
+             (scanlineBlur !== 0 ? "
+                 uniform lowp float scanlineBlur;" : "") +
+
              (ambientLight !== 0 ? "
                  uniform lowp float ambientLight;" : "") +
 
@@ -432,15 +436,15 @@ Item {
                 (appSettings.rasterization != appSettings.no_rasterization ?
                     "float val = 0.0;
                      vec2 rasterizationCoords = fract(coords * virtual_resolution);
-                     val += smoothstep(0.0, 0.5, rasterizationCoords.y);
-                     val -= smoothstep(0.5, 1.0, rasterizationCoords.y);
-                     result *= mix(0.5, 1.0, val);" : "") +
+                     val += smoothstep(0.1, 0.5, rasterizationCoords.y);
+                     val -= smoothstep(0.5, 0.9, rasterizationCoords.y);
+                     result *= mix(0.3, 1.0, val);" : "") +
 
                 (appSettings.rasterization == appSettings.pixel_rasterization ?
                     "val = 0.0;
                      val += smoothstep(0.0, 0.5, rasterizationCoords.x);
                      val -= smoothstep(0.5, 1.0, rasterizationCoords.x);
-                     result *= mix(0.5, 1.0, val);" : "") + "
+                     result *= mix(0.1, 1.0, val);" : "") + "
 
                 return result;
              }
@@ -488,6 +492,19 @@ Item {
                      txt_color.r = leftColor.r * 0.10 + rightColor.r * 0.30 + txt_color.r * 0.60;
                      txt_color.g = leftColor.g * 0.20 + rightColor.g * 0.20 + txt_color.g * 0.60;
                      txt_color.b = leftColor.b * 0.30 + rightColor.b * 0.10 + txt_color.b * 0.60;
+                 " : "") +
+
+                 (scanlineBlur !== 0 ? "
+                     vec2 scanlineBlur_displacement = vec2(12.0, 0.0) * scanlineBlur;
+                     vec3 scanlineBlur_rightColor = texture2D(source, txt_coords + scanlineBlur_displacement).rgb;
+                     vec3 scanlineBlur_leftColor = texture2D(source, txt_coords - scanlineBlur_displacement).rgb;
+                     vec3 scanlineBlur_rightColor2 = texture2D(source, txt_coords + scanlineBlur_displacement + scanlineBlur_displacement).rgb;
+                     vec3 scanlineBlur_leftColor2 = texture2D(source, txt_coords - scanlineBlur_displacement - scanlineBlur_displacement).rgb;
+                     vec3 scanlineBlur_rightColor3 = texture2D(source, txt_coords + scanlineBlur_displacement + scanlineBlur_displacement + scanlineBlur_displacement).rgb;
+                     vec3 scanlineBlur_leftColor3 = texture2D(source, txt_coords - scanlineBlur_displacement - scanlineBlur_displacement - scanlineBlur_displacement).rgb;
+                     txt_color.r = scanlineBlur_leftColor3.r * 0.05 + scanlineBlur_leftColor2.r * 0.1 + scanlineBlur_leftColor.r * 0.20 + txt_color.r * 0.30 + scanlineBlur_rightColor.r * 0.20 + scanlineBlur_rightColor2.r * 0.1 + scanlineBlur_rightColor3.r * 0.05;
+                     txt_color.g = scanlineBlur_leftColor3.g * 0.05 + scanlineBlur_leftColor2.g * 0.1 + scanlineBlur_leftColor.g * 0.20 + txt_color.g * 0.30 + scanlineBlur_rightColor.g * 0.20 + scanlineBlur_rightColor2.g * 0.1 + scanlineBlur_rightColor3.g * 0.05;
+                     txt_color.b = scanlineBlur_leftColor3.b * 0.05 + scanlineBlur_leftColor2.b * 0.1 + scanlineBlur_leftColor.b * 0.20 + txt_color.b * 0.30 + scanlineBlur_rightColor.b * 0.20 + scanlineBlur_rightColor2.b * 0.1 + scanlineBlur_rightColor3.b * 0.05;
                  " : "") +
 
                   "txt_color *= getScanlineIntensity(txt_coords);" +

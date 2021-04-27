@@ -94,6 +94,7 @@ QtObject{
     property real flickering: 0.1
 
     property real rbgShift: 0.0
+    property real scanlineBlur: 0.0
 
     property real _margin: 0.5
     property real margin: Utils.lint(1.0, 20.0, _margin)
@@ -232,6 +233,7 @@ QtObject{
             rasterization: rasterization,
             jitter: jitter,
             rbgShift: rbgShift,
+            scanlineBlur: scanlineBlur,
             brightness: brightness,
             contrast: contrast,
             ambientLight: ambientLight,
@@ -325,6 +327,7 @@ QtObject{
         jitter = settings.jitter !== undefined ? settings.jitter : jitter;
 
         rbgShift = settings.rbgShift !== undefined ? settings.rbgShift : rbgShift;
+        scanlineBlur = settings.scanlineBlur !== undefined ? settings.scanlineBlur : rbgShift;
 
         ambientLight = settings.ambientLight !== undefined ? settings.ambientLight : ambientLight;
         contrast = settings.contrast !== undefined ? settings.contrast : contrast;
@@ -402,9 +405,38 @@ QtObject{
                   "jitter": 0.1997,
                   "rasterization": 0,
                   "rbgShift": 0,
+                  "scanlineBlur": 0,
                   "saturationColor": 0.2483,
                   "screenCurvature": 0.3,
                   "staticNoise": 0.1198,
+                  "windowOpacity": 1,
+                  "margin": 0.5
+                }'
+            builtin: true
+        }
+        ListElement{
+            text: "Amber Scanlines"
+            obj_string: '{
+                  "ambientLight": 0.2,
+                  "backgroundColor": "#000000",
+                  "bloom": 0.32,
+                  "brightness": 1,
+                  "burnIn": 0.30,
+                  "chromaColor": 1,
+                  "contrast": 0.75,
+                  "flickering": 0.04,
+                  "fontColor": "#ff8100",
+                  "fontName": "TERMINUS_SCALED",
+                  "fontWidth": 1,
+                  "glowingLine": 0,
+                  "horizontalSync": 0,
+                  "jitter": 0.03,
+                  "rasterization": 1,
+                  "rbgShift": 0,
+                  "scanlineBlur": 0.05,
+                  "saturationColor": 1,
+                  "screenCurvature": 0.05,
+                  "staticNoise": 0.05,
                   "windowOpacity": 1,
                   "margin": 0.5
                 }'
@@ -430,6 +462,7 @@ QtObject{
                   "jitter": 0.1997,
                   "rasterization": 0,
                   "rbgShift": 0,
+                  "scanlineBlur": 0,
                   "saturationColor": 0.0,
                   "screenCurvature": 0.3,
                   "staticNoise": 0.1198,
@@ -458,6 +491,7 @@ QtObject{
                   "jitter": 0.11,
                   "rasterization": 1,
                   "rbgShift": 0,
+                  "scanlineBlur": 0.05,
                   "saturationColor": 0.5,
                   "screenCurvature": 0.3,
                   "staticNoise": 0.15,
@@ -486,6 +520,7 @@ QtObject{
                   "jitter": 0,
                   "rasterization": 2,
                   "rbgShift": 0,
+                  "scanlineBlur": 0,
                   "saturationColor": 0,
                   "screenCurvature": 0,
                   "staticNoise": 0.15,
@@ -514,6 +549,7 @@ QtObject{
                   "jitter": 0.1,
                   "rasterization": 1,
                   "rbgShift": 0,
+                  "scanlineBlur": 0,
                   "saturationColor": 0,
                   "screenCurvature": 0.5,
                   "staticNoise": 0.099,
@@ -542,6 +578,7 @@ QtObject{
                   "jitter": 0.4,
                   "rasterization": 1,
                   "rbgShift": 0.2969,
+                  "scanlineBlur": 0,
                   "saturationColor": 0,
                   "screenCurvature": 0.5,
                   "staticNoise": 0.2969,
@@ -570,6 +607,7 @@ QtObject{
                   "jitter": 0.1545,
                   "rasterization": 0,
                   "rbgShift": 0.3524,
+                  "scanlineBlur": 0,
                   "saturationColor": 0,
                   "screenCurvature": 0.4,
                   "staticNoise": 0.0503,
@@ -598,6 +636,7 @@ QtObject{
                   "jitter": 0,
                   "rasterization": 0,
                   "rbgShift": 0,
+                  "scanlineBlur": 0,
                   "saturationColor": 0,
                   "screenCurvature": 0.2,
                   "staticNoise": 0,
@@ -626,6 +665,7 @@ QtObject{
                   "jitter": 0.099,
                   "rasterization": 0,
                   "rbgShift": 0,
+                  "scanlineBlur": 0,
                   "saturationColor": 0.4983,
                   "screenCurvature": 0,
                   "staticNoise": 0.0955,

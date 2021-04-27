@@ -87,6 +87,9 @@ Loader {
                 property variant blurredSource: burnInSourceEffect
                 property real burnInCoefficient: burnInSourceEffect.burnInCoefficient
 
+                property int rasterization: appSettings.rasterization
+                property size virtual_resolution: Qt.size(kterminal.totalWidth, kterminal.totalHeight)
+
                 anchors.fill: parent
                 blending: false
 
@@ -97,6 +100,7 @@ Loader {
 
                 "uniform lowp float qt_Opacity;" +
                 "uniform lowp sampler2D txt_source;" +
+                "uniform highp vec2 virtual_resolution;" +
 
                 "varying highp vec2 qt_TexCoord0;
              uniform lowp sampler2D blurredSource;
@@ -106,12 +110,33 @@ Loader {
                      return max (max (v.x, v.y), v.z);
                 }" +
 
+
+                "highp float getScanlineIntensity(vec2 coords) {
+                 float result = 1.0;" +
+
+                (appSettings.rasterization != appSettings.no_rasterization ?
+                    "float val = 0.0;
+                     vec2 rasterizationCoords = fract(coords * virtual_resolution);
+                     val += smoothstep(0.0, 0.5, rasterizationCoords.y);
+                     val -= smoothstep(0.5, 1.0, rasterizationCoords.y);
+                     result *= mix(0.5, 1.0, val);" : "") +
+
+                (appSettings.rasterization == appSettings.pixel_rasterization ?
+                    "val = 0.0;
+                     val += smoothstep(0.0, 0.5, rasterizationCoords.x);
+                     val -= smoothstep(0.5, 1.0, rasterizationCoords.x);
+                     result *= mix(0.5, 1.0, val);" : "") + "
+
+                return result;
+                }" +
+
+
                 "void main() {" +
                     "vec2 coords = qt_TexCoord0;" +
                     "vec3 origColor = texture2D(txt_source, coords).rgb;" +
+                    "origColor *= getScanlineIntensity(coords);" +
                     "vec3 blur_color = texture2D(blurredSource, coords).rgb - vec3(burnInCoefficient);" +
                     "vec3 color = min(origColor + blur_color, max(origColor, blur_color));" +
-
                     "gl_FragColor = vec4(color, max3(color - origColor));" +
                 "}"
 
