@@ -85,6 +85,11 @@ Tab{
                     onNewValue: appSettings.rbgShift = newValue;
                     value: appSettings.rbgShift;
                 }
+                CheckableSlider{
+                    name: qsTr("Scanline Blur")
+                    onNewValue: appSettings.scanlineBlur = newValue;
+                    value: appSettings.scanlineBlur;
+                }
             }
         }
     }
