@@ -420,7 +420,7 @@ QtObject{
                   "ambientLight": 0.2,
                   "backgroundColor": "#000000",
                   "bloom": 0.32,
-                  "brightness": 1,
+                  "brightness": 0.85,
                   "burnIn": 0.30,
                   "chromaColor": 1,
                   "contrast": 0.75,
