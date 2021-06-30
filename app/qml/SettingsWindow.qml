@@ -19,46 +19,50 @@
 *******************************************************************************/
 
 import QtQuick 2.2
-import QtQuick.Controls 1.1
+import QtQuick.Controls 2.1
 import QtQuick.Window 2.1
-import QtQuick.Layouts 1.1
+import QtQuick.Layouts 1.3
 import QtQuick.Dialogs 1.1
 
 Window {
     id: settings_window
     title: qsTr("Settings")
-    width: 580
-    height: 400
+    width: 800
+    height: 600
 
     property int tabmargins: 15
 
-    TabView{
-        id: tabView
-        anchors.fill: parent
-        anchors.margins: 10
-        SettingsGeneralTab {
-            id: generalTab
-            title: qsTr("General")
-            anchors.fill: parent
-            anchors.margins: tabmargins
+    TabBar {
+        id: bar
+        width: parent.width
+        TabButton {
+            text: qsTr("General")
         }
-        SettingsTerminalTab {
-            id: terminalTab
-            title: qsTr("Terminal")
-            anchors.fill: parent
-            anchors.margins: tabmargins
+        TabButton {
+            text: qsTr("Terminal")
         }
-        SettingsEffectsTab {
-            id: effectsTab
-            title: qsTr("Effects")
-            anchors.fill: parent
-            anchors.margins: tabmargins
+        TabButton {
+            text: qsTr("Effects")
         }
-        SettingsAdvancedTab {
-            id: performanceTab
-            title: qsTr("Advanced")
-            anchors.fill: parent
-            anchors.margins: tabmargins
+        TabButton {
+            text: qsTr("Advanced")
         }
+    }
+
+    StackLayout {
+        anchors {
+            top: bar.bottom
+            left: parent.left
+            right: parent.right
+            bottom: parent.bottom
+            margins: tabmargins
+        }
+
+        currentIndex: bar.currentIndex
+
+        SettingsGeneralTab { }
+        SettingsTerminalTab { }
+        SettingsEffectsTab { }
+        SettingsAdvancedTab { }
     }
 }

@@ -19,72 +19,69 @@
 *******************************************************************************/
 
 import QtQuick 2.2
-import QtQuick.Controls 1.1
+import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.1
 
-Tab{
-    ColumnLayout{
-        anchors.fill: parent
-        spacing: 2
+ColumnLayout{
+    spacing: 2
 
-        GroupBox{
-            title: qsTr("Effects")
-            Layout.fillWidth: true
+    GroupBox{
+        title: qsTr("Effects")
+        Layout.fillWidth: true
 
-            ColumnLayout {
-                anchors.fill: parent
+        ColumnLayout {
+            anchors.fill: parent
 
-                CheckableSlider{
-                    name: qsTr("Bloom")
-                    onNewValue: appSettings.bloom = newValue
-                    value: appSettings.bloom
-                }
-                CheckableSlider{
-                    name: qsTr("BurnIn")
-                    onNewValue: appSettings.burnIn = newValue
-                    value: appSettings.burnIn
-                }
-                CheckableSlider{
-                    name: qsTr("Static Noise")
-                    onNewValue: appSettings.staticNoise = newValue
-                    value: appSettings.staticNoise
-                }
-                CheckableSlider{
-                    name: qsTr("Jitter")
-                    onNewValue: appSettings.jitter = newValue
-                    value: appSettings.jitter
-                }
-                CheckableSlider{
-                    name: qsTr("Glow Line")
-                    onNewValue: appSettings.glowingLine = newValue;
-                    value: appSettings.glowingLine
-                }
-                CheckableSlider{
-                    name: qsTr("Screen Curvature")
-                    onNewValue: appSettings.screenCurvature = newValue;
-                    value: appSettings.screenCurvature;
-                }
-                CheckableSlider{
-                    name: qsTr("Ambient Light")
-                    onNewValue: appSettings.ambientLight = newValue;
-                    value: appSettings.ambientLight
-                    enabled: appSettings.framesIndex !== 0
-                }
-                CheckableSlider{
-                    name: qsTr("Flickering")
-                    onNewValue: appSettings.flickering = newValue;
-                    value: appSettings.flickering;
-                }
-                CheckableSlider{
-                    name: qsTr("Horizontal Sync")
-                    onNewValue: appSettings.horizontalSync = newValue;
-                    value: appSettings.horizontalSync;
-                }
-                CheckableSlider{
-                    name: qsTr("RGB Shift")
-                    onNewValue: appSettings.rbgShift = newValue;
-                    value: appSettings.rbgShift;
-                }
+            CheckableSlider{
+                name: qsTr("Bloom")
+                onNewValue: appSettings.bloom = newValue
+                value: appSettings.bloom
+            }
+            CheckableSlider{
+                name: qsTr("BurnIn")
+                onNewValue: appSettings.burnIn = newValue
+                value: appSettings.burnIn
+            }
+            CheckableSlider{
+                name: qsTr("Static Noise")
+                onNewValue: appSettings.staticNoise = newValue
+                value: appSettings.staticNoise
+            }
+            CheckableSlider{
+                name: qsTr("Jitter")
+                onNewValue: appSettings.jitter = newValue
+                value: appSettings.jitter
+            }
+            CheckableSlider{
+                name: qsTr("Glow Line")
+                onNewValue: appSettings.glowingLine = newValue;
+                value: appSettings.glowingLine
+            }
+            CheckableSlider{
+                name: qsTr("Screen Curvature")
+                onNewValue: appSettings.screenCurvature = newValue;
+                value: appSettings.screenCurvature;
+            }
+            CheckableSlider{
+                name: qsTr("Ambient Light")
+                onNewValue: appSettings.ambientLight = newValue;
+                value: appSettings.ambientLight
+                enabled: appSettings.framesIndex !== 0
+            }
+            CheckableSlider{
+                name: qsTr("Flickering")
+                onNewValue: appSettings.flickering = newValue;
+                value: appSettings.flickering;
+            }
+            CheckableSlider{
+                name: qsTr("Horizontal Sync")
+                onNewValue: appSettings.horizontalSync = newValue;
+                value: appSettings.horizontalSync;
+            }
+            CheckableSlider{
+                name: qsTr("RGB Shift")
+                onNewValue: appSettings.rbgShift = newValue;
+                value: appSettings.rbgShift;
             }
         }
     }
