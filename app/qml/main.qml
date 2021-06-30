@@ -20,8 +20,9 @@
 
 import QtQuick 2.2
 import QtQuick.Window 2.1
-import QtQuick.Controls 1.1
-import QtGraphicalEffects 1.0
+import QtQuick.Controls 2.3
+
+import "menus"
 
 ApplicationWindow{
     id: terminalWindow
@@ -37,8 +38,6 @@ ApplicationWindow{
 
     // Load saved window geometry and show the window
     Component.onCompleted: {        
-        appSettings.handleFontChanged();
-
         x = appSettings.x
         y = appSettings.y
         width = appSettings.width
@@ -55,11 +54,9 @@ ApplicationWindow{
     property bool fullscreen: appSettings.fullscreen
     onFullscreenChanged: visibility = (fullscreen ? Window.FullScreen : Window.Windowed)
 
-    //Workaround: Without __contentItem a ugly thin border is visible.
-    menuBar: CRTMainMenuBar{
+    menuBar: WindowMenu {
         id: mainMenu
         visible: (Qt.platform.os === "osx" || appSettings.showMenubar)
-        __contentItem.visible: mainMenu.visible
     }
 
     property string wintitle: appSettings.wintitle
@@ -136,7 +133,6 @@ ApplicationWindow{
     }
     TerminalContainer{
         id: terminalContainer
-        y: appSettings.showMenubar ? 0 : -2 // Workaroud to hide the margin in the menubar.
         width: parent.width
         height: (parent.height + Math.abs(y))
     }

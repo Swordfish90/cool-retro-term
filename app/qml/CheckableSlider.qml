@@ -19,7 +19,7 @@
 *******************************************************************************/
 
 import QtQuick 2.2
-import QtQuick.Controls 1.1
+import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.1
 
 import "Components"
@@ -28,8 +28,8 @@ RowLayout {
     property alias name: check.text
 
     property double value
-    property alias min_value: slider.minimumValue
-    property alias max_value: slider.maximumValue
+    property alias min_value: slider.from
+    property alias max_value: slider.to
     property alias stepSize: slider.stepSize
 
     signal newValue(real newValue);
@@ -67,7 +67,6 @@ RowLayout {
         }
     }
     SizedLabel {
-        Layout.fillHeight: true
         text: Math.round(((value - min_value) / (max_value - min_value)) * 100) + "%"
     }
 }

@@ -19,7 +19,7 @@
 *******************************************************************************/
 
 import QtQuick 2.2
-import QtQuick.Controls 1.0
+import QtQuick.Controls 2.0
 
 import "utils.js" as Utils
 
@@ -335,6 +335,7 @@ QtObject{
         fontWidth = settings.fontWidth !== undefined ? settings.fontWidth : fontWidth;
 
         _margin = settings.margin !== undefined ? settings.margin : _margin;
+
 
         handleFontChanged();
     }

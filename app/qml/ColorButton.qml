@@ -42,8 +42,7 @@ Item {
         anchors.fill: parent
         radius: 10
         color: rootItem.color
-        border.color: "black"
-        Glossy {}
+
         Rectangle {
             anchors.fill: parent
             anchors.margins: parent.height * 0.25

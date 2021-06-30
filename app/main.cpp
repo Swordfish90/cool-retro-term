@@ -79,6 +79,9 @@ int main(int argc, char *argv[])
     app.setWindowIcon(QIcon(":../icons/32x32/cool-retro-term.png"));
 #endif
 
+    app.setOrganizationName("cool-retro-term");
+    app.setOrganizationDomain("cool-retro-term");
+
     // Manage command line arguments from the cpp side
     QStringList args = app.arguments();
 

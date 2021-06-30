@@ -19,10 +19,11 @@
 *******************************************************************************/
 
 import QtQuick 2.2
-import QtQuick.Controls 1.1
+import QtQuick.Controls 2.0
 
 import QMLTermWidget 1.0
 
+import "menus"
 import "utils.js" as Utils
 
 Item{
@@ -156,31 +157,23 @@ Item{
         Component.onCompleted: {
             appSettings.terminalFontChanged.connect(handleFontChanged);
             appSettings.initializedSettings.connect(startSession);
+            appSettings.handleFontChanged()
         }
     }
+
     Component {
-        id: linuxContextMenu
-        Menu{
-            id: contextmenu
-            MenuItem { action: copyAction }
-            MenuItem { action: pasteAction }
-            MenuSeparator { visible: !appSettings.showMenubar }
-            MenuItem { action: showsettingsAction ; visible: !appSettings.showMenubar}
-            MenuSeparator { visible: !appSettings.showMenubar }
-            CRTMainMenuBar { visible: !appSettings.showMenubar }
-        }
+        id: shortContextMenu
+        ShortContextMenu { }
     }
+
     Component {
-        id: osxContextMenu
-        Menu{
-            id: contextmenu
-            MenuItem{action: copyAction}
-            MenuItem{action: pasteAction}
-        }
+        id: fullContextMenu
+        FullContextMenu { }
     }
+
     Loader {
         id: menuLoader
-        sourceComponent: (Qt.platform.os === "osx" ? osxContextMenu : linuxContextMenu)
+        sourceComponent: (Qt.platform.os === "osx" || appSettings.showMenubar ? shortContextMenu : fullContextMenu)
     }
     property alias contextmenu: menuLoader.item
 

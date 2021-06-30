@@ -20,16 +20,14 @@
 
 
 import QtQuick 2.0
-import QtQuick.Controls 1.0
+import QtQuick.Controls 2.0
+import QtQuick.Layouts 1.0
 
 // This component is simply a label with a predefined size.
 // Used to improve alignment.
 
-Item {
-    property alias text: textfield.text
+Label {
+    id: textfield
+    Layout.minimumWidth: appSettings.labelWidth
     width: appSettings.labelWidth
-    Label{
-        id: textfield
-        anchors { right: parent.right; verticalCenter: parent.verticalCenter }
-    }
 }
