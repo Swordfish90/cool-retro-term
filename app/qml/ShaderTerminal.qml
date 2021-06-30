@@ -1,5 +1,5 @@
 /*******************************************************************************
-* Copyright (c) 2013 "Filippo Scognamiglio"
+* Copyright (c) 2013-2021 "Filippo Scognamiglio"
 * https://github.com/Swordfish90/cool-retro-term
 *
 * This file is part of cool-retro-term.
@@ -86,7 +86,7 @@ Item {
          blending: false
 
          //Smooth random texture used for flickering effect.
-         Image{
+         Image {
              id: noiseTexture
              source: "images/allNoise512.png"
              width: 512
@@ -94,7 +94,7 @@ Item {
              fillMode: Image.Tile
              visible: false
          }
-         ShaderEffectSource{
+         ShaderEffectSource {
              id: noiseShaderSource
              sourceItem: noiseTexture
              wrapMode: ShaderEffectSource.Repeat

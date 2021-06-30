@@ -1,5 +1,5 @@
 /*******************************************************************************
-* Copyright (c) 2013 "Filippo Scognamiglio"
+* Copyright (c) 2013-2021 "Filippo Scognamiglio"
 * https://github.com/Swordfish90/cool-retro-term
 *
 * This file is part of cool-retro-term.
@@ -17,14 +17,13 @@
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *******************************************************************************/
-
 import QtQuick 2.2
 import QtQuick.Controls 2.4
 import QtQuick.Layouts 1.1
 import QtQuick.Dialogs 1.1
 
-ColumnLayout{
-    GroupBox{
+ColumnLayout {
+    GroupBox {
         Layout.fillWidth: true
         title: qsTr("Profile")
         RowLayout {
@@ -52,112 +51,127 @@ ColumnLayout{
             ColumnLayout {
                 Layout.fillHeight: true
                 Layout.fillWidth: false
-                Button{
+                Button {
                     Layout.fillWidth: true
                     text: qsTr("Save")
                     onClicked: {
-                        insertname.profileName = "";
+                        insertname.profileName = ""
                         insertname.show()
                     }
                 }
-                Button{
+                Button {
                     Layout.fillWidth: true
                     property alias currentIndex: profilesView.currentIndex
                     enabled: currentIndex >= 0
                     text: qsTr("Load")
                     onClicked: {
-                        var index = currentIndex;
+                        var index = currentIndex
                         if (index >= 0)
-                            appSettings.loadProfile(index);
+                            appSettings.loadProfile(index)
                     }
                 }
-                Button{
+                Button {
                     Layout.fillWidth: true
                     text: qsTr("Remove")
                     property alias currentIndex: profilesView.currentIndex
 
-                    enabled: currentIndex >= 0 && !appSettings.profilesList.get(currentIndex).builtin
+                    enabled: currentIndex >= 0 && !appSettings.profilesList.get(
+                                 currentIndex).builtin
                     onClicked: {
-                        appSettings.profilesList.remove(currentIndex);
-                        profilesView.selection.clear();
+                        appSettings.profilesList.remove(currentIndex)
+                        profilesView.selection.clear()
 
                         // TODO This is a very ugly workaround. The view didn't update on Qt 5.3.2.
-                        profilesView.model = 0;
-                        profilesView.model = appSettings.profilesList;
+                        profilesView.model = 0
+                        profilesView.model = appSettings.profilesList
                     }
                 }
                 Item {
                     // Spacing
                     Layout.fillHeight: true
                 }
-                Button{
+                Button {
                     Layout.fillWidth: true
                     text: qsTr("Import")
                     onClicked: {
-                        fileDialog.selectExisting = true;
-                        fileDialog.callBack = function (url) {loadFile(url);};
-                        fileDialog.open();
+                        fileDialog.selectExisting = true
+                        fileDialog.callBack = function (url) {
+                            loadFile(url)
+                        }
+                        fileDialog.open()
                     }
                     function loadFile(url) {
                         try {
                             if (appSettings.verbose)
-                                console.log("Loading file: " + url);
+                                console.log("Loading file: " + url)
 
-                            var profileObject = JSON.parse(fileIO.read(url));
-                            var name = profileObject.name;
+                            var profileObject = JSON.parse(fileIO.read(url))
+                            var name = profileObject.name
 
                             if (!name)
-                                throw "Profile doesn't have a name";
+                                throw "Profile doesn't have a name"
 
-                            var version = profileObject.version !== undefined ? profileObject.version : 1;
+                            var version = profileObject.version
+                                    !== undefined ? profileObject.version : 1
                             if (version !== appSettings.profileVersion)
-                                throw "This profile is not supported on this version of CRT.";
+                                throw "This profile is not supported on this version of CRT."
 
-                            delete profileObject.name;
+                            delete profileObject.name
 
-                            appSettings.appendCustomProfile(name, JSON.stringify(profileObject));
+                            appSettings.appendCustomProfile(name,
+                                                            JSON.stringify(
+                                                                profileObject))
                         } catch (err) {
                             messageDialog.text = qsTr(err)
-                            messageDialog.open();
+                            messageDialog.open()
                         }
                     }
                 }
-                Button{
+                Button {
                     property alias currentIndex: profilesView.currentIndex
 
                     Layout.fillWidth: true
 
                     text: qsTr("Export")
-                    enabled: currentIndex >= 0 && !appSettings.profilesList.get(currentIndex).builtin
+                    enabled: currentIndex >= 0 && !appSettings.profilesList.get(
+                                 currentIndex).builtin
                     onClicked: {
-                        fileDialog.selectExisting = false;
-                        fileDialog.callBack = function (url) {storeFile(url);};
-                        fileDialog.open();
+                        fileDialog.selectExisting = false
+                        fileDialog.callBack = function (url) {
+                            storeFile(url)
+                        }
+                        fileDialog.open()
                     }
                     function storeFile(url) {
                         try {
-                            var urlString = url.toString();
+                            var urlString = url.toString()
 
                             // Fix the extension if it's missing.
-                            var extension = urlString.substring(urlString.length - 5, urlString.length);
-                            var urlTail = (extension === ".json" ? "" : ".json");
-                            url += urlTail;
+                            var extension = urlString.substring(
+                                        urlString.length - 5, urlString.length)
+                            var urlTail = (extension === ".json" ? "" : ".json")
+                            url += urlTail
 
                             if (true)
-                                console.log("Storing file: " + url);
+                                console.log("Storing file: " + url)
 
-                            var profileObject = appSettings.profilesList.get(currentIndex);
-                            var profileSettings = JSON.parse(profileObject.obj_string);
-                            profileSettings["name"] = profileObject.text;
-                            profileSettings["version"] = appSettings.profileVersion;
+                            var profileObject = appSettings.profilesList.get(
+                                        currentIndex)
+                            var profileSettings = JSON.parse(
+                                        profileObject.obj_string)
+                            profileSettings["name"] = profileObject.text
+                            profileSettings["version"] = appSettings.profileVersion
 
-                            var result = fileIO.write(url, JSON.stringify(profileSettings, undefined, 2));
+                            var result = fileIO.write(url, JSON.stringify(
+                                                          profileSettings,
+                                                          undefined, 2))
                             if (!result)
-                                throw "The file could not be written.";
+                                throw "The file could not be written."
                         } catch (err) {
-                            console.log(err);
-                            messageDialog.text = qsTr("There has been an error storing the file.")
-                            messageDialog.open();
+                            console.log(err)
+                            messageDialog.text = qsTr(
+                                        "There has been an error storing the file.")
+                            messageDialog.open()
                         }
                     }
                 }
@@ -165,29 +179,37 @@ ColumnLayout{
         }
     }
 
-    GroupBox{
+    GroupBox {
         title: qsTr("Screen")
         Layout.fillWidth: true
-        GridLayout{
+        GridLayout {
             anchors.fill: parent
             columns: 2
-            Label{ text: qsTr("Brightness") }
-            SimpleSlider{
+            Label {
+                text: qsTr("Brightness")
+            }
+            SimpleSlider {
                 onValueChanged: appSettings.brightness = value
                 value: appSettings.brightness
             }
-            Label{ text: qsTr("Contrast") }
-            SimpleSlider{
+            Label {
+                text: qsTr("Contrast")
+            }
+            SimpleSlider {
                 onValueChanged: appSettings.contrast = value
                 value: appSettings.contrast
             }
-            Label{ text: qsTr("Margin") }
-            SimpleSlider{
+            Label {
+                text: qsTr("Margin")
+            }
+            SimpleSlider {
                 onValueChanged: appSettings._margin = value
                 value: appSettings._margin
             }
-            Label{ text: qsTr("Opacity") }
-            SimpleSlider{
+            Label {
+                text: qsTr("Opacity")
+            }
+            SimpleSlider {
                 onValueChanged: appSettings.windowOpacity = value
                 value: appSettings.windowOpacity
             }
@@ -195,17 +217,18 @@ ColumnLayout{
     }
 
     // DIALOGS ////////////////////////////////////////////////////////////////
-    InsertNameDialog{
+    InsertNameDialog {
         id: insertname
         onNameSelected: {
-            appSettings.appendCustomProfile(name, appSettings.composeProfileString());
+            appSettings.appendCustomProfile(name,
+                                            appSettings.composeProfileString())
         }
     }
     MessageDialog {
         id: messageDialog
         title: qsTr("File Error")
         onAccepted: {
-            messageDialog.close();
+            messageDialog.close()
         }
     }
     Loader {
@@ -213,23 +236,23 @@ ColumnLayout{
         property bool selectExisting: false
         id: fileDialog
 
-        sourceComponent: FileDialog{
+        sourceComponent: FileDialog {
             nameFilters: ["Json files (*.json)"]
             selectMultiple: false
             selectFolder: false
             selectExisting: fileDialog.selectExisting
-            onAccepted: callBack(fileUrl);
+            onAccepted: callBack(fileUrl)
         }
 
         onSelectExistingChanged: reload()
 
         function open() {
-            item.open();
+            item.open()
         }
 
         function reload() {
-            active = false;
-            active = true;
+            active = false
+            active = true
         }
     }
 }

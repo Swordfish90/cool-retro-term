@@ -1,3 +1,23 @@
+/*******************************************************************************
+* Copyright (c) 2013-2021 "Filippo Scognamiglio"
+* https://github.com/Swordfish90/cool-retro-term
+*
+* This file is part of cool-retro-term.
+*
+* cool-retro-term is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*******************************************************************************/
+
 import QtQuick 2.0
 
 import "utils.js" as Utils
@@ -6,12 +26,10 @@ Loader {
     property ShaderEffectSource source: item ? item.source : null
 
     active: !appSettings.useFastBurnIn && appSettings.burnIn !== 0
-
     anchors.fill: parent
 
     sourceComponent: Item {
         property alias source: burnInSourceEffect
-
         property int burnInScaling: scaleTexture * appSettings.burnInQuality
 
         ShaderEffectSource {
@@ -48,7 +66,7 @@ Loader {
                 }
             }
 
-            Timer{
+            Timer {
                 id: livetimer
 
                 // The interval assumes 60 fps. This is the time needed burnout a white pixel.
@@ -59,7 +77,7 @@ Loader {
                 running: true
                 onTriggered: burnInSourceEffect.updateBurnIn = false;
             }
-            Connections{
+            Connections {
                 target: kterminal
                 onImagePainted:{
                     burnInSourceEffect.scheduleUpdate();
@@ -68,7 +86,7 @@ Loader {
                 }
             }
             // Restart blurred source settings change.
-            Connections{
+            Connections {
                 target: appSettings
                 onBurnInChanged: burnInSourceEffect.restartBlurSource();
                 onTerminalFontChanged: burnInSourceEffect.restartBlurSource();
@@ -92,28 +110,28 @@ Loader {
 
                 fragmentShader:
                     "#ifdef GL_ES
-                    precision mediump float;
-                #endif\n" +
+                        precision mediump float;
+                    #endif\n" +
 
-                "uniform lowp float qt_Opacity;" +
-                "uniform lowp sampler2D txt_source;" +
+                    "uniform lowp float qt_Opacity;" +
+                    "uniform lowp sampler2D txt_source;" +
 
-                "varying highp vec2 qt_TexCoord0;
-             uniform lowp sampler2D blurredSource;
-             uniform highp float burnInCoefficient;" +
+                    "varying highp vec2 qt_TexCoord0;
+                     uniform lowp sampler2D blurredSource;
+                     uniform highp float burnInCoefficient;" +
 
-                "float max3(vec3 v) {
-                     return max (max (v.x, v.y), v.z);
-                }" +
+                    "float max3(vec3 v) {
+                         return max (max (v.x, v.y), v.z);
+                    }" +
 
-                "void main() {" +
-                    "vec2 coords = qt_TexCoord0;" +
-                    "vec3 origColor = texture2D(txt_source, coords).rgb;" +
-                    "vec3 blur_color = texture2D(blurredSource, coords).rgb - vec3(burnInCoefficient);" +
-                    "vec3 color = min(origColor + blur_color, max(origColor, blur_color));" +
+                    "void main() {" +
+                        "vec2 coords = qt_TexCoord0;" +
+                        "vec3 origColor = texture2D(txt_source, coords).rgb;" +
+                        "vec3 blur_color = texture2D(blurredSource, coords).rgb - vec3(burnInCoefficient);" +
+                        "vec3 color = min(origColor + blur_color, max(origColor, blur_color));" +
 
-                    "gl_FragColor = vec4(color, max3(color - origColor));" +
-                "}"
+                        "gl_FragColor = vec4(color, max3(color - origColor));" +
+                    "}"
 
                 onStatusChanged: if (log) console.log(log) //Print warning messages
             }

@@ -1,5 +1,5 @@
 /*******************************************************************************
-* Copyright (c) 2013 "Filippo Scognamiglio"
+* Copyright (c) 2013-2021 "Filippo Scognamiglio"
 * https://github.com/Swordfish90/cool-retro-term
 *
 * This file is part of cool-retro-term.
@@ -17,14 +17,13 @@
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *******************************************************************************/
-
 import QtQuick 2.2
 import QtQuick.Window 2.1
 import QtQuick.Controls 2.3
 
 import "menus"
 
-ApplicationWindow{
+ApplicationWindow {
     id: terminalWindow
 
     width: 1024
@@ -37,7 +36,7 @@ ApplicationWindow{
     onHeightChanged: appSettings.height = height
 
     // Load saved window geometry and show the window
-    Component.onCompleted: {        
+    Component.onCompleted: {
         x = appSettings.x
         y = appSettings.y
         width = appSettings.width
@@ -78,7 +77,7 @@ ApplicationWindow{
         text: qsTr("Fullscreen")
         enabled: Qt.platform.os !== "osx"
         shortcut: "Alt+F11"
-        onTriggered: appSettings.fullscreen = !appSettings.fullscreen;
+        onTriggered: appSettings.fullscreen = !appSettings.fullscreen
         checkable: true
         checked: appSettings.fullscreen
     }
@@ -86,68 +85,68 @@ ApplicationWindow{
         id: quitAction
         text: qsTr("Quit")
         shortcut: "Ctrl+Shift+Q"
-        onTriggered: Qt.quit();
+        onTriggered: Qt.quit()
     }
-    Action{
+    Action {
         id: showsettingsAction
         text: qsTr("Settings")
         onTriggered: {
-            settingswindow.show();
-            settingswindow.requestActivate();
-            settingswindow.raise();
+            settingswindow.show()
+            settingswindow.requestActivate()
+            settingswindow.raise()
         }
     }
-    Action{
+    Action {
         id: copyAction
         text: qsTr("Copy")
         shortcut: "Ctrl+Shift+C"
     }
-    Action{
+    Action {
         id: pasteAction
         text: qsTr("Paste")
         shortcut: "Ctrl+Shift+V"
     }
-    Action{
+    Action {
         id: zoomIn
         text: qsTr("Zoom In")
         shortcut: "Ctrl++"
-        onTriggered: appSettings.incrementScaling();
+        onTriggered: appSettings.incrementScaling()
     }
-    Action{
+    Action {
         id: zoomOut
         text: qsTr("Zoom Out")
         shortcut: "Ctrl+-"
-        onTriggered: appSettings.decrementScaling();
+        onTriggered: appSettings.decrementScaling()
     }
-    Action{
+    Action {
         id: showAboutAction
         text: qsTr("About")
         onTriggered: {
-            aboutDialog.show();
-            aboutDialog.requestActivate();
-            aboutDialog.raise();
+            aboutDialog.show()
+            aboutDialog.requestActivate()
+            aboutDialog.raise()
         }
     }
-    ApplicationSettings{
+    ApplicationSettings {
         id: appSettings
     }
-    TerminalContainer{
+    TerminalContainer {
         id: terminalContainer
         width: parent.width
         height: (parent.height + Math.abs(y))
     }
-    SettingsWindow{
+    SettingsWindow {
         id: settingswindow
         visible: false
     }
-    AboutDialog{
+    AboutDialog {
         id: aboutDialog
         visible: false
     }
-    Loader{
+    Loader {
         anchors.centerIn: parent
         active: appSettings.showTerminalSize
-        sourceComponent: SizeOverlay{
+        sourceComponent: SizeOverlay {
             z: 3
             terminalSize: terminalContainer.terminalSize
         }
