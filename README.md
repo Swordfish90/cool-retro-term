@@ -53,7 +53,7 @@ eopkg it cool-retro-term
 
 **macOS** users can grab the latest dmg from the [release page](https://github.com/Swordfish90/cool-retro-term/releases) or install via Homebrew or MacPorts:
 ```
-brew cask install cool-retro-term
+brew install cool-retro-term --cask
 ```
 or
 ```
@@ -206,7 +206,7 @@ open cool-retro-term.app
 **Homebrew**
 
 ```sh
-brew cask install cool-retro-term
+brew install cool-retro-term --cask
 ```
 
 ## Donations
