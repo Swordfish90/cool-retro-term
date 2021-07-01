@@ -202,7 +202,7 @@ open cool-retro-term.app
 **Homebrew**
 
 ```sh
-brew cask install cool-retro-term
+brew install cool-retro-term --cask
 ```
 
 ## Donations
