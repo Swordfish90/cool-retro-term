@@ -26,13 +26,19 @@ ShaderTerminal {
     property alias title: terminal.title
     property alias terminalSize: terminal.terminalSize
 
+    property real devicePixelRatio: terminalWindow.screen.devicePixelRatio
+
     id: mainShader
     opacity: appSettings.windowOpacity * 0.3 + 0.7
 
     source: terminal.mainSource
     burnInEffect: terminal.burnInEffect
     slowBurnInEffect: terminal.slowBurnInEffect
-    virtual_resolution: terminal.virtualResolution
+    virtualResolution: terminal.virtualResolution
+    screenResolution: Qt.size(
+        terminalWindow.width * devicePixelRatio * appSettings.windowScaling,
+        terminalWindow.height * devicePixelRatio * appSettings.windowScaling
+    )
 
     TimeManager {
         id: timeManager

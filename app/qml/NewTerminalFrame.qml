@@ -34,6 +34,10 @@ ShaderEffect {
 
     property size aadelta: Qt.size(1.0 / width, 1.0 / height)
 
+    ShaderLibrary {
+        id: shaderLibrary
+    }
+
     fragmentShader: "
         #ifdef GL_ES
             precision mediump float;
@@ -52,22 +56,14 @@ ShaderEffect {
             float dist = dot(cc, cc) * screenCurvature;
             return (coords + cc * (1.0 + dist) * dist);
         }
+        " +
 
-        float max2(vec2 v) {
-            return max(v.x, v.y);
-        }
+        shaderLibrary.max2 +
+        shaderLibrary.min2 +
+        shaderLibrary.prod2 +
+        shaderLibrary.sum2 +
 
-        float min2(vec2 v) {
-            return min(v.x, v.y);
-        }
-
-        float prod2(vec2 v) {
-            return v.x * v.y;
-        }
-
-        float sum2(vec2 v) {
-            return v.x + v.y;
-        }
+        "
 
         void main(){
             vec2 staticCoords = qt_TexCoord0;

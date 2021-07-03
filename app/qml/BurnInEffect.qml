@@ -89,6 +89,10 @@ Loader {
             }
         }
 
+        ShaderLibrary {
+            id: shaderLibrary
+        }
+
         ShaderEffect {
             id: burnInShaderEffect
 
@@ -118,9 +122,7 @@ Loader {
 
                  uniform highp float prevLastUpdate;" +
 
-                "float rgb2grey(vec3 v){
-                    return dot(v, vec3(0.21, 0.72, 0.04));
-                }" +
+                shaderLibrary.rgb2grey +
 
                 "void main() {
                     vec2 coords = qt_TexCoord0;

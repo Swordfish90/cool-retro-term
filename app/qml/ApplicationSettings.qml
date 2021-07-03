@@ -104,6 +104,7 @@ QtObject {
     readonly property int no_rasterization: 0
     readonly property int scanline_rasterization: 1
     readonly property int pixel_rasterization: 2
+    readonly property int lcd_rasterization: 3
 
     property int rasterization: no_rasterization
 
@@ -141,6 +142,13 @@ QtObject {
             },
             State {
                 when: rasterization == pixel_rasterization
+                PropertyChanges {
+                    target: fontManager
+                    source: "FontPixels.qml"
+                }
+            },
+            State {
+                when: rasterization == lcd_rasterization
                 PropertyChanges {
                     target: fontManager
                     source: "FontPixels.qml"

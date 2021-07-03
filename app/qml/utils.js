@@ -31,11 +31,16 @@ function lint(a, b, t) {
     return (1 - t) * a + (t) * b;
 }
 
-function mix(c1, c2, alpha){
+function mix(c1, c2, alpha) {
     return Qt.rgba(c1.r * alpha + c2.r * (1-alpha),
                    c1.g * alpha + c2.g * (1-alpha),
                    c1.b * alpha + c2.b * (1-alpha),
                    c1.a * alpha + c2.a * (1-alpha))
+}
+
+function smoothstep(min, max, value) {
+    let x = Math.max(0, Math.min(1, (value - min) / (max - min)));
+    return x * x * (3 - 2 * x);
 }
 
 function strToColor(s){
