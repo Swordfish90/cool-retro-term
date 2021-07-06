@@ -41,7 +41,7 @@ ColumnLayout {
                 property string selectedElement: model[currentIndex]
 
                 Layout.fillWidth: true
-                model: [qsTr("Default"), qsTr("Scanlines"), qsTr("Pixels"), qsTr("LCD")]
+                model: [qsTr("Default"), qsTr("Scanlines"), qsTr("Pixels"), qsTr("Sub-Pixels")]
                 currentIndex: appSettings.rasterization
                 onCurrentIndexChanged: {
                     appSettings.rasterization = currentIndex
