@@ -1,5 +1,5 @@
 /*******************************************************************************
-* Copyright (c) 2013 "Filippo Scognamiglio"
+* Copyright (c) 2013-2021 "Filippo Scognamiglio"
 * https://github.com/Swordfish90/cool-retro-term
 *
 * This file is part of cool-retro-term.
@@ -27,7 +27,7 @@ QtObject {
     property bool initialized: false
 
     function getDatabase() {
-         return LocalStorage.openDatabaseSync("coolretroterm" + dbMajorVersion, dbMinorVersion, "StorageDatabase", 100000);
+         return LocalStorage.openDatabaseSync("coolretroterm" + dbMajorVersion, dbMinorVersion, "StorageDatabase", 100000)
     }
 
     function initialize() {
@@ -35,43 +35,47 @@ QtObject {
         db.transaction(
             function(tx) {
                 tx.executeSql('CREATE TABLE IF NOT EXISTS settings(setting TEXT UNIQUE, value TEXT)');
-          });
+            }
+        )
 
-        initialized = true;
+        initialized = true
     }
 
     function setSetting(setting, value) {
-       if(!initialized) initialize();
+        if(!initialized) initialize();
 
-       var db = getDatabase();
-       var res = "";
-       db.transaction(function(tx) {
-            var rs = tx.executeSql('INSERT OR REPLACE INTO settings VALUES (?,?);', [setting,value]);
-                  //console.log(rs.rowsAffected)
-                  if (rs.rowsAffected > 0) {
+        var db = getDatabase();
+        var res = "";
+        db.transaction(
+            function(tx) {
+                var rs = tx.executeSql('INSERT OR REPLACE INTO settings VALUES (?,?);', [setting,value]);
+                //console.log(rs.rowsAffected)
+                if (rs.rowsAffected > 0) {
                     res = "OK";
-                  } else {
+                } else {
                     res = "Error";
-                  }
-            }
-      );
+                }
+           }
+      )
       // The function returns “OK” if it was successful, or “Error” if it wasn't
-      return res;
+      return res
     }
 
     function getSetting(setting) {
-       if(!initialized) initialize();
-       var db = getDatabase();
-       var res="";
-       db.transaction(function(tx) {
-         var rs = tx.executeSql('SELECT value FROM settings WHERE setting=?;', [setting]);
-         if (rs.rows.length > 0) {
-              res = rs.rows.item(0).value;
-         } else {
-             res = undefined;
-         }
-      })
-      return res
+        if(!initialized) initialize();
+        var db = getDatabase();
+        var res = "";
+        db.transaction(
+            function(tx) {
+                var rs = tx.executeSql('SELECT value FROM settings WHERE setting=?;', [setting]);
+                if (rs.rows.length > 0) {
+                res = rs.rows.item(0).value;
+                } else {
+                res = undefined;
+                }
+            }
+        )
+        return res
     }
 
     function dropSettings(){
@@ -79,6 +83,7 @@ QtObject {
         db.transaction(
             function(tx) {
                 tx.executeSql('DROP TABLE settings');
-          });
+            }
+        )
     }
 }

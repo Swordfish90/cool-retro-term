@@ -17,7 +17,6 @@
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *******************************************************************************/
-
 import QtQuick 2.2
 import QtQuick.Controls 2.3
 
@@ -27,40 +26,60 @@ MenuBar {
 
     Menu {
         title: qsTr("File")
-        MenuItem {action: quitAction}
+        MenuItem {
+            action: quitAction
+        }
     }
     Menu {
         title: qsTr("Edit")
-        MenuItem {action: copyAction}
-        MenuItem {action: pasteAction}
-        MenuSeparator { }
-        MenuItem {action: showsettingsAction}
+        MenuItem {
+            action: copyAction
+        }
+        MenuItem {
+            action: pasteAction
+        }
+        MenuSeparator {}
+        MenuItem {
+            action: showsettingsAction
+        }
     }
-    Menu{
+    Menu {
         title: qsTr("View")
-        MenuItem {action: fullscreenAction; visible: fullscreenAction.enabled}
-        MenuItem {action: showMenubarAction; visible: showMenubarAction.enabled}
-        MenuItem {action: zoomIn}
-        MenuItem {action: zoomOut}
+        MenuItem {
+            action: fullscreenAction
+            visible: fullscreenAction.enabled
+        }
+        MenuItem {
+            action: showMenubarAction
+            visible: showMenubarAction.enabled
+        }
+        MenuItem {
+            action: zoomIn
+        }
+        MenuItem {
+            action: zoomOut
+        }
     }
-    Menu{
+    Menu {
         id: profilesMenu
         title: qsTr("Profiles")
-        Instantiator{
+        Instantiator {
             model: appSettings.profilesList
             delegate: MenuItem {
                 text: model.text
                 onTriggered: {
-                    appSettings.loadProfileString(obj_string);
-                    appSettings.handleFontChanged();
+                    appSettings.loadProfileString(obj_string)
+                    appSettings.handleFontChanged()
                 }
             }
             onObjectAdded: profilesMenu.insertItem(index, object)
             onObjectRemoved: profilesMenu.removeItem(object)
         }
     }
-    Menu{
+    Menu {
         title: qsTr("Help")
-        MenuItem {action: showAboutAction}
+        MenuItem {
+            action: showAboutAction
+        }
     }
 }

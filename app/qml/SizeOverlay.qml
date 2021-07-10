@@ -1,5 +1,5 @@
 /*******************************************************************************
-* Copyright (c) 2013 "Filippo Scognamiglio"
+* Copyright (c) 2013-2021 "Filippo Scognamiglio"
 * https://github.com/Swordfish90/cool-retro-term
 *
 * This file is part of cool-retro-term.
@@ -17,12 +17,12 @@
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *******************************************************************************/
-
 import QtQuick 2.2
 
-Rectangle{
+Rectangle {
     property size terminalSize
     property real topOpacity: 0.6
+
     width: textSize.width * 2
     height: textSize.height * 2
     radius: 5
@@ -31,17 +31,21 @@ Rectangle{
     color: "black"
     opacity: sizetimer.running ? 0.6 : 0.0
 
-    Behavior on opacity{NumberAnimation{duration: 200}}
+    Behavior on opacity {
+        NumberAnimation {
+            duration: 200
+        }
+    }
 
     onTerminalSizeChanged: sizetimer.restart()
 
-    Text{
+    Text {
         id: textSize
         anchors.centerIn: parent
         color: "white"
         text: terminalSize.width + "x" + terminalSize.height
     }
-    Timer{
+    Timer {
         id: sizetimer
         interval: 1000
         running: false
