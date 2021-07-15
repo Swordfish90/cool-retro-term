@@ -99,7 +99,12 @@ QtObject {
     property real rbgShift: 0.0
 
     property real _margin: 0.5
+    property real _frameMargin: 0.5
+
     property real margin: Utils.lint(1.0, 20.0, _margin)
+    property real frameMargin: Utils.lint(1.0, 50.0, _frameMargin)
+
+    property real totalMargin: frameMargin + margin
 
     readonly property int no_rasterization: 0
     readonly property int scanline_rasterization: 1
@@ -238,8 +243,7 @@ QtObject {
             "burnInQuality": burnInQuality,
             "useCustomCommand": useCustomCommand,
             "customCommand": customCommand,
-            "useFastBurnIn": useFastBurnIn,
-            "blinkingCursor": blinkingCursor
+            "useFastBurnIn": useFastBurnIn
         }
         return stringify(settings)
     }
@@ -266,7 +270,9 @@ QtObject {
             "windowOpacity": windowOpacity,
             "fontName": fontNames[rasterization],
             "fontWidth": fontWidth,
-            "margin": _margin
+            "margin": _margin,
+            "blinkingCursor": blinkingCursor,
+            "frameMargin": _frameMargin,
         }
         return settings
     }
@@ -335,9 +341,6 @@ QtObject {
 
         useFastBurnIn = settings.useFastBurnIn
                 !== undefined ? settings.useFastBurnIn : useFastBurnIn
-
-        blinkingCursor = settings.blinkingCursor
-                !== undefined ? settings.blinkingCursor : blinkingCursor
     }
 
     function loadProfileString(profileString) {
@@ -379,6 +382,9 @@ QtObject {
         fontWidth = settings.fontWidth !== undefined ? settings.fontWidth : fontWidth
 
         _margin = settings.margin !== undefined ? settings.margin : _margin
+        _frameMargin = settings.frameMargin !== undefined ? settings.frameMargin : _frameMargin
+
+        blinkingCursor = settings.blinkingCursor !== undefined ? settings.blinkingCursor : blinkingCursor
 
         handleFontChanged()
     }
@@ -459,7 +465,9 @@ QtObject {
                 "screenCurvature": 0.3,
                 "staticNoise": 0.1198,
                 "windowOpacity": 1,
-                "margin": 0.5
+                "margin": 0.5,
+                "blinkingCursor": false,
+                "frameMargin": 0.1
             }'
             builtin: true
         }
@@ -486,7 +494,9 @@ QtObject {
                 "screenCurvature": 0.3,
                 "staticNoise": 0.1198,
                 "windowOpacity": 1,
-                "margin": 0.5
+                "margin": 0.5,
+                "blinkingCursor": false,
+                "frameMargin": 0.1
             }'
             builtin: true
         }
@@ -513,7 +523,9 @@ QtObject {
                 "screenCurvature": 0.3,
                 "staticNoise": 0.15,
                 "windowOpacity": 1,
-                "margin": 0.5
+                "margin": 0.5,
+                "blinkingCursor": false,
+                "frameMargin": 0.1
             }'
             builtin: true
         }
@@ -540,7 +552,9 @@ QtObject {
                 "screenCurvature": 0,
                 "staticNoise": 0.15,
                 "windowOpacity": 1,
-                "margin": 0.5
+                "margin": 0.5,
+                "blinkingCursor": false,
+                "frameMargin": 0.1
             }'
             builtin: true
         }
@@ -567,7 +581,9 @@ QtObject {
                 "screenCurvature": 0.5,
                 "staticNoise": 0.099,
                 "windowOpacity": 1,
-                "margin": 0.5
+                "margin": 0.5,
+                "blinkingCursor": false,
+                "frameMargin": 0.2
             }'
             builtin: true
         }
@@ -594,7 +610,9 @@ QtObject {
                 "screenCurvature": 0.5,
                 "staticNoise": 0.2969,
                 "windowOpacity": 1,
-                "margin": 0.5
+                "margin": 0.5,
+                "blinkingCursor": false,
+                "frameMargin": 0.5
             }'
             builtin: true
         }
@@ -621,7 +639,9 @@ QtObject {
                 "screenCurvature": 0.4,
                 "staticNoise": 0.0503,
                 "windowOpacity": 1,
-                "margin": 0.5
+                "margin": 0.5,
+                "blinkingCursor": false,
+                "frameMargin": 0.2
             }'
             builtin: true
         }
@@ -648,7 +668,9 @@ QtObject {
                 "screenCurvature": 0.2,
                 "staticNoise": 0,
                 "windowOpacity": 1,
-                "margin": 0.5
+                "margin": 0.5,
+                "blinkingCursor": false,
+                "frameMargin": 0.1
             }'
             builtin: true
         }
@@ -675,7 +697,9 @@ QtObject {
                 "screenCurvature": 0,
                 "staticNoise": 0.0955,
                 "windowOpacity": 0.7,
-                "margin": 0.1
+                "margin": 0.1,
+                "blinkingCursor": false,
+                "frameMargin": 0
             }'
             builtin: true
         }

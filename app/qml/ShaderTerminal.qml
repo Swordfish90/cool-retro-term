@@ -79,14 +79,16 @@ Item {
          property size jitterDisplacement: Qt.size(0.007 * jitter, 0.002 * jitter)
          property real shadowLength: 0.25 * screenCurvature * Utils.lint(0.50, 1.5, ambientLight)
          property real staticNoise: appSettings.staticNoise
-         property size scaleNoiseSize: Qt.size((width) / (noiseTexture.width * appSettings.windowScaling * appSettings.totalFontScaling),
-                                               (height) / (noiseTexture.height * appSettings.windowScaling * appSettings.totalFontScaling))
+         property size scaleNoiseSize: Qt.size((width * 0.75) / (noiseTexture.width * appSettings.windowScaling * appSettings.totalFontScaling),
+                                               (height * 0.75) / (noiseTexture.height * appSettings.windowScaling * appSettings.totalFontScaling))
 
          property size virtualResolution: parent.virtualResolution
 
          // Rasterization might display oversamping issues if virtual resolution is close to physical display resolution.
          // We progressively disable rasterization from 4x up to 2x resolution.
          property real rasterizationIntensity: Utils.smoothstep(2.0, 4.0, _screenDensity)
+
+         property real displayTerminalFrame: appSettings._frameMargin > 0 || appSettings.screenCurvature > 0
 
          property real time: timeManager.time
          property ShaderEffectSource noiseSource: noiseShaderSource
@@ -190,9 +192,10 @@ Item {
              (((staticNoise !== 0 || jitter !== 0) ||(fallBack && (flickering || horizontalSync))) ? "
                  uniform lowp sampler2D noiseSource;
                  uniform highp vec2 scaleNoiseSize;" : "") +
-             (screenCurvature !== 0 ? "
-                 uniform highp float screenCurvature;
+             (displayTerminalFrame ? "
                  uniform lowp sampler2D frameSource;" : "") +
+             (screenCurvature !== 0 ? "
+                 uniform highp float screenCurvature;" : "") +
              (glowingLine !== 0 ? "
                  uniform highp float glowingLine;" : "") +
              (chromaColor !== 0 ? "
@@ -328,7 +331,7 @@ Item {
                  (ambientLight !== 0 ? "
                      finalColor += vec3(ambientLight) * (1.0 - distance) * (1.0 - distance);" : "") +
 
-                 (screenCurvature !== 0 ?
+                 (displayTerminalFrame ?
                     "vec4 frameColor = texture2D(frameSource, qt_TexCoord0);
                      finalColor = mix(finalColor, frameColor.rgb, frameColor.a);"
                  : "") +
@@ -351,7 +354,7 @@ Item {
      Loader {
          id: terminalFrameLoader
 
-         active: screenCurvature !== 0
+         active: dynamicShader.displayTerminalFrame
 
          width: staticShader.width
          height: staticShader.height
@@ -363,7 +366,7 @@ Item {
              visible: false
              format: ShaderEffectSource.RGBA
 
-             NewTerminalFrame {
+             TerminalFrame {
                  id: terminalFrame
                  blending: false
                  anchors.fill: parent
@@ -441,18 +444,9 @@ Item {
              (ambientLight !== 0 ? "
                  uniform lowp float ambientLight;" : "") +
 
-             "
-             float min2(vec2 v) {
-                 return min(v.x, v.y);
-             }
-
-             float sum2(vec2 v) {
-                 return v.x + v.y;
-             }
-
-             float rgb2grey(vec3 v){
-                 return dot(v, vec3(0.21, 0.72, 0.04));
-             }" +
+             shaderLibrary.min2 +
+             shaderLibrary.sum2 +
+             shaderLibrary.rgb2grey +
 
              "vec3 convertWithChroma(vec3 inColor) {
                 vec3 outColor = inColor;" +

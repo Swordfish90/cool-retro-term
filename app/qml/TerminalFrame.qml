@@ -22,7 +22,7 @@ import QtQuick 2.0
 import "utils.js" as Utils
 
 ShaderEffect {
-    property color _staticFrameColor: "#ffffff"
+    property color _staticFrameColor: "#fff"
     property color _backgroundColor: appSettings.backgroundColor
     property color _fontColor: appSettings.fontColor
     property color _lightColor: Utils.mix(_fontColor, _backgroundColor, 0.2)
@@ -30,9 +30,15 @@ ShaderEffect {
 
     property color frameColor: Utils.mix(_staticFrameColor, _lightColor, _ambientLight)
     property real screenCurvature: appSettings.screenCurvature * appSettings.screenCurvatureSize
-    property real shadowLength: 0.5 * screenCurvature * Utils.lint(0.50, 1.5, _ambientLight)
 
-    property size aadelta: Qt.size(1.0 / width, 1.0 / height)
+    // Coefficient of the log curve used to approximate shadowing
+    property real screenShadowCoeff: Utils.lint(20.0, 10.0, _ambientLight)
+    property real frameShadowCoeff: Utils.lint(20.0, 10.0, _ambientLight)
+
+    property size margin: Qt.size(
+        appSettings.frameMargin / width * appSettings.windowScaling,
+        appSettings.frameMargin / height * appSettings.windowScaling
+    )
 
     ShaderLibrary {
         id: shaderLibrary
@@ -44,10 +50,11 @@ ShaderEffect {
         #endif
 
         uniform lowp float screenCurvature;
-        uniform lowp float shadowLength;
+        uniform lowp float screenShadowCoeff;
+        uniform lowp float frameShadowCoeff;
         uniform highp float qt_Opacity;
         uniform lowp vec4 frameColor;
-        uniform mediump vec2 aadelta;
+        uniform mediump vec2 margin;
 
         varying highp vec2 qt_TexCoord0;
 
@@ -65,25 +72,29 @@ ShaderEffect {
 
         "
 
-        void main(){
-            vec2 staticCoords = qt_TexCoord0;
-            vec2 coords = distortCoordinates(staticCoords);
+        vec2 positiveLog(vec2 x) {
+            return clamp(log(x), vec2(0.0), vec2(100.0));
+        }
 
-            vec3 color = vec3(0.0);
+        void main() {
+            vec2 staticCoords = qt_TexCoord0;
+            vec2 coords = distortCoordinates(staticCoords) * (vec2(1.0) + margin * 2.0) - margin;
+
+            vec2 vignetteCoords = staticCoords * (1.0 - staticCoords.yx);
+            float vignette = pow(prod2(vignetteCoords) * 15.0, 0.25);
+
+            vec3 color = frameColor.rgb * vec3(1.0 - vignette);
             float alpha = 0.0;
 
-            float outShadowLength = shadowLength;
-            float inShadowLength = shadowLength * 0.5;
+            float frameShadow = max2(positiveLog(-coords * frameShadowCoeff + vec2(1.0)) + positiveLog(coords * frameShadowCoeff - (vec2(frameShadowCoeff) - vec2(1.0))));
+            frameShadow = max(sqrt(frameShadow), 0.0);
+            color *= frameShadow;
+            alpha = sum2(1.0 - step(vec2(0.0), coords) + step(vec2(1.0), coords));
+            alpha = clamp(alpha, 0.0, 1.0);
+            alpha *= mix(1.0, 0.9, frameShadow);
 
-            float outShadow = max2(1.0 - smoothstep(vec2(-outShadowLength), vec2(0.0), coords) + smoothstep(vec2(1.0), vec2(1.0 + outShadowLength), coords));
-            outShadow = clamp(sqrt(outShadow), 0.0, 1.0);
-            color += frameColor.rgb * outShadow;
-            alpha = sum2(1.0 - smoothstep(vec2(0.0), aadelta, coords) + smoothstep(vec2(1.0) - aadelta, vec2(1.0), coords));
-            alpha = clamp(alpha, 0.0, 1.0) * mix(1.0, 0.9, outShadow);
-
-            float inShadow = 1.0 - prod2(smoothstep(0.0, inShadowLength, coords) - smoothstep(1.0 - inShadowLength, 1.0, coords));
-            inShadow = 0.5 * inShadow * inShadow;
-            alpha = max(alpha, inShadow);
+            float screenShadow = 1.0 - prod2(positiveLog(coords * screenShadowCoeff + vec2(1.0)) * positiveLog(-coords * screenShadowCoeff + vec2(screenShadowCoeff + 1.0)));
+            alpha = max(0.8 * screenShadow, alpha);
 
             gl_FragColor = vec4(color * alpha, alpha);
         }
