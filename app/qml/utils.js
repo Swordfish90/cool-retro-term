@@ -1,3 +1,23 @@
+/*******************************************************************************
+* Copyright (c) 2013-2021 "Filippo Scognamiglio"
+* https://github.com/Swordfish90/cool-retro-term
+*
+* This file is part of cool-retro-term.
+*
+* cool-retro-term is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*******************************************************************************/
+
 .pragma library
 function clamp(x, min, max) {
     if (x <= min)
@@ -6,15 +26,23 @@ function clamp(x, min, max) {
         return max;
     return x;
 }
+
 function lint(a, b, t) {
     return (1 - t) * a + (t) * b;
 }
-function mix(c1, c2, alpha){
+
+function mix(c1, c2, alpha) {
     return Qt.rgba(c1.r * alpha + c2.r * (1-alpha),
                    c1.g * alpha + c2.g * (1-alpha),
                    c1.b * alpha + c2.b * (1-alpha),
                    c1.a * alpha + c2.a * (1-alpha))
 }
+
+function smoothstep(min, max, value) {
+    let x = Math.max(0, Math.min(1, (value - min) / (max - min)));
+    return x * x * (3 - 2 * x);
+}
+
 function strToColor(s){
     var r = parseInt(s.substring(1,3), 16) / 256;
     var g = parseInt(s.substring(3,5), 16) / 256;

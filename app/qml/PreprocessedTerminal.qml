@@ -1,5 +1,5 @@
 /*******************************************************************************
-* Copyright (c) 2013 "Filippo Scognamiglio"
+* Copyright (c) 2013-2021 "Filippo Scognamiglio"
 * https://github.com/Swordfish90/cool-retro-term
 *
 * This file is part of cool-retro-term.
@@ -73,7 +73,7 @@ Item{
         id: kterminal
 
         property int textureResolutionScale: appSettings.lowResolutionFont ? devicePixelRatio : 1
-        property int margin: appSettings.margin / screenScaling
+        property int margin: appSettings.totalMargin / screenScaling
         property int totalWidth: Math.floor(parent.width / (screenScaling * fontWidth))
         property int totalHeight: Math.floor(parent.height / screenScaling)
 
@@ -177,8 +177,8 @@ Item{
     }
     property alias contextmenu: menuLoader.item
 
-    MouseArea{
-        property real margin: appSettings.margin
+    MouseArea {
+        property real margin: appSettings.totalMargin
 
         acceptedButtons: Qt.LeftButton | Qt.MiddleButton | Qt.RightButton
         anchors.fill: parent
@@ -219,8 +219,8 @@ Item{
             var cc = Qt.size(0.5 - x, 0.5 - y);
             var distortion = (cc.height * cc.height + cc.width * cc.width) * appSettings.screenCurvature * appSettings.screenCurvatureSize;
 
-            return Qt.point((x - cc.width  * (1+distortion) * distortion) * kterminal.totalWidth,
-                           (y - cc.height * (1+distortion) * distortion) * kterminal.totalHeight)
+            return Qt.point((x - cc.width  * (1+distortion) * distortion) * (kterminal.totalWidth),
+                           (y - cc.height * (1+distortion) * distortion) * (kterminal.totalHeight))
         }
     }
     ShaderEffectSource{
