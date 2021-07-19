@@ -38,8 +38,8 @@ Loader {
             property real fps: appSettings.fps !== 0 ? appSettings.fps : 60
             property real burnInFadeTime: Utils.lint(minBurnInFadeTime, maxBurnInFadeTime, burnIn)
             property real burnInCoefficient: 1000 / (fps * burnInFadeTime)
-            property real minBurnInFadeTime: appSettings.minBurnInFadeTime
-            property real maxBurnInFadeTime: appSettings.maxBurnInFadeTime
+            property real minBurnInFadeTime: appConstants.minBurnInFadeTime
+            property real maxBurnInFadeTime: appConstants.maxBurnInFadeTime
 
             id: burnInSourceEffect
 

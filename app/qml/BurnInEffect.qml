@@ -32,8 +32,8 @@ Loader {
     property real delay: (1.0 / appSettings.fps) * 1000
     property real burnIn: appSettings.burnIn
     property real burnInFadeTime: 1 / Utils.lint(_minBurnInFadeTime, _maxBurnInFadeTime, burnIn)
-    property real _minBurnInFadeTime: appSettings.minBurnInFadeTime
-    property real _maxBurnInFadeTime: appSettings.maxBurnInFadeTime
+    property real _minBurnInFadeTime: appConstants.minBurnInFadeTime
+    property real _maxBurnInFadeTime: appConstants.maxBurnInFadeTime
 
     active: appSettings.useFastBurnIn && appSettings.burnIn !== 0
 

@@ -32,7 +32,7 @@ Item {
     property color fontColor: appSettings.fontColor
     property color backgroundColor: appSettings.backgroundColor
 
-    property real screenCurvature: appSettings.screenCurvature * appSettings.screenCurvatureSize
+    property real screenCurvature: appSettings.screenCurvature * appConstants.screenCurvatureSize
 
     property real chromaColor: appSettings.chromaColor
 

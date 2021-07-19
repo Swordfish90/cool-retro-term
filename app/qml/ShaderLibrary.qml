@@ -2,12 +2,12 @@ import QtQuick 2.0
 
 QtObject {
     property string rasterizationShader:
-        (appSettings.rasterization === appSettings.no_rasterization ? "
+        (appSettings.rasterization === appConstants.no_rasterization ? "
             lowp vec3 applyRasterization(vec2 screenCoords, lowp vec3 texel, vec2 virtualResolution, float intensity) {
                 return texel;
             }" : "") +
 
-        (appSettings.rasterization === appSettings.scanline_rasterization ? "
+        (appSettings.rasterization === appConstants.scanline_rasterization ? "
             #define INTENSITY 0.30
             #define BRIGHTBOOST 0.30
 
@@ -22,7 +22,7 @@ QtObject {
                 return mix(texel, rasterizationColor, intensity);
             }" : "") +
 
-        (appSettings.rasterization === appSettings.pixel_rasterization ? "
+        (appSettings.rasterization === appConstants.pixel_rasterization ? "
             #define INTENSITY 0.30
             #define BRIGHTBOOST 0.30
 
@@ -40,7 +40,7 @@ QtObject {
                 return mix(texel, rasterizationColor, intensity);
             }" : "") +
 
-        (appSettings.rasterization === appSettings.subpixel_rasterization ? "
+        (appSettings.rasterization === appConstants.subpixel_rasterization ? "
             #define INTENSITY 0.30
             #define BRIGHTBOOST 0.30
             #define SUBPIXELS 3.0

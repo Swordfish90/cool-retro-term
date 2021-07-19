@@ -46,5 +46,6 @@
         <file>menus/FullContextMenu.qml</file>
         <file>menus/ShortContextMenu.qml</file>
         <file>ShaderLibrary.qml</file>
+        <file>ApplicationConstants.qml</file>
     </qresource>
 </RCC>

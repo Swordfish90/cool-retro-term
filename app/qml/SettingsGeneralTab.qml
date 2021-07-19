@@ -113,7 +113,7 @@ ColumnLayout {
 
                             var version = profileObject.version
                                     !== undefined ? profileObject.version : 1
-                            if (version !== appSettings.profileVersion)
+                            if (version !== appConstants.profileVersion)
                                 throw "This profile is not supported on this version of CRT."
 
                             delete profileObject.name
@@ -160,7 +160,7 @@ ColumnLayout {
                             var profileSettings = JSON.parse(
                                         profileObject.obj_string)
                             profileSettings["name"] = profileObject.text
-                            profileSettings["version"] = appSettings.profileVersion
+                            profileSettings["version"] = appConstants.profileVersion
 
                             var result = fileIO.write(url, JSON.stringify(
                                                           profileSettings,

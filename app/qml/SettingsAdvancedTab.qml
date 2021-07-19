@@ -156,7 +156,7 @@ ColumnLayout {
             }
             CheckBox {
                 Layout.columnSpan: 2
-                text: qsTr("Burnin optimization (Might display timing artifacts)")
+                text: qsTr("Burnin optimization (might display timing artifacts)")
                 checked: appSettings.useFastBurnIn
                 onCheckedChanged: appSettings.useFastBurnIn = checked
             }

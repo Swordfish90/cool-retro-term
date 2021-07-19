@@ -23,18 +23,8 @@ import QtQuick.Controls 2.0
 import "utils.js" as Utils
 
 QtObject {
-    readonly property string version: appVersion
-    readonly property int profileVersion: 2
 
-    // STATIC CONSTANTS ////////////////////////////////////////////////////////
-    readonly property real screenCurvatureSize: 0.4
-    readonly property real minimumFontScaling: 0.25
-    readonly property real maximumFontScaling: 2.50
-
-    readonly property real minBurnInFadeTime: 160
-    readonly property real maxBurnInFadeTime: 1600
-
-    // GENERAL SETTINGS ///////////////////////////////////////////////////////
+    // APPLICATION SETTINGS ///////////////////////////////////////////////////////
     property int x: 100
     property int y: 100
     property int width: 1024
@@ -55,8 +45,6 @@ QtObject {
 
     property real burnInQuality: 0.5
     property bool useFastBurnIn: Qt.platform.os === "osx" ? false : true
-
-    property bool blinkingCursor: false
 
     onWindowScalingChanged: handleFontChanged()
 
@@ -106,17 +94,13 @@ QtObject {
 
     property real totalMargin: frameMargin + margin
 
-    readonly property int no_rasterization: 0
-    readonly property int scanline_rasterization: 1
-    readonly property int pixel_rasterization: 2
-    readonly property int subpixel_rasterization: 3
-
     property int rasterization: no_rasterization
 
+    property bool blinkingCursor: false
+
     // FONTS //////////////////////////////////////////////////////////////////
-    readonly property real baseFontScaling: 0.75
     property real fontScaling: 1.0
-    property real totalFontScaling: baseFontScaling * fontScaling
+    property real totalFontScaling: appConstants.baseFontScaling * fontScaling
 
     property real fontWidth: 1.0
 
@@ -132,28 +116,28 @@ QtObject {
     property Loader fontManager: Loader {
         states: [
             State {
-                when: rasterization == no_rasterization
+                when: rasterization == appConstants.no_rasterization
                 PropertyChanges {
                     target: fontManager
                     source: "Fonts.qml"
                 }
             },
             State {
-                when: rasterization == scanline_rasterization
+                when: rasterization == appConstants.scanline_rasterization
                 PropertyChanges {
                     target: fontManager
                     source: "FontScanlines.qml"
                 }
             },
             State {
-                when: rasterization == pixel_rasterization
+                when: rasterization == appConstants.pixel_rasterization
                 PropertyChanges {
                     target: fontManager
                     source: "FontPixels.qml"
                 }
             },
             State {
-                when: rasterization == subpixel_rasterization
+                when: rasterization == appConstants.subpixel_rasterization
                 PropertyChanges {
                     target: fontManager
                     source: "FontPixels.qml"
@@ -179,12 +163,12 @@ QtObject {
     }
 
     function incrementScaling() {
-        fontScaling = Math.min(fontScaling + 0.05, maximumFontScaling)
+        fontScaling = Math.min(fontScaling + 0.05, appConstants.maximumFontScaling)
         handleFontChanged()
     }
 
     function decrementScaling() {
-        fontScaling = Math.max(fontScaling - 0.05, minimumFontScaling)
+        fontScaling = Math.max(fontScaling - 0.05, appConstants.minimumFontScaling)
         handleFontChanged()
     }
 

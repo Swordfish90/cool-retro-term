@@ -83,8 +83,8 @@ ColumnLayout {
                     onValueChanged: appSettings.fontScaling = value
                     value: appSettings.fontScaling
                     stepSize: 0.05
-                    from: appSettings.minimumFontScaling
-                    to: appSettings.maximumFontScaling
+                    from: appConstants.minimumFontScaling
+                    to: appConstants.maximumFontScaling
                 }
                 SizedLabel {
                     text: Math.round(fontScalingChanger.value * 100) + "%"

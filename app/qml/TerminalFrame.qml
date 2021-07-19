@@ -29,7 +29,7 @@ ShaderEffect {
     property real _ambientLight: Utils.lint(0.2, 0.8, appSettings.ambientLight)
 
     property color frameColor: Utils.mix(_staticFrameColor, _lightColor, _ambientLight)
-    property real screenCurvature: appSettings.screenCurvature * appSettings.screenCurvatureSize
+    property real screenCurvature: appSettings.screenCurvature * appConstants.screenCurvatureSize
 
     // Coefficient of the log curve used to approximate shadowing
     property real screenShadowCoeff: Utils.lint(20.0, 10.0, _ambientLight)

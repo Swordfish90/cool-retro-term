@@ -127,6 +127,9 @@ ApplicationWindow {
             aboutDialog.raise()
         }
     }
+    ApplicationConstants {
+        id: appConstants
+    }
     ApplicationSettings {
         id: appSettings
     }
