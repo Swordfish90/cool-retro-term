@@ -71,6 +71,7 @@ QtObject {
 
     property string _backgroundColor: "#000000"
     property string _fontColor: "#ff8100"
+    property string _frameColor: "#ffffff"
     property string saturatedColor: Utils.mix(Utils.strToColor("#FFFFFF"),
                                               Utils.strToColor(_fontColor),
                                               saturationColor * 0.5)
@@ -81,6 +82,7 @@ QtObject {
                                                   _backgroundColor),
                                               Utils.strToColor(saturatedColor),
                                               0.7 + (contrast * 0.3))
+    property color frameColor: Utils.strToColor(_frameColor)
 
     property real staticNoise: 0.12
     property real screenCurvature: 0.3
@@ -251,6 +253,7 @@ QtObject {
         var settings = {
             "backgroundColor": _backgroundColor,
             "fontColor": _fontColor,
+            "frameColor": _frameColor,
             "flickering": flickering,
             "horizontalSync": horizontalSync,
             "staticNoise": staticNoise,
@@ -345,6 +348,7 @@ QtObject {
         _backgroundColor = settings.backgroundColor
                 !== undefined ? settings.backgroundColor : _backgroundColor
         _fontColor = settings.fontColor !== undefined ? settings.fontColor : _fontColor
+        _frameColor = settings.frameColor !== undefined ? settings.frameColor : _frameColor
 
         horizontalSync = settings.horizontalSync
                 !== undefined ? settings.horizontalSync : horizontalSync

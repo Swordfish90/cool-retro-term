@@ -166,6 +166,13 @@ ColumnLayout {
                     onColorSelected: appSettings._backgroundColor = color
                     color: appSettings._backgroundColor
                 }
+                ColorButton {
+                    name: qsTr("Frame")
+                    height: 50
+                    Layout.fillWidth: true
+                    onColorSelected: appSettings._frameColor = color
+                    color: appSettings._frameColor
+                }
             }
         }
     }
