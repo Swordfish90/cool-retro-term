@@ -321,7 +321,7 @@ Item {
 
                  (displayTerminalFrame ?
                     "vec4 frameColor = texture2D(frameSource, qt_TexCoord0);
-                     finalColor = mix(finalColor, frameColor.rgb, frameColor.a);"
+                     finalColor = mix(finalColor, frameColor.rgb + finalColor, frameColor.a);"
                  : "") +
 
                  "gl_FragColor = vec4(finalColor, qt_Opacity);" +
