@@ -149,6 +149,11 @@ ColumnLayout {
                     value: appSettings.saturationColor
                     enabled: appSettings.chromaColor !== 0
                 }
+                CheckableSlider {
+                    name: qsTr("Frame Gloss")
+                    onNewValue: appSettings.frameGloss = newValue
+                    value: appSettings.frameGloss
+                }
             }
             RowLayout {
                 Layout.fillWidth: true

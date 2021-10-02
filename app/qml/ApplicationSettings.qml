@@ -92,6 +92,7 @@ QtObject {
 
     property real chromaColor: 0.25
     property real saturationColor: 0.25
+    property real frameGloss: 0
 
     property real jitter: 0.2
 
@@ -259,6 +260,7 @@ QtObject {
             "staticNoise": staticNoise,
             "chromaColor": chromaColor,
             "saturationColor": saturationColor,
+            "frameGloss": frameGloss,
             "screenCurvature": screenCurvature,
             "glowingLine": glowingLine,
             "burnIn": burnIn,
@@ -357,6 +359,7 @@ QtObject {
         chromaColor = settings.chromaColor !== undefined ? settings.chromaColor : chromaColor
         saturationColor = settings.saturationColor
                 !== undefined ? settings.saturationColor : saturationColor
+        frameGloss = settings.frameGloss !== undefined ? settings.frameGloss : frameGloss
         screenCurvature = settings.screenCurvature
                 !== undefined ? settings.screenCurvature : screenCurvature
         glowingLine = settings.glowingLine !== undefined ? settings.glowingLine : glowingLine
