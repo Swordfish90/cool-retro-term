@@ -41,10 +41,10 @@ int main(int argc, char *argv[])
 #if defined(Q_OS_MAC)
     // This allows UTF-8 characters usage in OSX.
     setenv("LC_CTYPE", "UTF-8", 1);
-
-    // Force fusion style on macOS
-    QQuickStyle::setStyle("Fusion");
 #endif
+
+    // Force fusion style on every platform
+    QQuickStyle::setStyle("Fusion");
 
     if (argc>1 && (!strcmp(argv[1],"-h") || !strcmp(argv[1],"--help"))) {
         QTextStream cout(stdout, QIODevice::WriteOnly);
