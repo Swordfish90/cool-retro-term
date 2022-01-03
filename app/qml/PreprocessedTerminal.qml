@@ -45,28 +45,54 @@ Item{
     property size fontMetrics: kterminal.fontMetrics
 
     // Manage copy and paste
-    Connections{
+    Connections {
         target: copyAction
-        onTriggered: kterminal.copyClipboard();
+
+        function onTriggered() {
+            kterminal.copyClipboard()
+        }
     }
-    Connections{
+    Connections {
         target: pasteAction
-        onTriggered: kterminal.pasteClipboard()
+
+        function onTriggered() {
+            kterminal.pasteClipboard()
+        }
     }
 
     //When settings are updated sources need to be redrawn.
-    Connections{
+    Connections {
         target: appSettings
-        onFontScalingChanged: terminalContainer.updateSources();
-        onFontWidthChanged: terminalContainer.updateSources();
+
+        function onFontScalingChanged() {
+            terminalContainer.updateSources()
+        }
+
+        function onFontWidthChanged() {
+            terminalContainer.updateSources()
+        }
     }
-    Connections{
+    Connections {
         target: terminalContainer
-        onWidthChanged: terminalContainer.updateSources();
-        onHeightChanged: terminalContainer.updateSources();
+
+        function onWidthChanged() {
+            terminalContainer.updateSources()
+        }
+
+        function onHeightChanged() {
+            terminalContainer.updateSources()
+        }
     }
+    Connections {
+        target: terminalWindow
+
+        function onActiveChanged() {
+            kterminal.forceActiveFocus()
+        }
+    }
+
     function updateSources() {
-        kterminal.update();
+        kterminal.update()
     }
 
     QMLTermWidget {
@@ -143,7 +169,7 @@ Item{
                 var args = Utils.tokenizeCommandLine(appSettings.customCommand);
                 ksession.setShellProgram(args[0]);
                 ksession.setArgs(args.slice(1));
-            } else if (!defaultCmd && Qt.platform.os === "osx") {
+            } else if (!defaultCmd && appSettings.isMacOS) {
                 // OSX Requires the following default parameters for auto login.
                 ksession.setArgs(["-i", "-l"]);
             }
@@ -173,7 +199,7 @@ Item{
 
     Loader {
         id: menuLoader
-        sourceComponent: (Qt.platform.os === "osx" || appSettings.showMenubar ? shortContextMenu : fullContextMenu)
+        sourceComponent: (appSettings.isMacOS || appSettings.showMenubar ? shortContextMenu : fullContextMenu)
     }
     property alias contextmenu: menuLoader.item
 

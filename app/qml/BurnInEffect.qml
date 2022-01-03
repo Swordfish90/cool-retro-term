@@ -72,20 +72,38 @@ Loader {
 
             Connections {
                 target: kterminal
-                onImagePainted: completelyUpdate()
+
+                function onImagePainted() {
+                    completelyUpdate()
+                }
             }
             // Restart blurred source settings change.
             Connections{
                 target: appSettings
-                onBurnInChanged: burnInEffect.restartBlurSource();
-                onTerminalFontChanged: burnInEffect.restartBlurSource();
-                onRasterizationChanged: burnInEffect.restartBlurSource();
-                onBurnInQualityChanged: burnInEffect.restartBlurSource();
+
+                function onBurnInChanged() {
+                    burnInEffect.restartBlurSource()
+                }
+
+                function onTerminalFontChanged() {
+                    burnInEffect.restartBlurSource()
+                }
+
+                function onRasterizationChanged() {
+                    burnInEffect.restartBlurSource()
+                }
+
+                function onBurnInQualityChanged() {
+                    burnInEffect.restartBlurSource()
+                }
             }
 
             Connections {
                 target: kterminalScrollbar
-                onOpacityChanged: completelyUpdate()
+
+                function onOpacityChanged() {
+                    completelyUpdate()
+                }
             }
         }
 

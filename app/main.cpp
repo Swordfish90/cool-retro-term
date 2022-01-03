@@ -6,6 +6,7 @@
 
 #include <QtWidgets/QApplication>
 #include <QIcon>
+#include <QQuickStyle>
 
 #include <QDebug>
 #include <stdlib.h>
@@ -40,6 +41,9 @@ int main(int argc, char *argv[])
 #if defined(Q_OS_MAC)
     // This allows UTF-8 characters usage in OSX.
     setenv("LC_CTYPE", "UTF-8", 1);
+
+    // Force fusion style on macOS
+    QQuickStyle::setStyle("Fusion");
 #endif
 
     if (argc>1 && (!strcmp(argv[1],"-h") || !strcmp(argv[1],"--help"))) {
@@ -65,9 +69,7 @@ int main(int argc, char *argv[])
     }
 
     QApplication app(argc, argv);
-    // set application attributes
-    // Has no effects, see https://bugreports.qt.io/browse/QTBUG-51293
-    // app.setAttribute(Qt::AA_MacDontSwapCtrlAndMeta, true);
+    app.setAttribute(Qt::AA_MacDontSwapCtrlAndMeta, true);
 
     QQmlApplicationEngine engine;
     FileIO fileIO;

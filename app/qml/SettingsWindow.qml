@@ -34,7 +34,7 @@ Window {
 
     TabBar {
         id: bar
-        width: parent.width
+        anchors { left: parent.left; right: parent.right; top: parent.top }
         TabButton {
             text: qsTr("General")
         }

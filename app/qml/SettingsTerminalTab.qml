@@ -68,7 +68,10 @@ ColumnLayout {
                 }
                 Connections {
                     target: appSettings
-                    onTerminalFontChanged: fontChanger.updateIndex()
+
+                    function onTerminalFontChanged() {
+                        fontChanger.updateIndex()
+                    }
                 }
                 Component.onCompleted: updateIndex()
             }

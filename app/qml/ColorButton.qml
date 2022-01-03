@@ -34,10 +34,8 @@ Item {
         visible: false
 
         //This is a workaround to a Qt 5.2 bug.
-        onColorChanged: if (Qt.platform.os !== "osx")
-                            colorSelected(color)
-        onAccepted: if (Qt.platform.os === "osx")
-                        colorSelected(color)
+        onColorChanged: if (!appSettings.isMacOS) colorSelected(color)
+        onAccepted: if (appSettings.isMacOS) colorSelected(color)
     }
     Rectangle {
         anchors.fill: parent

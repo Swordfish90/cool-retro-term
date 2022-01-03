@@ -215,10 +215,12 @@ ColumnLayout {
             }
             Label {
                 text: qsTr("Opacity")
+                visible: !appSettings.isMacOS
             }
             SimpleSlider {
                 onValueChanged: appSettings.windowOpacity = value
                 value: appSettings.windowOpacity
+                visible: !appSettings.isMacOS
             }
         }
     }

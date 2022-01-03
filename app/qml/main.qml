@@ -53,20 +53,30 @@ ApplicationWindow {
     property bool fullscreen: appSettings.fullscreen
     onFullscreenChanged: visibility = (fullscreen ? Window.FullScreen : Window.Windowed)
 
-    menuBar: WindowMenu {
-        id: mainMenu
-        visible: (Qt.platform.os === "osx" || appSettings.showMenubar)
+    menuBar: qtquickMenuLoader.item
+
+    Loader {
+        id: qtquickMenuLoader
+        active: !appSettings.isMacOS && appSettings.showMenubar
+        sourceComponent: WindowMenu { }
+    }
+
+    Loader {
+        id: globalMenuLoader
+        active: appSettings.isMacOS
+        sourceComponent: OSXMenu { }
     }
 
     property string wintitle: appSettings.wintitle
 
     color: "#00000000"
+
     title: terminalContainer.title || qsTr(appSettings.wintitle)
 
     Action {
         id: showMenubarAction
         text: qsTr("Show Menubar")
-        enabled: Qt.platform.os !== "osx"
+        enabled: !appSettings.isMacOS
         shortcut: "Ctrl+Shift+M"
         checkable: true
         checked: appSettings.showMenubar
@@ -75,7 +85,7 @@ ApplicationWindow {
     Action {
         id: fullscreenAction
         text: qsTr("Fullscreen")
-        enabled: Qt.platform.os !== "osx"
+        enabled: !appSettings.isMacOS
         shortcut: "Alt+F11"
         onTriggered: appSettings.fullscreen = !appSettings.fullscreen
         checkable: true
@@ -154,7 +164,7 @@ ApplicationWindow {
     onClosing: {
         // OSX Since we are currently supporting only one window
         // quit the application when it is closed.
-        if (Qt.platform.os === "osx")
+        if (appSettings.isMacOS)
             Qt.quit()
     }
 }
