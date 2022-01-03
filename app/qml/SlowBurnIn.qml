@@ -61,8 +61,9 @@ Loader {
             Connections {
                 target: burnInSourceEffect.updateBurnIn ? timeManager : null
                 ignoreUnknownSignals: false
-                onTimeChanged: {
-                    burnInSourceEffect.scheduleUpdate();
+
+                function onTimeChanged() {
+                    burnInSourceEffect.scheduleUpdate()
                 }
             }
 
@@ -79,7 +80,8 @@ Loader {
             }
             Connections {
                 target: kterminal
-                onImagePainted:{
+
+                function onImagePainted() {
                     burnInSourceEffect.scheduleUpdate();
                     burnInSourceEffect.updateBurnIn = true;
                     livetimer.restart();
@@ -88,14 +90,29 @@ Loader {
             // Restart blurred source settings change.
             Connections {
                 target: appSettings
-                onBurnInChanged: burnInSourceEffect.restartBlurSource();
-                onTerminalFontChanged: burnInSourceEffect.restartBlurSource();
-                onRasterizationChanged: burnInSourceEffect.restartBlurSource();
-                onBurnInQualityChanged: burnInSourceEffect.restartBlurSource();
+
+                function onBurnInChanged() {
+                    burnInSourceEffect.restartBlurSource()
+                }
+
+                function onTerminalFontChanged() {
+                    burnInSourceEffect.restartBlurSource()
+                }
+
+                function onRasterizationChanged() {
+                    burnInSourceEffect.restartBlurSource()
+                }
+
+                function onBurnInQualityChanged() {
+                    burnInSourceEffect.restartBlurSource()
+                }
             }
             Connections {
                 target: kterminalScrollbar
-                onOpacityChanged: burnInSourceEffect.restartBlurSource();
+
+                function onOpacityChanged() {
+                    burnInSourceEffect.restartBlurSource()
+                }
             }
 
             ShaderEffect {
