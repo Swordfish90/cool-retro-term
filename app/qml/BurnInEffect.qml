@@ -35,7 +35,7 @@ Loader {
     property real _minBurnInFadeTime: appSettings.minBurnInFadeTime
     property real _maxBurnInFadeTime: appSettings.maxBurnInFadeTime
 
-    active: appSettings.useFastBurnIn && appSettings.burnIn !== 0
+    active: appSettings.burnIn !== 0
 
     anchors.fill: parent
 

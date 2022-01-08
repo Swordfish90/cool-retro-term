@@ -54,9 +54,7 @@ QtObject {
     property bool verbose: false
 
     property real bloomQuality: 0.5
-
     property real burnInQuality: 0.5
-    property bool useFastBurnIn: true
 
     property bool blinkingCursor: false
 
@@ -244,8 +242,7 @@ QtObject {
             "bloomQuality": bloomQuality,
             "burnInQuality": burnInQuality,
             "useCustomCommand": useCustomCommand,
-            "customCommand": customCommand,
-            "useFastBurnIn": useFastBurnIn
+            "customCommand": customCommand
         }
         return stringify(settings)
     }
@@ -340,9 +337,6 @@ QtObject {
                 !== undefined ? settings.useCustomCommand : useCustomCommand
         customCommand = settings.customCommand
                 !== undefined ? settings.customCommand : customCommand
-
-        useFastBurnIn = settings.useFastBurnIn
-                !== undefined ? settings.useFastBurnIn : useFastBurnIn
     }
 
     function loadProfileString(profileString) {

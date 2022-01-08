@@ -41,7 +41,6 @@
         <file>BurnInEffect.qml</file>
         <file>fonts/modern-terminus/TerminusTTF-4.46.0.ttf</file>
         <file>TerminalFrame.qml</file>
-        <file>SlowBurnIn.qml</file>
         <file>menus/WindowMenu.qml</file>
         <file>menus/FullContextMenu.qml</file>
         <file>menus/ShortContextMenu.qml</file>

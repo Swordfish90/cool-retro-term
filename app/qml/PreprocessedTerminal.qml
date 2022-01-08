@@ -34,7 +34,6 @@ Item{
 
     property ShaderEffectSource mainSource: kterminalSource
     property BurnInEffect burnInEffect: burnInEffect
-    property SlowBurnIn slowBurnInEffect: slowBurnInEffect
     property real fontWidth: 1.0
     property real screenScaling: 1.0
     property real scaleTexture: 1.0
@@ -275,10 +274,6 @@ Item{
 
         BurnInEffect {
             id: burnInEffect
-        }
-
-        SlowBurnIn {
-            id: slowBurnInEffect
         }
     }
 }
