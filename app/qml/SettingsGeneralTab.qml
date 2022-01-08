@@ -33,6 +33,7 @@ ColumnLayout {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
                 model: appSettings.profilesList
+                clip: true
                 delegate: Rectangle {
                     width: label.width
                     height: label.height
