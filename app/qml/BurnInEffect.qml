@@ -40,15 +40,19 @@ Loader {
     anchors.fill: parent
 
     function completelyUpdate() {
-        prevLastUpdate = lastUpdate;
-        lastUpdate = timeManager.time;
-        item.source.scheduleUpdate();
+        let newTime = timeManager.time
+        if (newTime > lastUpdate) {
+            prevLastUpdate = lastUpdate
+            lastUpdate = newTime
+        }
+
+        item.source.scheduleUpdate()
     }
 
     function restartBlurSource(){
-        prevLastUpdate = timeManager.time;
-        lastUpdate = prevLastUpdate;
-        completelyUpdate();
+        prevLastUpdate = timeManager.time
+        lastUpdate = prevLastUpdate
+        completelyUpdate()
     }
 
     sourceComponent: Item {
