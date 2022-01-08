@@ -29,7 +29,6 @@ Loader {
     property real lastUpdate: 0
     property real prevLastUpdate: 0
 
-    property real delay: (1.0 / appSettings.fps) * 1000
     property real burnIn: appSettings.burnIn
     property real burnInFadeTime: 1 / Utils.lint(_minBurnInFadeTime, _maxBurnInFadeTime, burnIn)
     property real _minBurnInFadeTime: appSettings.minBurnInFadeTime
@@ -49,7 +48,7 @@ Loader {
         item.source.scheduleUpdate()
     }
 
-    function restartBlurSource(){
+    function restartBlurSource() {
         prevLastUpdate = timeManager.time
         lastUpdate = prevLastUpdate
         completelyUpdate()
@@ -82,7 +81,7 @@ Loader {
                 }
             }
             // Restart blurred source settings change.
-            Connections{
+            Connections {
                 target: appSettings
 
                 function onBurnInChanged() {
@@ -99,14 +98,6 @@ Loader {
 
                 function onBurnInQualityChanged() {
                     burnInEffect.restartBlurSource()
-                }
-            }
-
-            Connections {
-                target: kterminalScrollbar
-
-                function onOpacityChanged() {
-                    completelyUpdate()
                 }
             }
         }
