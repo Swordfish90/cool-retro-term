@@ -64,12 +64,12 @@ int main(int argc, char *argv[])
         return 0;
     }
 
-    QString appVersion("1.1.1");
+    QString appVersion("1.2.0-beta1");
 
     if (argc>1 && (!strcmp(argv[1],"-v") || !strcmp(argv[1],"--version"))) {
         QTextStream cout(stdout, QIODevice::WriteOnly);
         cout << "cool-retro-term " << appVersion << endl;
-	return 0;
+        return 0;
     }
 
     QApplication app(argc, argv);
