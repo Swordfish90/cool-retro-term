@@ -208,8 +208,3 @@ open cool-retro-term.app
 ```sh
 brew install cool-retro-term --cask
 ```
-
-## Donations
-I made this project in my spare time because I love what I'm doing. If you are enjoying it, and you want to buy me a beer click [here](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=flscogna%40gmail%2ecom&lc=IT&item_name=Filippo%20Scognamiglio&currency_code=EUR&bn=PP%2dDonationsBF%3abtn_donate_LG%2egif%3aNonHosted).
-
-You can also add "bounties" on your favourite issues. More information on the [Bountysource](https://www.bountysource.com/teams/crt/issues) page.
