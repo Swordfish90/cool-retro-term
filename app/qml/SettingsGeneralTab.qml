@@ -33,6 +33,7 @@ ColumnLayout {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
                 model: appSettings.profilesList
+                clip: true
                 delegate: Rectangle {
                     width: label.width
                     height: label.height
@@ -215,10 +216,12 @@ ColumnLayout {
             }
             Label {
                 text: qsTr("Opacity")
+                visible: !appSettings.isMacOS
             }
             SimpleSlider {
                 onValueChanged: appSettings.windowOpacity = value
                 value: appSettings.windowOpacity
+                visible: !appSettings.isMacOS
             }
         }
     }

@@ -6,11 +6,13 @@
 
 #include <QtWidgets/QApplication>
 #include <QIcon>
+#include <QQuickStyle>
 
 #include <QDebug>
 #include <stdlib.h>
 
 #include <QFontDatabase>
+#include <QLoggingCategory>
 
 #include <fileio.h>
 #include <monospacefontmanager.h>
@@ -33,6 +35,9 @@ int main(int argc, char *argv[])
     // This disables QT appmenu under Ubuntu, which is not working with QML apps.
     setenv("QT_QPA_PLATFORMTHEME", "", 1);
 
+    // Disable Connections slot warnings
+    QLoggingCategory::setFilterRules("qt.qml.connections.warning=false");
+
 #if defined (Q_OS_LINUX)
     setenv("QSG_RENDER_LOOP", "threaded", 0);
 #endif
@@ -41,6 +46,9 @@ int main(int argc, char *argv[])
     // This allows UTF-8 characters usage in OSX.
     setenv("LC_CTYPE", "UTF-8", 1);
 #endif
+
+    // Force fusion style on every platform
+    QQuickStyle::setStyle("Fusion");
 
     if (argc>1 && (!strcmp(argv[1],"-h") || !strcmp(argv[1],"--help"))) {
         QTextStream cout(stdout, QIODevice::WriteOnly);
@@ -65,9 +73,7 @@ int main(int argc, char *argv[])
     }
 
     QApplication app(argc, argv);
-    // set application attributes
-    // Has no effects, see https://bugreports.qt.io/browse/QTBUG-51293
-    // app.setAttribute(Qt::AA_MacDontSwapCtrlAndMeta, true);
+    app.setAttribute(Qt::AA_MacDontSwapCtrlAndMeta, true);
 
     QQmlApplicationEngine engine;
     FileIO fileIO;

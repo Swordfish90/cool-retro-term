@@ -29,26 +29,29 @@ Loader {
     property real lastUpdate: 0
     property real prevLastUpdate: 0
 
-    property real delay: (1.0 / appSettings.fps) * 1000
     property real burnIn: appSettings.burnIn
     property real burnInFadeTime: 1 / Utils.lint(_minBurnInFadeTime, _maxBurnInFadeTime, burnIn)
     property real _minBurnInFadeTime: appSettings.minBurnInFadeTime
     property real _maxBurnInFadeTime: appSettings.maxBurnInFadeTime
 
-    active: appSettings.useFastBurnIn && appSettings.burnIn !== 0
+    active: appSettings.burnIn !== 0
 
     anchors.fill: parent
 
     function completelyUpdate() {
-        prevLastUpdate = lastUpdate;
-        lastUpdate = timeManager.time;
-        item.source.scheduleUpdate();
+        let newTime = timeManager.time
+        if (newTime > lastUpdate) {
+            prevLastUpdate = lastUpdate
+            lastUpdate = newTime
+        }
+
+        item.source.scheduleUpdate()
     }
 
-    function restartBlurSource(){
-        prevLastUpdate = timeManager.time;
-        lastUpdate = prevLastUpdate;
-        completelyUpdate();
+    function restartBlurSource() {
+        prevLastUpdate = timeManager.time
+        lastUpdate = prevLastUpdate
+        completelyUpdate()
     }
 
     sourceComponent: Item {
@@ -72,20 +75,30 @@ Loader {
 
             Connections {
                 target: kterminal
-                onImagePainted: completelyUpdate()
+
+                function onImagePainted() {
+                    completelyUpdate()
+                }
             }
             // Restart blurred source settings change.
-            Connections{
-                target: appSettings
-                onBurnInChanged: burnInEffect.restartBlurSource();
-                onTerminalFontChanged: burnInEffect.restartBlurSource();
-                onRasterizationChanged: burnInEffect.restartBlurSource();
-                onBurnInQualityChanged: burnInEffect.restartBlurSource();
-            }
-
             Connections {
-                target: kterminalScrollbar
-                onOpacityChanged: completelyUpdate()
+                target: appSettings
+
+                function onBurnInChanged() {
+                    burnInEffect.restartBlurSource()
+                }
+
+                function onTerminalFontChanged() {
+                    burnInEffect.restartBlurSource()
+                }
+
+                function onRasterizationChanged() {
+                    burnInEffect.restartBlurSource()
+                }
+
+                function onBurnInQualityChanged() {
+                    burnInEffect.restartBlurSource()
+                }
             }
         }
 

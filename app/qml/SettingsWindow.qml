@@ -27,42 +27,49 @@ import QtQuick.Dialogs 1.1
 Window {
     id: settings_window
     title: qsTr("Settings")
-    width: 800
-    height: 600
+    width: 600
+    height: 480
 
     property int tabmargins: 15
 
-    TabBar {
-        id: bar
-        width: parent.width
-        TabButton {
-            text: qsTr("General")
-        }
-        TabButton {
-            text: qsTr("Terminal")
-        }
-        TabButton {
-            text: qsTr("Effects")
-        }
-        TabButton {
-            text: qsTr("Advanced")
-        }
-    }
+    Item {
+        anchors { fill: parent;  margins: tabmargins }
 
-    StackLayout {
-        anchors {
-            top: bar.bottom
-            left: parent.left
-            right: parent.right
-            bottom: parent.bottom
-            margins: tabmargins
+        TabBar {
+            id: bar
+            anchors { left: parent.left; right: parent.right; top: parent.top; }
+            TabButton {
+                text: qsTr("General")
+            }
+            TabButton {
+                text: qsTr("Terminal")
+            }
+            TabButton {
+                text: qsTr("Effects")
+            }
+            TabButton {
+                text: qsTr("Advanced")
+            }
         }
 
-        currentIndex: bar.currentIndex
+        Frame {
+            anchors {
+                top: bar.bottom
+                left: parent.left
+                right: parent.right
+                bottom: parent.bottom
+            }
 
-        SettingsGeneralTab { }
-        SettingsTerminalTab { }
-        SettingsEffectsTab { }
-        SettingsAdvancedTab { }
+            StackLayout {
+                anchors.fill: parent
+
+                currentIndex: bar.currentIndex
+
+                SettingsGeneralTab { }
+                SettingsTerminalTab { }
+                SettingsEffectsTab { }
+                SettingsAdvancedTab { }
+            }
+        }
     }
 }

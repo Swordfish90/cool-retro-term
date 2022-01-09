@@ -34,6 +34,8 @@ QtObject {
     readonly property real minBurnInFadeTime: 160
     readonly property real maxBurnInFadeTime: 1600
 
+    property bool isMacOS: Qt.platform.os === "osx"
+
     // GENERAL SETTINGS ///////////////////////////////////////////////////////
     property int x: 100
     property int y: 100
@@ -41,7 +43,7 @@ QtObject {
     property int height: 768
 
     property bool fullscreen: false
-    property bool showMenubar: Qt.platform.os === "osx" ? true : false
+    property bool showMenubar: false
 
     property string wintitle: "cool-retro-term"
 
@@ -52,9 +54,7 @@ QtObject {
     property bool verbose: false
 
     property real bloomQuality: 0.5
-
     property real burnInQuality: 0.5
-    property bool useFastBurnIn: Qt.platform.os === "osx" ? false : true
 
     property bool blinkingCursor: false
 
@@ -242,8 +242,7 @@ QtObject {
             "bloomQuality": bloomQuality,
             "burnInQuality": burnInQuality,
             "useCustomCommand": useCustomCommand,
-            "customCommand": customCommand,
-            "useFastBurnIn": useFastBurnIn
+            "customCommand": customCommand
         }
         return stringify(settings)
     }
@@ -338,9 +337,6 @@ QtObject {
                 !== undefined ? settings.useCustomCommand : useCustomCommand
         customCommand = settings.customCommand
                 !== undefined ? settings.customCommand : customCommand
-
-        useFastBurnIn = settings.useFastBurnIn
-                !== undefined ? settings.useFastBurnIn : useFastBurnIn
     }
 
     function loadProfileString(profileString) {

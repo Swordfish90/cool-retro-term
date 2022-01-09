@@ -33,7 +33,6 @@ ShaderTerminal {
 
     source: terminal.mainSource
     burnInEffect: terminal.burnInEffect
-    slowBurnInEffect: terminal.slowBurnInEffect
     virtualResolution: terminal.virtualResolution
     screenResolution: Qt.size(
         terminalWindow.width * devicePixelRatio * appSettings.windowScaling,
