@@ -76,7 +76,7 @@ Loader {
             Connections {
                 target: kterminal
 
-                function onImagePainted() {
+                onImagePainted: {
                     completelyUpdate()
                 }
             }
@@ -84,19 +84,19 @@ Loader {
             Connections {
                 target: appSettings
 
-                function onBurnInChanged() {
+                onBurnInChanged: {
                     burnInEffect.restartBlurSource()
                 }
 
-                function onTerminalFontChanged() {
+                onTerminalFontChanged: {
                     burnInEffect.restartBlurSource()
                 }
 
-                function onRasterizationChanged() {
+                onRasterizationChanged: {
                     burnInEffect.restartBlurSource()
                 }
 
-                function onBurnInQualityChanged() {
+                onBurnInQualityChanged: {
                     burnInEffect.restartBlurSource()
                 }
             }

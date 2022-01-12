@@ -69,7 +69,7 @@ ColumnLayout {
                 Connections {
                     target: appSettings
 
-                    function onTerminalFontChanged() {
+                    onTerminalFontChanged: {
                         fontChanger.updateIndex()
                     }
                 }

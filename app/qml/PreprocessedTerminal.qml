@@ -47,14 +47,14 @@ Item{
     Connections {
         target: copyAction
 
-        function onTriggered() {
+        onTriggered: {
             kterminal.copyClipboard()
         }
     }
     Connections {
         target: pasteAction
 
-        function onTriggered() {
+        onTriggered: {
             kterminal.pasteClipboard()
         }
     }
@@ -63,29 +63,29 @@ Item{
     Connections {
         target: appSettings
 
-        function onFontScalingChanged() {
+        onFontScalingChanged: {
             terminalContainer.updateSources()
         }
 
-        function onFontWidthChanged() {
+        onFontWidthChanged: {
             terminalContainer.updateSources()
         }
     }
     Connections {
         target: terminalContainer
 
-        function onWidthChanged() {
+        onWidthChanged: {
             terminalContainer.updateSources()
         }
 
-        function onHeightChanged() {
+        onHeightChanged: {
             terminalContainer.updateSources()
         }
     }
     Connections {
         target: terminalWindow
 
-        function onActiveChanged() {
+        onActiveChanged: {
             kterminal.forceActiveFocus()
         }
     }
