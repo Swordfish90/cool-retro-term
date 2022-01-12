@@ -46,6 +46,8 @@ Users of **Ubuntu 14.04 LTS (Trusty) up to 15.10 (Wily)** can use [this PPA](htt
 
 **Ubuntu 17.10** can use [this PPA](https://launchpad.net/%7Evantuz/+archive/ubuntu/cool-retro-term)
 
+**Ubuntu 21.10** has the `cool-retro-term` in the official repositories. All you have to do is `sudo apt install cool-retro-term`.
+
 **Solus** users can install using `eopg`:
 ```
 eopkg it cool-retro-term
