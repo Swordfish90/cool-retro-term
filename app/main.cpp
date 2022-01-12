@@ -47,9 +47,6 @@ int main(int argc, char *argv[])
     setenv("LC_CTYPE", "UTF-8", 1);
 #endif
 
-    // Force fusion style on every platform
-    QQuickStyle::setStyle("Fusion");
-
     if (argc>1 && (!strcmp(argv[1],"-h") || !strcmp(argv[1],"--help"))) {
         QTextStream cout(stdout, QIODevice::WriteOnly);
         cout << "Usage: " << argv[0] << " [--default-settings] [--workdir <dir>] [--program <prog>] [-p|--profile <prof>] [--fullscreen] [-h|--help]" << endl;
