@@ -89,7 +89,7 @@ ColumnLayout {
                 }
             }
 
-            Label {
+            SizedLabel {
                 text: appSettings.fps !== 0 ? appSettings.fps : qsTr("Max")
             }
             Label {
@@ -109,7 +109,7 @@ ColumnLayout {
                     enabled = true
                 }
             }
-            Label {
+            SizedLabel {
                 text: Math.round(txtslider.value * 100) + "%"
             }
 
@@ -130,7 +130,7 @@ ColumnLayout {
                     enabled = true
                 }
             }
-            Label {
+            SizedLabel {
                 text: Math.round(bloomSlider.value * 100) + "%"
             }
 
@@ -151,7 +151,7 @@ ColumnLayout {
                     enabled = true
                 }
             }
-            Label {
+            SizedLabel {
                 text: Math.round(burnInSlider.value * 100) + "%"
             }
         }
