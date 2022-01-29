@@ -61,7 +61,7 @@ int main(int argc, char *argv[])
         return 0;
     }
 
-    QString appVersion("1.2.0-beta1");
+    QString appVersion("1.2.0");
 
     if (argc>1 && (!strcmp(argv[1],"-v") || !strcmp(argv[1],"--version"))) {
         QTextStream cout(stdout, QIODevice::WriteOnly);
