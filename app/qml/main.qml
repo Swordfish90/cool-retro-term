@@ -117,6 +117,11 @@ ApplicationWindow {
         shortcut: "Ctrl+Shift+V"
     }
     Action {
+        id: pasteActionAlt
+        text: qsTr("Paste selection")
+        shortcut: "Shift+Insert"
+    }
+    Action {
         id: zoomIn
         text: qsTr("Zoom In")
         shortcut: "Ctrl++"
