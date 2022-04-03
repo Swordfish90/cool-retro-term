@@ -721,7 +721,7 @@ QtObject {
 
         loadCustomProfiles()
 
-        var profileArgPosition = args.indexOf("--profile")
+        var profileArgPosition = args.indexOf(/-p|--profile/)
         if (profileArgPosition !== -1) {
             var profileIndex = getProfileIndexByName(
                         args[profileArgPosition + 1])
