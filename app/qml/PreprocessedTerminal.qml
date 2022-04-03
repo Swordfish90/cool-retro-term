@@ -58,6 +58,13 @@ Item{
             kterminal.pasteClipboard()
         }
     }
+    Connections {
+        target: pasteActionAlt
+
+        onTriggered: {
+            kterminal.pasteSelection()
+        }
+    }
 
     //When settings are updated sources need to be redrawn.
     Connections {
