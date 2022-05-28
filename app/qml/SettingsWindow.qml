@@ -30,6 +30,7 @@ Window {
     width: 640
     height: 640
 
+    color: palette.window
     property int tabmargins: 15
 
     Item {
