@@ -28,3 +28,5 @@ Alternatively, most distributions such as Ubuntu, Fedora or Arch already package
 ## Building
 
 Check out the wiki and follow the instructions on how to build it on [Linux](https://github.com/Swordfish90/cool-retro-term/wiki/Build-Instructions-(Linux)) and [macOS](https://github.com/Swordfish90/cool-retro-term/wiki/Build-Instructions-(macOS)).
+
+Alex
