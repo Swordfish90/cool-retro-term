@@ -71,6 +71,7 @@ QtObject {
 
     property string _backgroundColor: "#000000"
     property string _fontColor: "#ff8100"
+    property string _frameColor: "#ffffff"
     property string saturatedColor: Utils.mix(Utils.strToColor("#FFFFFF"),
                                               Utils.strToColor(_fontColor),
                                               saturationColor * 0.5)
@@ -81,6 +82,7 @@ QtObject {
                                                   _backgroundColor),
                                               Utils.strToColor(saturatedColor),
                                               0.7 + (contrast * 0.3))
+    property color frameColor: Utils.strToColor(_frameColor)
 
     property real staticNoise: 0.12
     property real screenCurvature: 0.3
@@ -90,6 +92,7 @@ QtObject {
 
     property real chromaColor: 0.25
     property real saturationColor: 0.25
+    property real frameGloss: 0
 
     property real jitter: 0.2
 
@@ -251,11 +254,13 @@ QtObject {
         var settings = {
             "backgroundColor": _backgroundColor,
             "fontColor": _fontColor,
+            "frameColor": _frameColor,
             "flickering": flickering,
             "horizontalSync": horizontalSync,
             "staticNoise": staticNoise,
             "chromaColor": chromaColor,
             "saturationColor": saturationColor,
+            "frameGloss": frameGloss,
             "screenCurvature": screenCurvature,
             "glowingLine": glowingLine,
             "burnIn": burnIn,
@@ -345,6 +350,7 @@ QtObject {
         _backgroundColor = settings.backgroundColor
                 !== undefined ? settings.backgroundColor : _backgroundColor
         _fontColor = settings.fontColor !== undefined ? settings.fontColor : _fontColor
+        _frameColor = settings.frameColor !== undefined ? settings.frameColor : _frameColor
 
         horizontalSync = settings.horizontalSync
                 !== undefined ? settings.horizontalSync : horizontalSync
@@ -353,6 +359,7 @@ QtObject {
         chromaColor = settings.chromaColor !== undefined ? settings.chromaColor : chromaColor
         saturationColor = settings.saturationColor
                 !== undefined ? settings.saturationColor : saturationColor
+        frameGloss = settings.frameGloss !== undefined ? settings.frameGloss : frameGloss
         screenCurvature = settings.screenCurvature
                 !== undefined ? settings.screenCurvature : screenCurvature
         glowingLine = settings.glowingLine !== undefined ? settings.glowingLine : glowingLine
@@ -459,6 +466,8 @@ QtObject {
                 "rbgShift": 0,
                 "saturationColor": 0.2483,
                 "screenCurvature": 0.3,
+                "frameColor": "#ffffff",
+                "frameGloss": 0,
                 "staticNoise": 0.1198,
                 "windowOpacity": 1,
                 "margin": 0.5,
@@ -488,6 +497,8 @@ QtObject {
                 "rbgShift": 0,
                 "saturationColor": 0.0,
                 "screenCurvature": 0.3,
+                "frameColor": "#ffffff",
+                "frameGloss": 0,
                 "staticNoise": 0.1198,
                 "windowOpacity": 1,
                 "margin": 0.5,
@@ -517,6 +528,8 @@ QtObject {
                 "rbgShift": 0,
                 "saturationColor": 0.5,
                 "screenCurvature": 0.3,
+                "frameColor": "#ffffff",
+                "frameGloss": 0,
                 "staticNoise": 0.15,
                 "windowOpacity": 1,
                 "margin": 0.5,
@@ -546,6 +559,8 @@ QtObject {
                 "rbgShift": 0,
                 "saturationColor": 0,
                 "screenCurvature": 0,
+                "frameColor": "#ffffff",
+                "frameGloss": 0,
                 "staticNoise": 0.15,
                 "windowOpacity": 1,
                 "margin": 0.5,
@@ -575,6 +590,8 @@ QtObject {
                 "rbgShift": 0,
                 "saturationColor": 0,
                 "screenCurvature": 0.5,
+                "frameColor": "#ffffff",
+                "frameGloss": 0,
                 "staticNoise": 0.099,
                 "windowOpacity": 1,
                 "margin": 0.5,
@@ -604,6 +621,8 @@ QtObject {
                 "rbgShift": 0.2969,
                 "saturationColor": 0,
                 "screenCurvature": 0.5,
+                "frameColor": "#ffffff",
+                "frameGloss": 0,
                 "staticNoise": 0.2969,
                 "windowOpacity": 1,
                 "margin": 0.5,
@@ -633,6 +652,8 @@ QtObject {
                 "rbgShift": 0.3524,
                 "saturationColor": 0,
                 "screenCurvature": 0.4,
+                "frameColor": "#ffffff",
+                "frameGloss": 0,
                 "staticNoise": 0.0503,
                 "windowOpacity": 1,
                 "margin": 0.5,
@@ -662,6 +683,8 @@ QtObject {
                 "rbgShift": 0,
                 "saturationColor": 0,
                 "screenCurvature": 0.2,
+                "frameColor": "#ffffff",
+                "frameGloss": 0,
                 "staticNoise": 0,
                 "windowOpacity": 1,
                 "margin": 0.5,
@@ -691,6 +714,8 @@ QtObject {
                 "rbgShift": 0,
                 "saturationColor": 0.4983,
                 "screenCurvature": 0,
+                "frameColor": "#ffffff",
+                "frameGloss": 0,
                 "staticNoise": 0.0955,
                 "windowOpacity": 0.7,
                 "margin": 0.1,

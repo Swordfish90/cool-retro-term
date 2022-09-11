@@ -37,6 +37,8 @@ Item {
 
     property real ambientLight: appSettings.ambientLight * 0.2
 
+    property real frameGloss: appSettings.frameGloss
+
     property size virtualResolution
     property size screenResolution
 
@@ -59,6 +61,7 @@ Item {
          property real screenCurvature: parent.screenCurvature
          property real chromaColor: parent.chromaColor
          property real ambientLight: parent.ambientLight
+         property real frameGloss: parent.frameGloss
 
          property real flickering: appSettings.flickering
          property real horizontalSync: appSettings.horizontalSync
@@ -172,6 +175,7 @@ Item {
              uniform highp vec4 fontColor;
              uniform highp vec4 backgroundColor;
              uniform lowp float shadowLength;
+             uniform lowp float frameGloss;
 
              uniform highp vec2 virtualResolution;
              uniform lowp float rasterizationIntensity;\n" +
@@ -321,7 +325,7 @@ Item {
 
                  (displayTerminalFrame ?
                     "vec4 frameColor = texture2D(frameSource, qt_TexCoord0);
-                     finalColor = mix(finalColor, frameColor.rgb, frameColor.a);"
+                     finalColor = mix(finalColor, frameColor.rgb + (finalColor*frameGloss), frameColor.a);"
                  : "") +
 
                  "gl_FragColor = vec4(finalColor, qt_Opacity);" +

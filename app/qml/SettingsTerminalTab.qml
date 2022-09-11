@@ -149,6 +149,11 @@ ColumnLayout {
                     value: appSettings.saturationColor
                     enabled: appSettings.chromaColor !== 0
                 }
+                CheckableSlider {
+                    name: qsTr("Frame Gloss")
+                    onNewValue: appSettings.frameGloss = newValue
+                    value: appSettings.frameGloss
+                }
             }
             RowLayout {
                 Layout.fillWidth: true
@@ -165,6 +170,13 @@ ColumnLayout {
                     Layout.fillWidth: true
                     onColorSelected: appSettings._backgroundColor = color
                     color: appSettings._backgroundColor
+                }
+                ColorButton {
+                    name: qsTr("Frame")
+                    height: 50
+                    Layout.fillWidth: true
+                    onColorSelected: appSettings._frameColor = color
+                    color: appSettings._frameColor
                 }
             }
         }

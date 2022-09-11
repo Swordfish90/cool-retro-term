@@ -22,13 +22,13 @@ import QtQuick 2.0
 import "utils.js" as Utils
 
 ShaderEffect {
-    property color _staticFrameColor: "#fff"
+    property color _frameColor: appSettings.frameColor
     property color _backgroundColor: appSettings.backgroundColor
     property color _fontColor: appSettings.fontColor
     property color _lightColor: Utils.mix(_fontColor, _backgroundColor, 0.2)
     property real _ambientLight: Utils.lint(0.2, 0.8, appSettings.ambientLight)
 
-    property color frameColor: Utils.mix(_staticFrameColor, _lightColor, _ambientLight)
+    property color frameColor: Utils.mix(_frameColor, _lightColor, _ambientLight)
     property real screenCurvature: appSettings.screenCurvature * appSettings.screenCurvatureSize
 
     // Coefficient of the log curve used to approximate shadowing
