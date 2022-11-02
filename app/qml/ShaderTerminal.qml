@@ -243,6 +243,17 @@ Item {
              "  return outColor;
              }" +
 
+             //pseudo-random vector
+             //https://stackoverflow.com/a/10625698
+             "float random( vec2 p )
+             {
+                 vec2 K1 = vec2(
+                     23.14069263277926, // e^pi (Gelfond's constant)
+                     2.665144142690225 // 2^sqrt(2) (Gelfond-Schneider constant)
+                 );
+                 return fract( cos( dot(p,K1) ) * 12345.6789 );
+             }" +
+
              "void main() {" +
                  "vec2 cc = vec2(0.5) - qt_TexCoord0;" +
                  "float distance = length(cc);" +
@@ -281,7 +292,11 @@ Item {
                  : "") +
 
                  (jitter !== 0 || staticNoise !== 0 ?
-                     "vec4 noiseTexel = texture2D(noiseSource, scaleNoiseSize * coords + vec2(fract(time / 51.0), fract(time / 237.0)));"
+                 "vec4 noiseTexel = texture2D(
+                     noiseSource, scaleNoiseSize * coords
+                     + vec2(0.0, random(vec2(fract(time / 237.0), 822.9582)))
+                     + vec2(fract(time / 31.0), fract(time / 177.0))
+                 );"
                  : "") +
 
                  (jitter !== 0 ? "
