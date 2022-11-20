@@ -118,7 +118,7 @@ Item{
         colorScheme: "cool-retro-term"
 
         smooth: !appSettings.lowResolutionFont
-        enableBold: false
+        enableBold: true
         fullCursorHeight: true
         blinkingCursor: appSettings.blinkingCursor
 
