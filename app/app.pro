@@ -16,7 +16,7 @@ macx:ICON = icons/crt.icns
 RESOURCES += qml/resources.qrc
 
 #########################################
-##              INTALLS
+##              INSTALLS
 #########################################
 
 target.path += /usr/bin/
