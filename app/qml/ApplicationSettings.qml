@@ -613,7 +613,7 @@ QtObject {
             builtin: true
         }
         ListElement {
-            text: "IBM Dos"
+            text: "IBM DOS"
             obj_string: '{
                 "ambientLight": 0.151,
                 "backgroundColor": "#000000",
