@@ -12,7 +12,7 @@ It uses the QML port of qtermwidget (Konsole): https://github.com/Swordfish90/qm
 
 This terminal emulator works under Linux and macOS and requires Qt5. It's suggested that you stick to the latest LTS version.
 
-Settings such as colors, fonts, and effects can be accessed via context menu.
+Settings such as colors, fonts, and effects can be accessed via the context menu.
 
 ## Screenshots
 ![Image](<https://i.imgur.com/TNumkDn.png>)
@@ -21,10 +21,10 @@ Settings such as colors, fonts, and effects can be accessed via context menu.
 
 ## Install
 
-If you want to get a hold of the latest version, just go to the Releases page and grab the latest AppImage (Linux) or dmg (macOS).
+If you want to get a hold of the latest version, just go to the [Releases](https://github.com/Swordfish90/cool-retro-term/releases) page and grab the latest AppImage (Linux) or dmg (macOS).
 
 Alternatively, most distributions such as Ubuntu, Fedora or Arch already package cool-retro-term in their official repositories.
 
 ## Building
 
-Check out the wiki and follow the instructions on how to build it on [Linux](https://github.com/Swordfish90/cool-retro-term/wiki/Build-Instructions-(Linux)) and [macOS](https://github.com/Swordfish90/cool-retro-term/wiki/Build-Instructions-(macOS)).
+Build instructions for [Linux](https://github.com/Swordfish90/cool-retro-term/wiki/Build-Instructions-(Linux)) and [macOS](https://github.com/Swordfish90/cool-retro-term/wiki/Build-Instructions-(macOS)) can be found on the wiki.
