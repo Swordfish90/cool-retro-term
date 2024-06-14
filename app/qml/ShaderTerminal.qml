@@ -302,8 +302,8 @@ Item {
 
                  (burnIn !== 0 ? "
                      vec4 txt_blur = texture2D(burnInSource, staticCoords);
-                     float blurDecay = clamp((time - burnInLastUpdate) * burnInTime, 0.0, 1.0);
-                     vec3 burnInColor = 0.65 * (txt_blur.rgb - vec3(blurDecay));
+                     float blurDecay = clamp(pow(0.5, burnInTime * (time - burnInLastUpdate)), 0.0, 1.0);
+                     vec3 burnInColor = txt_blur.rgb * vec3(blurDecay);
                      txt_color = max(txt_color, convertWithChroma(burnInColor));"
                  : "") +
 
