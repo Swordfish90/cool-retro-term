@@ -29,8 +29,8 @@ Loader {
     property real lastUpdate: 0
     property real prevLastUpdate: 0
 
-    property real burnIn: appSettings.burnIn
-    property real burnInFadeTime: 1 / Utils.lint(_minBurnInFadeTime, _maxBurnInFadeTime, burnIn)
+    property real burnIn: appSettings.burnIn;
+    property real burnInFadeTime: (1 / Utils.lint(_minBurnInFadeTime, _maxBurnInFadeTime, burnIn))*64
     property real _minBurnInFadeTime: appSettings.minBurnInFadeTime
     property real _maxBurnInFadeTime: appSettings.maxBurnInFadeTime
 
@@ -146,9 +146,8 @@ Loader {
                     float prevMask = accColor.a;
                     float currMask = rgb2grey(txtColor);
 
-                    highp float blurDecay = clamp((lastUpdate - prevLastUpdate) * burnInTime, 0.0, 1.0);
-                    blurDecay = max(0.0, blurDecay - prevMask);
-                    vec3 blurColor = accColor.rgb - vec3(blurDecay);
+                    highp float blurDecay = clamp(pow(0.5, burnInTime * (lastUpdate - prevLastUpdate)), 0.0, 1.0);
+                    vec3 blurColor = accColor.rgb * vec3(blurDecay);
                     vec3 color = max(blurColor, txtColor);
 
                     gl_FragColor = vec4(color, currMask);

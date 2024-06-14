@@ -32,7 +32,7 @@ QtObject {
     readonly property real maximumFontScaling: 2.50
 
     readonly property real minBurnInFadeTime: 160
-    readonly property real maxBurnInFadeTime: 1600
+    readonly property real maxBurnInFadeTime: 160000
 
     property bool isMacOS: Qt.platform.os === "osx"
 
