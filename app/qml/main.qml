@@ -26,9 +26,15 @@ import QtGraphicalEffects 1.0
 ApplicationWindow{
     style: ApplicationWindowStyle {
         background: Image {
-            source: "file:background.png"
+            source: "file:///" + "appSettings.backgroundImage"
             fillMode: Image.PreserveAspectCrop
             smooth: false
+        }
+
+        Rectangle {
+            color: "black"
+            opacity: appSettings.backgroundTint
+            anchors.fill: parent
         }
     }
     id: terminalWindow
