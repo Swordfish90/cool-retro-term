@@ -229,6 +229,7 @@ ColumnLayout {
                                     console.log("Opening file: " + url)
 
                         image.source = url
+                        appSettings.backgroundImage = url
                     } catch (err) {
                         console.log(err)
                         messageDialog.text = qsTr(

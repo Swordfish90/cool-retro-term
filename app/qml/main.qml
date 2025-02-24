@@ -26,6 +26,7 @@ import "menus"
 ApplicationWindow{
     background: Image {
         id: image
+        source: appSettings.backgroundImage
         anchors.fill: parent
         fillMode: Image.PreserveAspectCrop
     }
