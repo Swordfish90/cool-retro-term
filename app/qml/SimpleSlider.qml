@@ -1,5 +1,5 @@
 /*******************************************************************************
-* Copyright (c) 2013 "Filippo Scognamiglio"
+* Copyright (c) 2013-2021 "Filippo Scognamiglio"
 * https://github.com/Swordfish90/cool-retro-term
 *
 * This file is part of cool-retro-term.
@@ -17,9 +17,8 @@
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *******************************************************************************/
-
 import QtQuick 2.2
-import QtQuick.Controls 1.1
+import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.1
 
 import "Components"
@@ -27,18 +26,18 @@ import "Components"
 RowLayout {
     property alias value: slider.value
     property alias stepSize: slider.stepSize
-    property alias minimumValue: slider.minimumValue
-    property alias maximumValue: slider.maximumValue
+    property alias minimumValue: slider.from
+    property alias maximumValue: slider.to
     property real maxMultiplier: 100
 
     id: setting_component
     spacing: 10
-    Slider{
+    Slider {
         id: slider
         stepSize: parent.stepSize
         Layout.fillWidth: true
     }
-    SizedLabel{
+    SizedLabel {
         text: Math.round(value * maxMultiplier) + "%"
     }
 }

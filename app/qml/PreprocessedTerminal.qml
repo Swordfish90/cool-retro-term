@@ -1,5 +1,5 @@
 /*******************************************************************************
-* Copyright (c) 2013 "Filippo Scognamiglio"
+* Copyright (c) 2013-2021 "Filippo Scognamiglio"
 * https://github.com/Swordfish90/cool-retro-term
 *
 * This file is part of cool-retro-term.
@@ -19,10 +19,11 @@
 *******************************************************************************/
 
 import QtQuick 2.2
-import QtQuick.Controls 1.1
+import QtQuick.Controls 2.0
 
 import QMLTermWidget 1.0
 
+import "menus"
 import "utils.js" as Utils
 
 Item{
@@ -33,7 +34,6 @@ Item{
 
     property ShaderEffectSource mainSource: kterminalSource
     property BurnInEffect burnInEffect: burnInEffect
-    property SlowBurnIn slowBurnInEffect: slowBurnInEffect
     property real fontWidth: 1.0
     property real screenScaling: 1.0
     property real scaleTexture: 1.0
@@ -44,35 +44,61 @@ Item{
     property size fontMetrics: kterminal.fontMetrics
 
     // Manage copy and paste
-    Connections{
+    Connections {
         target: copyAction
-        onTriggered: kterminal.copyClipboard();
+
+        onTriggered: {
+            kterminal.copyClipboard()
+        }
     }
-    Connections{
+    Connections {
         target: pasteAction
-        onTriggered: kterminal.pasteClipboard()
+
+        onTriggered: {
+            kterminal.pasteClipboard()
+        }
     }
 
     //When settings are updated sources need to be redrawn.
-    Connections{
+    Connections {
         target: appSettings
-        onFontScalingChanged: terminalContainer.updateSources();
-        onFontWidthChanged: terminalContainer.updateSources();
+
+        onFontScalingChanged: {
+            terminalContainer.updateSources()
+        }
+
+        onFontWidthChanged: {
+            terminalContainer.updateSources()
+        }
     }
-    Connections{
+    Connections {
         target: terminalContainer
-        onWidthChanged: terminalContainer.updateSources();
-        onHeightChanged: terminalContainer.updateSources();
+
+        onWidthChanged: {
+            terminalContainer.updateSources()
+        }
+
+        onHeightChanged: {
+            terminalContainer.updateSources()
+        }
     }
+    Connections {
+        target: terminalWindow
+
+        onActiveChanged: {
+            kterminal.forceActiveFocus()
+        }
+    }
+
     function updateSources() {
-        kterminal.update();
+        kterminal.update()
     }
 
     QMLTermWidget {
         id: kterminal
 
         property int textureResolutionScale: appSettings.lowResolutionFont ? devicePixelRatio : 1
-        property int margin: appSettings.margin / screenScaling
+        property int margin: appSettings.totalMargin / screenScaling
         property int totalWidth: Math.floor(parent.width / (screenScaling * fontWidth))
         property int totalHeight: Math.floor(parent.height / screenScaling)
 
@@ -94,6 +120,7 @@ Item{
         smooth: !appSettings.lowResolutionFont
         enableBold: false
         fullCursorHeight: true
+        blinkingCursor: appSettings.blinkingCursor
 
         session: QMLTermSession {
             id: ksession
@@ -141,7 +168,7 @@ Item{
                 var args = Utils.tokenizeCommandLine(appSettings.customCommand);
                 ksession.setShellProgram(args[0]);
                 ksession.setArgs(args.slice(1));
-            } else if (!defaultCmd && Qt.platform.os === "osx") {
+            } else if (!defaultCmd && appSettings.isMacOS) {
                 // OSX Requires the following default parameters for auto login.
                 ksession.setArgs(["-i", "-l"]);
             }
@@ -155,36 +182,28 @@ Item{
         Component.onCompleted: {
             appSettings.terminalFontChanged.connect(handleFontChanged);
             appSettings.initializedSettings.connect(startSession);
+            appSettings.handleFontChanged()
         }
     }
+
     Component {
-        id: linuxContextMenu
-        Menu{
-            id: contextmenu
-            MenuItem { action: copyAction }
-            MenuItem { action: pasteAction }
-            MenuSeparator { visible: !appSettings.showMenubar }
-            MenuItem { action: showsettingsAction ; visible: !appSettings.showMenubar}
-            MenuSeparator { visible: !appSettings.showMenubar }
-            CRTMainMenuBar { visible: !appSettings.showMenubar }
-        }
+        id: shortContextMenu
+        ShortContextMenu { }
     }
+
     Component {
-        id: osxContextMenu
-        Menu{
-            id: contextmenu
-            MenuItem{action: copyAction}
-            MenuItem{action: pasteAction}
-        }
+        id: fullContextMenu
+        FullContextMenu { }
     }
+
     Loader {
         id: menuLoader
-        sourceComponent: (Qt.platform.os === "osx" ? osxContextMenu : linuxContextMenu)
+        sourceComponent: (appSettings.isMacOS || appSettings.showMenubar ? shortContextMenu : fullContextMenu)
     }
     property alias contextmenu: menuLoader.item
 
-    MouseArea{
-        property real margin: appSettings.margin
+    MouseArea {
+        property real margin: appSettings.totalMargin
 
         acceptedButtons: Qt.LeftButton | Qt.MiddleButton | Qt.RightButton
         anchors.fill: parent
@@ -225,8 +244,8 @@ Item{
             var cc = Qt.size(0.5 - x, 0.5 - y);
             var distortion = (cc.height * cc.height + cc.width * cc.width) * appSettings.screenCurvature * appSettings.screenCurvatureSize;
 
-            return Qt.point((x - cc.width  * (1+distortion) * distortion) * kterminal.totalWidth,
-                           (y - cc.height * (1+distortion) * distortion) * kterminal.totalHeight)
+            return Qt.point((x - cc.width  * (1+distortion) * distortion) * (kterminal.totalWidth),
+                           (y - cc.height * (1+distortion) * distortion) * (kterminal.totalHeight))
         }
     }
     ShaderEffectSource{
@@ -255,10 +274,6 @@ Item{
 
         BurnInEffect {
             id: burnInEffect
-        }
-
-        SlowBurnIn {
-            id: slowBurnInEffect
         }
     }
 }

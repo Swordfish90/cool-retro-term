@@ -1,5 +1,5 @@
 /*******************************************************************************
-* Copyright (c) 2013 "Filippo Scognamiglio"
+* Copyright (c) 2013-2021 "Filippo Scognamiglio"
 * https://github.com/Swordfish90/cool-retro-term
 *
 * This file is part of cool-retro-term.
@@ -17,9 +17,8 @@
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *******************************************************************************/
-
 import QtQuick 2.2
-import QtQuick.Controls 1.1
+import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.1
 
 import "Components"
@@ -28,46 +27,46 @@ RowLayout {
     property alias name: check.text
 
     property double value
-    property alias min_value: slider.minimumValue
-    property alias max_value: slider.maximumValue
+    property alias min_value: slider.from
+    property alias max_value: slider.to
     property alias stepSize: slider.stepSize
 
-    signal newValue(real newValue);
+    signal newValue(real newValue)
 
     id: setting_component
     Layout.fillWidth: true
 
     onValueChanged: {
-        check.checked = !(value == 0);
-        if(check.checked)
-            slider.value = value;
+        check.checked = !(value == 0)
+        if (check.checked)
+            slider.value = value
     }
 
-    CheckBox{
+    CheckBox {
         id: check
         implicitWidth: 160
         onClicked: {
-            if(!checked){
-                checked = false;
-                slider.enabled = false;
-                newValue(0);
+            if (!checked) {
+                checked = false
+                slider.enabled = false
+                newValue(0)
             } else {
-                checked = true;
-                newValue(slider.value);
-                slider.enabled = true;
+                checked = true
+                newValue(slider.value)
+                slider.enabled = true
             }
         }
     }
-    Slider{
+    Slider {
         id: slider
         stepSize: parent.stepSize
         Layout.fillWidth: true
         onValueChanged: {
-            newValue(value);
+            newValue(value)
         }
     }
     SizedLabel {
-        Layout.fillHeight: true
-        text: Math.round(((value - min_value) / (max_value - min_value)) * 100) + "%"
+        text: Math.round(
+                  ((value - min_value) / (max_value - min_value)) * 100) + "%"
     }
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
-* Copyright (c) 2013 "Filippo Scognamiglio"
+* Copyright (c) 2013-2021 "Filippo Scognamiglio"
 * https://github.com/Swordfish90/cool-retro-term
 *
 * This file is part of cool-retro-term.
@@ -17,14 +17,13 @@
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *******************************************************************************/
-
 import QtQuick 2.2
 import QtQuick.Window 2.0
-import QtQuick.Controls 1.1
+import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.1
 import QtQuick.Dialogs 1.1
 
-Window{
+Window {
     id: insertnamedialog
     width: 400
     height: 100
@@ -39,50 +38,53 @@ Window{
         title: qsTr("Error")
         visible: false
 
-        function showError(message){
-            text = message;
-            open();
+        function showError(message) {
+            text = message
+            open()
         }
     }
 
-    function validateName(name){
-        var profile_list = appSettings.profilesList;
+    function validateName(name) {
+        var profile_list = appSettings.profilesList
         if (name === "")
-            return 1;
-        return 0;
+            return 1
+        return 0
     }
 
-    ColumnLayout{
+    ColumnLayout {
         anchors.margins: 10
         anchors.fill: parent
-        RowLayout{
-            Label{text: qsTr("Name")}
-            TextField{
+        RowLayout {
+            Label {
+                text: qsTr("Name")
+            }
+            TextField {
                 id: namefield
                 Layout.fillWidth: true
                 Component.onCompleted: forceActiveFocus()
                 onAccepted: okbutton.clickAction()
             }
         }
-        RowLayout{
+        RowLayout {
             Layout.alignment: Qt.AlignBottom | Qt.AlignRight
-            Button{
+            Button {
                 id: okbutton
                 text: qsTr("OK")
                 onClicked: clickAction()
-                function clickAction(){
-                    var name = namefield.text;
-                    switch(validateName(name)){
+                function clickAction() {
+                    var name = namefield.text
+                    switch (validateName(name)) {
                     case 1:
-                        errorDialog.showError(qsTr("The name you inserted is empty. Please choose a different one."));
-                        break;
+                        errorDialog.showError(
+                                    qsTr("The name you inserted is empty. Please choose a different one."))
+                        break
                     default:
-                        nameSelected(name);
-                        close();
+                        nameSelected(name)
+                        close()
                     }
                 }
             }
-            Button{
+            Button {
                 text: qsTr("Cancel")
                 onClicked: close()
             }

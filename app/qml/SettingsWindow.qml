@@ -1,5 +1,5 @@
 /*******************************************************************************
-* Copyright (c) 2013 "Filippo Scognamiglio"
+* Copyright (c) 2013-2021 "Filippo Scognamiglio"
 * https://github.com/Swordfish90/cool-retro-term
 *
 * This file is part of cool-retro-term.
@@ -19,46 +19,57 @@
 *******************************************************************************/
 
 import QtQuick 2.2
-import QtQuick.Controls 1.1
+import QtQuick.Controls 2.1
 import QtQuick.Window 2.1
-import QtQuick.Layouts 1.1
+import QtQuick.Layouts 1.3
 import QtQuick.Dialogs 1.1
 
 Window {
     id: settings_window
     title: qsTr("Settings")
-    width: 580
-    height: 400
+    width: 640
+    height: 640
 
     property int tabmargins: 15
 
-    TabView{
-        id: tabView
-        anchors.fill: parent
-        anchors.margins: 10
-        SettingsGeneralTab {
-            id: generalTab
-            title: qsTr("General")
-            anchors.fill: parent
-            anchors.margins: tabmargins
+    Item {
+        anchors { fill: parent;  margins: tabmargins }
+
+        TabBar {
+            id: bar
+            anchors { left: parent.left; right: parent.right; top: parent.top; }
+            TabButton {
+                text: qsTr("General")
+            }
+            TabButton {
+                text: qsTr("Terminal")
+            }
+            TabButton {
+                text: qsTr("Effects")
+            }
+            TabButton {
+                text: qsTr("Advanced")
+            }
         }
-        SettingsTerminalTab {
-            id: terminalTab
-            title: qsTr("Terminal")
-            anchors.fill: parent
-            anchors.margins: tabmargins
-        }
-        SettingsEffectsTab {
-            id: effectsTab
-            title: qsTr("Effects")
-            anchors.fill: parent
-            anchors.margins: tabmargins
-        }
-        SettingsAdvancedTab {
-            id: performanceTab
-            title: qsTr("Advanced")
-            anchors.fill: parent
-            anchors.margins: tabmargins
+
+        Frame {
+            anchors {
+                top: bar.bottom
+                left: parent.left
+                right: parent.right
+                bottom: parent.bottom
+            }
+
+            StackLayout {
+                anchors.fill: parent
+
+                currentIndex: bar.currentIndex
+
+                SettingsGeneralTab { }
+                SettingsTerminalTab { }
+                SettingsEffectsTab { }
+                SettingsAdvancedTab { }
+            }
         }
     }
 }

@@ -1,3 +1,22 @@
+/*******************************************************************************
+* Copyright (c) 2013-2021 "Filippo Scognamiglio"
+* https://github.com/Swordfish90/cool-retro-term
+*
+* This file is part of cool-retro-term.
+*
+* cool-retro-term is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*******************************************************************************/
 import QtQuick 2.0
 
 import "utils.js" as Utils
@@ -10,26 +29,29 @@ Loader {
     property real lastUpdate: 0
     property real prevLastUpdate: 0
 
-    property real delay: (1.0 / appSettings.fps) * 1000
     property real burnIn: appSettings.burnIn
     property real burnInFadeTime: 1 / Utils.lint(_minBurnInFadeTime, _maxBurnInFadeTime, burnIn)
     property real _minBurnInFadeTime: appSettings.minBurnInFadeTime
     property real _maxBurnInFadeTime: appSettings.maxBurnInFadeTime
 
-    active: appSettings.useFastBurnIn && appSettings.burnIn !== 0
+    active: appSettings.burnIn !== 0
 
     anchors.fill: parent
 
     function completelyUpdate() {
-        prevLastUpdate = lastUpdate;
-        lastUpdate = timeManager.time;
-        item.source.scheduleUpdate();
+        let newTime = timeManager.time
+        if (newTime > lastUpdate) {
+            prevLastUpdate = lastUpdate
+            lastUpdate = newTime
+        }
+
+        item.source.scheduleUpdate()
     }
 
-    function restartBlurSource(){
-        prevLastUpdate = timeManager.time;
-        lastUpdate = prevLastUpdate;
-        completelyUpdate();
+    function restartBlurSource() {
+        prevLastUpdate = timeManager.time
+        lastUpdate = prevLastUpdate
+        completelyUpdate()
     }
 
     sourceComponent: Item {
@@ -53,21 +75,35 @@ Loader {
 
             Connections {
                 target: kterminal
-                onImagePainted: completelyUpdate()
+
+                onImagePainted: {
+                    completelyUpdate()
+                }
             }
             // Restart blurred source settings change.
-            Connections{
-                target: appSettings
-                onBurnInChanged: burnInEffect.restartBlurSource();
-                onTerminalFontChanged: burnInEffect.restartBlurSource();
-                onRasterizationChanged: burnInEffect.restartBlurSource();
-                onBurnInQualityChanged: burnInEffect.restartBlurSource();
-            }
-
             Connections {
-                target: kterminalScrollbar
-                onOpacityChanged: completelyUpdate()
+                target: appSettings
+
+                onBurnInChanged: {
+                    burnInEffect.restartBlurSource()
+                }
+
+                onTerminalFontChanged: {
+                    burnInEffect.restartBlurSource()
+                }
+
+                onRasterizationChanged: {
+                    burnInEffect.restartBlurSource()
+                }
+
+                onBurnInQualityChanged: {
+                    burnInEffect.restartBlurSource()
+                }
             }
+        }
+
+        ShaderLibrary {
+            id: shaderLibrary
         }
 
         ShaderEffect {
@@ -99,9 +135,7 @@ Loader {
 
                  uniform highp float prevLastUpdate;" +
 
-                "float rgb2grey(vec3 v){
-                    return dot(v, vec3(0.21, 0.72, 0.04));
-                }" +
+                shaderLibrary.rgb2grey +
 
                 "void main() {
                     vec2 coords = qt_TexCoord0;

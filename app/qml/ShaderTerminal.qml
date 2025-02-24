@@ -1,5 +1,5 @@
 /*******************************************************************************
-* Copyright (c) 2013 "Filippo Scognamiglio"
+* Copyright (c) 2013-2021 "Filippo Scognamiglio"
 * https://github.com/Swordfish90/cool-retro-term
 *
 * This file is part of cool-retro-term.
@@ -24,7 +24,6 @@ import QtGraphicalEffects 1.0
 import "utils.js" as Utils
 
 Item {
-    property SlowBurnIn slowBurnInEffect
     property ShaderEffectSource source
     property BurnInEffect burnInEffect
     property ShaderEffectSource bloomSource
@@ -38,10 +37,18 @@ Item {
 
     property real ambientLight: appSettings.ambientLight * 0.2
 
-    property size virtual_resolution
+    property size virtualResolution
+    property size screenResolution
+
+    property real _screenDensity: Math.min(
+        screenResolution.width / virtualResolution.width,
+        screenResolution.height / virtualResolution.height
+    )
 
      ShaderEffect {
          id: dynamicShader
+
+         property ShaderLibrary shaderLibrary: ShaderLibrary { }
 
          property ShaderEffectSource screenBuffer: frameBuffer
          property ShaderEffectSource burnInSource: burnInEffect.source
@@ -59,22 +66,24 @@ Item {
          property real glowingLine: appSettings.glowingLine * 0.2
 
          // Fast burnin properties
-         property real burnIn: appSettings.useFastBurnIn ? appSettings.burnIn : 0
+         property real burnIn: appSettings.burnIn
          property real burnInLastUpdate: burnInEffect.lastUpdate
          property real burnInTime: burnInEffect.burnInFadeTime
-
-         // Slow burnin properties
-         property real slowBurnIn: appSettings.useFastBurnIn ? 0 : appSettings.burnIn
-         property ShaderEffectSource slowBurnInSource: slowBurnInEffect.source
 
          property real jitter: appSettings.jitter
          property size jitterDisplacement: Qt.size(0.007 * jitter, 0.002 * jitter)
          property real shadowLength: 0.25 * screenCurvature * Utils.lint(0.50, 1.5, ambientLight)
          property real staticNoise: appSettings.staticNoise
-         property size scaleNoiseSize: Qt.size((width) / (noiseTexture.width * appSettings.windowScaling * appSettings.totalFontScaling),
-                                               (height) / (noiseTexture.height * appSettings.windowScaling * appSettings.totalFontScaling))
+         property size scaleNoiseSize: Qt.size((width * 0.75) / (noiseTexture.width * appSettings.windowScaling * appSettings.totalFontScaling),
+                                               (height * 0.75) / (noiseTexture.height * appSettings.windowScaling * appSettings.totalFontScaling))
 
-         property size virtual_resolution: parent.virtual_resolution
+         property size virtualResolution: parent.virtualResolution
+
+         // Rasterization might display oversamping issues if virtual resolution is close to physical display resolution.
+         // We progressively disable rasterization from 4x up to 2x resolution.
+         property real rasterizationIntensity: Utils.smoothstep(2.0, 4.0, _screenDensity)
+
+         property real displayTerminalFrame: appSettings._frameMargin > 0 || appSettings.screenCurvature > 0
 
          property real time: timeManager.time
          property ShaderEffectSource noiseSource: noiseShaderSource
@@ -86,7 +95,7 @@ Item {
          blending: false
 
          //Smooth random texture used for flickering effect.
-         Image{
+         Image {
              id: noiseTexture
              source: "images/allNoise512.png"
              width: 512
@@ -94,7 +103,7 @@ Item {
              fillMode: Image.Tile
              visible: false
          }
-         ShaderEffectSource{
+         ShaderEffectSource {
              id: noiseShaderSource
              sourceItem: noiseTexture
              wrapMode: ShaderEffectSource.Repeat
@@ -164,23 +173,22 @@ Item {
              uniform highp vec4 backgroundColor;
              uniform lowp float shadowLength;
 
-             uniform highp vec2 virtual_resolution;" +
+             uniform highp vec2 virtualResolution;
+             uniform lowp float rasterizationIntensity;\n" +
 
              (burnIn !== 0 ? "
                  uniform sampler2D burnInSource;
                  uniform highp float burnInLastUpdate;
                  uniform highp float burnInTime;" : "") +
-             (slowBurnIn !== 0 ? "
-                 uniform sampler2D slowBurnInSource;" : "") +
              (staticNoise !== 0 ? "
                  uniform highp float staticNoise;" : "") +
-             (((staticNoise !== 0 || jitter !== 0)
-               ||(fallBack && (flickering || horizontalSync))) ? "
+             (((staticNoise !== 0 || jitter !== 0) ||(fallBack && (flickering || horizontalSync))) ? "
                  uniform lowp sampler2D noiseSource;
                  uniform highp vec2 scaleNoiseSize;" : "") +
-             (screenCurvature !== 0 ? "
-                 uniform highp float screenCurvature;
+             (displayTerminalFrame ? "
                  uniform lowp sampler2D frameSource;" : "") +
+             (screenCurvature !== 0 ? "
+                 uniform highp float screenCurvature;" : "") +
              (glowingLine !== 0 ? "
                  uniform highp float glowingLine;" : "") +
              (chromaColor !== 0 ? "
@@ -203,17 +211,14 @@ Item {
 
              (glowingLine !== 0 ? "
                  float randomPass(vec2 coords){
-                     return fract(smoothstep(-120.0, 0.0, coords.y - (virtual_resolution.y + 120.0) * fract(time * 0.00015)));
+                     return fract(smoothstep(-120.0, 0.0, coords.y - (virtualResolution.y + 120.0) * fract(time * 0.00015)));
                  }" : "") +
 
-             "float min2(vec2 v) {
-                 return min(v.x, v.y);
-             }
+             shaderLibrary.min2 +
+             shaderLibrary.rgb2grey +
+             shaderLibrary.rasterizationShader +
 
-             float rgb2grey(vec3 v){
-                 return dot(v, vec3(0.21, 0.72, 0.04));
-             }
-
+             "
              float isInScreen(vec2 v) {
                  return min2(step(0.0, v) - step(1.0, v));
              }
@@ -291,7 +296,7 @@ Item {
                      color += noiseVal * noise * (1.0 - distance * 1.3);" : "") +
 
                  (glowingLine !== 0 ? "
-                     color += randomPass(coords * virtual_resolution) * glowingLine;" : "") +
+                     color += randomPass(coords * virtualResolution) * glowingLine;" : "") +
 
                  "vec3 txt_color = texture2D(screenBuffer, txt_coords).rgb;" +
 
@@ -302,12 +307,9 @@ Item {
                      txt_color = max(txt_color, convertWithChroma(burnInColor));"
                  : "") +
 
-                 (slowBurnIn !== 0 ? "
-                     vec4 txt_blur = texture2D(slowBurnInSource, staticCoords);
-                     txt_color = max(txt_color, convertWithChroma(txt_blur.rgb * txt_blur.a));
-                 " : "") +
-
                   "txt_color += fontColor.rgb * vec3(color);" +
+
+                  "txt_color = applyRasterization(staticCoords, txt_color, virtualResolution, rasterizationIntensity);\n" +
 
                  "vec3 finalColor = txt_color;" +
 
@@ -317,7 +319,7 @@ Item {
                  (ambientLight !== 0 ? "
                      finalColor += vec3(ambientLight) * (1.0 - distance) * (1.0 - distance);" : "") +
 
-                 (screenCurvature !== 0 ?
+                 (displayTerminalFrame ?
                     "vec4 frameColor = texture2D(frameSource, qt_TexCoord0);
                      finalColor = mix(finalColor, frameColor.rgb, frameColor.a);"
                  : "") +
@@ -340,7 +342,7 @@ Item {
      Loader {
          id: terminalFrameLoader
 
-         active: screenCurvature !== 0
+         active: dynamicShader.displayTerminalFrame
 
          width: staticShader.width
          height: staticShader.height
@@ -352,12 +354,16 @@ Item {
              visible: false
              format: ShaderEffectSource.RGBA
 
-             NewTerminalFrame {
+             TerminalFrame {
                  id: terminalFrame
                  blending: false
                  anchors.fill: parent
              }
          }
+     }
+
+     ShaderLibrary {
+         id: shaderLibrary
      }
 
      ShaderEffect {
@@ -385,7 +391,7 @@ Item {
 
          property real ambientLight: parent.ambientLight
 
-         property size virtual_resolution: parent.virtual_resolution
+         property size virtualResolution: parent.virtualResolution
 
          blending: false
          visible: false
@@ -408,7 +414,7 @@ Item {
              uniform highp vec4 backgroundColor;
              uniform lowp float screen_brightness;
 
-             uniform highp vec2 virtual_resolution;" +
+             uniform highp vec2 virtualResolution;" +
 
              (bloom !== 0 ? "
                  uniform highp sampler2D bloomSource;
@@ -426,36 +432,9 @@ Item {
              (ambientLight !== 0 ? "
                  uniform lowp float ambientLight;" : "") +
 
-             "highp float getScanlineIntensity(vec2 coords) {
-                 float result = 1.0;" +
-
-                (appSettings.rasterization != appSettings.no_rasterization ?
-                    "float val = 0.0;
-                     vec2 rasterizationCoords = fract(coords * virtual_resolution);
-                     val += smoothstep(0.0, 0.5, rasterizationCoords.y);
-                     val -= smoothstep(0.5, 1.0, rasterizationCoords.y);
-                     result *= mix(0.5, 1.0, val);" : "") +
-
-                (appSettings.rasterization == appSettings.pixel_rasterization ?
-                    "val = 0.0;
-                     val += smoothstep(0.0, 0.5, rasterizationCoords.x);
-                     val -= smoothstep(0.5, 1.0, rasterizationCoords.x);
-                     result *= mix(0.5, 1.0, val);" : "") + "
-
-                return result;
-             }
-
-             float min2(vec2 v) {
-                 return min(v.x, v.y);
-             }
-
-             float sum2(vec2 v) {
-                 return v.x + v.y;
-             }
-
-             float rgb2grey(vec3 v){
-                 return dot(v, vec3(0.21, 0.72, 0.04));
-             }" +
+             shaderLibrary.min2 +
+             shaderLibrary.sum2 +
+             shaderLibrary.rgb2grey +
 
              "vec3 convertWithChroma(vec3 inColor) {
                 vec3 outColor = inColor;" +
@@ -468,6 +447,7 @@ Item {
              "  return outColor;
              }" +
 
+             shaderLibrary.rasterizationShader +
 
              "void main() {" +
                  "vec2 cc = vec2(0.5) - qt_TexCoord0;" +
@@ -489,8 +469,6 @@ Item {
                      txt_color.g = leftColor.g * 0.20 + rightColor.g * 0.20 + txt_color.g * 0.60;
                      txt_color.b = leftColor.b * 0.30 + rightColor.b * 0.10 + txt_color.b * 0.60;
                  " : "") +
-
-                  "txt_color *= getScanlineIntensity(txt_coords);" +
 
                   "txt_color += vec3(0.0001);" +
                   "float greyscale_color = rgb2grey(txt_color);" +

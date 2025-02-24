@@ -12,7 +12,6 @@
         <file>TimeManager.qml</file>
         <file>SimpleSlider.qml</file>
         <file>ColorButton.qml</file>
-        <file>Glossy.qml</file>
         <file>AboutDialog.qml</file>
         <file>InsertNameDialog.qml</file>
         <file>SettingsEffectsTab.qml</file>
@@ -20,9 +19,8 @@
         <file>SettingsTerminalTab.qml</file>
         <file>FontScanlines.qml</file>
         <file>fonts/1977-apple2/PrintChar21.ttf</file>
-        <file>fonts/1971-ibm-3278/3270Medium.ttf</file>
+        <file>fonts/1971-ibm-3278/3270-Regular.ttf</file>
         <file>Storage.qml</file>
-        <file>CRTMainMenuBar.qml</file>
         <file>SettingsAdvancedTab.qml</file>
         <file>TerminalContainer.qml</file>
         <file>images/crt256.png</file>
@@ -42,7 +40,11 @@
         <file>fonts/1977-commodore-pet/PetMe.ttf</file>
         <file>BurnInEffect.qml</file>
         <file>fonts/modern-terminus/TerminusTTF-4.46.0.ttf</file>
-        <file>NewTerminalFrame.qml</file>
-        <file>SlowBurnIn.qml</file>
+        <file>TerminalFrame.qml</file>
+        <file>menus/WindowMenu.qml</file>
+        <file>menus/FullContextMenu.qml</file>
+        <file>menus/ShortContextMenu.qml</file>
+        <file>ShaderLibrary.qml</file>
+        <file>menus/OSXMenu.qml</file>
     </qresource>
 </RCC>

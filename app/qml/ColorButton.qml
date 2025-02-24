@@ -1,5 +1,5 @@
 /*******************************************************************************
-* Copyright (c) 2013 "Filippo Scognamiglio"
+* Copyright (c) 2013-2021 "Filippo Scognamiglio"
 * https://github.com/Swordfish90/cool-retro-term
 *
 * This file is part of cool-retro-term.
@@ -17,14 +17,13 @@
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *******************************************************************************/
-
 import QtQuick 2.2
 import QtQuick.Dialogs 1.1
 
 Item {
     id: rootItem
 
-    signal colorSelected (color color)
+    signal colorSelected(color color)
     property color color
     property string name
 
@@ -35,15 +34,14 @@ Item {
         visible: false
 
         //This is a workaround to a Qt 5.2 bug.
-        onColorChanged: if (Qt.platform.os !== "osx") colorSelected(color)
-        onAccepted: if (Qt.platform.os === "osx") colorSelected(color)
+        onColorChanged: if (!appSettings.isMacOS) colorSelected(color)
+        onAccepted: if (appSettings.isMacOS) colorSelected(color)
     }
-    Rectangle{
+    Rectangle {
         anchors.fill: parent
         radius: 10
         color: rootItem.color
-        border.color: "black"
-        Glossy {}
+
         Rectangle {
             anchors.fill: parent
             anchors.margins: parent.height * 0.25
@@ -51,14 +49,14 @@ Item {
             color: "white"
             opacity: 0.5
         }
-        Text{
+        Text {
             anchors.centerIn: parent
             z: parent.z + 1
             text: name + ":  " + rootItem.color
         }
     }
-    MouseArea{
+    MouseArea {
         anchors.fill: parent
-        onClicked: colorDialog.visible = true;
+        onClicked: colorDialog.visible = true
     }
 }

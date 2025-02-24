@@ -1,5 +1,7 @@
+
+
 /*******************************************************************************
-* Copyright (c) 2013 "Filippo Scognamiglio"
+* Copyright (c) 2013-2021 "Filippo Scognamiglio"
 * https://github.com/Swordfish90/cool-retro-term
 *
 * This file is part of cool-retro-term.
@@ -17,19 +19,14 @@
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *******************************************************************************/
-
-
 import QtQuick 2.0
-import QtQuick.Controls 1.0
+import QtQuick.Controls 2.0
+import QtQuick.Layouts 1.0
 
 // This component is simply a label with a predefined size.
 // Used to improve alignment.
-
-Item {
-    property alias text: textfield.text
+Label {
+    id: textfield
+    Layout.minimumWidth: appSettings.labelWidth
     width: appSettings.labelWidth
-    Label{
-        id: textfield
-        anchors { right: parent.right; verticalCenter: parent.verticalCenter }
-    }
 }

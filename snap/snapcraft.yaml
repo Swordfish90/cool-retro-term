@@ -66,4 +66,6 @@ parts:
       - libgl1-mesa-dev
       - qtdeclarative5-dev-tools
       - qml-module-qtquick-extras
+      - qml-module-qt-labs-settings
+      - qml-module-qt-labs-folderlistmodel
 

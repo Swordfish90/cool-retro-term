@@ -1,5 +1,5 @@
 /*******************************************************************************
-* Copyright (c) 2013 "Filippo Scognamiglio"
+* Copyright (c) 2013-2021 "Filippo Scognamiglio"
 * https://github.com/Swordfish90/cool-retro-term
 *
 * This file is part of cool-retro-term.
@@ -17,27 +17,20 @@
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *******************************************************************************/
-
 import QtQuick 2.2
 
-QtObject{
+QtObject {
     property int selectedFontIndex
     property real scaling
     property var source: fontlist.get(selectedFontIndex).source
     property var _font: fontlist.get(selectedFontIndex)
     property bool lowResolutionFont: _font.lowResolutionFont
 
-    property int pixelSize: lowResolutionFont
-                                 ? _font.pixelSize
-                                 : _font.pixelSize * scaling
+    property int pixelSize: lowResolutionFont ? _font.pixelSize : _font.pixelSize * scaling
 
-    property int lineSpacing: lowResolutionFont
-                                  ? _font.lineSpacing
-                                  : pixelSize * _font.lineSpacing
+    property int lineSpacing: lowResolutionFont ? _font.lineSpacing : pixelSize * _font.lineSpacing
 
-    property real screenScaling: lowResolutionFont
-                                     ? _font.baseScaling * scaling
-                                     : 1.0
+    property real screenScaling: lowResolutionFont ? _font.baseScaling * scaling : 1.0
 
     property real defaultFontWidth: fontlist.get(selectedFontIndex).fontWidth
 
@@ -52,9 +45,8 @@ QtObject{
     // High resolution fonts are instead drawn on a texture which has the
     // size of the screen, and the scaling directly controls their pixels size.
     // Those are slower to render but are not pixelated.
-
     property ListModel fontlist: ListModel {
-        ListElement{
+        ListElement {
             name: "TERMINUS_SCALED"
             text: "Terminus (Modern)"
             source: "fonts/modern-terminus/TerminusTTF-4.46.0.ttf"
@@ -66,7 +58,7 @@ QtObject{
             isSystemFont: false
             family: ""
         }
-        ListElement{
+        ListElement {
             name: "PRO_FONT_SCALED"
             text: "Pro Font (Modern)"
             source: "fonts/modern-pro-font-win-tweaked/ProFontWindows.ttf"
@@ -78,7 +70,7 @@ QtObject{
             isSystemFont: false
             family: ""
         }
-        ListElement{
+        ListElement {
             name: "EXCELSIOR_SCALED"
             text: "Fixedsys Excelsior (Modern)"
             source: "fonts/modern-fixedsys-excelsior/FSEX301-L2.ttf"
@@ -90,7 +82,7 @@ QtObject{
             isSystemFont: false
             family: ""
         }
-        ListElement{
+        ListElement {
             name: "COMMODORE_PET_SCALED"
             text: "Commodore PET (1977)"
             source: "fonts/1977-commodore-pet/PetMe.ttf"
@@ -102,7 +94,7 @@ QtObject{
             isSystemFont: false
             family: ""
         }
-        ListElement{
+        ListElement {
             name: "PROGGY_TINY_SCALED"
             text: "Proggy Tiny (Modern)"
             source: "fonts/modern-proggy-tiny/ProggyTiny.ttf"
@@ -114,7 +106,7 @@ QtObject{
             isSystemFont: false
             family: ""
         }
-        ListElement{
+        ListElement {
             name: "APPLE_II_SCALED"
             text: "Apple ][ (1977)"
             source: "fonts/1977-apple2/PrintChar21.ttf"
@@ -126,7 +118,7 @@ QtObject{
             isSystemFont: false
             family: ""
         }
-        ListElement{
+        ListElement {
             name: "ATARI_400_SCALED"
             text: "Atari 400-800 (1979)"
             source: "fonts/1979-atari-400-800/AtariClassic-Regular.ttf"
@@ -138,7 +130,7 @@ QtObject{
             isSystemFont: false
             family: ""
         }
-        ListElement{
+        ListElement {
             name: "IBM_PC_SCALED"
             text: "IBM PC (1981)"
             source: "fonts/1981-ibm-pc/PxPlus_IBM_BIOS.ttf"
@@ -150,7 +142,7 @@ QtObject{
             isSystemFont: false
             family: ""
         }
-        ListElement{
+        ListElement {
             name: "COMMODORE_64_SCALED"
             text: "Commodore 64 (1982)"
             source: "fonts/1982-commodore64/C64_Pro_Mono-STYLE.ttf"
@@ -162,7 +154,7 @@ QtObject{
             isSystemFont: false
             family: ""
         }
-        ListElement{
+        ListElement {
             name: "IBM_DOS"
             text: "IBM DOS (1985)"
             source: "fonts/1985-ibm-pc-vga/PxPlus_IBM_VGA8.ttf"
@@ -174,7 +166,7 @@ QtObject{
             isSystemFont: false
             family: ""
         }
-        ListElement{
+        ListElement {
             name: "HERMIT"
             text: "HD: Hermit (Modern)"
             source: "fonts/modern-hermit/Hermit-medium.otf"
@@ -185,7 +177,7 @@ QtObject{
             isSystemFont: false
             family: ""
         }
-        ListElement{
+        ListElement {
             name: "TERMINUS"
             text: "HD: Terminus (Modern)"
             source: "fonts/modern-terminus/TerminusTTF-4.46.0.ttf"
@@ -196,7 +188,7 @@ QtObject{
             isSystemFont: false
             family: ""
         }
-        ListElement{
+        ListElement {
             name: "PRO_FONT"
             text: "HD: Pro Font (Modern)"
             source: "fonts/modern-pro-font-win-tweaked/ProFontWindows.ttf"
@@ -207,7 +199,7 @@ QtObject{
             isSystemFont: false
             family: ""
         }
-        ListElement{
+        ListElement {
             name: "INCONSOLATA"
             text: "HD: Inconsolata (Modern)"
             source: "fonts/modern-inconsolata/Inconsolata.otf"
@@ -218,10 +210,10 @@ QtObject{
             isSystemFont: false
             family: ""
         }
-        ListElement{
+        ListElement {
             name: "IBM_3278"
             text: "HD: IBM 3278 (1971)"
-            source: "fonts/1971-ibm-3278/3270Medium.ttf"
+            source: "fonts/1971-ibm-3278/3270-Regular.ttf"
             lineSpacing: 0.2
             pixelSize: 32
             fontWidth: 1.0
@@ -234,7 +226,7 @@ QtObject{
     Component.onCompleted: addSystemFonts()
 
     function addSystemFonts() {
-        var families = monospaceSystemFonts;
+        var families = monospaceSystemFonts
         for (var i = 0; i < families.length; i++) {
             if (verbose) {
                 console.log("Adding system font: ", families[i])
@@ -245,16 +237,16 @@ QtObject{
 
     function convertToListElement(family) {
         return {
-            name: "System: " + family,
-            text: qsTr("System: ") + family,
-            source: "",
-            lineSpacing: 0.1,
-            pixelSize: 30,
-            fontWidth: 1.0,
-            baseScaling: 1.0,
-            lowResolutionFont: false,
-            isSystemFont: true,
-            family: family
+            "name": "System: " + family,
+            "text": qsTr("System: ") + family,
+            "source": "",
+            "lineSpacing": 0.1,
+            "pixelSize": 30,
+            "fontWidth": 1.0,
+            "baseScaling": 1.0,
+            "lowResolutionFont": false,
+            "isSystemFont": true,
+            "family": family
         }
     }
 }
