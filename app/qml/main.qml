@@ -20,23 +20,22 @@
 import QtQuick 2.2
 import QtQuick.Window 2.1
 import QtQuick.Controls 2.3
-import QtQuick.Controls.Styles 1.4
-import QtGraphicalEffects 1.0
+
+import "menus"
 
 ApplicationWindow{
-    style: ApplicationWindowStyle {
-        background: Image {
-            source: "file:///" + "appSettings.backgroundImage"
-            fillMode: Image.PreserveAspectCrop
-            smooth: false
-        }
-
-        Rectangle {
-            color: "black"
-            opacity: appSettings.backgroundTint
-            anchors.fill: parent
-        }
+    background: Image {
+        id: image
+        anchors.fill: parent
+        fillMode: Image.PreserveAspectFit
     }
+
+    Rectangle {
+        color: "black"
+        opacity: appSettings.backgroundTint
+        anchors.fill: parent
+    }
+
     id: terminalWindow
 
     width: 1024
