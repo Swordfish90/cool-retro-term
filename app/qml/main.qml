@@ -27,7 +27,7 @@ ApplicationWindow{
     background: Image {
         id: image
         anchors.fill: parent
-        fillMode: Image.PreserveAspectFit
+        fillMode: Image.PreserveAspectCrop
     }
 
     Rectangle {
