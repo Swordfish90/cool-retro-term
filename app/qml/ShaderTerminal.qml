@@ -24,6 +24,8 @@ import QtGraphicalEffects 1.0
 import "utils.js" as Utils
 
 Item {
+    id: shaderItem
+
     property ShaderEffectSource source
     property BurnInEffect burnInEffect
     property ShaderEffectSource bloomSource
@@ -45,6 +47,8 @@ Item {
         screenResolution.height / virtualResolution.height
     )
 
+    property real backgroundOpacity: ApplicationSettings.windowOpacity
+
      ShaderEffect {
          id: dynamicShader
 
@@ -56,6 +60,7 @@ Item {
 
          property color fontColor: parent.fontColor
          property color backgroundColor: parent.backgroundColor
+         property real backgroundOpacity: parent.backgroundOpacity
          property real screenCurvature: parent.screenCurvature
          property real chromaColor: parent.chromaColor
          property real ambientLight: parent.ambientLight
@@ -172,6 +177,8 @@ Item {
              uniform highp vec4 fontColor;
              uniform highp vec4 backgroundColor;
              uniform lowp float shadowLength;
+
+             uniform highp float backgroundOpacity;
 
              uniform highp vec2 virtualResolution;
              uniform lowp float rasterizationIntensity;\n" +
@@ -324,7 +331,7 @@ Item {
                      finalColor = mix(finalColor, frameColor.rgb, frameColor.a);"
                  : "") +
 
-                 "gl_FragColor = vec4(finalColor, qt_Opacity);" +
+                 "gl_FragColor = vec4(finalColor, backgroundOpacity);" +
              "}"
 
           onStatusChanged: {
@@ -338,6 +345,12 @@ Item {
               }
           }
      }
+
+    Binding {
+        target: shaderItem
+        property: "backgroundOpacity"
+        value: appSettings.windowOpacity
+    }
 
      Loader {
          id: terminalFrameLoader
@@ -377,6 +390,7 @@ Item {
 
          property color fontColor: parent.fontColor
          property color backgroundColor: parent.backgroundColor
+         property real backgroundOpacity: parent.backgroundOpacity
          property real bloom: appSettings.bloom * 2.5
 
          property real screenCurvature: parent.screenCurvature
@@ -408,6 +422,7 @@ Item {
 
              uniform sampler2D source;
              uniform highp float qt_Opacity;
+             uniform highp float backgroundOpacity;
              varying highp vec2 qt_TexCoord0;
 
              uniform highp vec4 fontColor;

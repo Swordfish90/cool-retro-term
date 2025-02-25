@@ -23,7 +23,20 @@ import QtQuick.Controls 2.3
 
 import "menus"
 
-ApplicationWindow {
+ApplicationWindow{
+    background: Image {
+        id: image
+        source: appSettings.backgroundImage
+        anchors.fill: parent
+        fillMode: Image.PreserveAspectCrop
+    }
+
+    Rectangle {
+        color: "black"
+        opacity: appSettings.backgroundTint
+        anchors.fill: parent
+    }
+
     id: terminalWindow
 
     width: 1024

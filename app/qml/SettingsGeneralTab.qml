@@ -181,6 +181,67 @@ ColumnLayout {
     }
 
     GroupBox {
+        title: qsTr("Background Image")
+        signal opacity
+        ColumnLayout {
+            anchors.fill: parent
+            CheckBox {
+                id: useBackgroundImage
+                text: qsTr("Use background image instead of background color")
+                checked: appSettings.useBackgroundImage
+
+                property real lastOpacity: 0.0
+                property real thisOpacity: appSettings.windowOpacity
+                property real buffer: NaN
+                onCheckedChanged: appSettings.useBackgroundImage = checked, 
+                                  buttonUseBackground.enabled = appSettings.useBackgroundImage,
+                                  sliderBackgroundTint.enabled = appSettings.useBackgroundImage,
+                                  sliderOpacity.enabled = !appSettings.useBackgroundImage,
+
+                                  thisOpacity = appSettings.windowOpacity,
+                                  buffer = thisOpacity,
+
+                                  thisOpacity = lastOpacity,
+                                  lastOpacity = buffer,
+                                  appSettings.windowOpacity = thisOpacity
+                
+            }
+            // Workaround for QTBUG-31627 for pre 5.3.0
+            Binding {
+                target: useBackgroundImage
+                property: "checked"
+                value: appSettings.useBackgroundImage
+            }
+            Button {
+                Layout.fillWidth: true
+                id: buttonUseBackground
+                text: qsTr("Open")
+                enabled: useBackgroundImage
+                onClicked: {
+                    fileDialogImage.callBack = function (url) {
+                        loadFile(url)
+                    }
+                    fileDialogImage.open()
+                }
+                function loadFile(url) {
+                    try {
+                        if (appSettings.verbose)
+                                    console.log("Opening file: " + url)
+
+                        image.source = url
+                        appSettings.backgroundImage = url
+                    } catch (err) {
+                        console.log(err)
+                        messageDialog.text = qsTr(
+                                    "There has been an error opening the file.")
+                        messageDialog.open()
+                    }
+                }
+            }
+        }
+    }
+
+    GroupBox {
         title: qsTr("Screen")
         Layout.fillWidth: true
         GridLayout {
@@ -219,9 +280,24 @@ ColumnLayout {
                 visible: !appSettings.isMacOS
             }
             SimpleSlider {
+                id: sliderOpacity
+                enabled: !useBackgroundImage
                 onValueChanged: appSettings.windowOpacity = value
                 value: appSettings.windowOpacity
                 visible: !appSettings.isMacOS
+            }
+            Label {
+                text: qsTr("Background Tint")
+            }
+            SimpleSlider {
+                id: sliderBackgroundTint
+                enabled: useBackgroundImage
+                onValueChanged: appSettings.backgroundTint = value
+                value: appSettings.backgroundTint
+            }
+            function reload() {
+                active = false
+                active = true
             }
         }
     }
@@ -263,6 +339,23 @@ ColumnLayout {
         function reload() {
             active = false
             active = true
+        }
+    }
+    Loader {
+        property var callBack
+        id: fileDialogImage
+
+        sourceComponent: FileDialog {
+            nameFilters: ["Image files (*.png *.jpeg *.jpg)"]
+            selectMultiple: false
+            selectFolder: false
+            selectExisting: true
+            folder: shortcuts.pictures
+            onAccepted: callBack(fileUrl)
+        }
+
+        function open() {
+            item.open()
         }
     }
 }
