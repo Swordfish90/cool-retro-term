@@ -29,6 +29,8 @@ ApplicationWindow {
     width: 1024
     height: 768
 
+    property real keybindStep: 0.005
+
     // Save window properties automatically
     onXChanged: appSettings.x = x
     onYChanged: appSettings.y = y
@@ -127,6 +129,22 @@ ApplicationWindow {
         text: qsTr("Zoom Out")
         shortcut: "Ctrl+-"
         onTriggered: appSettings.decrementScaling()
+    }
+    Action {
+        id: lessOpaque
+        text: qsTr("Make less opaque.")
+        shortcut: "Ctrl+Shift+Up"
+        onTriggered: {
+          appSettings.windowOpacity -= appSettings.windowOpacity > keybindStep ? keybindStep : 0
+        }
+    }
+    Action {
+        id: moreOpaque
+        text: qsTr("Make more opaque.")
+        shortcut: "Ctrl+Shift+Down"
+        onTriggered: {
+          appSettings.windowOpacity += appSettings.windowOpacity < (2 - keybindStep) ? keybindStep : 0
+        }
     }
     Action {
         id: showAboutAction

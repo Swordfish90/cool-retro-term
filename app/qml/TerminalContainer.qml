@@ -29,7 +29,8 @@ ShaderTerminal {
     property real devicePixelRatio: terminalWindow.screen.devicePixelRatio
 
     id: mainShader
-    opacity: appSettings.windowOpacity * 0.3 + 0.7
+
+    opacity: appSettings.windowOpacity + 0.001
 
     source: terminal.mainSource
     burnInEffect: terminal.burnInEffect
