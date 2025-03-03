@@ -130,9 +130,11 @@ ApplicationWindow {
         shortcut: "Ctrl+-"
         onTriggered: appSettings.decrementScaling()
     }
+
     Action {
         id: lessOpaque
         text: qsTr("Make less opaque.")
+        enabled: appSettings.useKeybinds
         shortcut: "Ctrl+Shift+Up"
         onTriggered: {
           appSettings.windowOpacity -= appSettings.windowOpacity > keybindStep ? keybindStep : 0
@@ -141,6 +143,7 @@ ApplicationWindow {
     Action {
         id: moreOpaque
         text: qsTr("Make more opaque.")
+        enabled: appSettings.useKeybinds
         shortcut: "Ctrl+Shift+Down"
         onTriggered: {
           appSettings.windowOpacity += appSettings.windowOpacity < (1 - keybindStep) ? keybindStep : 0
@@ -149,6 +152,7 @@ ApplicationWindow {
     Action {
         id: moreContrast
         text: qsTr("More contrast.")
+        enabled: appSettings.useKeybinds
         shortcut: "Ctrl+Up"
         onTriggered: {
           appSettings.contrast += appSettings.contrast < (1 - keybindStep) ? keybindStep : 0
@@ -157,6 +161,7 @@ ApplicationWindow {
     Action {
         id: lessContrast
         text: qsTr("Less contrast.")
+        enabled: appSettings.useKeybinds
         shortcut: "Ctrl+Down"
         onTriggered: {
           appSettings.contrast -= appSettings.contrast > keybindStep ? keybindStep : 0
@@ -165,6 +170,7 @@ ApplicationWindow {
     Action {
         id: brighter
         text: qsTr("Brighter.")
+        enabled: appSettings.useKeybinds
         shortcut: "Alt+Up"
         onTriggered: {
           appSettings.brightness += appSettings.brightness < (1 - keybindStep) ? keybindStep : 0
@@ -173,11 +179,13 @@ ApplicationWindow {
     Action {
         id: darker
         text: qsTr("Darker.")
+        enabled: appSettings.useKeybinds
         shortcut: "Alt+Down"
         onTriggered: {
           appSettings.brightness -= appSettings.brightness > keybindStep ? keybindStep : 0
         }
     }
+
     Action {
         id: showAboutAction
         text: qsTr("About")
