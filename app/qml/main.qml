@@ -147,6 +147,22 @@ ApplicationWindow {
         }
     }
     Action {
+        id: moreContrast
+        text: qsTr("More contrast.")
+        shortcut: "Ctrl+Up"
+        onTriggered: {
+          appSettings.contrast += appSettings.contrast < (1 - keybindStep) ? keybindStep : 0
+        }
+    }
+    Action {
+        id: lessContrast
+        text: qsTr("Less contrast.")
+        shortcut: "Ctrl+Down"
+        onTriggered: {
+          appSettings.contrast -= appSettings.contrast > keybindStep ? keybindStep : 0
+        }
+    }
+    Action {
         id: showAboutAction
         text: qsTr("About")
         onTriggered: {
