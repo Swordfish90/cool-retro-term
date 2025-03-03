@@ -29,7 +29,7 @@ ApplicationWindow {
     width: 1024
     height: 768
 
-    property real keybindStep: 0.005
+    property real keybindStep: 0.01
 
     // Save window properties automatically
     onXChanged: appSettings.x = x
@@ -143,7 +143,7 @@ ApplicationWindow {
         text: qsTr("Make more opaque.")
         shortcut: "Ctrl+Shift+Down"
         onTriggered: {
-          appSettings.windowOpacity += appSettings.windowOpacity < (2 - keybindStep) ? keybindStep : 0
+          appSettings.windowOpacity += appSettings.windowOpacity < (1 - keybindStep) ? keybindStep : 0
         }
     }
     Action {
