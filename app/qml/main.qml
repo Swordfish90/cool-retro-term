@@ -163,6 +163,22 @@ ApplicationWindow {
         }
     }
     Action {
+        id: brighter
+        text: qsTr("Brighter.")
+        shortcut: "Alt+Up"
+        onTriggered: {
+          appSettings.brightness += appSettings.brightness < (1 - keybindStep) ? keybindStep : 0
+        }
+    }
+    Action {
+        id: darker
+        text: qsTr("Darker.")
+        shortcut: "Alt+Down"
+        onTriggered: {
+          appSettings.brightness -= appSettings.brightness > keybindStep ? keybindStep : 0
+        }
+    }
+    Action {
         id: showAboutAction
         text: qsTr("About")
         onTriggered: {
