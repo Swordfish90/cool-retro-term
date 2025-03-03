@@ -114,9 +114,9 @@ ColumnLayout {
         }
     }
     GroupBox {
-        title: qsTr("Cursor")
+        title: qsTr("Misc.")
         Layout.fillWidth: true
-        ColumnLayout {
+        RowLayout {
             anchors.fill: parent
             CheckBox {
                 id: blinkingCursor
@@ -128,6 +128,12 @@ ColumnLayout {
                 target: blinkingCursor
                 property: "checked"
                 value: appSettings.blinkingCursor
+            }
+            CheckBox {
+                id: useBindings
+                text: qsTr("Use Keybinds")
+                checked: appSettings.useKeybinds
+                onCheckedChanged: appSettings.useKeybinds = checked
             }
         }
     }
