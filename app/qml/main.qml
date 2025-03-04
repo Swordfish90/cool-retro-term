@@ -129,6 +129,36 @@ ApplicationWindow {
         onTriggered: appSettings.decrementScaling()
     }
     Action {
+        id: previousProfie
+        text: qsTr("Previous profile.")
+        enabled: appSettings.useKeybinds
+        shortcut: "Shift+Alt+Left"
+        onTriggered: {
+          var current = appSettings.currentProfileIndex
+          current -= 1
+          current = current < 0 ? appSettings.profilesList.count - 1 : current
+          appSettings.currentProfileIndex = current
+          var unload = (appSettings.brightness, appSettings.contrast, appSettings.windowOpacity)
+          appSettings.loadProfile(current)
+          appSettings.brightness, appSettings.contrast, appSettings.windowOpacity = unload
+        }
+    }
+    Action {
+        id: nextProfile
+        text: qsTr("Next profile.")
+        enabled: appSettings.useKeybinds
+        shortcut: "Shift+Alt+Right"
+        onTriggered: {
+          var current = appSettings.currentProfileIndex
+          current += 1
+          current = current < appSettings.profilesList.count ? current : 0
+          appSettings.currentProfileIndex = current
+          var unload = (appSettings.brightness, appSettings.contrast, appSettings.windowOpacity)
+          appSettings.loadProfile(current)
+          appSettings.brightness, appSettings.contrast, appSettings.windowOpacity = unload
+        }
+    }
+    Action {
         id: showAboutAction
         text: qsTr("About")
         onTriggered: {
