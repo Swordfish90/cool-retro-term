@@ -29,6 +29,7 @@ Window {
     title: qsTr("Settings")
     width: 640
     height: 640
+    color: palette.base
 
     property int tabmargins: 15
 
