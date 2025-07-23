@@ -358,6 +358,7 @@ Item {
                  id: terminalFrame
                  blending: false
                  anchors.fill: parent
+                 runsOnDarkDesktopTheme: appSettings.runsOnDarkDesktopTheme
              }
          }
      }

@@ -35,6 +35,7 @@ QtObject {
     readonly property real maxBurnInFadeTime: 1600
 
     property bool isMacOS: Qt.platform.os === "osx"
+    property bool runsOnDarkDesktopTheme: (0.299 * palette.base.r + 0.587 * palette.base.g + 0.114 * palette.base.b) < 0.5
 
     // GENERAL SETTINGS ///////////////////////////////////////////////////////
     property int x: 100
