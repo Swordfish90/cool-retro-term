@@ -100,6 +100,8 @@ QtObject {
 
     property real _margin: 0.5
     property real _frameMargin: 0.5
+    property bool showFrame: false
+    property string frameColor: "#ffffff"
 
     property real margin: Utils.lint(1.0, 20.0, _margin)
     property real frameMargin: Utils.lint(1.0, 50.0, _frameMargin)
@@ -272,6 +274,8 @@ QtObject {
             "margin": _margin,
             "blinkingCursor": blinkingCursor,
             "frameMargin": _frameMargin,
+            "showFrame": showFrame,
+            "frameColor": frameColor,
         }
         return settings
     }
@@ -379,6 +383,8 @@ QtObject {
 
         _margin = settings.margin !== undefined ? settings.margin : _margin
         _frameMargin = settings.frameMargin !== undefined ? settings.frameMargin : _frameMargin
+        showFrame = settings.showFrame !== undefined ? settings.showFrame : showFrame
+        frameColor = settings.frameColor !== undefined ? settings.frameColor : frameColor
 
         blinkingCursor = settings.blinkingCursor !== undefined ? settings.blinkingCursor : blinkingCursor
 
@@ -463,7 +469,10 @@ QtObject {
                 "windowOpacity": 1,
                 "margin": 0.5,
                 "blinkingCursor": false,
-                "frameMargin": 0.1
+                "frameMargin": 0.1,
+                "showFrame": true,
+                "frameColor": "#ffffff",
+                "showReflections": true
             }'
             builtin: true
         }
@@ -492,7 +501,10 @@ QtObject {
                 "windowOpacity": 1,
                 "margin": 0.5,
                 "blinkingCursor": false,
-                "frameMargin": 0.1
+                "frameMargin": 0.1,
+                "showFrame": true,
+                "frameColor": "#ffffff",
+                "showReflections": true
             }'
             builtin: true
         }
@@ -521,7 +533,10 @@ QtObject {
                 "windowOpacity": 1,
                 "margin": 0.5,
                 "blinkingCursor": false,
-                "frameMargin": 0.1
+                "frameMargin": 0.1,
+                "showFrame": true,
+                "frameColor": "#ffffff",
+                "showReflections": true
             }'
             builtin: true
         }
@@ -550,7 +565,10 @@ QtObject {
                 "windowOpacity": 1,
                 "margin": 0.5,
                 "blinkingCursor": false,
-                "frameMargin": 0.1
+                "frameMargin": 0.1,
+                "showFrame": true,
+                "frameColor": "#ffffff",
+                "showReflections": true
             }'
             builtin: true
         }
@@ -579,7 +597,10 @@ QtObject {
                 "windowOpacity": 1,
                 "margin": 0.5,
                 "blinkingCursor": false,
-                "frameMargin": 0.2
+                "frameMargin": 0.2,
+                "showFrame": true,
+                "frameColor": "#ffffff",
+                "showReflections": true
             }'
             builtin: true
         }
@@ -608,7 +629,10 @@ QtObject {
                 "windowOpacity": 1,
                 "margin": 0.5,
                 "blinkingCursor": false,
-                "frameMargin": 0.5
+                "frameMargin": 0.5,
+                "showFrame": true,
+                "frameColor": "#ffffff",
+                "showReflections": true
             }'
             builtin: true
         }
@@ -637,7 +661,10 @@ QtObject {
                 "windowOpacity": 1,
                 "margin": 0.5,
                 "blinkingCursor": false,
-                "frameMargin": 0.2
+                "frameMargin": 0.2,
+                "showFrame": true,
+                "frameColor": "#ffffff",
+                "showReflections": true
             }'
             builtin: true
         }
@@ -666,7 +693,10 @@ QtObject {
                 "windowOpacity": 1,
                 "margin": 0.5,
                 "blinkingCursor": false,
-                "frameMargin": 0.1
+                "frameMargin": 0.1,
+                "showFrame": true,
+                "frameColor": "#ffffff",
+                "showReflections": true
             }'
             builtin: true
         }
@@ -695,7 +725,10 @@ QtObject {
                 "windowOpacity": 0.7,
                 "margin": 0.1,
                 "blinkingCursor": false,
-                "frameMargin": 0
+                "frameMargin": 0,
+                "showFrame": true,
+                "frameColor": "#ffffff",
+                "showReflections": true
             }'
             builtin: true
         }
