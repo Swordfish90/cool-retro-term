@@ -223,6 +223,12 @@ ColumnLayout {
                 value: appSettings.windowOpacity
                 visible: !appSettings.isMacOS
             }
+            CheckBox {
+                text: qsTr("Show frame")
+                checked: appSettings.showFrame
+                onCheckedChanged: appSettings.showFrame = checked
+                Layout.columnSpan: 2
+            }
         }
     }
 
