@@ -1,50 +1,53 @@
-# C++ objects and libs
-
-*.slo
-*.lo
-*.o
-*.a
-*.la
-*.lai
-*.so
+# .NET Framework / Visual Studio files
+bin/
+obj/
+*.user
+*.suo
+*.userprefs
+*.pidb
+*.userprefs
+*.DS_Store
+[Dd]ebug/
+[Rr]elease/
+*.exe
 *.dll
-*.dylib
+*.pdb
+*.cache
+*.log
 
-# Qt-es
+# Visual Studio
+.vs/
+*.sln.docstates
+*.log
+TestResults/
 
-/.qmake.cache
-/.qmake.stash
-*.pro.user
-*.pro.user.*
-*.moc
-moc_*.cpp
-moc_*.h
-qrc_*.cpp
-ui_*.h
-Makefile*
-*-build-*
+# ReSharper
+_ReSharper*/
+*.[Rr]e[Ss]harper
 
-# QtCreator
+# Build results
+[Dd]ebug/
+[Rr]elease/
+x64/
+build/
+[Bb]in/
+[Oo]bj/
 
-*.autosave
+# MSBuild Binary and Structured Log
+*.binlog
 
-# QtCtreator Qml
-*.qmlproject.user
-*.qmlproject.user.*
+# NuGet
+*.nupkg
+**/packages/*
+!**/packages/build/
+*.nuget.props
+*.nuget.targets
 
-# Others
+# .NET Core
+project.lock.json
+project.fragment.lock.json
+artifacts/
 
-*.xcf
-
-# Ubuntu SDk
-*.excludes
-*.json
-
-# Excludes compiled files
-imports
-cool-retro-term
-
-# Mac OSX
-
-.DS_Store
-*.app
+# IDE and Editor files
+.vscode/
+.idea/
