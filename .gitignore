@@ -48,3 +48,6 @@ cool-retro-term
 
 .DS_Store
 *.app
+
+# AI Copilot instructions
+.github/copilot-instructions.md
