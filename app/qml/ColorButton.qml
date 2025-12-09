@@ -18,7 +18,7 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *******************************************************************************/
 import QtQuick 2.2
-import QtQuick.Dialogs 1.1
+import QtQuick.Dialogs
 
 Item {
     id: rootItem
@@ -31,11 +31,13 @@ Item {
         id: colorDialog
         title: qsTr("Choose a color")
         modality: Qt.ApplicationModal
-        visible: false
+        selectedColor: rootItem.color
 
-        //This is a workaround to a Qt 5.2 bug.
-        onColorChanged: if (!appSettings.isMacOS) colorSelected(color)
-        onAccepted: if (appSettings.isMacOS) colorSelected(color)
+        onSelectedColorChanged: {
+            if (!appSettings.isMacOS && visible)
+                colorSelected(selectedColor)
+        }
+        onAccepted: colorSelected(selectedColor)
     }
     Rectangle {
         anchors.fill: parent
@@ -57,6 +59,6 @@ Item {
     }
     MouseArea {
         anchors.fill: parent
-        onClicked: colorDialog.visible = true
+        onClicked: colorDialog.open()
     }
 }

@@ -20,7 +20,7 @@
 import QtQuick 2.2
 import QtQuick.Controls 2.4
 import QtQuick.Layouts 1.1
-import QtQuick.Dialogs 1.1
+import QtQuick.Dialogs
 
 ColumnLayout {
     GroupBox {
@@ -237,6 +237,7 @@ ColumnLayout {
     MessageDialog {
         id: messageDialog
         title: qsTr("File Error")
+        buttons: MessageDialog.Ok
         onAccepted: {
             messageDialog.close()
         }
@@ -248,10 +249,8 @@ ColumnLayout {
 
         sourceComponent: FileDialog {
             nameFilters: ["Json files (*.json)"]
-            selectMultiple: false
-            selectFolder: false
-            selectExisting: fileDialog.selectExisting
-            onAccepted: callBack(fileUrl)
+            fileMode: fileDialog.selectExisting ? FileDialog.OpenFile : FileDialog.SaveFile
+            onAccepted: callBack(selectedFile)
         }
 
         onSelectExistingChanged: reload()

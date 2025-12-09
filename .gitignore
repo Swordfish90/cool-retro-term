@@ -43,6 +43,7 @@ Makefile*
 # Excludes compiled files
 imports
 cool-retro-term
+build
 
 # Mac OSX
 

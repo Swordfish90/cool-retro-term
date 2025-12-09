@@ -19,7 +19,6 @@
 *******************************************************************************/
 
 import QtQuick 2.2
-import QtGraphicalEffects 1.0
 
 import "utils.js" as Utils
 
@@ -377,7 +376,7 @@ Item {
 
          property color fontColor: parent.fontColor
          property color backgroundColor: parent.backgroundColor
-         property real bloom: appSettings.bloom * 2.5
+         property real bloom: bloomSource ? appSettings.bloom * 2.5 : 0
 
          property real screenCurvature: parent.screenCurvature
 
