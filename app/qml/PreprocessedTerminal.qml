@@ -251,7 +251,7 @@ Item{
     ShaderEffectSource{
         id: kterminalSource
         sourceItem: kterminal
-        hideSource: true
+        hideSource: false
         wrapMode: ShaderEffectSource.Repeat
         visible: false
         textureSize: Qt.size(kterminal.totalWidth * scaleTexture, kterminal.totalHeight * scaleTexture)

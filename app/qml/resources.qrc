@@ -46,5 +46,11 @@
         <file>menus/ShortContextMenu.qml</file>
         <file>ShaderLibrary.qml</file>
         <file>menus/OSXMenu.qml</file>
+        <file>../shaders/terminal_dynamic.vert.qsb</file>
+        <file>../shaders/terminal_dynamic.frag.qsb</file>
+        <file>../shaders/passthrough.vert.qsb</file>
+        <file>../shaders/terminal_static.frag.qsb</file>
+        <file>../shaders/terminal_frame.frag.qsb</file>
+        <file>../shaders/burn_in.frag.qsb</file>
     </qresource>
 </RCC>

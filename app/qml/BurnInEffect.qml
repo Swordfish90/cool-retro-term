@@ -102,58 +102,50 @@ Loader {
             }
         }
 
-        ShaderLibrary {
-            id: shaderLibrary
-        }
-
         ShaderEffect {
             id: burnInShaderEffect
 
             property variant txt_source: kterminalSource
             property variant burnInSource: burnInEffectSource
             property real burnInTime: burnInFadeTime
-            property real lastUpdate: burnInEffect.lastUpdate
+            property real burnInLastUpdate: burnInEffect.lastUpdate
             property real prevLastUpdate: burnInEffect.prevLastUpdate
 
             anchors.fill: parent
             blending: false
 
-            fragmentShader:
-                "#ifdef GL_ES
-                        precision mediump float;
-                    #endif\n" +
+            // Extra uniforms required by shared block
+            property real qt_Opacity: 1.0
+            property real time: timeManager.time
+            property color fontColor: appSettings.fontColor
+            property color backgroundColor: appSettings.backgroundColor
+            property real shadowLength: 0
+            property size virtualResolution: Qt.size(width, height)
+            property real rasterizationIntensity: 0
+            property int rasterizationMode: 0
+            property real burnIn: appSettings.burnIn
+            property real staticNoise: 0
+            property real screenCurvature: 0
+            property real glowingLine: 0
+            property real chromaColor: 0
+            property size jitterDisplacement: Qt.size(0, 0)
+            property real ambientLight: 0
+            property real jitter: 0
+            property real horizontalSync: 0
+            property real horizontalSyncStrength: 0
+            property real flickering: 0
+            property real displayTerminalFrame: 0
+            property size scaleNoiseSize: Qt.size(0, 0)
+            property real screen_brightness: 1.0
+            property real bloom: 0
+            property real rbgShift: 0
+            property real screenShadowCoeff: 0
+            property real frameShadowCoeff: 0
+            property color frameColor: backgroundColor
+            property size margin: Qt.size(0, 0)
 
-                "uniform lowp float qt_Opacity;" +
-                "uniform lowp sampler2D txt_source;" +
-
-                "varying highp vec2 qt_TexCoord0;
-
-                 uniform lowp sampler2D burnInSource;
-                 uniform highp float burnInTime;
-
-                 uniform highp float lastUpdate;
-
-                 uniform highp float prevLastUpdate;" +
-
-                shaderLibrary.rgb2grey +
-
-                "void main() {
-                    vec2 coords = qt_TexCoord0;
-
-                    vec3 txtColor = texture2D(txt_source, coords).rgb;
-                    vec4 accColor = texture2D(burnInSource, coords);
-
-                    float prevMask = accColor.a;
-                    float currMask = rgb2grey(txtColor);
-
-                    highp float blurDecay = clamp((lastUpdate - prevLastUpdate) * burnInTime, 0.0, 1.0);
-                    blurDecay = max(0.0, blurDecay - prevMask);
-                    vec3 blurColor = accColor.rgb - vec3(blurDecay);
-                    vec3 color = max(blurColor, txtColor);
-
-                    gl_FragColor = vec4(color, currMask);
-                }
-            "
+            fragmentShader: "qrc:/shaders/burn_in.frag.qsb"
+            vertexShader: "qrc:/shaders/passthrough.vert.qsb"
 
             onStatusChanged: if (log) console.log(log) //Print warning messages
         }

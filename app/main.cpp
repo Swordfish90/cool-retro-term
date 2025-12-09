@@ -31,16 +31,15 @@ QString getNamedArgument(QStringList args, QString name)
 int main(int argc, char *argv[])
 {
     // Some environmental variable are necessary on certain platforms.
-
-    // This disables QT appmenu under Ubuntu, which is not working with QML apps.
-    setenv("QT_QPA_PLATFORMTHEME", "", 1);
-
     // Disable Connections slot warnings
     QLoggingCategory::setFilterRules("qt.qml.connections.warning=false");
 
-#if defined (Q_OS_LINUX)
-    setenv("QSG_RENDER_LOOP", "threaded", 0);
-#endif
+    // TODO FILIPPO... This should not be hardcoded but handled as a fallback of sort!
+    QQuickStyle::setStyle("Material");
+
+// #if defined (Q_OS_LINUX)
+//     setenv("QSG_RENDER_LOOP", "threaded", 0);
+// #endif
 
 #if defined(Q_OS_MAC)
     // This allows UTF-8 characters usage in OSX.

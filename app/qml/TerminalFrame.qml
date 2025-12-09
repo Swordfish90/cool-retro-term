@@ -40,65 +40,36 @@ ShaderEffect {
         appSettings.frameMargin / height * appSettings.windowScaling
     )
 
-    ShaderLibrary {
-        id: shaderLibrary
-    }
+    // Uniforms required by the shared block
+    property real qt_Opacity: 1.0
+    property real time: timeManager.time
+    property color fontColor: appSettings.fontColor
+    property color backgroundColor: appSettings.backgroundColor
+    property real shadowLength: 0
+    property size virtualResolution: Qt.size(width, height)
+    property real rasterizationIntensity: 0
+    property int rasterizationMode: 0
+    property real burnInLastUpdate: 0
+    property real burnInTime: 0
+    property real burnIn: 0
+    property real staticNoise: 0
+    property real glowingLine: 0
+    property real chromaColor: 0
+    property size jitterDisplacement: Qt.size(0, 0)
+    property real ambientLight: _ambientLight
+    property real jitter: 0
+    property real horizontalSync: 0
+    property real horizontalSyncStrength: 0
+    property real flickering: 0
+    property real displayTerminalFrame: 0
+    property size scaleNoiseSize: Qt.size(0, 0)
+    property real screen_brightness: 1.0
+    property real bloom: 0
+    property real rbgShift: 0
+    property real prevLastUpdate: 0
 
-    fragmentShader: "
-        #ifdef GL_ES
-            precision mediump float;
-        #endif
-
-        uniform lowp float screenCurvature;
-        uniform lowp float screenShadowCoeff;
-        uniform lowp float frameShadowCoeff;
-        uniform highp float qt_Opacity;
-        uniform lowp vec4 frameColor;
-        uniform mediump vec2 margin;
-
-        varying highp vec2 qt_TexCoord0;
-
-        vec2 distortCoordinates(vec2 coords){
-            vec2 cc = (coords - vec2(0.5));
-            float dist = dot(cc, cc) * screenCurvature;
-            return (coords + cc * (1.0 + dist) * dist);
-        }
-        " +
-
-        shaderLibrary.max2 +
-        shaderLibrary.min2 +
-        shaderLibrary.prod2 +
-        shaderLibrary.sum2 +
-
-        "
-
-        vec2 positiveLog(vec2 x) {
-            return clamp(log(x), vec2(0.0), vec2(100.0));
-        }
-
-        void main() {
-            vec2 staticCoords = qt_TexCoord0;
-            vec2 coords = distortCoordinates(staticCoords) * (vec2(1.0) + margin * 2.0) - margin;
-
-            vec2 vignetteCoords = staticCoords * (1.0 - staticCoords.yx);
-            float vignette = pow(prod2(vignetteCoords) * 15.0, 0.25);
-
-            vec3 color = frameColor.rgb * vec3(1.0 - vignette);
-            float alpha = 0.0;
-
-            float frameShadow = max2(positiveLog(-coords * frameShadowCoeff + vec2(1.0)) + positiveLog(coords * frameShadowCoeff - (vec2(frameShadowCoeff) - vec2(1.0))));
-            frameShadow = max(sqrt(frameShadow), 0.0);
-            color *= frameShadow;
-            alpha = sum2(1.0 - step(vec2(0.0), coords) + step(vec2(1.0), coords));
-            alpha = clamp(alpha, 0.0, 1.0);
-            alpha *= mix(1.0, 0.9, frameShadow);
-
-            float screenShadow = 1.0 - prod2(positiveLog(coords * screenShadowCoeff + vec2(1.0)) * positiveLog(-coords * screenShadowCoeff + vec2(screenShadowCoeff + 1.0)));
-            alpha = max(0.8 * screenShadow, alpha);
-
-            gl_FragColor = vec4(color * alpha, alpha);
-        }
-    "
+    vertexShader: "qrc:/shaders/passthrough.vert.qsb"
+    fragmentShader: "qrc:/shaders/terminal_frame.frag.qsb"
 
     onStatusChanged: if (log) console.log(log) //Print warning messages
 }
