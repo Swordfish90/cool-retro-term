@@ -36,6 +36,7 @@ int main(int argc, char *argv[])
 
     // TODO FILIPPO... This should not be hardcoded but handled as a fallback of sort!
     QQuickStyle::setStyle("Material");
+    QGuiApplication::setHighDpiScaleFactorRoundingPolicy(Qt::HighDpiScaleFactorRoundingPolicy::Round);
 
 // #if defined (Q_OS_LINUX)
 //     setenv("QSG_RENDER_LOOP", "threaded", 0);
