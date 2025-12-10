@@ -72,8 +72,8 @@ MenuBar {
                     appSettings.handleFontChanged()
                 }
             }
-            onObjectAdded: profilesMenu.insertItem(index, object)
-            onObjectRemoved: profilesMenu.removeItem(object)
+            onObjectAdded: function(index, object) { profilesMenu.insertItem(index, object) }
+            onObjectRemoved: function(object) { profilesMenu.removeItem(object) }
         }
     }
     Menu {

@@ -208,31 +208,31 @@ Item{
         acceptedButtons: Qt.LeftButton | Qt.MiddleButton | Qt.RightButton
         anchors.fill: parent
         cursorShape: kterminal.terminalUsesMouse ? Qt.ArrowCursor : Qt.IBeamCursor
-        onWheel:{
-            if(wheel.modifiers & Qt.ControlModifier){
+        onWheel: function(wheel) {
+            if (wheel.modifiers & Qt.ControlModifier) {
                wheel.angleDelta.y > 0 ? zoomIn.trigger() : zoomOut.trigger();
             } else {
                 var coord = correctDistortion(wheel.x, wheel.y);
                 kterminal.simulateWheel(coord.x, coord.y, wheel.buttons, wheel.modifiers, wheel.angleDelta);
             }
         }
-        onDoubleClicked: {
+        onDoubleClicked: function(mouse) {
             var coord = correctDistortion(mouse.x, mouse.y);
             kterminal.simulateMouseDoubleClick(coord.x, coord.y, mouse.button, mouse.buttons, mouse.modifiers);
         }
-        onPressed: {
-            if((!kterminal.terminalUsesMouse || mouse.modifiers & Qt.ShiftModifier) && mouse.button == Qt.RightButton) {
+        onPressed: function(mouse) {
+            if ((!kterminal.terminalUsesMouse || mouse.modifiers & Qt.ShiftModifier) && mouse.button == Qt.RightButton) {
                 contextmenu.popup();
             } else {
                 var coord = correctDistortion(mouse.x, mouse.y);
                 kterminal.simulateMousePress(coord.x, coord.y, mouse.button, mouse.buttons, mouse.modifiers)
             }
         }
-        onReleased: {
+        onReleased: function(mouse) {
             var coord = correctDistortion(mouse.x, mouse.y);
             kterminal.simulateMouseRelease(coord.x, coord.y, mouse.button, mouse.buttons, mouse.modifiers);
         }
-        onPositionChanged: {
+        onPositionChanged: function(mouse) {
             var coord = correctDistortion(mouse.x, mouse.y);
             kterminal.simulateMouseMove(coord.x, coord.y, mouse.button, mouse.buttons, mouse.modifiers);
         }

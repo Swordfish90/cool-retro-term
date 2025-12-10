@@ -33,53 +33,53 @@ ColumnLayout {
 
             CheckableSlider {
                 name: qsTr("Bloom")
-                onNewValue: appSettings.bloom = newValue
+                onNewValue: function(newValue) { appSettings.bloom = newValue }
                 value: appSettings.bloom
             }
             CheckableSlider {
                 name: qsTr("BurnIn")
-                onNewValue: appSettings.burnIn = newValue
+                onNewValue: function(newValue) { appSettings.burnIn = newValue }
                 value: appSettings.burnIn
             }
             CheckableSlider {
                 name: qsTr("Static Noise")
-                onNewValue: appSettings.staticNoise = newValue
+                onNewValue: function(newValue) { appSettings.staticNoise = newValue }
                 value: appSettings.staticNoise
             }
             CheckableSlider {
                 name: qsTr("Jitter")
-                onNewValue: appSettings.jitter = newValue
+                onNewValue: function(newValue) { appSettings.jitter = newValue }
                 value: appSettings.jitter
             }
             CheckableSlider {
                 name: qsTr("Glow Line")
-                onNewValue: appSettings.glowingLine = newValue
+                onNewValue: function(newValue) { appSettings.glowingLine = newValue }
                 value: appSettings.glowingLine
             }
             CheckableSlider {
                 name: qsTr("Screen Curvature")
-                onNewValue: appSettings.screenCurvature = newValue
+                onNewValue: function(newValue) { appSettings.screenCurvature = newValue }
                 value: appSettings.screenCurvature
             }
             CheckableSlider {
                 name: qsTr("Ambient Light")
-                onNewValue: appSettings.ambientLight = newValue
+                onNewValue: function(newValue) { appSettings.ambientLight = newValue }
                 value: appSettings.ambientLight
                 enabled: appSettings.framesIndex !== 0
             }
             CheckableSlider {
                 name: qsTr("Flickering")
-                onNewValue: appSettings.flickering = newValue
+                onNewValue: function(newValue) { appSettings.flickering = newValue }
                 value: appSettings.flickering
             }
             CheckableSlider {
                 name: qsTr("Horizontal Sync")
-                onNewValue: appSettings.horizontalSync = newValue
+                onNewValue: function(newValue) { appSettings.horizontalSync = newValue }
                 value: appSettings.horizontalSync
             }
             CheckableSlider {
                 name: qsTr("RGB Shift")
-                onNewValue: appSettings.rbgShift = newValue
+                onNewValue: function(newValue) { appSettings.rbgShift = newValue }
                 value: appSettings.rbgShift
             }
         }

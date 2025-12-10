@@ -140,12 +140,12 @@ ColumnLayout {
                 Layout.fillWidth: true
                 CheckableSlider {
                     name: qsTr("Chroma Color")
-                    onNewValue: appSettings.chromaColor = newValue
+                    onNewValue: function(newValue) { appSettings.chromaColor = newValue }
                     value: appSettings.chromaColor
                 }
                 CheckableSlider {
                     name: qsTr("Saturation Color")
-                    onNewValue: appSettings.saturationColor = newValue
+                    onNewValue: function(newValue) { appSettings.saturationColor = newValue }
                     value: appSettings.saturationColor
                     enabled: appSettings.chromaColor !== 0
                 }
