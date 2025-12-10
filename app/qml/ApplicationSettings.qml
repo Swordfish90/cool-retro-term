@@ -31,8 +31,8 @@ QtObject {
     readonly property real minimumFontScaling: 0.25
     readonly property real maximumFontScaling: 2.50
 
-    readonly property real minBurnInFadeTime: 160
-    readonly property real maxBurnInFadeTime: 1600
+    readonly property real minBurnInFadeTime: 0.16
+    readonly property real maxBurnInFadeTime: 1.6
 
     property bool isMacOS: Qt.platform.os === "osx"
 
@@ -50,7 +50,7 @@ QtObject {
     property bool showTerminalSize: true
     property real windowScaling: 1.0
 
-    property real fps: 20
+    property int effectsFrameSkip: 2
     property bool verbose: false
 
     property real bloomQuality: 0.5
@@ -229,7 +229,7 @@ QtObject {
 
     function composeSettingsString() {
         var settings = {
-            "fps": fps,
+            "effectsFrameSkip": effectsFrameSkip,
             "x": x,
             "y": y,
             "width": width,
@@ -315,7 +315,7 @@ QtObject {
         showTerminalSize = settings.showTerminalSize
                 !== undefined ? settings.showTerminalSize : showTerminalSize
 
-        fps = settings.fps !== undefined ? settings.fps : fps
+        effectsFrameSkip = settings.effectsFrameSkip !== undefined ? settings.effectsFrameSkip : effectsFrameSkip
         windowScaling = settings.windowScaling
                 !== undefined ? settings.windowScaling : windowScaling
 

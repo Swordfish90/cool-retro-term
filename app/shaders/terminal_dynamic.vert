@@ -48,7 +48,7 @@ layout(location = 3) out float vDistortionFreq;
 void main() {
     qt_TexCoord0 = qt_MultiTexCoord0;
 
-    vec2 coords = vec2(fract(time / 2048.0), fract(time / 1048576.0));
+    vec2 coords = vec2(fract(time / 2.048), fract(time / 1048.576));
     vec4 initialNoiseTexel = texture(noiseSource, coords);
 
     vBrightness = 1.0 + (initialNoiseTexel.g - 0.5) * flickering;

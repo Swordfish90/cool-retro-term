@@ -102,7 +102,7 @@ vec3 applyRasterization(vec2 screenCoords, vec3 texel, vec2 virtualRes, float in
 }
 
 float randomPass(vec2 coords){
-    return fract(smoothstep(-120.0, 0.0, coords.y - (virtualResolution.y + 120.0) * fract(time * 0.00015)));
+    return fract(smoothstep(-120.0, 0.0, coords.y - (virtualResolution.y + 120.0) * fract(time * 0.15)));
 }
 
 vec2 barrel(vec2 v, vec2 cc) {
@@ -125,10 +125,10 @@ void main() {
     vec2 staticCoords = barrel(qt_TexCoord0, cc);
     vec2 coords = qt_TexCoord0;
 
-    float dst = sin((coords.y + time * 0.001) * vDistortionFreq);
+    float dst = sin((coords.y + time) * vDistortionFreq);
     coords.x += dst * vDistortionScale;
 
-    vec4 noiseTexel = texture(noiseSource, scaleNoiseSize * coords + vec2(fract(time / 51.0), fract(time / 237.0)));
+    vec4 noiseTexel = texture(noiseSource, scaleNoiseSize * coords + vec2(fract(time / 0.051), fract(time / 0.237)));
 
     vec2 txt_coords = coords + (noiseTexel.ba - vec2(0.5)) * jitterDisplacement * jitter;
 
