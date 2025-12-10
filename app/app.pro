@@ -15,6 +15,23 @@ macx:ICON = icons/crt.icns
 
 RESOURCES += qml/resources.qrc
 
+# Shader compilation (Qt Shader Baker)
+QSB_BIN = $$[QT_HOST_BINS]/qsb
+isEmpty(QSB_BIN): QSB_BIN = $$[QT_INSTALL_BINS]/qsb
+
+SHADERS_DIR = $${_PRO_FILE_PWD_}/shaders
+SHADERS += $$files($$SHADERS_DIR/*.frag) $$files($$SHADERS_DIR/*.vert)
+
+qsb.input = SHADERS
+qsb.output = ../../app/shaders/${QMAKE_FILE_NAME}.qsb
+qsb.commands = $$QSB_BIN --glsl \"100 es,120,150\" --hlsl 50 --msl 12 --qt6 -o ${QMAKE_FILE_OUT} ${QMAKE_FILE_IN}
+qsb.clean = $$qsb.output
+qsb.name = qsb ${QMAKE_FILE_IN}
+qsb.variable_out = QSB_FILES
+QMAKE_EXTRA_COMPILERS += qsb
+PRE_TARGETDEPS += $$QSB_FILES
+OTHER_FILES += $$SHADERS $$QSB_FILES
+
 #########################################
 ##              INTALLS
 #########################################
