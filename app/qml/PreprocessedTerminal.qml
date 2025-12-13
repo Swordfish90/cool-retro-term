@@ -155,6 +155,10 @@ Item{
             scaleTexture = Math.max(1.0, Math.floor(screenScaling * appSettings.windowScaling));
 
             kterminal.lineSpacing = lineSpacing;
+
+            // Set up font fallback based on platform
+            var fallbackFont = appSettings.isMacOS ? "Menlo" : "monospace";
+            monospaceFontManager.setFontSubstitution(fontFamily, fallbackFont);
         }
 
         function startSession() {

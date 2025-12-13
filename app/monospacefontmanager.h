@@ -10,6 +10,10 @@ class MonospaceFontManager : public QObject
 public:
     explicit MonospaceFontManager(QObject *parent = nullptr);
     Q_INVOKABLE QStringList retrieveMonospaceFonts();
+
+public slots:
+    void setFontSubstitution(const QString &family, const QString &substitute);
+    void removeFontSubstitution(const QString &family);
 };
 
 #endif // MONOSPACEFONTMANAGER_H

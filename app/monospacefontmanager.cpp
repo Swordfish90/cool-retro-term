@@ -1,6 +1,7 @@
 #include "monospacefontmanager.h"
 
 #include <QDebug>
+#include <QFont>
 
 MonospaceFontManager::MonospaceFontManager(QObject *parent) : QObject(parent)
 {
@@ -22,4 +23,26 @@ QStringList MonospaceFontManager::retrieveMonospaceFonts() {
     }
 
     return result;
+}
+
+void MonospaceFontManager::setFontSubstitution(const QString &family, const QString &substitute)
+{
+    if (family.isEmpty() || substitute.isEmpty()) {
+        return;
+    }
+
+    QFont::removeSubstitutions(family);
+    QFont::insertSubstitution(family, substitute);
+
+    qDebug() << "Font substitution set:" << family << "->" << substitute;
+}
+
+void MonospaceFontManager::removeFontSubstitution(const QString &family)
+{
+    if (family.isEmpty()) {
+        return;
+    }
+
+    QFont::removeSubstitutions(family);
+    qDebug() << "Font substitution removed for:" << family;
 }

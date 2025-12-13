@@ -109,6 +109,7 @@ int main(int argc, char *argv[])
 
     engine.rootContext()->setContextProperty("workdir", getNamedArgument(args, "--workdir", "$HOME"));
     engine.rootContext()->setContextProperty("fileIO", &fileIO);
+    engine.rootContext()->setContextProperty("monospaceFontManager", &monospaceFontManager);
     engine.rootContext()->setContextProperty("monospaceSystemFonts", monospaceFontManager.retrieveMonospaceFonts());
 
     engine.rootContext()->setContextProperty("devicePixelRatio", app.devicePixelRatio());
