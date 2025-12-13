@@ -17,6 +17,10 @@
 #include <fileio.h>
 #include <monospacefontmanager.h>
 
+#if defined(Q_OS_MAC)
+#include <CoreFoundation/CoreFoundation.h>
+#endif
+
 QString getNamedArgument(QStringList args, QString name, QString defaultName)
 {
     int index = args.indexOf(name);
@@ -45,6 +49,10 @@ int main(int argc, char *argv[])
 #if defined(Q_OS_MAC)
     // This allows UTF-8 characters usage in OSX.
     setenv("LC_CTYPE", "UTF-8", 1);
+
+    // Ensure key repeat works for letter keys (disable macOS press-and-hold for this app).
+    CFPreferencesSetAppValue(CFSTR("ApplePressAndHoldEnabled"), kCFBooleanFalse, kCFPreferencesCurrentApplication);
+    CFPreferencesAppSynchronize(kCFPreferencesCurrentApplication);
 #endif
 
     if (argc>1 && (!strcmp(argv[1],"-h") || !strcmp(argv[1],"--help"))) {
