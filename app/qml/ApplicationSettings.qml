@@ -132,11 +132,9 @@ QtObject {
 
     property var filteredFontList: ListModel {}
 
-    // Single method that updates the font list and applies changes to terminal
     function updateFont() {
         if (!fontManager.item || !fontlist) return
 
-        // Step 1: Update filtered font list
         filteredFontList.clear()
         var currentFontInList = false
 
@@ -145,14 +143,14 @@ QtObject {
             var isBundled = !font.isSystemFont
             var isSystem = font.isSystemFont
 
-            // Filter by font source (bundled vs system)
             var matchesSource = (fontSource === bundled_fonts && isBundled) ||
                                (fontSource === system_fonts && isSystem)
 
             if (!matchesSource) continue
 
-            // For non-default rasterization, only show low-resolution fonts
-            var matchesRasterization = (rasterization === no_rasterization) || font.lowResolutionFont
+            var matchesRasterization = font.isSystemFont ||
+                                       (rasterization === no_rasterization) ||
+                                       font.lowResolutionFont
 
             if (matchesRasterization) {
                 filteredFontList.append(font)
@@ -162,12 +160,10 @@ QtObject {
             }
         }
 
-        // Step 2: If current font is not in the filtered list, select the first available font
         if (!currentFontInList && filteredFontList.count > 0) {
             fontName = filteredFontList.get(0).name
         }
 
-        // Step 3: Apply font to terminal
         var index = getIndexByName(fontName)
         if (index === undefined) return
 

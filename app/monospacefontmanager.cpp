@@ -33,8 +33,6 @@ void MonospaceFontManager::setFontSubstitution(const QString &family, const QStr
 
     QFont::removeSubstitutions(family);
     QFont::insertSubstitution(family, substitute);
-
-    qDebug() << "Font substitution set:" << family << "->" << substitute;
 }
 
 void MonospaceFontManager::removeFontSubstitution(const QString &family)
@@ -44,5 +42,4 @@ void MonospaceFontManager::removeFontSubstitution(const QString &family)
     }
 
     QFont::removeSubstitutions(family);
-    qDebug() << "Font substitution removed for:" << family;
 }

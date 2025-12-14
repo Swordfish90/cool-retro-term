@@ -226,13 +226,14 @@ QtObject {
     Component.onCompleted: addSystemFonts()
 
     function addSystemFonts() {
-        var families = monospaceSystemFonts
+        var families = monospaceSystemFonts;
         for (var i = 0; i < families.length; i++) {
             if (verbose) {
                 console.log("Adding system font: ", families[i])
             }
             fontlist.append(convertToListElement(families[i]))
         }
+        appSettings.updateFont();
     }
 
     function convertToListElement(family) {
