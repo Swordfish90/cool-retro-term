@@ -72,7 +72,6 @@ MenuBar {
                 text: model.text
                 onTriggered: {
                     appSettings.loadProfileString(obj_string)
-                    appSettings.handleFontChanged()
                 }
             }
             onObjectAdded: function(index, object) { profilesMenu.insertItem(index, object) }

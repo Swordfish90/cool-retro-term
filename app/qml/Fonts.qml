@@ -237,8 +237,8 @@ QtObject {
 
     function convertToListElement(family) {
         return {
-            "name": "System: " + family,
-            "text": qsTr("System: ") + family,
+            "name": family,
+            "text": family,
             "source": "",
             "lineSpacing": 0.1,
             "pixelSize": 30,

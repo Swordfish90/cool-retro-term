@@ -157,7 +157,7 @@ Item{
             kterminal.lineSpacing = lineSpacing;
 
             // Set up font fallback based on platform
-            var fallbackFont = appSettings.isMacOS ? "Menlo" : "monospace";
+            var fallbackFont = appSettings.isMacOS ? "Menlo" : "Monospace";
             monospaceFontManager.setFontSubstitution(fontFamily, fallbackFont);
         }
 
@@ -186,7 +186,7 @@ Item{
         Component.onCompleted: {
             appSettings.terminalFontChanged.connect(handleFontChanged);
             appSettings.initializedSettings.connect(startSession);
-            appSettings.handleFontChanged()
+            appSettings.updateFont()
         }
     }
 

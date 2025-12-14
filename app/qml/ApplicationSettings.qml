@@ -58,7 +58,7 @@ QtObject {
 
     property bool blinkingCursor: false
 
-    onWindowScalingChanged: handleFontChanged()
+    onWindowScalingChanged: updateFont()
 
     // PROFILE SETTINGS ///////////////////////////////////////////////////////
     property real windowOpacity: 1.0
@@ -113,6 +113,11 @@ QtObject {
 
     property int rasterization: no_rasterization
 
+    readonly property int bundled_fonts: 0
+    readonly property int system_fonts: 1
+
+    property int fontSource: bundled_fonts
+
     // FONTS //////////////////////////////////////////////////////////////////
     readonly property real baseFontScaling: 0.75
     property real fontScaling: 1.0
@@ -122,52 +127,88 @@ QtObject {
 
     property bool lowResolutionFont: false
 
-    property var fontNames: ["TERMINUS_SCALED", "COMMODORE_PET", "COMMODORE_PET"]
-    property var fontlist: fontManager.item.fontlist
+    property string fontName: "TERMINUS_SCALED"
+    property var fontlist: fontManager.item ? fontManager.item.fontlist : null
+
+    property var filteredFontList: ListModel {}
+
+    // Single method that updates the font list and applies changes to terminal
+    function updateFont() {
+        if (!fontManager.item || !fontlist) return
+
+        // Step 1: Update filtered font list
+        filteredFontList.clear()
+        var currentFontInList = false
+
+        for (var i = 0; i < fontlist.count; i++) {
+            var font = fontlist.get(i)
+            var isBundled = !font.isSystemFont
+            var isSystem = font.isSystemFont
+
+            // Filter by font source (bundled vs system)
+            var matchesSource = (fontSource === bundled_fonts && isBundled) ||
+                               (fontSource === system_fonts && isSystem)
+
+            if (!matchesSource) continue
+
+            // For non-default rasterization, only show low-resolution fonts
+            var matchesRasterization = (rasterization === no_rasterization) || font.lowResolutionFont
+
+            if (matchesRasterization) {
+                filteredFontList.append(font)
+                if (font.name === fontName) {
+                    currentFontInList = true
+                }
+            }
+        }
+
+        // Step 2: If current font is not in the filtered list, select the first available font
+        if (!currentFontInList && filteredFontList.count > 0) {
+            fontName = filteredFontList.get(0).name
+        }
+
+        // Step 3: Apply font to terminal
+        var index = getIndexByName(fontName)
+        if (index === undefined) return
+
+        fontManager.item.selectedFontIndex = index
+        fontManager.item.scaling = totalFontScaling
+
+        var fontSourcePath = fontManager.item.source
+        var pixelSize = fontManager.item.pixelSize
+        var lineSpacing = fontManager.item.lineSpacing
+        var screenScaling = fontManager.item.screenScaling
+        var fontWidth = fontManager.item.defaultFontWidth * appSettings.fontWidth
+        var fontFamily = fontManager.item.family
+        var isSystemFont = fontManager.item.isSystemFont
+
+        lowResolutionFont = fontManager.item.lowResolutionFont
+
+        if (!isSystemFont) {
+            fontLoader.source = fontSourcePath
+            fontFamily = fontLoader.name
+        }
+
+        terminalFontChanged(fontFamily, pixelSize, lineSpacing, screenScaling, fontWidth)
+    }
+
+    onFontSourceChanged: updateFont()
+    onRasterizationChanged: updateFont()
+    onFontNameChanged: updateFont()
 
     signal terminalFontChanged(string fontFamily, int pixelSize, int lineSpacing, real screenScaling, real fontWidth)
 
     signal initializedSettings
 
     property Loader fontManager: Loader {
-        states: [
-            State {
-                when: rasterization == no_rasterization
-                PropertyChanges {
-                    target: fontManager
-                    source: "Fonts.qml"
-                }
-            },
-            State {
-                when: rasterization == scanline_rasterization
-                PropertyChanges {
-                    target: fontManager
-                    source: "FontScanlines.qml"
-                }
-            },
-            State {
-                when: rasterization == pixel_rasterization
-                PropertyChanges {
-                    target: fontManager
-                    source: "FontPixels.qml"
-                }
-            },
-            State {
-                when: rasterization == subpixel_rasterization
-                PropertyChanges {
-                    target: fontManager
-                    source: "FontPixels.qml"
-                }
-            }
-        ]
-
-        onLoaded: handleFontChanged()
+        source: "Fonts.qml"
+        onLoaded: updateFont()
     }
 
     property FontLoader fontLoader: FontLoader {}
 
-    onTotalFontScalingChanged: handleFontChanged()
-    onFontWidthChanged: handleFontChanged()
+    onTotalFontScalingChanged: updateFont()
+    onFontWidthChanged: updateFont()
 
     function getIndexByName(name) {
         for (var i = 0; i < fontlist.count; i++) {
@@ -180,42 +221,10 @@ QtObject {
 
     function incrementScaling() {
         fontScaling = Math.min(fontScaling + 0.05, maximumFontScaling)
-        handleFontChanged()
     }
 
     function decrementScaling() {
         fontScaling = Math.max(fontScaling - 0.05, minimumFontScaling)
-        handleFontChanged()
-    }
-
-    function handleFontChanged() {
-        if (!fontManager.item)
-            return
-
-        var index = getIndexByName(fontNames[rasterization])
-        if (index === undefined)
-            return
-
-        fontManager.item.selectedFontIndex = index
-        fontManager.item.scaling = totalFontScaling
-
-        var fontSource = fontManager.item.source
-        var pixelSize = fontManager.item.pixelSize
-        var lineSpacing = fontManager.item.lineSpacing
-        var screenScaling = fontManager.item.screenScaling
-        var fontWidth = fontManager.item.defaultFontWidth * appSettings.fontWidth
-        var fontFamily = fontManager.item.family
-        var isSystemFont = fontManager.item.isSystemFont
-
-        lowResolutionFont = fontManager.item.lowResolutionFont
-
-        if (!isSystemFont) {
-            fontLoader.source = fontSource
-            fontFamily = fontLoader.name
-        }
-
-        terminalFontChanged(fontFamily, pixelSize, lineSpacing, screenScaling,
-                            fontWidth)
     }
 
     property Storage storage: Storage {}
@@ -237,7 +246,8 @@ QtObject {
             "windowScaling": windowScaling,
             "showTerminalSize": showTerminalSize,
             "fontScaling": fontScaling,
-            "fontNames": fontNames,
+            "fontName": fontName,
+            "fontSource": fontSource,
             "showMenubar": showMenubar,
             "bloomQuality": bloomQuality,
             "burnInQuality": burnInQuality,
@@ -267,7 +277,8 @@ QtObject {
             "contrast": contrast,
             "ambientLight": ambientLight,
             "windowOpacity": windowOpacity,
-            "fontName": fontNames[rasterization],
+            "fontName": fontName,
+            "fontSource": fontSource,
             "fontWidth": fontWidth,
             "margin": _margin,
             "blinkingCursor": blinkingCursor,
@@ -324,8 +335,9 @@ QtObject {
         width = settings.width !== undefined ? settings.width : width
         height = settings.height !== undefined ? settings.height : height
 
-        fontNames = settings.fontNames !== undefined ? settings.fontNames : fontNames
+        fontName = settings.fontName !== undefined ? settings.fontName : fontName
         fontScaling = settings.fontScaling !== undefined ? settings.fontScaling : fontScaling
+        fontSource = settings.fontSource !== undefined ? settings.fontSource : fontSource
 
         showMenubar = settings.showMenubar !== undefined ? settings.showMenubar : showMenubar
 
@@ -373,16 +385,14 @@ QtObject {
         windowOpacity = settings.windowOpacity
                 !== undefined ? settings.windowOpacity : windowOpacity
 
-        fontNames[rasterization] = settings.fontName
-                !== undefined ? settings.fontName : fontNames[rasterization]
+        fontName = settings.fontName !== undefined ? settings.fontName : fontName
+        fontSource = settings.fontSource !== undefined ? settings.fontSource : fontSource
         fontWidth = settings.fontWidth !== undefined ? settings.fontWidth : fontWidth
 
         _margin = settings.margin !== undefined ? settings.margin : _margin
         _frameMargin = settings.frameMargin !== undefined ? settings.frameMargin : _frameMargin
 
         blinkingCursor = settings.blinkingCursor !== undefined ? settings.blinkingCursor : blinkingCursor
-
-        handleFontChanged()
     }
 
     function storeCustomProfiles() {
@@ -451,6 +461,7 @@ QtObject {
                 "flickering": 0.1,
                 "fontColor": "#ff8100",
                 "fontName": "TERMINUS_SCALED",
+                "fontSource": 0,
                 "fontWidth": 1,
                 "glowingLine": 0.2,
                 "horizontalSync": 0.08,
@@ -480,6 +491,7 @@ QtObject {
                 "flickering": 0.1,
                 "fontColor": "#0ccc68",
                 "fontName": "TERMINUS_SCALED",
+                "fontSource": 0,
                 "fontWidth": 1,
                 "glowingLine": 0.2,
                 "horizontalSync": 0.08,
@@ -509,6 +521,7 @@ QtObject {
                 "flickering": 0.1,
                 "fontColor": "#7cff4f",
                 "fontName": "PRO_FONT_SCALED",
+                "fontSource": 0,
                 "fontWidth": 1,
                 "glowingLine": 0.2,
                 "horizontalSync": 0.151,
@@ -538,6 +551,7 @@ QtObject {
                 "flickering": 0.1962,
                 "fontColor": "#ffffff",
                 "fontName": "COMMODORE_PET",
+                "fontSource": 0,
                 "fontWidth": 1,
                 "glowingLine": 0.2,
                 "horizontalSync": 0.151,
@@ -567,6 +581,7 @@ QtObject {
                 "flickering": 0.2,
                 "fontColor": "#00d56d",
                 "fontName": "APPLE_II",
+                "fontSource": 0,
                 "fontWidth": 1,
                 "glowingLine": 0.22,
                 "horizontalSync": 0.16,
@@ -596,6 +611,7 @@ QtObject {
                 "flickering": 0.9,
                 "fontColor": "#00ff3e",
                 "fontName": "COMMODORE_PET",
+                "fontSource": 0,
                 "fontWidth": 1,
                 "glowingLine": 0.3,
                 "horizontalSync": 0.42,
@@ -625,6 +641,7 @@ QtObject {
                 "flickering": 0.0955,
                 "fontColor": "#ffffff",
                 "fontName": "IBM_DOS",
+                "fontSource": 0,
                 "fontWidth": 1,
                 "glowingLine": 0.1545,
                 "horizontalSync": 0,
@@ -654,6 +671,7 @@ QtObject {
                 "flickering": 0,
                 "fontColor": "#0ccc68",
                 "fontName": "IBM_3278",
+                "fontSource": 0,
                 "fontWidth": 1,
                 "glowingLine": 0,
                 "horizontalSync": 0,
@@ -683,6 +701,7 @@ QtObject {
                 "flickering": 0.2,
                 "fontColor": "#729fcf",
                 "fontName": "TERMINUS",
+                "fontSource": 0,
                 "fontWidth": 1,
                 "glowingLine": 0.1476,
                 "horizontalSync": 0,

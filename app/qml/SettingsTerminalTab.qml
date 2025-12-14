@@ -33,10 +33,31 @@ ColumnLayout {
             anchors.fill: parent
             columns: 2
             Label {
-                text: qsTr("Rasterization")
+                text: qsTr("Source")
+            }
+            RowLayout {
+                Layout.fillWidth: true
+                RadioButton {
+                    text: qsTr("Bundled")
+                    checked: appSettings.fontSource === appSettings.bundled_fonts
+                    onClicked: {
+                        appSettings.fontSource = appSettings.bundled_fonts
+                    }
+                }
+                RadioButton {
+                    text: qsTr("System")
+                    checked: appSettings.fontSource === appSettings.system_fonts
+                    onClicked: {
+                        appSettings.fontSource = appSettings.system_fonts
+                    }
+                }
+            }
+            Label {
+                text: qsTr("Rendering")
+                enabled: appSettings.fontSource === appSettings.bundled_fonts
             }
             ComboBox {
-                id: rasterizationBox
+                id: renderingBox
 
                 property string selectedElement: model[currentIndex]
 
@@ -46,6 +67,7 @@ ColumnLayout {
                 onCurrentIndexChanged: {
                     appSettings.rasterization = currentIndex
                 }
+                enabled: appSettings.fontSource === appSettings.bundled_fonts
             }
             Label {
                 text: qsTr("Name")
@@ -53,23 +75,37 @@ ColumnLayout {
             ComboBox {
                 id: fontChanger
                 Layout.fillWidth: true
-                model: appSettings.fontlist
+                model: appSettings.filteredFontList
                 textRole: "text"
                 onActivated: {
-                    var name = appSettings.fontlist.get(index).name
-                    appSettings.fontNames[appSettings.rasterization] = name
-                    appSettings.handleFontChanged()
+                    var font = appSettings.filteredFontList.get(index)
+
+                    // If selecting a high-res font while in non-default rasterization,
+                    // switch to default rasterization
+                    if (!font.lowResolutionFont && appSettings.rasterization !== appSettings.no_rasterization) {
+                        appSettings.rasterization = appSettings.no_rasterization
+                    }
+
+                    appSettings.fontName = font.name
                 }
                 function updateIndex() {
-                    var name = appSettings.fontNames[appSettings.rasterization]
-                    var index = appSettings.getIndexByName(name)
-                    if (index !== undefined)
-                        currentIndex = index
+                    for (var i = 0; i < appSettings.filteredFontList.count; i++) {
+                        var font = appSettings.filteredFontList.get(i)
+                        if (font.name === appSettings.fontName) {
+                            currentIndex = i
+                            return
+                        }
+                    }
+                    currentIndex = 0
                 }
                 Connections {
                     target: appSettings
 
                     onTerminalFontChanged: {
+                        fontChanger.updateIndex()
+                    }
+
+                    onFilteredFontListChanged: {
                         fontChanger.updateIndex()
                     }
                 }
