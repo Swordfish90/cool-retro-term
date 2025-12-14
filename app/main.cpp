@@ -37,9 +37,6 @@ int main(int argc, char *argv[])
     // Some environmental variable are necessary on certain platforms.
     // Disable Connections slot warnings
     QLoggingCategory::setFilterRules("qt.qml.connections.warning=false");
-
-    // TODO FILIPPO... This should not be hardcoded but handled as a fallback of sort!
-    QQuickStyle::setStyle("Material");
     QGuiApplication::setHighDpiScaleFactorRoundingPolicy(Qt::HighDpiScaleFactorRoundingPolicy::Round);
 
 // #if defined (Q_OS_LINUX)

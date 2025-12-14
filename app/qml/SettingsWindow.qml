@@ -24,7 +24,7 @@ import QtQuick.Window 2.1
 import QtQuick.Layouts 1.3
 import QtQuick.Dialogs
 
-Window {
+ApplicationWindow {
     id: settings_window
     title: qsTr("Settings")
     width: 640
