@@ -19,6 +19,7 @@
 
 #if defined(Q_OS_MAC)
 #include <CoreFoundation/CoreFoundation.h>
+#include <QStyleFactory>
 #endif
 
 QString getNamedArgument(QStringList args, QString name, QString defaultName)
@@ -50,6 +51,9 @@ int main(int argc, char *argv[])
     // Ensure key repeat works for letter keys (disable macOS press-and-hold for this app).
     CFPreferencesSetAppValue(CFSTR("ApplePressAndHoldEnabled"), kCFBooleanFalse, kCFPreferencesCurrentApplication);
     CFPreferencesAppSynchronize(kCFPreferencesCurrentApplication);
+
+    // Qt6 macOS default look is still lacking, so let's force Fusion for now
+    QQuickStyle::setStyle(QStringLiteral("Fusion"));
 #endif
 
     if (argc>1 && (!strcmp(argv[1],"-h") || !strcmp(argv[1],"--help"))) {
