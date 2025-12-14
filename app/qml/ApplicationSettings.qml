@@ -31,6 +31,8 @@ QtObject {
     readonly property real minimumFontScaling: 0.25
     readonly property real maximumFontScaling: 2.50
 
+    readonly property int defaultMargin: 16
+
     readonly property real minBurnInFadeTime: 0.16
     readonly property real maxBurnInFadeTime: 1.6
 

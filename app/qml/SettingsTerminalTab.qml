@@ -25,10 +25,11 @@ import QtQml 2.0
 import "Components"
 
 ColumnLayout {
-
     GroupBox {
         title: qsTr("Font")
         Layout.fillWidth: true
+        Layout.fillHeight: true
+        padding: appSettings.defaultMargin
         GridLayout {
             anchors.fill: parent
             columns: 2
@@ -150,26 +151,10 @@ ColumnLayout {
         }
     }
     GroupBox {
-        title: qsTr("Cursor")
-        Layout.fillWidth: true
-        ColumnLayout {
-            anchors.fill: parent
-            CheckBox {
-                id: blinkingCursor
-                text: qsTr("Blinking Cursor")
-                checked: appSettings.blinkingCursor
-                onCheckedChanged: appSettings.blinkingCursor = checked
-            }
-            Binding {
-                target: blinkingCursor
-                property: "checked"
-                value: appSettings.blinkingCursor
-            }
-        }
-    }
-    GroupBox {
         title: qsTr("Colors")
         Layout.fillWidth: true
+        Layout.fillHeight: true
+        padding: appSettings.defaultMargin
         ColumnLayout {
             anchors.fill: parent
             ColumnLayout {

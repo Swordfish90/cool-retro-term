@@ -22,11 +22,15 @@ import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.1
 
 ColumnLayout {
+    Layout.fillWidth: true
+    Layout.fillHeight: true
     spacing: 2
 
     GroupBox {
         title: qsTr("Effects")
         Layout.fillWidth: true
+        Layout.fillHeight: true
+        padding: appSettings.defaultMargin
 
         ColumnLayout {
             anchors.fill: parent

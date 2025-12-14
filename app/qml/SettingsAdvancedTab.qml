@@ -27,7 +27,9 @@ import "Components"
 ColumnLayout {
     GroupBox {
         Layout.fillWidth: true
+        Layout.fillHeight: true
         title: qsTr("Command")
+        padding: appSettings.defaultMargin
 
         ColumnLayout {
             anchors.fill: parent
@@ -61,8 +63,31 @@ ColumnLayout {
     }
 
     GroupBox {
+        title: qsTr("Cursor")
+        Layout.fillWidth: true
+        Layout.fillHeight: true
+        padding: appSettings.defaultMargin
+        ColumnLayout {
+            anchors.fill: parent
+            CheckBox {
+                id: blinkingCursor
+                text: qsTr("Blinking Cursor")
+                checked: appSettings.blinkingCursor
+                onCheckedChanged: appSettings.blinkingCursor = checked
+            }
+            Binding {
+                target: blinkingCursor
+                property: "checked"
+                value: appSettings.blinkingCursor
+            }
+        }
+    }
+
+    GroupBox {
         title: qsTr("Performance")
         Layout.fillWidth: true
+        Layout.fillHeight: true
+        padding: appSettings.defaultMargin
         GridLayout {
             anchors.fill: parent
             columns: 4

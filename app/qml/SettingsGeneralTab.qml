@@ -25,7 +25,9 @@ import QtQuick.Dialogs
 ColumnLayout {
     GroupBox {
         Layout.fillWidth: true
+        Layout.fillHeight: true
         title: qsTr("Profile")
+        padding: appSettings.defaultMargin
         RowLayout {
             anchors.fill: parent
             ListView {
@@ -183,6 +185,8 @@ ColumnLayout {
     GroupBox {
         title: qsTr("Screen")
         Layout.fillWidth: true
+        Layout.fillHeight: true
+        padding: appSettings.defaultMargin
         GridLayout {
             anchors.fill: parent
             columns: 2
