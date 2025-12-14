@@ -30,10 +30,8 @@ ApplicationWindow {
     width: 640
     height: 640
 
-    property int tabmargins: 15
-
     Item {
-        anchors { fill: parent;  margins: tabmargins }
+        anchors { fill: parent; }
 
         TabBar {
             id: bar
@@ -52,24 +50,21 @@ ApplicationWindow {
             }
         }
 
-        Frame {
+        StackLayout {
             anchors {
                 top: bar.bottom
                 left: parent.left
                 right: parent.right
                 bottom: parent.bottom
+                margins: 16
             }
 
-            StackLayout {
-                anchors.fill: parent
+            currentIndex: bar.currentIndex
 
-                currentIndex: bar.currentIndex
-
-                SettingsGeneralTab { }
-                SettingsTerminalTab { }
-                SettingsEffectsTab { }
-                SettingsAdvancedTab { }
-            }
+            SettingsGeneralTab { }
+            SettingsTerminalTab { }
+            SettingsEffectsTab { }
+            SettingsAdvancedTab { }
         }
     }
 }
