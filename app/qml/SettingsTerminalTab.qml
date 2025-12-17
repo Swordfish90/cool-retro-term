@@ -152,6 +152,24 @@ ColumnLayout {
                     text: Math.round(widthChanger.value * 100) + "%"
                 }
             }
+            Label {
+                text: qsTr("Line Spacing")
+            }
+            RowLayout {
+                Layout.fillWidth: true
+                Slider {
+                    Layout.fillWidth: true
+                    id: lineSpacingChanger
+                    onValueChanged: appSettings.lineSpacing = value
+                    value: appSettings.lineSpacing
+                    stepSize: 0.01
+                    from: 0.0
+                    to: 1.0
+                }
+                SizedLabel {
+                    text: Math.round(lineSpacingChanger.value * 100) + "%"
+                }
+            }
         }
     }
     GroupBox {

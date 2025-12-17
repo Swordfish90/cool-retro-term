@@ -127,6 +127,7 @@ QtObject {
     property real totalFontScaling: baseFontScaling * fontScaling
 
     property real fontWidth: 1.0
+    property real lineSpacing: 0.1
 
     property bool lowResolutionFont: false
 
@@ -218,6 +219,7 @@ QtObject {
 
     onTotalFontScalingChanged: updateFont()
     onFontWidthChanged: updateFont()
+    onLineSpacingChanged: updateFont()
 
     function getIndexByName(name) {
         for (var i = 0; i < fontlist.count; i++) {
@@ -271,7 +273,8 @@ QtObject {
             "bloomQuality": bloomQuality,
             "burnInQuality": burnInQuality,
             "useCustomCommand": useCustomCommand,
-            "customCommand": customCommand
+            "customCommand": customCommand,
+            "lineSpacing": lineSpacing
         }
         return stringify(settings)
     }
@@ -407,6 +410,7 @@ QtObject {
         fontName = settings.fontName !== undefined ? settings.fontName : fontName
         fontSource = settings.fontSource !== undefined ? settings.fontSource : fontSource
         fontWidth = settings.fontWidth !== undefined ? settings.fontWidth : fontWidth
+        lineSpacing = settings.lineSpacing !== undefined ? settings.lineSpacing : lineSpacing
 
         _margin = settings.margin !== undefined ? settings.margin : _margin
         _frameMargin = settings.frameMargin !== undefined ? settings.frameMargin : _frameMargin
@@ -482,6 +486,7 @@ QtObject {
                 "fontName": "TERMINUS_SCALED",
                 "fontSource": 0,
                 "fontWidth": 1,
+                "lineSpacing": 0.1,
                 "glowingLine": 0.2,
                 "horizontalSync": 0.08,
                 "jitter": 0.1997,
@@ -542,6 +547,7 @@ QtObject {
                 "fontName": "PRO_FONT_SCALED",
                 "fontSource": 0,
                 "fontWidth": 1,
+                "lineSpacing": 0.1,
                 "glowingLine": 0.2,
                 "horizontalSync": 0.151,
                 "jitter": 0.11,
@@ -572,6 +578,7 @@ QtObject {
                 "fontName": "COMMODORE_PET",
                 "fontSource": 0,
                 "fontWidth": 1,
+                "lineSpacing": 0.1,
                 "glowingLine": 0.2,
                 "horizontalSync": 0.151,
                 "jitter": 0,
@@ -602,6 +609,7 @@ QtObject {
                 "fontName": "APPLE_II",
                 "fontSource": 0,
                 "fontWidth": 1,
+                "lineSpacing": 0.1,
                 "glowingLine": 0.22,
                 "horizontalSync": 0.16,
                 "jitter": 0.1,
@@ -632,6 +640,7 @@ QtObject {
                 "fontName": "COMMODORE_PET",
                 "fontSource": 0,
                 "fontWidth": 1,
+                "lineSpacing": 0.1,
                 "glowingLine": 0.3,
                 "horizontalSync": 0.42,
                 "jitter": 0.4,
@@ -659,9 +668,10 @@ QtObject {
                 "contrast": 0.85,
                 "flickering": 0.0955,
                 "fontColor": "#ffffff",
-                "fontName": "IBM_DOS",
+                "fontName": "IBM_VGA_8x16",
                 "fontSource": 0,
                 "fontWidth": 1,
+                "lineSpacing": 0.1,
                 "glowingLine": 0.1545,
                 "horizontalSync": 0,
                 "jitter": 0.1545,
@@ -692,6 +702,7 @@ QtObject {
                 "fontName": "IBM_3278",
                 "fontSource": 0,
                 "fontWidth": 1,
+                "lineSpacing": 0.1,
                 "glowingLine": 0,
                 "horizontalSync": 0,
                 "jitter": 0,
@@ -722,6 +733,7 @@ QtObject {
                 "fontName": "TERMINUS",
                 "fontSource": 0,
                 "fontWidth": 1,
+                "lineSpacing": 0.1,
                 "glowingLine": 0.1476,
                 "horizontalSync": 0,
                 "jitter": 0.099,

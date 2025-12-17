@@ -1,3 +1,4 @@
+
 /*******************************************************************************
 * Copyright (c) 2013-2021 "Filippo Scognamiglio"
 * https://github.com/Swordfish90/cool-retro-term
@@ -36,11 +37,13 @@ QtObject {
 
     property int pixelSize: lowResolutionFont ? _font.pixelSize : targetPixelHeight
 
-    // Line spacing stays absolute for low-res fonts; for high-res fonts it's a factor of target size.
-    property int lineSpacing: lowResolutionFont ? _font.lineSpacing : Math.round(targetPixelHeight * _font.lineSpacing)
+    // Line spacing expressed as a relative factor for all fonts.
+    property real lineSpacingFactor: appSettings.lineSpacing
+    property int lineSpacing: Math.round(targetPixelHeight * lineSpacingFactor)
 
     // Use total line height (glyph + spacing) for scaling computations on low-res fonts.
-    property real nativeLineHeight: _font.pixelSize + _font.lineSpacing
+    property real nativeLineHeight: _font.pixelSize + Math.round(
+                                        _font.pixelSize * lineSpacingFactor)
     property real targetLineHeight: targetPixelHeight + lineSpacing
 
     // Scale low-res font textures to hit the target line height; high-res fonts don't need scaling.
@@ -65,9 +68,7 @@ QtObject {
             name: "TERMINUS_SCALED"
             text: "Terminus"
             source: "fonts/terminus/TerminusTTF-4.49.3.ttf"
-            lineSpacing: 1
             pixelSize: 12
-            baseScaling: 3.0
             lowResolutionFont: true
             isSystemFont: false
         }
@@ -75,9 +76,7 @@ QtObject {
             name: "EXCELSIOR_SCALED"
             text: "Fixedsys Excelsior"
             source: "fonts/fixedsys-excelsior/FSEX301-L2.ttf"
-            lineSpacing: 0
             pixelSize: 16
-            baseScaling: 2.4
             lowResolutionFont: true
             isSystemFont: false
             fallbackName: "UNSCII_16_SCALED"
@@ -86,9 +85,7 @@ QtObject {
             name: "GREYBEARD_SCALED"
             text: "Greybeard"
             source: "fonts/greybeard/Greybeard-16px.ttf"
-            lineSpacing: 1
             pixelSize: 16
-            baseScaling: 3.0
             lowResolutionFont: true
             isSystemFont: false
             fallbackName: "UNSCII_16_SCALED"
@@ -97,9 +94,7 @@ QtObject {
             name: "COMMODORE_PET_SCALED"
             text: "Commodore PET"
             source: "fonts/pet-me/PetMe.ttf"
-            lineSpacing: 0
             pixelSize: 8
-            baseScaling: 3.5
             lowResolutionFont: true
             isSystemFont: false
             fallbackName: "UNSCII_8_SCALED"
@@ -108,9 +103,7 @@ QtObject {
             name: "COZETTE_SCALED"
             text: "Cozette"
             source: "fonts/cozette/CozetteVector.ttf"
-            lineSpacing: 1
             pixelSize: 13
-            baseScaling: 3.3
             lowResolutionFont: true
             isSystemFont: false
         }
@@ -118,9 +111,7 @@ QtObject {
             name: "UNSCII_8_SCALED"
             text: "Unscii 8"
             source: "fonts/unscii/unscii-8.ttf"
-            lineSpacing: 0
             pixelSize: 8
-            baseScaling: 3.5
             lowResolutionFont: true
             isSystemFont: false
             fallbackName: "UNSCII_8_SCALED"
@@ -129,9 +120,7 @@ QtObject {
             name: "UNSCII_8_THIN_SCALED"
             text: "Unscii 8 Thin"
             source: "fonts/unscii/unscii-8-thin.ttf"
-            lineSpacing: 0
             pixelSize: 8
-            baseScaling: 3.5
             lowResolutionFont: true
             isSystemFont: false
             fallbackName: "UNSCII_8_SCALED"
@@ -140,9 +129,7 @@ QtObject {
             name: "UNSCII_16_SCALED"
             text: "Unscii 16"
             source: "fonts/unscii/unscii-16-full.ttf"
-            lineSpacing: 0
             pixelSize: 16
-            baseScaling: 2.4
             lowResolutionFont: true
             isSystemFont: false
             fallbackName: "UNSCII_16_SCALED"
@@ -151,9 +138,7 @@ QtObject {
             name: "APPLE_II_SCALED"
             text: "Apple ]["
             source: "fonts/apple2/PrintChar21.ttf"
-            lineSpacing: 3
             pixelSize: 8
-            baseScaling: 3.5
             lowResolutionFont: true
             isSystemFont: false
             fallbackName: "UNSCII_8_SCALED"
@@ -162,20 +147,7 @@ QtObject {
             name: "ATARI_400_SCALED"
             text: "Atari 400-800"
             source: "fonts/atari-400-800/AtariClassic-Regular.ttf"
-            lineSpacing: 3
             pixelSize: 8
-            baseScaling: 3.5
-            lowResolutionFont: true
-            isSystemFont: false
-            fallbackName: "UNSCII_8_SCALED"
-        }
-        ListElement {
-            name: "IBM_EGA_8x8"
-            text: "IBM EGA 8x8"
-            source: "fonts/oldschool-pc-fonts/PxPlus_IBM_EGA_8x8.ttf"
-            lineSpacing: 3
-            pixelSize: 8
-            baseScaling: 3.5
             lowResolutionFont: true
             isSystemFont: false
             fallbackName: "UNSCII_8_SCALED"
@@ -184,9 +156,16 @@ QtObject {
             name: "COMMODORE_64_SCALED"
             text: "Commodore 64"
             source: "fonts/pet-me/PetMe64.ttf"
-            lineSpacing: 0
             pixelSize: 8
-            baseScaling: 3.5
+            lowResolutionFont: true
+            isSystemFont: false
+            fallbackName: "UNSCII_8_SCALED"
+        }
+        ListElement {
+            name: "IBM_EGA_8x8"
+            text: "IBM EGA 8x8"
+            source: "fonts/oldschool-pc-fonts/PxPlus_IBM_EGA_8x8.ttf"
+            pixelSize: 8
             lowResolutionFont: true
             isSystemFont: false
             fallbackName: "UNSCII_8_SCALED"
@@ -195,9 +174,7 @@ QtObject {
             name: "IBM_VGA_8x16"
             text: "IBM VGA 8x16"
             source: "fonts/oldschool-pc-fonts/PxPlus_IBM_VGA_8x16.ttf"
-            lineSpacing: 3
             pixelSize: 16
-            baseScaling: 2.0
             lowResolutionFont: true
             isSystemFont: false
             fallbackName: "UNSCII_16_SCALED"
@@ -206,7 +183,6 @@ QtObject {
             name: "TERMINUS"
             text: "Terminus"
             source: "fonts/terminus/TerminusTTF-4.49.3.ttf"
-            lineSpacing: 0.1
             pixelSize: 35
             lowResolutionFont: false
             isSystemFont: false
@@ -215,7 +191,6 @@ QtObject {
             name: "HACK"
             text: "Hack"
             source: "fonts/hack/Hack-Regular.ttf"
-            lineSpacing: 0.1
             pixelSize: 35
             lowResolutionFont: false
             isSystemFont: false
@@ -224,7 +199,6 @@ QtObject {
             name: "FIRA_CODE"
             text: "Fira Code"
             source: "fonts/fira-code/FiraCode-Medium.ttf"
-            lineSpacing: 0.1
             pixelSize: 35
             lowResolutionFont: false
             isSystemFont: false
@@ -233,7 +207,6 @@ QtObject {
             name: "IOSEVKA"
             text: "Iosevka"
             source: "fonts/iosevka/IosevkaTerm-ExtendedMedium.ttf"
-            lineSpacing: 0.1
             pixelSize: 35
             lowResolutionFont: false
             isSystemFont: false
@@ -242,7 +215,6 @@ QtObject {
             name: "JETBRAINS_MONO"
             text: "JetBrains Mono"
             source: "fonts/jetbrains-mono/JetBrainsMono-Medium.ttf"
-            lineSpacing: 0.1
             pixelSize: 35
             lowResolutionFont: false
             isSystemFont: false
@@ -251,7 +223,6 @@ QtObject {
             name: "IBM_3278"
             text: "IBM 3278"
             source: "fonts/ibm-3278/3270-Regular.ttf"
-            lineSpacing: 0.2
             pixelSize: 32
             lowResolutionFont: false
             isSystemFont: false
@@ -261,14 +232,14 @@ QtObject {
     Component.onCompleted: addSystemFonts()
 
     function addSystemFonts() {
-        var families = monospaceSystemFonts;
+        var families = monospaceSystemFonts
         for (var i = 0; i < families.length; i++) {
             if (verbose) {
                 console.log("Adding system font: ", families[i])
             }
             fontlist.append(convertToListElement(families[i]))
         }
-        appSettings.updateFont();
+        appSettings.updateFont()
     }
 
     function convertToListElement(family) {
@@ -276,7 +247,6 @@ QtObject {
             "name": family,
             "text": family,
             "source": "",
-            "lineSpacing": 0.1,
             "pixelSize": 30,
             "baseScaling": 1.0,
             "lowResolutionFont": false,
