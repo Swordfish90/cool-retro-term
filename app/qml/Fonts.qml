@@ -26,17 +26,32 @@ QtObject {
     property var _font: fontlist.get(selectedFontIndex)
     property bool lowResolutionFont: _font.lowResolutionFont
 
-    property int pixelSize: lowResolutionFont ? _font.pixelSize : _font.pixelSize * scaling
+    // Reference height (in pixels) that represents the "normal" on-screen size at scaling=1.0.
+    // Adjust this single value to tune how large fonts appear by default.
+    property int baseFontPixelHeight: 32
 
-    property int lineSpacing: lowResolutionFont ? _font.lineSpacing : pixelSize * _font.lineSpacing
+    // Target pixel height we want on screen for the current zoom level. Low-res fonts will be scaled
+    // up to this height, high-res fonts render directly at this size.
+    property real targetPixelHeight: baseFontPixelHeight * scaling
 
-    property real screenScaling: lowResolutionFont ? _font.baseScaling * scaling : 1.0
+    property int pixelSize: lowResolutionFont ? _font.pixelSize : targetPixelHeight
 
-    property real defaultFontWidth: fontlist.get(selectedFontIndex).fontWidth
+    // Line spacing stays absolute for low-res fonts; for high-res fonts it's a factor of target size.
+    property int lineSpacing: lowResolutionFont ? _font.lineSpacing : Math.round(targetPixelHeight * _font.lineSpacing)
 
-    property string family: fontlist.get(selectedFontIndex).family
+    // Use total line height (glyph + spacing) for scaling computations on low-res fonts.
+    property real nativeLineHeight: _font.pixelSize + _font.lineSpacing
+    property real targetLineHeight: targetPixelHeight + lineSpacing
+
+    // Scale low-res font textures to hit the target line height; high-res fonts don't need scaling.
+    property real screenScaling: lowResolutionFont ? targetLineHeight / nativeLineHeight : 1.0
+
+    // Uniform default font width (user width scaling still applies).
+    property real defaultFontWidth: 1.0
 
     property bool isSystemFont: fontlist.get(selectedFontIndex).isSystemFont
+
+    property string family: fontlist.get(selectedFontIndex).family
 
     // There are two kind of fonts: low resolution and high resolution.
     // Low resolution font sets the lowResolutionFont property to true.
@@ -48,178 +63,198 @@ QtObject {
     property ListModel fontlist: ListModel {
         ListElement {
             name: "TERMINUS_SCALED"
-            text: "Terminus (Modern)"
-            source: "fonts/modern-terminus/TerminusTTF-4.46.0.ttf"
+            text: "Terminus"
+            source: "fonts/terminus/TerminusTTF-4.49.3.ttf"
             lineSpacing: 1
             pixelSize: 12
             baseScaling: 3.0
-            fontWidth: 1.0
             lowResolutionFont: true
             isSystemFont: false
-            family: ""
-        }
-        ListElement {
-            name: "PRO_FONT_SCALED"
-            text: "Pro Font (Modern)"
-            source: "fonts/modern-pro-font-win-tweaked/ProFontWindows.ttf"
-            lineSpacing: 1
-            pixelSize: 12
-            baseScaling: 3.0
-            fontWidth: 1.0
-            lowResolutionFont: true
-            isSystemFont: false
-            family: ""
         }
         ListElement {
             name: "EXCELSIOR_SCALED"
-            text: "Fixedsys Excelsior (Modern)"
-            source: "fonts/modern-fixedsys-excelsior/FSEX301-L2.ttf"
+            text: "Fixedsys Excelsior"
+            source: "fonts/fixedsys-excelsior/FSEX301-L2.ttf"
             lineSpacing: 0
             pixelSize: 16
             baseScaling: 2.4
-            fontWidth: 1.0
             lowResolutionFont: true
             isSystemFont: false
-            family: ""
+            fallbackName: "UNSCII_16_SCALED"
+        }
+        ListElement {
+            name: "GREYBEARD_SCALED"
+            text: "Greybeard"
+            source: "fonts/greybeard/Greybeard-16px.ttf"
+            lineSpacing: 1
+            pixelSize: 16
+            baseScaling: 3.0
+            lowResolutionFont: true
+            isSystemFont: false
+            fallbackName: "UNSCII_16_SCALED"
         }
         ListElement {
             name: "COMMODORE_PET_SCALED"
-            text: "Commodore PET (1977)"
-            source: "fonts/1977-commodore-pet/PetMe.ttf"
-            lineSpacing: 3
+            text: "Commodore PET"
+            source: "fonts/pet-me/PetMe.ttf"
+            lineSpacing: 0
             pixelSize: 8
             baseScaling: 3.5
-            fontWidth: 0.7
             lowResolutionFont: true
             isSystemFont: false
-            family: ""
+            fallbackName: "UNSCII_8_SCALED"
         }
         ListElement {
-            name: "PROGGY_TINY_SCALED"
-            text: "Proggy Tiny (Modern)"
-            source: "fonts/modern-proggy-tiny/ProggyTiny.ttf"
+            name: "COZETTE_SCALED"
+            text: "Cozette"
+            source: "fonts/cozette/CozetteVector.ttf"
             lineSpacing: 1
-            pixelSize: 16
+            pixelSize: 13
             baseScaling: 3.3
-            fontWidth: 0.9
             lowResolutionFont: true
             isSystemFont: false
-            family: ""
+        }
+        ListElement {
+            name: "UNSCII_8_SCALED"
+            text: "Unscii 8"
+            source: "fonts/unscii/unscii-8.ttf"
+            lineSpacing: 0
+            pixelSize: 8
+            baseScaling: 3.5
+            lowResolutionFont: true
+            isSystemFont: false
+            fallbackName: "UNSCII_8_SCALED"
+        }
+        ListElement {
+            name: "UNSCII_8_THIN_SCALED"
+            text: "Unscii 8 Thin"
+            source: "fonts/unscii/unscii-8-thin.ttf"
+            lineSpacing: 0
+            pixelSize: 8
+            baseScaling: 3.5
+            lowResolutionFont: true
+            isSystemFont: false
+            fallbackName: "UNSCII_8_SCALED"
+        }
+        ListElement {
+            name: "UNSCII_16_SCALED"
+            text: "Unscii 16"
+            source: "fonts/unscii/unscii-16-full.ttf"
+            lineSpacing: 0
+            pixelSize: 16
+            baseScaling: 2.4
+            lowResolutionFont: true
+            isSystemFont: false
+            fallbackName: "UNSCII_16_SCALED"
         }
         ListElement {
             name: "APPLE_II_SCALED"
-            text: "Apple ][ (1977)"
-            source: "fonts/1977-apple2/PrintChar21.ttf"
+            text: "Apple ]["
+            source: "fonts/apple2/PrintChar21.ttf"
             lineSpacing: 3
             pixelSize: 8
             baseScaling: 3.5
-            fontWidth: 0.8
             lowResolutionFont: true
             isSystemFont: false
-            family: ""
+            fallbackName: "UNSCII_8_SCALED"
         }
         ListElement {
             name: "ATARI_400_SCALED"
-            text: "Atari 400-800 (1979)"
-            source: "fonts/1979-atari-400-800/AtariClassic-Regular.ttf"
+            text: "Atari 400-800"
+            source: "fonts/atari-400-800/AtariClassic-Regular.ttf"
             lineSpacing: 3
             pixelSize: 8
             baseScaling: 3.5
-            fontWidth: 0.7
             lowResolutionFont: true
             isSystemFont: false
-            family: ""
+            fallbackName: "UNSCII_8_SCALED"
         }
         ListElement {
-            name: "IBM_PC_SCALED"
-            text: "IBM PC (1981)"
-            source: "fonts/1981-ibm-pc/PxPlus_IBM_BIOS.ttf"
+            name: "IBM_EGA_8x8"
+            text: "IBM EGA 8x8"
+            source: "fonts/oldschool-pc-fonts/PxPlus_IBM_EGA_8x8.ttf"
             lineSpacing: 3
             pixelSize: 8
             baseScaling: 3.5
-            fontWidth: 0.8
             lowResolutionFont: true
             isSystemFont: false
-            family: ""
+            fallbackName: "UNSCII_8_SCALED"
         }
         ListElement {
             name: "COMMODORE_64_SCALED"
-            text: "Commodore 64 (1982)"
-            source: "fonts/1982-commodore64/C64_Pro_Mono-STYLE.ttf"
-            lineSpacing: 3
+            text: "Commodore 64"
+            source: "fonts/pet-me/PetMe64.ttf"
+            lineSpacing: 0
             pixelSize: 8
             baseScaling: 3.5
-            fontWidth: 0.7
             lowResolutionFont: true
             isSystemFont: false
-            family: ""
+            fallbackName: "UNSCII_8_SCALED"
         }
         ListElement {
-            name: "IBM_DOS"
-            text: "IBM DOS (1985)"
-            source: "fonts/1985-ibm-pc-vga/PxPlus_IBM_VGA8.ttf"
+            name: "IBM_VGA_8x16"
+            text: "IBM VGA 8x16"
+            source: "fonts/oldschool-pc-fonts/PxPlus_IBM_VGA_8x16.ttf"
             lineSpacing: 3
             pixelSize: 16
             baseScaling: 2.0
-            fontWidth: 1.0
             lowResolutionFont: true
             isSystemFont: false
-            family: ""
-        }
-        ListElement {
-            name: "HERMIT"
-            text: "HD: Hermit (Modern)"
-            source: "fonts/modern-hermit/Hermit-medium.otf"
-            lineSpacing: 0.05
-            pixelSize: 27
-            fontWidth: 1.0
-            lowResolutionFont: false
-            isSystemFont: false
-            family: ""
+            fallbackName: "UNSCII_16_SCALED"
         }
         ListElement {
             name: "TERMINUS"
-            text: "HD: Terminus (Modern)"
-            source: "fonts/modern-terminus/TerminusTTF-4.46.0.ttf"
+            text: "Terminus"
+            source: "fonts/terminus/TerminusTTF-4.49.3.ttf"
             lineSpacing: 0.1
             pixelSize: 35
-            fontWidth: 1.0
             lowResolutionFont: false
             isSystemFont: false
-            family: ""
         }
         ListElement {
-            name: "PRO_FONT"
-            text: "HD: Pro Font (Modern)"
-            source: "fonts/modern-pro-font-win-tweaked/ProFontWindows.ttf"
+            name: "HACK"
+            text: "Hack"
+            source: "fonts/hack/Hack-Regular.ttf"
             lineSpacing: 0.1
             pixelSize: 35
-            fontWidth: 1.0
             lowResolutionFont: false
             isSystemFont: false
-            family: ""
         }
         ListElement {
-            name: "INCONSOLATA"
-            text: "HD: Inconsolata (Modern)"
-            source: "fonts/modern-inconsolata/Inconsolata.otf"
+            name: "FIRA_CODE"
+            text: "Fira Code"
+            source: "fonts/fira-code/FiraCode-Medium.ttf"
             lineSpacing: 0.1
             pixelSize: 35
-            fontWidth: 1.0
             lowResolutionFont: false
             isSystemFont: false
-            family: ""
+        }
+        ListElement {
+            name: "IOSEVKA"
+            text: "Iosevka"
+            source: "fonts/iosevka/IosevkaTerm-ExtendedMedium.ttf"
+            lineSpacing: 0.1
+            pixelSize: 35
+            lowResolutionFont: false
+            isSystemFont: false
+        }
+        ListElement {
+            name: "JETBRAINS_MONO"
+            text: "JetBrains Mono"
+            source: "fonts/jetbrains-mono/JetBrainsMono-Medium.ttf"
+            lineSpacing: 0.1
+            pixelSize: 35
+            lowResolutionFont: false
+            isSystemFont: false
         }
         ListElement {
             name: "IBM_3278"
-            text: "HD: IBM 3278 (1971)"
-            source: "fonts/1971-ibm-3278/3270-Regular.ttf"
+            text: "IBM 3278"
+            source: "fonts/ibm-3278/3270-Regular.ttf"
             lineSpacing: 0.2
             pixelSize: 32
-            fontWidth: 1.0
             lowResolutionFont: false
             isSystemFont: false
-            family: ""
         }
     }
 
@@ -243,7 +278,6 @@ QtObject {
             "source": "",
             "lineSpacing": 0.1,
             "pixelSize": 30,
-            "fontWidth": 1.0,
             "baseScaling": 1.0,
             "lowResolutionFont": false,
             "isSystemFont": true,

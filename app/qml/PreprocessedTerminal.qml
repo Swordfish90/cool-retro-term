@@ -145,10 +145,13 @@ Item{
             }
         }
 
-        function handleFontChanged(fontFamily, pixelSize, lineSpacing, screenScaling, fontWidth) {
+        function handleFontChanged(fontFamily, pixelSize, lineSpacing, screenScaling, fontWidth, fallbackFontFamily) {
             kterminal.antialiasText = !appSettings.lowResolutionFont;
-            font.pixelSize = pixelSize;
-            font.family = fontFamily;
+            var updatedFont = Qt.font({
+                family: fontFamily,
+                pixelSize: pixelSize
+            });
+            kterminal.font = updatedFont;
 
             terminalContainer.fontWidth = fontWidth;
             terminalContainer.screenScaling = screenScaling;
@@ -156,9 +159,12 @@ Item{
 
             kterminal.lineSpacing = lineSpacing;
 
-            // Set up font fallback based on platform
-            var fallbackFont = appSettings.isMacOS ? "Menlo" : "Monospace";
-            monospaceFontManager.setFontSubstitution(fontFamily, fallbackFont);
+            var fallbackChain = [];
+            if (fallbackFontFamily && fallbackFontFamily.length > 0) {
+                fallbackChain.push(fallbackFontFamily);
+            }
+            fallbackChain.push(appSettings.isMacOS ? "Menlo" : "Monospace");
+            monospaceFontManager.setFontSubstitutions(fontFamily, fallbackChain);
         }
 
         function startSession() {

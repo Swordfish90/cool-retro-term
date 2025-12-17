@@ -2,7 +2,8 @@ import QtQuick 2.0
 
 QtObject {
     property string rasterizationShader:
-        (appSettings.rasterization === appSettings.no_rasterization ? "
+        ((appSettings.rasterization === appSettings.no_rasterization) ||
+         (appSettings.rasterization === appSettings.modern_rasterization) ? "
             lowp vec3 applyRasterization(vec2 screenCoords, lowp vec3 texel, vec2 virtualResolution, float intensity) {
                 return texel;
             }" : "") +

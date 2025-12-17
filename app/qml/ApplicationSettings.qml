@@ -112,6 +112,7 @@ QtObject {
     readonly property int scanline_rasterization: 1
     readonly property int pixel_rasterization: 2
     readonly property int subpixel_rasterization: 3
+    readonly property int modern_rasterization: 4
 
     property int rasterization: no_rasterization
 
@@ -145,14 +146,12 @@ QtObject {
             var isBundled = !font.isSystemFont
             var isSystem = font.isSystemFont
 
-            var matchesSource = (fontSource === bundled_fonts && isBundled) ||
-                               (fontSource === system_fonts && isSystem)
+            var matchesSource = (fontSource === bundled_fonts && isBundled) || (fontSource === system_fonts && isSystem)
 
             if (!matchesSource) continue
 
-            var matchesRasterization = font.isSystemFont ||
-                                       (rasterization === no_rasterization) ||
-                                       font.lowResolutionFont
+            var modernMode = rasterization === modern_rasterization
+            var matchesRasterization = font.isSystemFont || (modernMode == !font.lowResolutionFont)
 
             if (matchesRasterization) {
                 filteredFontList.append(font)
@@ -179,6 +178,7 @@ QtObject {
         var fontWidth = fontManager.item.defaultFontWidth * appSettings.fontWidth
         var fontFamily = fontManager.item.family
         var isSystemFont = fontManager.item.isSystemFont
+        var fallbackFontFamily = ""
 
         lowResolutionFont = fontManager.item.lowResolutionFont
 
@@ -187,14 +187,24 @@ QtObject {
             fontFamily = fontLoader.name
         }
 
-        terminalFontChanged(fontFamily, pixelSize, lineSpacing, screenScaling, fontWidth)
+        fallbackFontLoader.source = ""
+        var fallbackName = fontManager.item.fallbackName
+        if (fallbackName && fallbackName !== fontName) {
+            var fallbackFont = getFontByName(fallbackName)
+            if (fallbackFont) {
+                fallbackFontLoader.source = fallbackFont.source
+                fallbackFontFamily = fallbackFontLoader.name
+            }
+        }
+
+        terminalFontChanged(fontFamily, pixelSize, lineSpacing, screenScaling, fontWidth, fallbackFontFamily)
     }
 
     onFontSourceChanged: updateFont()
     onRasterizationChanged: updateFont()
     onFontNameChanged: updateFont()
 
-    signal terminalFontChanged(string fontFamily, int pixelSize, int lineSpacing, real screenScaling, real fontWidth)
+    signal terminalFontChanged(string fontFamily, int pixelSize, int lineSpacing, real screenScaling, real fontWidth, string fallbackFontFamily)
 
     signal initializedSettings
 
@@ -204,6 +214,7 @@ QtObject {
     }
 
     property FontLoader fontLoader: FontLoader {}
+    property FontLoader fallbackFontLoader: FontLoader {}
 
     onTotalFontScalingChanged: updateFont()
     onFontWidthChanged: updateFont()
@@ -215,6 +226,16 @@ QtObject {
                 return i
         }
         return 0 // If the font is not available default to 0.
+    }
+
+    function getFontByName(name) {
+        for (var i = 0; i < fontlist.count; i++) {
+            var font = fontlist.get(i)
+            if (name === font.name) {
+                return font
+            }
+        }
+        return null
     }
 
     function incrementScaling() {

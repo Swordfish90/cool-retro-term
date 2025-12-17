@@ -25,14 +25,19 @@ QStringList MonospaceFontManager::retrieveMonospaceFonts() {
     return result;
 }
 
-void MonospaceFontManager::setFontSubstitution(const QString &family, const QString &substitute)
+void MonospaceFontManager::setFontSubstitutions(const QString &family, const QStringList &substitutes)
 {
-    if (family.isEmpty() || substitute.isEmpty()) {
+    if (family.isEmpty()) {
         return;
     }
 
     QFont::removeSubstitutions(family);
-    QFont::insertSubstitution(family, substitute);
+
+    if (substitutes.isEmpty()) {
+        return;
+    }
+
+    QFont::insertSubstitutions(family, substitutes);
 }
 
 void MonospaceFontManager::removeFontSubstitution(const QString &family)

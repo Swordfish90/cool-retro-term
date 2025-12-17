@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QFontDatabase>
+#include <QStringList>
 
 class MonospaceFontManager : public QObject
 {
@@ -12,7 +13,7 @@ public:
     Q_INVOKABLE QStringList retrieveMonospaceFonts();
 
 public slots:
-    void setFontSubstitution(const QString &family, const QString &substitute);
+    Q_INVOKABLE void setFontSubstitutions(const QString &family, const QStringList &substitutes);
     void removeFontSubstitution(const QString &family);
 };
 

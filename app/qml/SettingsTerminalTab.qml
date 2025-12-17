@@ -63,7 +63,7 @@ ColumnLayout {
                 property string selectedElement: model[currentIndex]
 
                 Layout.fillWidth: true
-                model: [qsTr("Default"), qsTr("Scanlines"), qsTr("Pixels"), qsTr("Sub-Pixels")]
+                model: [qsTr("Default"), qsTr("Scanlines"), qsTr("Pixels"), qsTr("Sub-Pixels"), qsTr("Modern")]
                 currentIndex: appSettings.rasterization
                 onCurrentIndexChanged: {
                     appSettings.rasterization = currentIndex
@@ -81,9 +81,13 @@ ColumnLayout {
                 onActivated: {
                     var font = appSettings.filteredFontList.get(index)
 
-                    // If selecting a high-res font while in non-default rasterization,
-                    // switch to default rasterization
-                    if (!font.lowResolutionFont && appSettings.rasterization !== appSettings.no_rasterization) {
+                    // If selecting a high-res font while not in Modern mode,
+                    // switch to Modern to render at full resolution.
+                    if (!font.lowResolutionFont && appSettings.rasterization !== appSettings.modern_rasterization) {
+                        appSettings.rasterization = appSettings.modern_rasterization
+                    }
+                    // If selecting a low-res font while in Modern mode, switch back to default.
+                    if (font.lowResolutionFont && appSettings.rasterization === appSettings.modern_rasterization) {
                         appSettings.rasterization = appSettings.no_rasterization
                     }
 
