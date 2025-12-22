@@ -81,20 +81,20 @@ Item {
         property real rasterizationIntensity: Utils.smoothstep(2.0, 4.0, _screenDensity)
         property int rasterizationMode: appSettings.rasterization
 
-        property real displayTerminalFrame: appSettings._frameMargin > 0 || appSettings.screenCurvature > 0
+        property real displayTerminalFrame: appSettings._frameSize > 0 || appSettings.screenCurvature > 0
 
         property real time: timeManager.time
         property ShaderEffectSource noiseSource: noiseShaderSource
 
         // Extra uniforms expected by the shared uniform block
-        property real screenShadowCoeff: 0
         property real frameShadowCoeff: 0
         property color frameColor: backgroundColor
-        property size margin: Qt.size(0, 0)
+        property real frameSize: appSettings.frameSize
         property real prevLastUpdate: burnInEffect.prevLastUpdate
         property real screen_brightness: Utils.lint(0.5, 1.5, appSettings.brightness)
         property real bloom: appSettings.bloom
         property real rbgShift: (appSettings.rbgShift / Math.max(width, 1)) * appSettings.totalFontScaling
+        property real frameShininess: appSettings.frameShininess
 
         anchors.fill: parent
         blending: false
@@ -174,6 +174,7 @@ Item {
         property real ambientLight: parent.ambientLight
 
         property size virtualResolution: parent.virtualResolution
+        property real frameShininess: appSettings.frameShininess
 
         // Extra uniforms to match shared uniform block
         property real time: timeManager.time
@@ -193,10 +194,9 @@ Item {
         property real displayTerminalFrame: dynamicShader.displayTerminalFrame
         property size scaleNoiseSize: Qt.size((width * 0.75) / (512 * appSettings.windowScaling * appSettings.totalFontScaling),
                                               (height * 0.75) / (512 * appSettings.windowScaling * appSettings.totalFontScaling))
-        property real screenShadowCoeff: 0
         property real frameShadowCoeff: 0
         property color frameColor: backgroundColor
-        property size margin: Qt.size(0, 0)
+        property real frameSize: appSettings.frameSize
         property real prevLastUpdate: burnInEffect.prevLastUpdate
 
         blending: false

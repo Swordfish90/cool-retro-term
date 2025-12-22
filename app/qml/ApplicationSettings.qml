@@ -73,16 +73,11 @@ QtObject {
 
     property string _backgroundColor: "#000000"
     property string _fontColor: "#ff8100"
-    property string saturatedColor: Utils.mix(Utils.strToColor("#FFFFFF"),
-                                              Utils.strToColor(_fontColor),
-                                              saturationColor * 0.5)
-    property color fontColor: Utils.mix(Utils.strToColor(saturatedColor),
-                                        Utils.strToColor(_backgroundColor),
-                                        0.7 + (contrast * 0.3))
-    property color backgroundColor: Utils.mix(Utils.strToColor(
-                                                  _backgroundColor),
-                                              Utils.strToColor(saturatedColor),
-                                              0.7 + (contrast * 0.3))
+    property string _frameColor: "#ffffff"
+    property string saturatedColor: Utils.mix(Utils.strToColor(_fontColor), Utils.strToColor("#FFFFFF"), (saturationColor * 0.5))
+    property color fontColor: Utils.mix(Utils.strToColor(_backgroundColor), Utils.strToColor(saturatedColor), (0.7 + (contrast * 0.3)))
+    property color backgroundColor: Utils.mix(Utils.strToColor(saturatedColor), Utils.strToColor(_backgroundColor), (0.7 + (contrast * 0.3)))
+    property color frameColor: Utils.strToColor(_frameColor)
 
     property real staticNoise: 0.12
     property real screenCurvature: 0.3
@@ -100,13 +95,14 @@ QtObject {
 
     property real rbgShift: 0.0
 
+    property real _frameShininess: 0.2
+    property real frameShininess: _frameShininess * 0.5
+
     property real _margin: 0.5
-    property real _frameMargin: 0.5
-
     property real margin: Utils.lint(1.0, 20.0, _margin)
-    property real frameMargin: Utils.lint(1.0, 50.0, _frameMargin)
 
-    property real totalMargin: frameMargin + margin
+    property real _frameSize: 0.2
+    property real frameSize: _frameSize * 0.1
 
     readonly property int no_rasterization: 0
     readonly property int scanline_rasterization: 1
@@ -304,7 +300,9 @@ QtObject {
             "fontWidth": fontWidth,
             "margin": _margin,
             "blinkingCursor": blinkingCursor,
-            "frameMargin": _frameMargin,
+            "frameSize": _frameSize,
+            "frameColor": _frameColor,
+            "frameShininess": _frameShininess
         }
         return settings
     }
@@ -413,7 +411,9 @@ QtObject {
         lineSpacing = settings.lineSpacing !== undefined ? settings.lineSpacing : lineSpacing
 
         _margin = settings.margin !== undefined ? settings.margin : _margin
-        _frameMargin = settings.frameMargin !== undefined ? settings.frameMargin : _frameMargin
+        _frameSize = settings.frameSize !== undefined ? settings.frameSize : _frameSize
+        _frameColor = settings.frameColor !== undefined ? settings.frameColor : _frameColor
+        _frameShininess = settings.frameShininess !== undefined ? settings.frameShininess : _frameShininess
 
         blinkingCursor = settings.blinkingCursor !== undefined ? settings.blinkingCursor : blinkingCursor
     }
@@ -498,7 +498,9 @@ QtObject {
                 "windowOpacity": 1,
                 "margin": 0.5,
                 "blinkingCursor": false,
-                "frameMargin": 0.1
+                "frameSize": 0.1,
+                "frameColor": "#ffffff",
+                "frameShininess": 0.2
             }'
             builtin: true
         }
@@ -528,7 +530,9 @@ QtObject {
                 "windowOpacity": 1,
                 "margin": 0.5,
                 "blinkingCursor": false,
-                "frameMargin": 0.1
+                "frameSize": 0.1,
+                "frameColor": "#ffffff",
+                "frameShininess": 0.2
             }'
             builtin: true
         }
@@ -559,7 +563,9 @@ QtObject {
                 "windowOpacity": 1,
                 "margin": 0.5,
                 "blinkingCursor": false,
-                "frameMargin": 0.1
+                "frameSize": 0.1,
+                "frameColor": "#ffffff",
+                "frameShininess": 0.2
             }'
             builtin: true
         }
@@ -590,7 +596,9 @@ QtObject {
                 "windowOpacity": 1,
                 "margin": 0.5,
                 "blinkingCursor": false,
-                "frameMargin": 0.1
+                "frameSize": 0.1,
+                "frameColor": "#ffffff",
+                "frameShininess": 0.2
             }'
             builtin: true
         }
@@ -621,7 +629,9 @@ QtObject {
                 "windowOpacity": 1,
                 "margin": 0.5,
                 "blinkingCursor": false,
-                "frameMargin": 0.2
+                "frameSize": 0.2,
+                "frameColor": "#ffffff",
+                "frameShininess": 0.2
             }'
             builtin: true
         }
@@ -652,7 +662,9 @@ QtObject {
                 "windowOpacity": 1,
                 "margin": 0.5,
                 "blinkingCursor": false,
-                "frameMargin": 0.5
+                "frameSize": 0.5,
+                "frameColor": "#ffffff",
+                "frameShininess": 0.2
             }'
             builtin: true
         }
@@ -683,7 +695,9 @@ QtObject {
                 "windowOpacity": 1,
                 "margin": 0.5,
                 "blinkingCursor": false,
-                "frameMargin": 0.2
+                "frameSize": 0.2,
+                "frameColor": "#ffffff",
+                "frameShininess": 0.2
             }'
             builtin: true
         }
@@ -714,7 +728,9 @@ QtObject {
                 "windowOpacity": 1,
                 "margin": 0.5,
                 "blinkingCursor": false,
-                "frameMargin": 0.1
+                "frameSize": 0.1,
+                "frameColor": "#ffffff",
+                "frameShininess": 0.2
             }'
             builtin: true
         }
@@ -745,7 +761,9 @@ QtObject {
                 "windowOpacity": 0.7,
                 "margin": 0.1,
                 "blinkingCursor": false,
-                "frameMargin": 0
+                "frameSize": 0,
+                "frameColor": "#ffffff",
+                "frameShininess": 0.2
             }'
             builtin: true
         }

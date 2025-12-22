@@ -139,11 +139,10 @@ Loader {
             property real screen_brightness: 1.0
             property real bloom: 0
             property real rbgShift: 0
-            property real screenShadowCoeff: 0
             property real frameShadowCoeff: 0
+            property real frameShininess: 0
             property color frameColor: backgroundColor
-            property size margin: Qt.size(0, 0)
-
+            property real frameSize: 0
             fragmentShader: "qrc:/shaders/burn_in.frag.qsb"
             vertexShader: "qrc:/shaders/passthrough.vert.qsb"
 

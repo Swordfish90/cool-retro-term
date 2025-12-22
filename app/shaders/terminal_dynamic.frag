@@ -35,10 +35,10 @@ layout(std140, binding = 0) uniform ubuf {
     float screen_brightness;
     float bloom;
     float rbgShift;
-    float screenShadowCoeff;
     float frameShadowCoeff;
+    float frameShininess;
     vec4 frameColor;
-    vec2 margin;
+    float frameSize;
     float prevLastUpdate;
 };
 
@@ -51,6 +51,13 @@ float min2(vec2 v) { return min(v.x, v.y); }
 float prod2(vec2 v) { return v.x * v.y; }
 float sum2(vec2 v) { return v.x + v.y; }
 float rgb2grey(vec3 v) { return dot(v, vec3(0.21, 0.72, 0.04)); }
+
+vec2 distortCoordinates(vec2 coords){
+    vec2 paddedCoords = coords * (vec2(1.0) + frameSize * 2.0) - frameSize;
+    vec2 cc = (paddedCoords - vec2(0.5));
+    float dist = dot(cc, cc) * screenCurvature;
+    return (paddedCoords + cc * (1.0 + dist) * dist);
+}
 
 vec3 applyRasterization(vec2 screenCoords, vec3 texel, vec2 virtualRes, float intensity, int mode) {
     if (intensity <= 0.0 || mode == 0) {
@@ -105,11 +112,6 @@ float randomPass(vec2 coords){
     return fract(smoothstep(-120.0, 0.0, coords.y - (virtualResolution.y + 120.0) * fract(time * 0.15)));
 }
 
-vec2 barrel(vec2 v, vec2 cc) {
-    float distortion = dot(cc, cc) * screenCurvature;
-    return (v - cc * (1.0 + distortion) * distortion);
-}
-
 vec3 convertWithChroma(vec3 inColor) {
     vec3 outColor = fontColor.rgb * rgb2grey(inColor);
     if (chromaColor != 0.0) {
@@ -122,7 +124,7 @@ void main() {
     vec2 cc = vec2(0.5) - qt_TexCoord0;
     float distance = length(cc);
 
-    vec2 staticCoords = barrel(qt_TexCoord0, cc);
+    vec2 staticCoords = distortCoordinates(qt_TexCoord0);
     vec2 coords = qt_TexCoord0;
 
     float dst = sin((coords.y + time) * vDistortionFreq);
@@ -156,7 +158,9 @@ void main() {
 
     if (displayTerminalFrame > 0.0) {
         vec4 frameColor = texture(frameSource, qt_TexCoord0);
-        finalColor = mix(finalColor, frameColor.rgb, frameColor.a);
+        vec3 reflection = max(finalColor - backgroundColor.rgb, vec3(0.0));
+        reflection *= frameShininess;
+        finalColor = mix(finalColor, frameColor.rgb + reflection, frameColor.a);
     }
 
     fragColor = vec4(finalColor, qt_Opacity);

@@ -98,7 +98,7 @@ Item{
         id: kterminal
 
         property int textureResolutionScale: appSettings.lowResolutionFont ? devicePixelRatio : 1
-        property int margin: appSettings.totalMargin / screenScaling
+        property int margin: appSettings.margin / screenScaling
         property int totalWidth: Math.floor(parent.width / (screenScaling * fontWidth))
         property int totalHeight: Math.floor(parent.height / screenScaling)
 
@@ -213,7 +213,8 @@ Item{
     property alias contextmenu: menuLoader.item
 
     MouseArea {
-        property real margin: appSettings.totalMargin
+        property real margin: appSettings.margin
+        property real frameSize: appSettings.frameSize
 
         acceptedButtons: Qt.LeftButton | Qt.MiddleButton | Qt.RightButton
         anchors.fill: parent
@@ -247,9 +248,12 @@ Item{
             kterminal.simulateMouseMove(coord.x, coord.y, mouse.button, mouse.buttons, mouse.modifiers);
         }
 
-        function correctDistortion(x, y){
+        function correctDistortion(x, y) {
             x = (x - margin) / width;
             y = (y - margin) / height;
+
+            x = x * (1 + frameSize * 2) - frameSize;
+            y = y * (1 + frameSize * 2) - frameSize;
 
             var cc = Qt.size(0.5 - x, 0.5 - y);
             var distortion = (cc.height * cc.height + cc.width * cc.width) * appSettings.screenCurvature * appSettings.screenCurvatureSize;

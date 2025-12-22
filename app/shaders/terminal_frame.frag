@@ -31,10 +31,10 @@ layout(std140, binding = 0) uniform ubuf {
     float screen_brightness;
     float bloom;
     float rbgShift;
-    float screenShadowCoeff;
     float frameShadowCoeff;
+    float frameShininess;
     vec4 frameColor;
-    vec2 margin;
+    float frameSize;
     float prevLastUpdate;
 };
 
@@ -42,36 +42,49 @@ float min2(vec2 v) { return min(v.x, v.y); }
 float max2(vec2 v) { return max(v.x, v.y); }
 float prod2(vec2 v) { return v.x * v.y; }
 float sum2(vec2 v) { return v.x + v.y; }
+float hash(vec2 v) { return fract(sin(dot(v, vec2(12.9898, 78.233))) * 43758.5453); }
 
 vec2 distortCoordinates(vec2 coords){
-    vec2 cc = (coords - vec2(0.5));
+    vec2 paddedCoords = coords * (vec2(1.0) + frameSize * 2.0) - frameSize;
+    vec2 cc = (paddedCoords - vec2(0.5));
     float dist = dot(cc, cc) * screenCurvature;
-    return (coords + cc * (1.0 + dist) * dist);
-}
-
-vec2 positiveLog(vec2 x) {
-    return clamp(log(x), vec2(0.0), vec2(100.0));
+    return (paddedCoords + cc * (1.0 + dist) * dist);
 }
 
 void main() {
     vec2 staticCoords = qt_TexCoord0;
-    vec2 coords = distortCoordinates(staticCoords) * (vec2(1.0) + margin * 2.0) - margin;
+    vec2 coords = distortCoordinates(staticCoords);
 
-    vec2 vignetteCoords = staticCoords * (1.0 - staticCoords.yx);
-    float vignette = pow(prod2(vignetteCoords) * 15.0, 0.25);
+    float depth = 1.0 - 5.0 * min(min2(staticCoords), min2(vec2(1.0) - staticCoords));
 
-    vec3 color = frameColor.rgb * vec3(1.0 - vignette);
-    float alpha = 0.0;
+    float occlusionWidth = 0.025;
+    float seamWidth = occlusionWidth;
 
-    float frameShadow = max2(positiveLog(-coords * frameShadowCoeff + vec2(1.0)) + positiveLog(coords * frameShadowCoeff - (vec2(frameShadowCoeff) - vec2(1.0))));
-    frameShadow = max(sqrt(frameShadow), 0.0);
-    color *= frameShadow;
-    alpha = sum2(1.0 - step(vec2(0.0), coords) + step(vec2(1.0), coords));
-    alpha = clamp(alpha, 0.0, 1.0);
-    alpha *= mix(1.0, 0.9, frameShadow);
+    float e = min(
+        smoothstep(-seamWidth, seamWidth, coords.x - coords.y),
+        smoothstep(-seamWidth, seamWidth, coords.x - (1.0 - coords.y))
+    );
+    float s = min(
+        smoothstep(-seamWidth, seamWidth, coords.y - coords.x),
+        smoothstep(-seamWidth, seamWidth, coords.x - (1.0 - coords.y))
+    );
+    float w = min(
+        smoothstep(-seamWidth, seamWidth, coords.y - coords.x),
+        smoothstep(-seamWidth, seamWidth, (1.0 - coords.x) - coords.y)
+    );
+    float n = min(
+        smoothstep(-seamWidth, seamWidth, coords.x - coords.y),
+        smoothstep(-seamWidth, seamWidth, (1.0 - coords.x) - coords.y)
+    );
 
-    float screenShadow = 1.0 - prod2(positiveLog(coords * screenShadowCoeff + vec2(1.0)) * positiveLog(-coords * screenShadowCoeff + vec2(screenShadowCoeff + 1.0)));
-    alpha = max(0.8 * screenShadow, alpha);
+    vec2 clampedCoords = clamp(coords, vec2(0.0), vec2(1.0));
+    float innerEdgeDist = length(coords - clampedCoords);
+    float occlusion = smoothstep(0.0, occlusionWidth, innerEdgeDist);
 
+    float frameShadow = e * 0.75 + w * 0.75 + n * 0.50 + s * 1.00;
+    frameShadow *= sqrt(occlusion) * depth;
+
+    vec3 color = frameColor.rgb * frameShadow;
+    float alpha = clamp(sum2(1.0 - step(vec2(0.0), coords) + step(vec2(1.0), coords)), 0.0, 1.0);
     fragColor = vec4(color * alpha, alpha) * qt_Opacity;
 }

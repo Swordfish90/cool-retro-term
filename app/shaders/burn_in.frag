@@ -31,10 +31,8 @@ layout(std140, binding = 0) uniform ubuf {
     float screen_brightness;
     float bloom;
     float rbgShift;
-    float screenShadowCoeff;
     float frameShadowCoeff;
     vec4 frameColor;
-    vec2 margin;
     float prevLastUpdate;
 };
 

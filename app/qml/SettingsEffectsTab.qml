@@ -86,6 +86,11 @@ ColumnLayout {
                 onNewValue: function(newValue) { appSettings.rbgShift = newValue }
                 value: appSettings.rbgShift
             }
+            CheckableSlider {
+                name: qsTr("Frame Shininess")
+                onNewValue: function(newValue) { appSettings._frameShininess = newValue }
+                value: appSettings._frameShininess
+            }
         }
     }
 }

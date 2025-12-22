@@ -215,8 +215,8 @@ ColumnLayout {
                 text: qsTr("Frame size")
             }
             SimpleSlider {
-                onValueChanged: appSettings._frameMargin = value
-                value: appSettings._frameMargin
+                onValueChanged: appSettings._frameSize = value
+                value: appSettings._frameSize
             }
             Label {
                 text: qsTr("Opacity")
