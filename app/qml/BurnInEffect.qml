@@ -105,6 +105,8 @@ Loader {
         ShaderEffect {
             id: burnInShaderEffect
 
+            property real time: timeManager.time
+
             property variant txt_source: kterminalSource
             property variant burnInSource: burnInEffectSource
             property real burnInTime: burnInFadeTime
@@ -114,37 +116,8 @@ Loader {
             anchors.fill: parent
             blending: false
 
-            // Extra uniforms required by shared block
-            property real qt_Opacity: 1.0
-            property real time: timeManager.time
-            property color fontColor: appSettings.fontColor
-            property color backgroundColor: appSettings.backgroundColor
-            property real shadowLength: 0
-            property size virtualResolution: Qt.size(width, height)
-            property real rasterizationIntensity: 0
-            property int rasterizationMode: 0
-            property real burnIn: appSettings.burnIn
-            property real staticNoise: 0
-            property real screenCurvature: 0
-            property real glowingLine: 0
-            property real chromaColor: 0
-            property size jitterDisplacement: Qt.size(0, 0)
-            property real ambientLight: 0
-            property real jitter: 0
-            property real horizontalSync: 0
-            property real horizontalSyncStrength: 0
-            property real flickering: 0
-            property real displayTerminalFrame: 0
-            property size scaleNoiseSize: Qt.size(0, 0)
-            property real screen_brightness: 1.0
-            property real bloom: 0
-            property real rbgShift: 0
-            property real frameShadowCoeff: 0
-            property real frameShininess: 0
-            property color frameColor: backgroundColor
-            property real frameSize: 0
             fragmentShader: "qrc:/shaders/burn_in.frag.qsb"
-            vertexShader: "qrc:/shaders/passthrough.vert.qsb"
+            vertexShader: "qrc:/shaders/burn_in.vert.qsb"
 
             onStatusChanged: if (log) console.log(log) //Print warning messages
         }

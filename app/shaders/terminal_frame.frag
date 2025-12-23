@@ -6,36 +6,9 @@ layout(location = 0) out vec4 fragColor;
 layout(std140, binding = 0) uniform ubuf {
     mat4 qt_Matrix;
     float qt_Opacity;
-    float time;
-    vec4 fontColor;
-    vec4 backgroundColor;
-    float shadowLength;
-    vec2 virtualResolution;
-    float rasterizationIntensity;
-    int rasterizationMode;
-    float burnInLastUpdate;
-    float burnInTime;
-    float burnIn;
-    float staticNoise;
     float screenCurvature;
-    float glowingLine;
-    float chromaColor;
-    vec2 jitterDisplacement;
-    float ambientLight;
-    float jitter;
-    float horizontalSync;
-    float horizontalSyncStrength;
-    float flickering;
-    float displayTerminalFrame;
-    vec2 scaleNoiseSize;
-    float screen_brightness;
-    float bloom;
-    float rbgShift;
-    float frameShadowCoeff;
-    float frameShininess;
     vec4 frameColor;
     float frameSize;
-    float prevLastUpdate;
 };
 
 float min2(vec2 v) { return min(v.x, v.y); }

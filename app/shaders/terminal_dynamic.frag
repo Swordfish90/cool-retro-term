@@ -1,5 +1,18 @@
 #version 440
 
+#ifndef CRT_RASTER_MODE
+#define CRT_RASTER_MODE 0
+#endif
+#ifndef CRT_BURN_IN
+#define CRT_BURN_IN 1
+#endif
+#ifndef CRT_DISPLAY_FRAME
+#define CRT_DISPLAY_FRAME 1
+#endif
+#ifndef CRT_CHROMA
+#define CRT_CHROMA 1
+#endif
+
 layout(location = 0) in vec2 qt_TexCoord0;
 layout(location = 1) in float vBrightness;
 layout(location = 2) in float vDistortionScale;
@@ -13,10 +26,8 @@ layout(std140, binding = 0) uniform ubuf {
     float time;
     vec4 fontColor;
     vec4 backgroundColor;
-    float shadowLength;
     vec2 virtualResolution;
     float rasterizationIntensity;
-    int rasterizationMode;
     float burnInLastUpdate;
     float burnInTime;
     float burnIn;
@@ -32,14 +43,8 @@ layout(std140, binding = 0) uniform ubuf {
     float flickering;
     float displayTerminalFrame;
     vec2 scaleNoiseSize;
-    float screen_brightness;
-    float bloom;
-    float rbgShift;
-    float frameShadowCoeff;
     float frameShininess;
-    vec4 frameColor;
     float frameSize;
-    float prevLastUpdate;
 };
 
 layout(binding = 0) uniform sampler2D noiseSource;
@@ -59,53 +64,57 @@ vec2 distortCoordinates(vec2 coords){
     return (paddedCoords + cc * (1.0 + dist) * dist);
 }
 
-vec3 applyRasterization(vec2 screenCoords, vec3 texel, vec2 virtualRes, float intensity, int mode) {
-    if (intensity <= 0.0 || mode == 0) {
+vec3 applyRasterization(vec2 screenCoords, vec3 texel, vec2 virtualRes, float intensity) {
+#if CRT_RASTER_MODE == 0
+    return texel;
+#else
+    if (intensity <= 0.0) {
         return texel;
     }
 
     const float INTENSITY = 0.30;
     const float BRIGHTBOOST = 0.30;
 
-    if (mode == 1) { // scanline
-        vec3 pixelHigh = ((1.0 + BRIGHTBOOST) - (0.2 * texel)) * texel;
-        vec3 pixelLow  = ((1.0 - INTENSITY) + (0.1 * texel)) * texel;
+#if CRT_RASTER_MODE == 1
+    vec3 pixelHigh = ((1.0 + BRIGHTBOOST) - (0.2 * texel)) * texel;
+    vec3 pixelLow  = ((1.0 - INTENSITY) + (0.1 * texel)) * texel;
 
-        vec2 coords = fract(screenCoords * virtualRes) * 2.0 - vec2(1.0);
-        float mask = 1.0 - abs(coords.y);
+    vec2 coords = fract(screenCoords * virtualRes) * 2.0 - vec2(1.0);
+    float mask = 1.0 - abs(coords.y);
 
-        vec3 rasterizationColor = mix(pixelLow, pixelHigh, mask);
-        return mix(texel, rasterizationColor, intensity);
-    } else if (mode == 2) { // pixel
-        vec3 pixelHigh = ((1.0 + BRIGHTBOOST) - (0.2 * texel)) * texel;
-        vec3 pixelLow  = ((1.0 - INTENSITY) + (0.1 * texel)) * texel;
+    vec3 rasterizationColor = mix(pixelLow, pixelHigh, mask);
+    return mix(texel, rasterizationColor, intensity);
+#elif CRT_RASTER_MODE == 2
+    vec3 pixelHigh = ((1.0 + BRIGHTBOOST) - (0.2 * texel)) * texel;
+    vec3 pixelLow  = ((1.0 - INTENSITY) + (0.1 * texel)) * texel;
 
-        vec2 coords = fract(screenCoords * virtualRes) * 2.0 - vec2(1.0);
-        coords = coords * coords;
-        float mask = 1.0 - coords.x - coords.y;
+    vec2 coords = fract(screenCoords * virtualRes) * 2.0 - vec2(1.0);
+    coords = coords * coords;
+    float mask = 1.0 - coords.x - coords.y;
 
-        vec3 rasterizationColor = mix(pixelLow, pixelHigh, mask);
-        return mix(texel, rasterizationColor, intensity);
-    } else if (mode == 3) { // subpixel
-        const float SUBPIXELS = 3.0;
-        vec3 offsets = vec3(3.141592654) * vec3(0.5, 0.5 - 2.0 / 3.0, 0.5 - 4.0 / 3.0);
+    vec3 rasterizationColor = mix(pixelLow, pixelHigh, mask);
+    return mix(texel, rasterizationColor, intensity);
+#elif CRT_RASTER_MODE == 3
+    const float SUBPIXELS = 3.0;
+    vec3 offsets = vec3(3.141592654) * vec3(0.5, 0.5 - 2.0 / 3.0, 0.5 - 4.0 / 3.0);
 
-        vec2 omega = vec2(3.141592654) * vec2(2.0) * virtualRes;
-        vec2 angle = screenCoords * omega;
-        vec3 xfactors = (SUBPIXELS + sin(angle.x + offsets)) / (SUBPIXELS + 1.0);
+    vec2 omega = vec2(3.141592654) * vec2(2.0) * virtualRes;
+    vec2 angle = screenCoords * omega;
+    vec3 xfactors = (SUBPIXELS + sin(angle.x + offsets)) / (SUBPIXELS + 1.0);
 
-        vec3 result = texel * xfactors;
-        vec3 pixelHigh = ((1.0 + BRIGHTBOOST) - (0.2 * result)) * result;
-        vec3 pixelLow  = ((1.0 - INTENSITY) + (0.1 * result)) * result;
+    vec3 result = texel * xfactors;
+    vec3 pixelHigh = ((1.0 + BRIGHTBOOST) - (0.2 * result)) * result;
+    vec3 pixelLow  = ((1.0 - INTENSITY) + (0.1 * result)) * result;
 
-        vec2 coords = fract(screenCoords * virtualRes) * 2.0 - vec2(1.0);
-        float mask = 1.0 - abs(coords.y);
+    vec2 coords = fract(screenCoords * virtualRes) * 2.0 - vec2(1.0);
+    float mask = 1.0 - abs(coords.y);
 
-        vec3 rasterizationColor = mix(pixelLow, pixelHigh, mask);
-        return mix(texel, rasterizationColor, intensity);
-    }
-
+    vec3 rasterizationColor = mix(pixelLow, pixelHigh, mask);
+    return mix(texel, rasterizationColor, intensity);
+#else
     return texel;
+#endif
+#endif
 }
 
 float randomPass(vec2 coords){
@@ -113,11 +122,13 @@ float randomPass(vec2 coords){
 }
 
 vec3 convertWithChroma(vec3 inColor) {
+#if CRT_CHROMA == 1
     vec3 outColor = fontColor.rgb * rgb2grey(inColor);
-    if (chromaColor != 0.0) {
-        outColor = fontColor.rgb * mix(vec3(rgb2grey(inColor)), inColor, chromaColor);
-    }
+    outColor = fontColor.rgb * mix(vec3(rgb2grey(inColor)), inColor, chromaColor);
     return outColor;
+#else
+    return fontColor.rgb * rgb2grey(inColor);
+#endif
 }
 
 void main() {
@@ -140,15 +151,15 @@ void main() {
 
     vec3 txt_color = texture(screenBuffer, txt_coords).rgb;
 
-    if (burnIn > 0.0) {
-        vec4 txt_blur = texture(burnInSource, staticCoords);
-        float blurDecay = clamp((time - burnInLastUpdate) * burnInTime, 0.0, 1.0);
-        vec3 burnInColor = 0.65 * (txt_blur.rgb - vec3(blurDecay));
-        txt_color = max(txt_color, convertWithChroma(burnInColor));
-    }
+#if CRT_BURN_IN == 1
+    vec4 txt_blur = texture(burnInSource, staticCoords);
+    float blurDecay = clamp((time - burnInLastUpdate) * burnInTime, 0.0, 1.0);
+    vec3 burnInColor = 0.65 * (txt_blur.rgb - vec3(blurDecay));
+    txt_color = max(txt_color, convertWithChroma(burnInColor));
+#endif
 
     txt_color += fontColor.rgb * vec3(color);
-    txt_color = applyRasterization(staticCoords, txt_color, virtualResolution, rasterizationIntensity, rasterizationMode);
+    txt_color = applyRasterization(staticCoords, txt_color, virtualResolution, rasterizationIntensity);
 
     vec3 finalColor = txt_color;
     float brightness = mix(1.0, vBrightness, step(0.0, flickering));
@@ -156,12 +167,12 @@ void main() {
 
     finalColor += vec3(ambientLight) * (1.0 - distance) * (1.0 - distance);
 
-    if (displayTerminalFrame > 0.0) {
-        vec4 frameColor = texture(frameSource, qt_TexCoord0);
-        vec3 reflection = max(finalColor - backgroundColor.rgb, vec3(0.0));
-        reflection *= frameShininess;
-        finalColor = mix(finalColor, frameColor.rgb + reflection, frameColor.a);
-    }
+#if CRT_DISPLAY_FRAME == 1
+    vec4 frameColor = texture(frameSource, qt_TexCoord0);
+    vec3 reflection = max(finalColor - backgroundColor.rgb, vec3(0.0));
+    reflection *= frameShininess;
+    finalColor = mix(finalColor, frameColor.rgb + reflection, frameColor.a);
+#endif
 
     fragColor = vec4(finalColor, qt_Opacity);
 }

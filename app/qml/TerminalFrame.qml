@@ -42,35 +42,9 @@ ShaderEffect {
 
     property real frameSize: appSettings.frameSize
 
-    // Uniforms required by the shared block
     property real qt_Opacity: 1.0
-    property real time: timeManager.time
-    property color fontColor: appSettings.fontColor
-    property color backgroundColor: appSettings.backgroundColor
-    property real shadowLength: 0
-    property size virtualResolution: Qt.size(width, height)
-    property real rasterizationIntensity: 0
-    property int rasterizationMode: 0
-    property real burnInLastUpdate: 0
-    property real burnInTime: 0
-    property real burnIn: 0
-    property real staticNoise: 0
-    property real glowingLine: 0
-    property real chromaColor: 0
-    property size jitterDisplacement: Qt.size(0, 0)
-    property real ambientLight: _ambientLight
-    property real jitter: 0
-    property real horizontalSync: 0
-    property real horizontalSyncStrength: 0
-    property real flickering: 0
-    property real displayTerminalFrame: 0
-    property size scaleNoiseSize: Qt.size(0, 0)
-    property real screen_brightness: 1.0
-    property real bloom: 0
-    property real rbgShift: 0
-    property real prevLastUpdate: 0
 
-    vertexShader: "qrc:/shaders/passthrough.vert.qsb"
+    vertexShader: "qrc:/shaders/terminal_frame.vert.qsb"
     fragmentShader: "qrc:/shaders/terminal_frame.frag.qsb"
 
     onStatusChanged: if (log) console.log(log) //Print warning messages

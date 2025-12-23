@@ -21,6 +21,9 @@ isEmpty(QSB_BIN): QSB_BIN = $$[QT_INSTALL_BINS]/qsb
 
 SHADERS_DIR = $${_PRO_FILE_PWD_}/shaders
 SHADERS += $$files($$SHADERS_DIR/*.frag) $$files($$SHADERS_DIR/*.vert)
+SHADERS -= $$SHADERS_DIR/terminal_dynamic.frag
+SHADERS -= $$SHADERS_DIR/terminal_static.frag
+SHADERS -= $$SHADERS_DIR/passthrough.vert
 
 qsb.input = SHADERS
 qsb.output = ../../app/shaders/${QMAKE_FILE_NAME}.qsb
@@ -31,6 +34,45 @@ qsb.variable_out = QSB_FILES
 QMAKE_EXTRA_COMPILERS += qsb
 PRE_TARGETDEPS += $$QSB_FILES
 OTHER_FILES += $$SHADERS $$QSB_FILES
+
+DYNAMIC_SHADER = $$SHADERS_DIR/terminal_dynamic.frag
+STATIC_SHADER = $$SHADERS_DIR/terminal_static.frag
+
+RASTER_MODES = 0 1 2 3
+BINARY_FLAGS = 0 1
+VARIANT_SHADER_DIR = $$relative_path($$PWD/shaders, $$OUT_PWD)
+
+for(raster_mode, RASTER_MODES) {
+    for(burn_in, BINARY_FLAGS) {
+        for(display_frame, BINARY_FLAGS) {
+            for(chroma_on, BINARY_FLAGS) {
+                dynamic_variant = terminal_dynamic_raster$${raster_mode}_burn$${burn_in}_frame$${display_frame}_chroma$${chroma_on}
+                dynamic_output = $${VARIANT_SHADER_DIR}/$${dynamic_variant}.frag.qsb
+                dynamic_target = shader_variant_$${dynamic_variant}
+                $${dynamic_target}.target = $${dynamic_output}
+                $${dynamic_target}.depends = $$DYNAMIC_SHADER
+                $${dynamic_target}.commands = $$QSB_BIN --glsl \"100 es,120,150\" --hlsl 50 --msl 12 --qt6 -DCRT_RASTER_MODE=$${raster_mode} -DCRT_BURN_IN=$${burn_in} -DCRT_DISPLAY_FRAME=$${display_frame} -DCRT_CHROMA=$${chroma_on} -o $${dynamic_output} $$DYNAMIC_SHADER
+                QMAKE_EXTRA_TARGETS += $${dynamic_target}
+            }
+        }
+    }
+}
+
+for(rgb_shift, BINARY_FLAGS) {
+    for(chroma_on, BINARY_FLAGS) {
+        for(bloom_on, BINARY_FLAGS) {
+            for(curve_on, BINARY_FLAGS) {
+                static_variant = terminal_static_rgb$${rgb_shift}_chroma$${chroma_on}_bloom$${bloom_on}_curve$${curve_on}
+                static_output = $${VARIANT_SHADER_DIR}/$${static_variant}.frag.qsb
+                static_target = shader_variant_$${static_variant}
+                $${static_target}.target = $${static_output}
+                $${static_target}.depends = $$STATIC_SHADER
+                $${static_target}.commands = $$QSB_BIN --glsl \"100 es,120,150\" --hlsl 50 --msl 12 --qt6 -DCRT_RGB_SHIFT=$${rgb_shift} -DCRT_CHROMA=$${chroma_on} -DCRT_BLOOM=$${bloom_on} -DCRT_CURVATURE=$${curve_on} -o $${static_output} $$STATIC_SHADER
+                QMAKE_EXTRA_TARGETS += $${static_target}
+            }
+        }
+    }
+}
 
 #########################################
 ##              INTALLS

@@ -9,10 +9,8 @@ layout(std140, binding = 0) uniform ubuf {
     float time;
     vec4 fontColor;
     vec4 backgroundColor;
-    float shadowLength;
     vec2 virtualResolution;
     float rasterizationIntensity;
-    int rasterizationMode;
     float burnInLastUpdate;
     float burnInTime;
     float burnIn;
@@ -28,14 +26,8 @@ layout(std140, binding = 0) uniform ubuf {
     float flickering;
     float displayTerminalFrame;
     vec2 scaleNoiseSize;
-    float screen_brightness;
-    float bloom;
-    float rbgShift;
-    float frameShadowCoeff;
     float frameShininess;
-    vec4 frameColor;
     float frameSize;
-    float prevLastUpdate;
 };
 
 layout(binding = 0) uniform sampler2D noiseSource;

@@ -23,6 +23,30 @@ import QtQuick 2.2
 import "utils.js" as Utils
 
 Item {
+    function dynamicFragmentPath() {
+        var rasterMode = appSettings.rasterization;
+        var burnInOn = appSettings.burnIn > 0 ? 1 : 0;
+        var frameOn = (appSettings._frameSize > 0 || appSettings.screenCurvature > 0) ? 1 : 0;
+        var chromaOn = appSettings.chromaColor > 0 ? 1 : 0;
+        return "qrc:/shaders/terminal_dynamic_raster" + rasterMode +
+               "_burn" + burnInOn +
+               "_frame" + frameOn +
+               "_chroma" + chromaOn +
+               ".frag.qsb";
+    }
+
+    function staticFragmentPath() {
+        var rgbShiftOn = appSettings.rbgShift > 0 ? 1 : 0;
+        var chromaOn = appSettings.chromaColor > 0 ? 1 : 0;
+        var bloomOn = appSettings.bloom > 0 ? 1 : 0;
+        var curvatureOn = (appSettings.screenCurvature > 0 || appSettings.frameSize > 0) ? 1 : 0;
+        return "qrc:/shaders/terminal_static_rgb" + rgbShiftOn +
+               "_chroma" + chromaOn +
+               "_bloom" + bloomOn +
+               "_curve" + curvatureOn +
+               ".frag.qsb";
+    }
+
     property ShaderEffectSource source
     property BurnInEffect burnInEffect
     property ShaderEffectSource bloomSource
@@ -69,7 +93,6 @@ Item {
 
         property real jitter: appSettings.jitter
         property size jitterDisplacement: Qt.size(0.007 * jitter, 0.002 * jitter)
-        property real shadowLength: 0.25 * screenCurvature * Utils.lint(0.50, 1.5, ambientLight)
         property real staticNoise: appSettings.staticNoise
         property size scaleNoiseSize: Qt.size((width * 0.75) / (noiseTexture.width * appSettings.windowScaling * appSettings.totalFontScaling),
                                               (height * 0.75) / (noiseTexture.height * appSettings.windowScaling * appSettings.totalFontScaling))
@@ -79,21 +102,13 @@ Item {
         // Rasterization might display oversamping issues if virtual resolution is close to physical display resolution.
         // We progressively disable rasterization from 4x up to 2x resolution.
         property real rasterizationIntensity: Utils.smoothstep(2.0, 4.0, _screenDensity)
-        property int rasterizationMode: appSettings.rasterization
 
         property real displayTerminalFrame: appSettings._frameSize > 0 || appSettings.screenCurvature > 0
 
         property real time: timeManager.time
         property ShaderEffectSource noiseSource: noiseShaderSource
 
-        // Extra uniforms expected by the shared uniform block
-        property real frameShadowCoeff: 0
-        property color frameColor: backgroundColor
         property real frameSize: appSettings.frameSize
-        property real prevLastUpdate: burnInEffect.prevLastUpdate
-        property real screen_brightness: Utils.lint(0.5, 1.5, appSettings.brightness)
-        property real bloom: appSettings.bloom
-        property real rbgShift: (appSettings.rbgShift / Math.max(width, 1)) * appSettings.totalFontScaling
         property real frameShininess: appSettings.frameShininess
 
         anchors.fill: parent
@@ -116,7 +131,7 @@ Item {
         }
 
         vertexShader: "qrc:/shaders/terminal_dynamic.vert.qsb"
-        fragmentShader: "qrc:/shaders/terminal_dynamic.frag.qsb"
+        fragmentShader: dynamicFragmentPath()
 
         onStatusChanged: if (log) console.log(log)
     }
@@ -167,43 +182,15 @@ Item {
 
         property real rbgShift: (appSettings.rbgShift / width) * appSettings.totalFontScaling
 
-        property int rasterization: appSettings.rasterization
-
         property real screen_brightness: Utils.lint(0.5, 1.5, appSettings.brightness)
-
-        property real ambientLight: parent.ambientLight
-
-        property size virtualResolution: parent.virtualResolution
         property real frameShininess: appSettings.frameShininess
-
-        // Extra uniforms to match shared uniform block
-        property real time: timeManager.time
-        property real shadowLength: 0
-        property real rasterizationIntensity: Utils.smoothstep(2.0, 4.0, _screenDensity)
-        property int rasterizationMode: appSettings.rasterization
-        property real burnInLastUpdate: burnInEffect.lastUpdate
-        property real burnInTime: burnInEffect.burnInFadeTime
-        property real burnIn: appSettings.burnIn
-        property real staticNoise: appSettings.staticNoise
-        property real glowingLine: appSettings.glowingLine * 0.2
-        property size jitterDisplacement: Qt.size(0, 0)
-        property real jitter: appSettings.jitter
-        property real horizontalSync: appSettings.horizontalSync
-        property real horizontalSyncStrength: Utils.lint(0.05, 0.35, horizontalSync)
-        property real flickering: appSettings.flickering
-        property real displayTerminalFrame: dynamicShader.displayTerminalFrame
-        property size scaleNoiseSize: Qt.size((width * 0.75) / (512 * appSettings.windowScaling * appSettings.totalFontScaling),
-                                              (height * 0.75) / (512 * appSettings.windowScaling * appSettings.totalFontScaling))
-        property real frameShadowCoeff: 0
-        property color frameColor: backgroundColor
         property real frameSize: appSettings.frameSize
-        property real prevLastUpdate: burnInEffect.prevLastUpdate
 
         blending: false
         visible: false
 
-        vertexShader: "qrc:/shaders/passthrough.vert.qsb"
-        fragmentShader: "qrc:/shaders/terminal_static.frag.qsb"
+        vertexShader: "qrc:/shaders/terminal_static.vert.qsb"
+        fragmentShader: staticFragmentPath()
 
         onStatusChanged: if (log) console.log(log)
     }
