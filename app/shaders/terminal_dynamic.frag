@@ -169,8 +169,7 @@ void main() {
 
 #if CRT_DISPLAY_FRAME == 1
     vec4 frameColor = texture(frameSource, qt_TexCoord0);
-    vec3 reflection = max(finalColor - backgroundColor.rgb, vec3(0.0));
-    reflection *= frameShininess;
+    vec3 reflection = max(finalColor - backgroundColor.rgb, vec3(0.0)) * frameShininess;
     finalColor = mix(finalColor, frameColor.rgb + reflection, frameColor.a);
 #endif
 

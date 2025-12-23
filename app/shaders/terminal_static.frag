@@ -23,11 +23,11 @@ layout(std140, binding = 0) uniform ubuf {
     vec4 backgroundColor;
     float screenCurvature;
     float chromaColor;
-    float screen_brightness;
-    float bloom;
     float rbgShift;
     float frameShininess;
     float frameSize;
+    float screen_brightness;
+    float bloom;
 };
 
 layout(binding = 1) uniform sampler2D source;
@@ -67,7 +67,7 @@ void main() {
     shownDraw = max2(step(vec2(0.0), curvatureCoords) - step(vec2(1.0), curvatureCoords));
     isScreen = min2(step(vec2(0.0), curvatureCoords) - step(vec2(1.0), curvatureCoords));
     isReflection = shownDraw - isScreen;
-    txt_coords = -2.0 * curvatureCoords + 3.0 * step(vec2(0.0), curvatureCoords) * curvatureCoords - 3.0 * step(vec2(1.0), curvatureCoords) * curvatureCoords;
+    txt_coords = curvatureCoords * (-1.0 + 2.0 * step(vec2(0.0), curvatureCoords) - 2.0 * step(vec2(1.0), curvatureCoords));
 #endif
 
     vec3 txt_color = texture(source, txt_coords).rgb;
@@ -107,8 +107,7 @@ void main() {
 #endif
 
     if (frameShininess > 0.0) {
-        float shine = clamp(frameShininess, 0.0, 1.0);
-        vec3 reflectionColor = mix(bloomColor, finalColor, shine * 0.5);
+        vec3 reflectionColor = mix(backgroundColor.rgb + bloomColor, finalColor, frameShininess * 0.5);
         finalColor = mix(finalColor, reflectionColor, isReflection);
     }
 
