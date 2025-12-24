@@ -40,10 +40,12 @@ Item {
         var chromaOn = appSettings.chromaColor > 0 ? 1 : 0;
         var bloomOn = appSettings.bloom > 0 ? 1 : 0;
         var curvatureOn = (appSettings.screenCurvature > 0 || appSettings.frameSize > 0) ? 1 : 0;
+        var shineOn = appSettings.frameShininess > 0 ? 1 : 0;
         return "qrc:/shaders/terminal_static_rgb" + rgbShiftOn +
                "_chroma" + chromaOn +
                "_bloom" + bloomOn +
                "_curve" + curvatureOn +
+               "_shine" + shineOn +
                ".frag.qsb";
     }
 

@@ -9,6 +9,9 @@
 #ifndef CRT_BLOOM
 #define CRT_BLOOM 1
 #endif
+#ifndef CRT_FRAME_SHININESS
+#define CRT_FRAME_SHININESS 1
+#endif
 #ifndef CRT_CURVATURE
 #define CRT_CURVATURE 1
 #endif
@@ -92,24 +95,23 @@ void main() {
     finalColor = mix(backgroundColor.rgb, fontColor.rgb, greyscale_color * shownDraw);
 #endif
 
-    vec3 bloomColor;
-    float bloomAlpha;
-#if CRT_BLOOM == 1
+    vec3 bloomColor = finalColor;
+    float bloomAlpha = 0.0;
+#if CRT_BLOOM == 1 || CRT_FRAME_SHININESS == 1
     vec4 bloomFullColor = texture(bloomSource, txt_coords);
     bloomColor = convertWithChroma(bloomFullColor.rgb);
     bloomAlpha = bloomFullColor.a;
-
-    vec3 bloomOnScreen = bloomColor * isScreen;
-    finalColor += clamp(bloomOnScreen * bloom * bloomAlpha, 0.0, 0.5);
-#else
-    bloomColor = finalColor;
-    bloomAlpha = 0.0;
 #endif
 
-    if (frameShininess > 0.0) {
-        vec3 reflectionColor = mix(backgroundColor.rgb + bloomColor, finalColor, frameShininess * 0.5);
-        finalColor = mix(finalColor, reflectionColor, isReflection);
-    }
+#if CRT_BLOOM == 1
+    vec3 bloomOnScreen = bloomColor * isScreen;
+    finalColor += clamp(bloomOnScreen * bloom * bloomAlpha, 0.0, 0.5);
+#endif
+
+#if CRT_FRAME_SHININESS == 1
+    vec3 reflectionColor = mix(backgroundColor.rgb + bloomColor, finalColor, frameShininess * 0.5);
+    finalColor = mix(finalColor, reflectionColor, isReflection);
+#endif
 
     finalColor *= screen_brightness;
     fragColor = vec4(finalColor, qt_Opacity);

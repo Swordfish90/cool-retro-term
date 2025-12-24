@@ -27,6 +27,7 @@ ShaderTerminal {
     property alias terminalSize: terminal.terminalSize
 
     property real devicePixelRatio: terminalWindow.screen.devicePixelRatio
+    property bool loadBloomEffect: appSettings.bloom > 0 || appSettings._frameShininess > 0
 
     id: mainShader
     opacity: appSettings.windowOpacity * 0.3 + 0.7
@@ -53,7 +54,7 @@ ShaderTerminal {
     //  EFFECTS  ////////////////////////////////////////////////////////////////
     Loader {
         id: bloomEffectLoader
-        active: appSettings.bloom
+        active: loadBloomEffect
         asynchronous: true
         width: parent.width * appSettings.bloomQuality
         height: parent.height * appSettings.bloomQuality
@@ -66,7 +67,7 @@ ShaderTerminal {
     }
     Loader {
         id: bloomSourceLoader
-        active: appSettings.bloom !== 0
+        active: loadBloomEffect
         asynchronous: true
         sourceComponent: ShaderEffectSource {
             id: _bloomEffectSource
