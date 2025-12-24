@@ -59,18 +59,16 @@ for(raster_mode, RASTER_MODES) {
 }
 
 for(rgb_shift, BINARY_FLAGS) {
-    for(chroma_on, BINARY_FLAGS) {
-        for(bloom_on, BINARY_FLAGS) {
-            for(curve_on, BINARY_FLAGS) {
-                for(shine_on, BINARY_FLAGS) {
-                    static_variant = terminal_static_rgb$${rgb_shift}_chroma$${chroma_on}_bloom$${bloom_on}_curve$${curve_on}_shine$${shine_on}
-                    static_output = $${VARIANT_SHADER_DIR}/$${static_variant}.frag.qsb
-                    static_target = shader_variant_$${static_variant}
-                    $${static_target}.target = $${static_output}
-                    $${static_target}.depends = $$STATIC_SHADER
-                    $${static_target}.commands = $$QSB_BIN --glsl \"100 es,120,150\" --hlsl 50 --msl 12 --qt6 -DCRT_RGB_SHIFT=$${rgb_shift} -DCRT_CHROMA=$${chroma_on} -DCRT_BLOOM=$${bloom_on} -DCRT_CURVATURE=$${curve_on} -DCRT_FRAME_SHININESS=$${shine_on} -o $${static_output} $$STATIC_SHADER
-                    QMAKE_EXTRA_TARGETS += $${static_target}
-                }
+    for(bloom_on, BINARY_FLAGS) {
+        for(curve_on, BINARY_FLAGS) {
+            for(shine_on, BINARY_FLAGS) {
+                static_variant = terminal_static_rgb$${rgb_shift}_bloom$${bloom_on}_curve$${curve_on}_shine$${shine_on}
+                static_output = $${VARIANT_SHADER_DIR}/$${static_variant}.frag.qsb
+                static_target = shader_variant_$${static_variant}
+                $${static_target}.target = $${static_output}
+                $${static_target}.depends = $$STATIC_SHADER
+                $${static_target}.commands = $$QSB_BIN --glsl \"100 es,120,150\" --hlsl 50 --msl 12 --qt6 -DCRT_RGB_SHIFT=$${rgb_shift} -DCRT_BLOOM=$${bloom_on} -DCRT_CURVATURE=$${curve_on} -DCRT_FRAME_SHININESS=$${shine_on} -o $${static_output} $$STATIC_SHADER
+                QMAKE_EXTRA_TARGETS += $${static_target}
             }
         }
     }

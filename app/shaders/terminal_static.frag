@@ -3,9 +3,6 @@
 #ifndef CRT_RGB_SHIFT
 #define CRT_RGB_SHIFT 1
 #endif
-#ifndef CRT_CHROMA
-#define CRT_CHROMA 1
-#endif
 #ifndef CRT_BLOOM
 #define CRT_BLOOM 1
 #endif
@@ -22,10 +19,7 @@ layout(location = 0) out vec4 fragColor;
 layout(std140, binding = 0) uniform ubuf {
     mat4 qt_Matrix;
     float qt_Opacity;
-    vec4 fontColor;
-    vec4 backgroundColor;
     float screenCurvature;
-    float chromaColor;
     float rbgShift;
     float frameShininess;
     float frameSize;
@@ -38,23 +32,11 @@ layout(binding = 2) uniform sampler2D bloomSource;
 
 float min2(vec2 v) { return min(v.x, v.y); }
 float max2(vec2 v) { return max(v.x, v.y); }
-float rgb2grey(vec3 v) { return dot(v, vec3(0.21, 0.72, 0.04)); }
-
 vec2 distortCoordinates(vec2 coords){
     vec2 paddedCoords = coords * (vec2(1.0) + frameSize * 2.0) - frameSize;
     vec2 cc = (paddedCoords - vec2(0.5));
     float dist = dot(cc, cc) * screenCurvature;
     return (paddedCoords + cc * (1.0 + dist) * dist);
-}
-
-vec3 convertWithChroma(vec3 inColor) {
-#if CRT_CHROMA == 1
-    vec3 outColor = fontColor.rgb * rgb2grey(inColor);
-    outColor = fontColor.rgb * mix(vec3(rgb2grey(inColor)), inColor, chromaColor);
-    return outColor;
-#else
-    return fontColor.rgb * rgb2grey(inColor);
-#endif
 }
 
 void main() {
@@ -84,32 +66,25 @@ void main() {
     txt_color.b = leftColor.b * 0.30 + rightColor.b * 0.10 + txt_color.b * 0.60;
 #endif
 
-    txt_color += vec3(0.0001);
-    float greyscale_color = rgb2grey(txt_color);
+    vec3 finalColor = txt_color * shownDraw;
 
-    vec3 finalColor;
-#if CRT_CHROMA == 1
-    vec3 foregroundColor = mix(fontColor.rgb, txt_color * fontColor.rgb / greyscale_color, chromaColor);
-    finalColor = mix(backgroundColor.rgb, foregroundColor, greyscale_color * shownDraw);
-#else
-    finalColor = mix(backgroundColor.rgb, fontColor.rgb, greyscale_color * shownDraw);
-#endif
-
-    vec3 bloomColor = finalColor;
+    vec3 bloomColor = txt_color;
     float bloomAlpha = 0.0;
 #if CRT_BLOOM == 1 || CRT_FRAME_SHININESS == 1
     vec4 bloomFullColor = texture(bloomSource, txt_coords);
-    bloomColor = convertWithChroma(bloomFullColor.rgb);
+    bloomColor = bloomFullColor.rgb;
     bloomAlpha = bloomFullColor.a;
 #endif
 
 #if CRT_BLOOM == 1
     vec3 bloomOnScreen = bloomColor * isScreen;
     finalColor += clamp(bloomOnScreen * bloom * bloomAlpha, 0.0, 0.5);
+    float bloomScale = 1.0 + max(bloom, 0.0);
+    finalColor /= bloomScale;
 #endif
 
 #if CRT_FRAME_SHININESS == 1
-    vec3 reflectionColor = mix(backgroundColor.rgb + bloomColor, finalColor, frameShininess * 0.5);
+    vec3 reflectionColor = mix(bloomColor, finalColor, frameShininess * 0.5);
     finalColor = mix(finalColor, reflectionColor, isReflection);
 #endif
 

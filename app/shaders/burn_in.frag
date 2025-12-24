@@ -29,8 +29,10 @@ void main() {
 
     float blurDecay = clamp((burnInLastUpdate - prevLastUpdate) * burnInTime, 0.0, 1.0);
     blurDecay = max(0.0, blurDecay - prevMask);
-    vec3 blurColor = accColor.rgb - vec3(blurDecay);
-    vec3 color = max(blurColor, txtColor);
+    float blurValue = rgb2grey(accColor.rgb) - blurDecay;
+    float txtValue = rgb2grey(txtColor);
+    float colorValue = max(blurValue, txtValue);
+    vec3 color = vec3(colorValue);
 
     fragColor = vec4(color, currMask) * qt_Opacity;
 }

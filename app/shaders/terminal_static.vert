@@ -6,10 +6,7 @@ layout(location = 1) in vec2 qt_MultiTexCoord0;
 layout(std140, binding = 0) uniform ubuf {
     mat4 qt_Matrix;
     float qt_Opacity;
-    vec4 fontColor;
-    vec4 backgroundColor;
     float screenCurvature;
-    float chromaColor;
     float rbgShift;
     float frameShininess;
     float frameSize;

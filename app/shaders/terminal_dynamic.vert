@@ -28,6 +28,7 @@ layout(std140, binding = 0) uniform ubuf {
     vec2 scaleNoiseSize;
     float frameShininess;
     float frameSize;
+    float bloom;
 };
 
 layout(binding = 0) uniform sampler2D noiseSource;

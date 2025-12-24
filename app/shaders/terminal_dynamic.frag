@@ -45,6 +45,7 @@ layout(std140, binding = 0) uniform ubuf {
     vec2 scaleNoiseSize;
     float frameShininess;
     float frameSize;
+    float bloom;
 };
 
 layout(binding = 0) uniform sampler2D noiseSource;
@@ -123,11 +124,12 @@ float randomPass(vec2 coords){
 
 vec3 convertWithChroma(vec3 inColor) {
 #if CRT_CHROMA == 1
-    vec3 outColor = fontColor.rgb * rgb2grey(inColor);
-    outColor = fontColor.rgb * mix(vec3(rgb2grey(inColor)), inColor, chromaColor);
-    return outColor;
+    float grey = rgb2grey(inColor);
+    float denom = max(grey, 0.0001);
+    vec3 foregroundColor = mix(fontColor.rgb, inColor * fontColor.rgb / denom, chromaColor);
+    return mix(backgroundColor.rgb, foregroundColor, grey);
 #else
-    return fontColor.rgb * rgb2grey(inColor);
+    return mix(backgroundColor.rgb, fontColor.rgb, rgb2grey(inColor));
 #endif
 }
 
@@ -150,18 +152,20 @@ void main() {
     color += randomPass(coords * virtualResolution) * glowingLine;
 
     vec3 txt_color = texture(screenBuffer, txt_coords).rgb;
+    float bloomScale = 1.0 + max(bloom, 0.0);
+    txt_color *= bloomScale;
 
 #if CRT_BURN_IN == 1
     vec4 txt_blur = texture(burnInSource, staticCoords);
     float blurDecay = clamp((time - burnInLastUpdate) * burnInTime, 0.0, 1.0);
     vec3 burnInColor = 0.65 * (txt_blur.rgb - vec3(blurDecay));
-    txt_color = max(txt_color, convertWithChroma(burnInColor));
+    txt_color = max(txt_color, burnInColor);
 #endif
 
-    txt_color += fontColor.rgb * vec3(color);
+    txt_color += vec3(color);
     txt_color = applyRasterization(staticCoords, txt_color, virtualResolution, rasterizationIntensity);
 
-    vec3 finalColor = txt_color;
+    vec3 finalColor = convertWithChroma(txt_color);
     float brightness = mix(1.0, vBrightness, step(0.0, flickering));
     finalColor *= brightness;
 
