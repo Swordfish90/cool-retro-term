@@ -25,6 +25,8 @@ import QtQuick.Layouts 1.3
 import QtQuick.Dialogs
 
 ApplicationWindow {
+    readonly property real tabButtonPadding: 10
+
     id: settings_window
     title: qsTr("Settings")
     width: 640
@@ -37,15 +39,19 @@ ApplicationWindow {
             id: bar
             anchors { left: parent.left; right: parent.right; top: parent.top; }
             TabButton {
+                padding: tabButtonPadding
                 text: qsTr("General")
             }
             TabButton {
+                padding: tabButtonPadding
                 text: qsTr("Terminal")
             }
             TabButton {
+                padding: tabButtonPadding
                 text: qsTr("Effects")
             }
             TabButton {
+                padding: tabButtonPadding
                 text: qsTr("Advanced")
             }
         }

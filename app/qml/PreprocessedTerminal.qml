@@ -42,6 +42,7 @@ Item{
 
     property size terminalSize: kterminal.terminalSize
     property size fontMetrics: kterminal.fontMetrics
+    property bool sessionStarted: false
 
     // Manage copy and paste
     Connections {
@@ -168,6 +169,10 @@ Item{
         }
 
         function startSession() {
+            if (terminalContainer.sessionStarted)
+                return
+
+            terminalContainer.sessionStarted = true
             appSettings.initializedSettings.disconnect(startSession);
 
             // Retrieve the variable set in main.cpp if arguments are passed.
@@ -192,6 +197,8 @@ Item{
         Component.onCompleted: {
             appSettings.terminalFontChanged.connect(handleFontChanged);
             appSettings.initializedSettings.connect(startSession);
+            if (appSettings.settingsInitialized)
+                startSession();
             appSettings.updateFont()
         }
     }
@@ -232,6 +239,7 @@ Item{
             kterminal.simulateMouseDoubleClick(coord.x, coord.y, mouse.button, mouse.buttons, mouse.modifiers);
         }
         onPressed: function(mouse) {
+            kterminal.forceActiveFocus()
             if ((!kterminal.terminalUsesMouse || mouse.modifiers & Qt.ShiftModifier) && mouse.button == Qt.RightButton) {
                 contextmenu.popup();
             } else {

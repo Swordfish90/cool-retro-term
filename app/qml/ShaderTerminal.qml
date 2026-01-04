@@ -50,6 +50,7 @@ Item {
     property ShaderEffectSource source
     property BurnInEffect burnInEffect
     property ShaderEffectSource bloomSource
+    property QtObject timeManager
 
     property color fontColor: appSettings.fontColor
     property color backgroundColor: appSettings.backgroundColor
@@ -105,7 +106,7 @@ Item {
 
         property real displayTerminalFrame: appSettings._frameSize > 0 || appSettings.screenCurvature > 0
 
-        property real time: timeManager.time
+        property real time: timeManager ? timeManager.time : 0
         property ShaderEffectSource noiseSource: noiseShaderSource
 
         property real frameSize: appSettings.frameSize
@@ -158,10 +159,6 @@ Item {
                 anchors.fill: parent
             }
         }
-    }
-
-    ShaderLibrary {
-        id: shaderLibrary
     }
 
     ShaderEffect {

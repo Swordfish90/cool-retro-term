@@ -32,6 +32,7 @@ ShaderTerminal {
     id: mainShader
     opacity: appSettings.windowOpacity * 0.3 + 0.7
 
+    timeManager: terminalWindow.timeManager
     source: terminal.mainSource
     burnInEffect: terminal.burnInEffect
     virtualResolution: terminal.virtualResolution
@@ -41,14 +42,13 @@ ShaderTerminal {
     )
     bloomSource: bloomSourceLoader.item
 
-    TimeManager {
-        id: timeManager
-        enableTimer: terminalWindow.visible
-    }
-
     PreprocessedTerminal {
         id: terminal
         anchors.fill: parent
+    }
+
+    function activate() {
+        terminal.mainTerminal.forceActiveFocus()
     }
 
     //  EFFECTS  ////////////////////////////////////////////////////////////////

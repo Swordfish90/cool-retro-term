@@ -33,6 +33,15 @@ Menu {
     }
 
     MenuSeparator {}
+    Menu {
+        title: qsTr("Tabs")
+        MenuItem {
+            action: newTabAction
+        }
+        MenuItem {
+            action: closeTabAction
+        }
+    }
 
     Menu {
         title: qsTr("File")

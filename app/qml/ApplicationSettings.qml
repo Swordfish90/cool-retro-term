@@ -813,6 +813,7 @@ QtObject {
             wintitle = args[args.indexOf("-T") + 1]
         }
 
+        settingsInitialized = true
         initializedSettings()
     }
     Component.onDestruction: {
@@ -826,4 +827,5 @@ QtObject {
         text: "100%"
     }
     property real labelWidth: _sampleLabel.width
+    property bool settingsInitialized: false
 }

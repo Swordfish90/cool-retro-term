@@ -71,7 +71,7 @@ ApplicationWindow {
 
     color: "#00000000"
 
-    title: terminalContainer.title || qsTr(appSettings.wintitle)
+    title: terminalTabs.title || qsTr(appSettings.wintitle)
 
     Action {
         id: showMenubarAction
@@ -137,11 +137,27 @@ ApplicationWindow {
             aboutDialog.raise()
         }
     }
+    Action {
+        id: newTabAction
+        text: qsTr("New Tab")
+        onTriggered: terminalTabs.addTab()
+    }
+    Action {
+        id: closeTabAction
+        text: qsTr("Close Tab")
+        enabled: terminalTabs.count > 1
+        onTriggered: terminalTabs.closeCurrentTab()
+    }
     ApplicationSettings {
         id: appSettings
     }
-    TerminalContainer {
-        id: terminalContainer
+    TimeManager {
+        id: sharedTimeManager
+        enableTimer: terminalWindow.visible
+    }
+    property alias timeManager: sharedTimeManager
+    TerminalTabs {
+        id: terminalTabs
         width: parent.width
         height: (parent.height + Math.abs(y))
     }
@@ -158,7 +174,7 @@ ApplicationWindow {
         active: appSettings.showTerminalSize
         sourceComponent: SizeOverlay {
             z: 3
-            terminalSize: terminalContainer.terminalSize
+            terminalSize: terminalTabs.terminalSize
         }
     }
     onClosing: {
