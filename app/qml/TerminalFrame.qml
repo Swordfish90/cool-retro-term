@@ -26,23 +26,24 @@ ShaderEffect {
     property color _backgroundColor: appSettings.backgroundColor
     property color _fontColor: appSettings.fontColor
     property color _lightColor: Utils.mix(_fontColor, _backgroundColor, 0.2)
-    property real _ambientLight: appSettings.ambientLight
 
-    property color frameColor: Utils.sum(
-        Utils.scaleColor(_staticFrameColor, 0.8 * _ambientLight),
-        Utils.scaleColor(_lightColor, 0.2)
+    property color frameColor: Utils.mix(
+        Utils.scaleColor(_lightColor, 0.2),
+        _staticFrameColor,
+        0.125 + 0.750 * ambientLight
     )
 
     property real screenCurvature: appSettings.screenCurvature * appSettings.screenCurvatureSize
 
-    // TODO FILIPPO... Get rid of those...
-    // Coefficient of the log curve used to approximate shadowing
-    property real frameShadowCoeff: 0.0125//Utils.lint(0.05, 0.025, _ambientLight)
     property real frameShininess: appSettings.frameShininess
 
     property real frameSize: appSettings.frameSize
 
-    property real qt_Opacity: 1.0
+    property real screenRadius: appSettings.screenRadius
+
+    property size viewportSize: Qt.size(width, height)
+
+    property real ambientLight: appSettings.ambientLight
 
     vertexShader: "qrc:/shaders/terminal_frame.vert.qsb"
     fragmentShader: "qrc:/shaders/terminal_frame.frag.qsb"

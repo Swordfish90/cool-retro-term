@@ -72,6 +72,7 @@ ShaderTerminal {
         sourceComponent: ShaderEffectSource {
             id: _bloomEffectSource
             sourceItem: bloomEffectLoader.item
+            wrapMode: ShaderEffectSource.Repeat
             hideSource: true
             smooth: true
             visible: false

@@ -19,7 +19,6 @@ layout(std140, binding = 0) uniform ubuf {
     float glowingLine;
     float chromaColor;
     vec2 jitterDisplacement;
-    float ambientLight;
     float jitter;
     float horizontalSync;
     float horizontalSyncStrength;

@@ -9,6 +9,9 @@ layout(std140, binding = 0) uniform ubuf {
     float screenCurvature;
     vec4 frameColor;
     float frameSize;
+    float screenRadius;
+    vec2 viewportSize;
+    float ambientLight;
 };
 
 layout(location = 0) out vec2 qt_TexCoord0;

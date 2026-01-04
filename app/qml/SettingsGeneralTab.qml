@@ -212,6 +212,13 @@ ColumnLayout {
                 value: appSettings._margin
             }
             Label {
+                text: qsTr("Radius")
+            }
+            SimpleSlider {
+                onValueChanged: appSettings._screenRadius = value
+                value: appSettings._screenRadius
+            }
+            Label {
                 text: qsTr("Frame size")
             }
             SimpleSlider {

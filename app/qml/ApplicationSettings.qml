@@ -98,11 +98,14 @@ QtObject {
     property real _frameShininess: 0.2
     property real frameShininess: _frameShininess * 0.5
 
-    property real _margin: 0.5
-    property real margin: Utils.lint(1.0, 20.0, _margin)
-
     property real _frameSize: 0.2
-    property real frameSize: _frameSize * 0.1
+    property real frameSize: _frameSize * 0.05
+
+    property real _screenRadius: 0.2
+    property real screenRadius: Utils.lint(4.0, 40.0, _screenRadius)
+
+    property real _margin: 0.5
+    property real margin: Utils.lint(1.0, 40.0, _margin) + 0.5 * screenRadius
 
     readonly property int no_rasterization: 0
     readonly property int scanline_rasterization: 1
@@ -301,6 +304,7 @@ QtObject {
             "margin": _margin,
             "blinkingCursor": blinkingCursor,
             "frameSize": _frameSize,
+            "screenRadius": _screenRadius,
             "frameColor": _frameColor,
             "frameShininess": _frameShininess
         }
@@ -412,6 +416,7 @@ QtObject {
 
         _margin = settings.margin !== undefined ? settings.margin : _margin
         _frameSize = settings.frameSize !== undefined ? settings.frameSize : _frameSize
+        _screenRadius = settings.screenRadius !== undefined ? settings.screenRadius : _screenRadius
         _frameColor = settings.frameColor !== undefined ? settings.frameColor : _frameColor
         _frameShininess = settings.frameShininess !== undefined ? settings.frameShininess : _frameShininess
 

@@ -36,7 +36,6 @@ layout(std140, binding = 0) uniform ubuf {
     float glowingLine;
     float chromaColor;
     vec2 jitterDisplacement;
-    float ambientLight;
     float jitter;
     float horizontalSync;
     float horizontalSyncStrength;
@@ -151,6 +150,11 @@ void main() {
     color += noiseTexel.a * staticNoise * (1.0 - distance * 1.3);
     color += randomPass(coords * virtualResolution) * glowingLine;
 
+#if CRT_DISPLAY_FRAME == 1
+    vec4 frameColor = texture(frameSource, qt_TexCoord0);
+    color *= (1.0 - frameColor.a);
+#endif
+
     vec3 txt_color = texture(screenBuffer, txt_coords).rgb;
     float bloomScale = 1.0 + max(bloom, 0.0);
     txt_color *= bloomScale;
@@ -169,12 +173,8 @@ void main() {
     float brightness = mix(1.0, vBrightness, step(0.0, flickering));
     finalColor *= brightness;
 
-    finalColor += vec3(ambientLight) * (1.0 - distance) * (1.0 - distance);
-
 #if CRT_DISPLAY_FRAME == 1
-    vec4 frameColor = texture(frameSource, qt_TexCoord0);
-    vec3 reflection = max(finalColor - backgroundColor.rgb, vec3(0.0)) * frameShininess;
-    finalColor = mix(finalColor, frameColor.rgb + reflection, frameColor.a);
+    finalColor = mix(finalColor, frameColor.rgb, frameColor.a);
 #endif
 
     fragColor = vec4(finalColor, qt_Opacity);
