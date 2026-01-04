@@ -32,19 +32,15 @@ Menu {
         action: showsettingsAction
     }
 
-    MenuSeparator {}
     Menu {
-        title: qsTr("Tabs")
+        title: qsTr("File")
+        MenuItem {
+            action: newWindowAction
+        }
         MenuItem {
             action: newTabAction
         }
-        MenuItem {
-            action: closeTabAction
-        }
-    }
-
-    Menu {
-        title: qsTr("File")
+        MenuSeparator {}
         MenuItem {
             action: quitAction
         }

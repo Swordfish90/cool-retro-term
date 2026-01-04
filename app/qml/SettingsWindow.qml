@@ -30,7 +30,7 @@ ApplicationWindow {
     id: settings_window
     title: qsTr("Settings")
     width: 640
-    height: 480
+    height: 520
 
     Item {
         anchors { fill: parent; }

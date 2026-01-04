@@ -32,6 +32,12 @@ MenuBar {
             onTriggered: newWindowAction.trigger()
         }
         MenuItem {
+            text: newTabAction.text
+            shortcut: newTabAction.shortcut
+            onTriggered: newTabAction.trigger()
+        }
+        MenuSeparator {}
+        MenuItem {
             text: quitAction.text
             onTriggered: quitAction.trigger()
         }

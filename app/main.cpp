@@ -8,6 +8,8 @@
 #include <QIcon>
 #include <QQuickStyle>
 
+#include <singleapplication.h>
+
 #include <QDebug>
 #include <stdlib.h>
 
@@ -78,8 +80,13 @@ int main(int argc, char *argv[])
         return 0;
     }
 
-    QApplication app(argc, argv);
+    SingleApplication app(argc, argv, true);
     app.setAttribute(Qt::AA_MacDontSwapCtrlAndMeta, true);
+
+    if (app.isSecondary()) {
+        app.sendMessage("new-window");
+        return 0;
+    }
 
     QQmlApplicationEngine engine;
     FileIO fileIO;
@@ -134,6 +141,21 @@ int main(int argc, char *argv[])
 
     // Quit the application when the engine closes.
     QObject::connect((QObject*) &engine, SIGNAL(quit()), (QObject*) &app, SLOT(quit()));
+
+    auto requestNewWindow = [&engine]() {
+        if (engine.rootObjects().isEmpty())
+            return;
+
+        QObject *rootObject = engine.rootObjects().constFirst();
+        QMetaObject::invokeMethod(rootObject, "createWindow", Qt::QueuedConnection);
+    };
+
+    QObject::connect(&app, &SingleApplication::receivedMessage, &app,
+                     [&requestNewWindow](quint32 instanceId, QByteArray message) {
+        Q_UNUSED(instanceId);
+        if (message.isEmpty() || message == QByteArray("new-window"))
+            requestNewWindow();
+    });
 
     return app.exec();
 }

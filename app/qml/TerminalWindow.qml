@@ -148,12 +148,6 @@ ApplicationWindow {
         text: qsTr("New Tab")
         onTriggered: terminalTabs.addTab()
     }
-    Action {
-        id: closeTabAction
-        text: qsTr("Close Tab")
-        enabled: terminalTabs.count > 1
-        onTriggered: terminalTabs.closeCurrentTab()
-    }
     TerminalTabs {
         id: terminalTabs
         width: parent.width

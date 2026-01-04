@@ -1,5 +1,8 @@
 QT += qml quick widgets sql quickcontrols2
+DEFINES += QAPPLICATION_CLASS=QApplication
 TARGET = cool-retro-term 
+
+include(../singleapplication/singleapplication.pri)
 
 DESTDIR = $$OUT_PWD/../
 
@@ -7,7 +10,7 @@ HEADERS += \
     fileio.h \
     monospacefontmanager.h
 
-SOURCES = main.cpp \
+SOURCES += main.cpp \
     fileio.cpp \
     monospacefontmanager.cpp
 

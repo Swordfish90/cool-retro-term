@@ -30,6 +30,10 @@ MenuBar {
             action: newWindowAction
         }
         MenuItem {
+            action: newTabAction
+        }
+        MenuSeparator {}
+        MenuItem {
             action: quitAction
         }
     }

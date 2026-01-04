@@ -44,10 +44,6 @@ Item {
         }
     }
 
-    function closeCurrentTab() {
-        closeTab(tabBar.currentIndex)
-    }
-
     ListModel {
         id: tabsModel
     }

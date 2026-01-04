@@ -28,14 +28,4 @@ Menu {
     MenuItem {
         action: pasteAction
     }
-    MenuSeparator {}
-    Menu {
-        title: qsTr("Tabs")
-        MenuItem {
-            action: newTabAction
-        }
-        MenuItem {
-            action: closeTabAction
-        }
-    }
 }
