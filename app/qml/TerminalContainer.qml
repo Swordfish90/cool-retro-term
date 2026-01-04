@@ -32,7 +32,6 @@ ShaderTerminal {
     id: mainShader
     opacity: appSettings.windowOpacity * 0.3 + 0.7
 
-    timeManager: terminalWindow.timeManager
     source: terminal.mainSource
     burnInEffect: terminal.burnInEffect
     virtualResolution: terminal.virtualResolution

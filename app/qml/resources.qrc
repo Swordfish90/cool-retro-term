@@ -5,6 +5,7 @@
         <file>CheckableSlider.qml</file>
         <file>ApplicationSettings.qml</file>
         <file>SettingsWindow.qml</file>
+        <file>TerminalWindow.qml</file>
         <file>Fonts.qml</file>
         <file>SettingsGeneralTab.qml</file>
         <file>PreprocessedTerminal.qml</file>

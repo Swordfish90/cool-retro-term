@@ -28,8 +28,6 @@ ApplicationWindow {
     width: 600
     height: 400
 
-    modality: Qt.ApplicationModal
-
     ColumnLayout {
         anchors.fill: parent
         anchors.margins: 15

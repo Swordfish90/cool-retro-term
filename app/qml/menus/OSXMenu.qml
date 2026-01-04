@@ -27,6 +27,11 @@ MenuBar {
     Menu {
         title: qsTr("File")
         MenuItem {
+            text: newWindowAction.text
+            shortcut: newWindowAction.shortcut
+            onTriggered: newWindowAction.trigger()
+        }
+        MenuItem {
             text: quitAction.text
             onTriggered: quitAction.trigger()
         }

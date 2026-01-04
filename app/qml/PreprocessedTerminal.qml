@@ -42,7 +42,6 @@ Item{
 
     property size terminalSize: kterminal.terminalSize
     property size fontMetrics: kterminal.fontMetrics
-    property bool sessionStarted: false
 
     // Manage copy and paste
     Connections {
@@ -169,12 +168,6 @@ Item{
         }
 
         function startSession() {
-            if (terminalContainer.sessionStarted)
-                return
-
-            terminalContainer.sessionStarted = true
-            appSettings.initializedSettings.disconnect(startSession);
-
             // Retrieve the variable set in main.cpp if arguments are passed.
             if (defaultCmd) {
                 ksession.setShellProgram(defaultCmd);
@@ -196,10 +189,8 @@ Item{
         }
         Component.onCompleted: {
             appSettings.terminalFontChanged.connect(handleFontChanged);
-            appSettings.initializedSettings.connect(startSession);
-            if (appSettings.settingsInitialized)
-                startSession();
             appSettings.updateFont()
+            startSession();
         }
     }
 

@@ -50,7 +50,6 @@ Item {
     property ShaderEffectSource source
     property BurnInEffect burnInEffect
     property ShaderEffectSource bloomSource
-    property QtObject timeManager
 
     property color fontColor: appSettings.fontColor
     property color backgroundColor: appSettings.backgroundColor
