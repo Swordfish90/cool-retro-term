@@ -1,7 +1,16 @@
 QT += qml quick widgets sql quickcontrols2
-TARGET = cool-retro-term 
+TARGET = cool-retro-term
 
-include(../KDSingleApplication/kdsingleapplication.pri)
+# TODO: When migrating to CMake, use KDSingleApplication's CMakeLists.txt instead of these manual sources.
+INCLUDEPATH += $$PWD/../KDSingleApplication/src
+HEADERS += \
+    $$PWD/../KDSingleApplication/src/kdsingleapplication.h \
+    $$PWD/../KDSingleApplication/src/kdsingleapplication_lib.h \
+    $$PWD/../KDSingleApplication/src/kdsingleapplication_localsocket_p.h
+SOURCES += \
+    $$PWD/../KDSingleApplication/src/kdsingleapplication.cpp \
+    $$PWD/../KDSingleApplication/src/kdsingleapplication_localsocket.cpp
+DEFINES += KDSINGLEAPPLICATION_STATIC_BUILD
 
 DESTDIR = $$OUT_PWD/../
 
