@@ -1,8 +1,7 @@
 QT += qml quick widgets sql quickcontrols2
-DEFINES += QAPPLICATION_CLASS=QApplication
 TARGET = cool-retro-term 
 
-include(../singleapplication/singleapplication.pri)
+include(../KDSingleApplication/kdsingleapplication.pri)
 
 DESTDIR = $$OUT_PWD/../
 

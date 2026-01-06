@@ -8,7 +8,7 @@
 #include <QIcon>
 #include <QQuickStyle>
 
-#include <singleapplication.h>
+#include <kdsingleapplication.h>
 
 #include <QDebug>
 #include <stdlib.h>
@@ -80,12 +80,18 @@ int main(int argc, char *argv[])
         return 0;
     }
 
-    SingleApplication app(argc, argv, true);
+    QApplication app(argc, argv);
     app.setAttribute(Qt::AA_MacDontSwapCtrlAndMeta, true);
+    app.setApplicationName(QStringLiteral("cool-retro-term"));
+    app.setOrganizationName(QStringLiteral("cool-retro-term"));
+    app.setOrganizationDomain(QStringLiteral("cool-retro-term"));
 
-    if (app.isSecondary()) {
-        app.sendMessage("new-window");
-        return 0;
+    KDSingleApplication singleApp(QStringLiteral("cool-retro-term"));
+
+    if (!singleApp.isPrimaryInstance()) {
+        if (singleApp.sendMessage("new-window"))
+            return 0;
+        qWarning() << "KDSingleApplication: primary not reachable, continuing as independent instance.";
     }
 
     QQmlApplicationEngine engine;
@@ -100,9 +106,6 @@ int main(int argc, char *argv[])
 #else
     app.setWindowIcon(QIcon(":../icons/32x32/cool-retro-term.png"));
 #endif
-
-    app.setOrganizationName("cool-retro-term");
-    app.setOrganizationDomain("cool-retro-term");
 
     // Manage command line arguments from the cpp side
     QStringList args = app.arguments();
@@ -150,9 +153,8 @@ int main(int argc, char *argv[])
         QMetaObject::invokeMethod(rootObject, "createWindow", Qt::QueuedConnection);
     };
 
-    QObject::connect(&app, &SingleApplication::receivedMessage, &app,
-                     [&requestNewWindow](quint32 instanceId, QByteArray message) {
-        Q_UNUSED(instanceId);
+    QObject::connect(&singleApp, &KDSingleApplication::messageReceived, &app,
+                     [&requestNewWindow](const QByteArray &message) {
         if (message.isEmpty() || message == QByteArray("new-window"))
             requestNewWindow();
     });
