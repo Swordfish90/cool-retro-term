@@ -25,6 +25,7 @@ import "utils.js" as Utils
 ShaderTerminal {
     property alias title: terminal.title
     property alias terminalSize: terminal.terminalSize
+    signal sessionFinished()
 
     property real devicePixelRatio: terminalWindow.screen.devicePixelRatio
     property bool loadBloomEffect: appSettings.bloom > 0 || appSettings._frameShininess > 0
@@ -44,6 +45,7 @@ ShaderTerminal {
     PreprocessedTerminal {
         id: terminal
         anchors.fill: parent
+        onSessionFinished: mainShader.sessionFinished()
     }
 
     function activate() {

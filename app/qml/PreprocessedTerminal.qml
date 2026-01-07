@@ -28,6 +28,7 @@ import "utils.js" as Utils
 
 Item{
     id: terminalContainer
+    signal sessionFinished()
 
     property size virtualResolution: Qt.size(kterminal.totalWidth, kterminal.totalHeight)
     property alias mainTerminal: kterminal
@@ -126,7 +127,7 @@ Item{
             id: ksession
 
             onFinished: {
-                Qt.quit()
+                terminalContainer.sessionFinished()
             }
         }
 

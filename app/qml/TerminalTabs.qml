@@ -28,6 +28,7 @@ Item {
     readonly property size terminalSize: stack.currentItem ? stack.currentItem.terminalSize : Qt.size(0, 0)
     property alias currentIndex: tabBar.currentIndex
     readonly property int count: tabsModel.count
+    property var hostWindow
 
     function addTab() {
         tabsModel.append({ title: qsTr("Tab %1").arg(tabsModel.count + 1) })
@@ -35,8 +36,10 @@ Item {
     }
 
     function closeTab(index) {
-        if (tabsModel.count <= 1)
+        if (tabsModel.count <= 1) {
+            hostWindow.close()
             return
+        }
 
         tabsModel.remove(index)
         if (tabBar.currentIndex >= tabsModel.count) {
@@ -109,6 +112,7 @@ Item {
                     Layout.fillWidth: true
                     Layout.fillHeight: true
                     onTitleChanged: tabsModel.setProperty(index, "title", title)
+                    onSessionFinished: tabsRoot.closeTab(index)
                 }
             }
         }
