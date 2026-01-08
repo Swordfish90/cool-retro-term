@@ -54,6 +54,8 @@ QtObject {
 
     property bool isSystemFont: fontlist.get(selectedFontIndex).isSystemFont
 
+    property string family: fontlist.get(selectedFontIndex).family
+
     // There are two kind of fonts: low resolution and high resolution.
     // Low resolution font sets the lowResolutionFont property to true.
     // They are rendered at a fixed pixel size and the texture is upscaled
