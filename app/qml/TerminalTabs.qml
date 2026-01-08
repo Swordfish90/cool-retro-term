@@ -104,25 +104,21 @@ Item {
 
             Repeater {
                 model: tabsModel
-                onItemAdded: function(index, item) {
-                    if (index === tabBar.currentIndex)
-                        item.activate()
-                }
                 TerminalContainer {
+                    property bool isCurrentItem: StackLayout.isCurrentItem
+
+                    onIsCurrentItemChanged: {
+                        if (isCurrentItem) {
+                            activate()
+                        }
+                    }
+
                     Layout.fillWidth: true
                     Layout.fillHeight: true
                     onTitleChanged: tabsModel.setProperty(index, "title", title)
                     onSessionFinished: tabsRoot.closeTab(index)
                 }
             }
-        }
-    }
-
-    Connections {
-        target: tabBar
-        onCurrentIndexChanged: {
-            if (stack.currentItem)
-                stack.currentItem.activate()
         }
     }
 }
