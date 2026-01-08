@@ -22,6 +22,7 @@
 #if defined(Q_OS_MAC)
 #include <CoreFoundation/CoreFoundation.h>
 #include <QStyleFactory>
+#include <QMenu>
 #endif
 
 QString getNamedArgument(QStringList args, QString name, QString defaultName)
@@ -156,6 +157,12 @@ int main(int argc, char *argv[])
         if (message.isEmpty() || message == QByteArray("new-window"))
             requestNewWindow();
     });
+
+#if defined(Q_OS_MAC)
+    QMenu *dockMenu = new QMenu(nullptr);
+    dockMenu->addAction(QObject::tr("New Window"), [&requestNewWindow]() { requestNewWindow(); });
+    dockMenu->setAsDockMenu();
+#endif
 
     return app.exec();
 }
