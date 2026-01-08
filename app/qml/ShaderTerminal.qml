@@ -54,7 +54,8 @@ Item {
     property color fontColor: appSettings.fontColor
     property color backgroundColor: appSettings.backgroundColor
 
-    property real screenCurvature: appSettings.screenCurvature * appSettings.screenCurvatureSize
+    property real screenCurvature: appSettings.screenCurvature * appSettings.screenCurvatureSize * terminalWindow.normalizedWindowScale
+    property real frameSize: appSettings.frameSize * terminalWindow.normalizedWindowScale
 
     property real chromaColor: appSettings.chromaColor
 
@@ -108,7 +109,7 @@ Item {
         property real time: timeManager ? timeManager.time : 0
         property ShaderEffectSource noiseSource: noiseShaderSource
 
-        property real frameSize: appSettings.frameSize
+        property real frameSize: parent.frameSize
         property real frameShininess: appSettings.frameShininess
         property real bloom: parent.bloomSource ? appSettings.bloom * 2.5 : 0
 
@@ -181,7 +182,7 @@ Item {
 
         property real screen_brightness: Utils.lint(0.5, 1.5, appSettings.brightness)
         property real frameShininess: appSettings.frameShininess
-        property real frameSize: appSettings.frameSize
+        property real frameSize: parent.frameSize
 
         blending: false
         visible: false

@@ -105,7 +105,7 @@ QtObject {
     property real screenRadius: Utils.lint(4.0, 40.0, _screenRadius)
 
     property real _margin: 0.5
-    property real margin: Utils.lint(1.0, 40.0, _margin) + 0.5 * screenRadius
+    property real margin: Utils.lint(1.0, 40.0, _margin) + 0.25 * screenRadius
 
     readonly property int no_rasterization: 0
     readonly property int scanline_rasterization: 1
@@ -178,9 +178,10 @@ QtObject {
         var fontWidth = fontManager.item.defaultFontWidth * appSettings.fontWidth
         var fontFamily = fontManager.item.family
         var isSystemFont = fontManager.item.isSystemFont
+        var lowResolutionFont = fontManager.item.lowResolutionFont;
         var fallbackFontFamily = ""
 
-        lowResolutionFont = fontManager.item.lowResolutionFont
+        appSettings.lowResolutionFont = fontManager.item.lowResolutionFont
 
         if (!isSystemFont) {
             fontLoader.source = fontSourcePath
@@ -197,14 +198,14 @@ QtObject {
             }
         }
 
-        terminalFontChanged(fontFamily, pixelSize, lineSpacing, screenScaling, fontWidth, fallbackFontFamily)
+        terminalFontChanged(fontFamily, pixelSize, lineSpacing, screenScaling, fontWidth, fallbackFontFamily, lowResolutionFont)
     }
 
     onFontSourceChanged: updateFont()
     onRasterizationChanged: updateFont()
     onFontNameChanged: updateFont()
 
-    signal terminalFontChanged(string fontFamily, int pixelSize, int lineSpacing, real screenScaling, real fontWidth, string fallbackFontFamily)
+    signal terminalFontChanged(string fontFamily, int pixelSize, int lineSpacing, real screenScaling, real fontWidth, string fallbackFontFamily, bool lowResolutionFont)
 
     signal initializedSettings
 

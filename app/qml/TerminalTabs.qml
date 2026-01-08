@@ -106,7 +106,6 @@ Item {
                 model: tabsModel
                 TerminalContainer {
                     property bool isCurrentItem: StackLayout.isCurrentItem
-
                     onIsCurrentItemChanged: {
                         if (isCurrentItem) {
                             activate()

@@ -65,7 +65,7 @@ vec2 distortCoordinates(vec2 coords){
 }
 
 vec3 applyRasterization(vec2 screenCoords, vec3 texel, vec2 virtualRes, float intensity) {
-#if CRT_RASTER_MODE == 0
+#if CRT_RASTER_MODE == 0 || CRT_RASTER_MODE == 4
     return texel;
 #else
     if (intensity <= 0.0) {
@@ -162,7 +162,7 @@ void main() {
 #if CRT_BURN_IN == 1
     vec4 txt_blur = texture(burnInSource, staticCoords);
     float blurDecay = clamp((time - burnInLastUpdate) * burnInTime, 0.0, 1.0);
-    vec3 burnInColor = 0.65 * (txt_blur.rgb - vec3(blurDecay));
+    vec3 burnInColor = 0.65 * (txt_blur.rgb - vec3(blurDecay)) * (1.0 - txt_blur.a);
     txt_color = max(txt_color, burnInColor);
 #endif
 

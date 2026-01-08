@@ -12,6 +12,7 @@ layout(std140, binding = 0) uniform ubuf {
     float screenRadius;
     vec2 viewportSize;
     float ambientLight;
+    float frameShininess;
 };
 
 float min2(vec2 v) { return min(v.x, v.y); }
@@ -65,8 +66,10 @@ void main() {
     float frameShadow = (e * 0.66 + w * 0.66 + n * 0.33 + s) * depth;
     frameShadow *= smoothstep(0.0, edgeSoftPixels * 10.0, distPixels);
 
+    float frameAlpha = 1.0 - frameShininess * 0.4;
+
     float inScreen = smoothstep(0.0, edgeSoftPixels, -distPixels);
-    float alpha = mix(mix(0.7, 0.9, ambientLight), mix(0.0, 0.2, ambientLight), inScreen);
+    float alpha = mix(frameAlpha, mix(0.0, 0.2, ambientLight), inScreen);
     float glass = clamp(ambientLight * pow(prod2(coords * (1.0 - coords.yx)) * 50.0, 0.25) * inScreen, 0.0, 1.0);
     vec3 color = mix(frameColor.rgb * frameShadow, vec3(glass), inScreen);
 

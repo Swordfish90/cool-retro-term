@@ -84,7 +84,7 @@ void main() {
 #endif
 
 #if CRT_FRAME_SHININESS == 1
-    vec3 reflectionColor = mix(bloomColor, finalColor, frameShininess * 0.5);
+    vec3 reflectionColor = mix(bloomColor * bloomAlpha * 2.0, finalColor, frameShininess * 0.5);
     finalColor = mix(finalColor, reflectionColor, isReflection);
 #endif
 

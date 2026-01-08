@@ -81,6 +81,14 @@
         <file>../shaders/terminal_dynamic_raster3_burn1_frame0_chroma1.frag.qsb</file>
         <file>../shaders/terminal_dynamic_raster3_burn1_frame1_chroma0.frag.qsb</file>
         <file>../shaders/terminal_dynamic_raster3_burn1_frame1_chroma1.frag.qsb</file>
+        <file>../shaders/terminal_dynamic_raster4_burn0_frame0_chroma0.frag.qsb</file>
+        <file>../shaders/terminal_dynamic_raster4_burn0_frame0_chroma1.frag.qsb</file>
+        <file>../shaders/terminal_dynamic_raster4_burn0_frame1_chroma0.frag.qsb</file>
+        <file>../shaders/terminal_dynamic_raster4_burn0_frame1_chroma1.frag.qsb</file>
+        <file>../shaders/terminal_dynamic_raster4_burn1_frame0_chroma0.frag.qsb</file>
+        <file>../shaders/terminal_dynamic_raster4_burn1_frame0_chroma1.frag.qsb</file>
+        <file>../shaders/terminal_dynamic_raster4_burn1_frame1_chroma0.frag.qsb</file>
+        <file>../shaders/terminal_dynamic_raster4_burn1_frame1_chroma1.frag.qsb</file>
         <file>../shaders/terminal_static_rgb0_bloom0_curve0_shine0.frag.qsb</file>
         <file>../shaders/terminal_static_rgb0_bloom0_curve0_shine1.frag.qsb</file>
         <file>../shaders/terminal_static_rgb0_bloom0_curve1_shine0.frag.qsb</file>

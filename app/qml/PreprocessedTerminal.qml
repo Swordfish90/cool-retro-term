@@ -98,7 +98,7 @@ Item{
     QMLTermWidget {
         id: kterminal
 
-        property int textureResolutionScale: appSettings.lowResolutionFont ? devicePixelRatio : 1
+        property int textureResolutionScale: appSettings.lowResolutionFont ? Screen.devicePixelRatio : 1
         property int margin: appSettings.margin / screenScaling
         property int totalWidth: Math.floor(parent.width / (screenScaling * fontWidth))
         property int totalHeight: Math.floor(parent.height / screenScaling)
@@ -108,8 +108,8 @@ Item{
 
         textureSize: Qt.size(width / textureResolutionScale, height / textureResolutionScale)
 
-        width: ensureMultiple(rawWidth, devicePixelRatio)
-        height: ensureMultiple(rawHeight, devicePixelRatio)
+        width: ensureMultiple(rawWidth, Screen.devicePixelRatio)
+        height: ensureMultiple(rawHeight, Screen.devicePixelRatio)
 
         /** Ensure size is a multiple of factor. This is needed for pixel perfect scaling on highdpi screens. */
         function ensureMultiple(size, factor) {
@@ -118,8 +118,9 @@ Item{
 
         colorScheme: "cool-retro-term"
 
+        antialiasText: !appSettings.lowResolutionFont
         smooth: !appSettings.lowResolutionFont
-        enableBold: false
+        enableBold: !appSettings.lowResolutionFont
         fullCursorHeight: true
         blinkingCursor: appSettings.blinkingCursor
 
@@ -146,8 +147,7 @@ Item{
             }
         }
 
-        function handleFontChanged(fontFamily, pixelSize, lineSpacing, screenScaling, fontWidth, fallbackFontFamily) {
-            kterminal.antialiasText = !appSettings.lowResolutionFont;
+        function handleFontChanged(fontFamily, pixelSize, lineSpacing, screenScaling, fontWidth, fallbackFontFamily, lowResolutionFont) {
             var updatedFont = Qt.font({
                 family: fontFamily,
                 pixelSize: pixelSize
@@ -213,7 +213,7 @@ Item{
 
     MouseArea {
         property real margin: appSettings.margin
-        property real frameSize: appSettings.frameSize
+        property real frameSize: appSettings.frameSize * terminalWindow.normalizedWindowScale
 
         acceptedButtons: Qt.LeftButton | Qt.MiddleButton | Qt.RightButton
         anchors.fill: parent
@@ -256,7 +256,9 @@ Item{
             y = y * (1 + frameSize * 2) - frameSize;
 
             var cc = Qt.size(0.5 - x, 0.5 - y);
-            var distortion = (cc.height * cc.height + cc.width * cc.width) * appSettings.screenCurvature * appSettings.screenCurvatureSize;
+            var distortion = (cc.height * cc.height + cc.width * cc.width)
+                    * appSettings.screenCurvature * appSettings.screenCurvatureSize
+                    * terminalWindow.normalizedWindowScale;
 
             return Qt.point((x - cc.width  * (1+distortion) * distortion) * (kterminal.totalWidth),
                            (y - cc.height * (1+distortion) * distortion) * (kterminal.totalHeight))

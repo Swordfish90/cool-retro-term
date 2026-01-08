@@ -68,6 +68,7 @@ ApplicationWindow {
     }
 
     property string wintitle: appSettings.wintitle
+    property real normalizedWindowScale: 1024 / ((0.5 * width + 0.5 * height))
 
     color: "#00000000"
 

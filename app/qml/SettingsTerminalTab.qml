@@ -79,7 +79,7 @@ ColumnLayout {
                 model: appSettings.filteredFontList
                 textRole: "text"
                 onActivated: {
-                    var font = appSettings.filteredFontList.get(index)
+                    var font = appSettings.filteredFontList.get(currentIndex)
 
                     // If selecting a high-res font while not in Modern mode,
                     // switch to Modern to render at full resolution.

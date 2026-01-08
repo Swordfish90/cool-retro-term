@@ -25,14 +25,12 @@ void main() {
     vec4 accColor = texture(burnInSource, coords);
 
     float prevMask = accColor.a;
-    float currMask = rgb2grey(txtColor);
 
     float blurDecay = clamp((burnInLastUpdate - prevLastUpdate) * burnInTime, 0.0, 1.0);
     blurDecay = max(0.0, blurDecay - prevMask);
-    float blurValue = rgb2grey(accColor.rgb) - blurDecay;
-    float txtValue = rgb2grey(txtColor);
-    float colorValue = max(blurValue, txtValue);
-    vec3 color = vec3(colorValue);
+    vec3 color = max(accColor.rgb - vec3(blurDecay), txtColor);
+
+    float currMask = step(rgb2grey(color), rgb2grey(txtColor));
 
     fragColor = vec4(color, currMask) * qt_Opacity;
 }

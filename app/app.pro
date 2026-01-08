@@ -49,9 +49,10 @@ OTHER_FILES += $$SHADERS $$QSB_FILES
 DYNAMIC_SHADER = $$SHADERS_DIR/terminal_dynamic.frag
 STATIC_SHADER = $$SHADERS_DIR/terminal_static.frag
 
-RASTER_MODES = 0 1 2 3
+RASTER_MODES = 0 1 2 3 4
 BINARY_FLAGS = 0 1
 VARIANT_SHADER_DIR = $$relative_path($$PWD/shaders, $$OUT_PWD)
+VARIANT_OUTPUTS =
 
 for(raster_mode, RASTER_MODES) {
     for(burn_in, BINARY_FLAGS) {
@@ -64,6 +65,7 @@ for(raster_mode, RASTER_MODES) {
                 $${dynamic_target}.depends = $$DYNAMIC_SHADER
                 $${dynamic_target}.commands = $$QSB_BIN --glsl \"100 es,120,150\" --hlsl 50 --msl 12 --qt6 -DCRT_RASTER_MODE=$${raster_mode} -DCRT_BURN_IN=$${burn_in} -DCRT_DISPLAY_FRAME=$${display_frame} -DCRT_CHROMA=$${chroma_on} -o $${dynamic_output} $$DYNAMIC_SHADER
                 QMAKE_EXTRA_TARGETS += $${dynamic_target}
+                VARIANT_OUTPUTS += $${dynamic_output}
             }
         }
     }
@@ -80,10 +82,12 @@ for(rgb_shift, BINARY_FLAGS) {
                 $${static_target}.depends = $$STATIC_SHADER
                 $${static_target}.commands = $$QSB_BIN --glsl \"100 es,120,150\" --hlsl 50 --msl 12 --qt6 -DCRT_RGB_SHIFT=$${rgb_shift} -DCRT_BLOOM=$${bloom_on} -DCRT_CURVATURE=$${curve_on} -DCRT_FRAME_SHININESS=$${shine_on} -o $${static_output} $$STATIC_SHADER
                 QMAKE_EXTRA_TARGETS += $${static_target}
+                VARIANT_OUTPUTS += $${static_output}
             }
         }
     }
 }
+PRE_TARGETDEPS += $${VARIANT_OUTPUTS}
 
 #########################################
 ##              INTALLS
