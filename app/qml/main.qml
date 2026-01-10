@@ -190,6 +190,42 @@ ApplicationWindow {
             appSettings.brightness -= appSettings.brightness > keybindStep ? keybindStep : 0
         }
     }
+    Action {
+        id: previousProfile
+        text: qsTr("Previous profile.")
+        enabled: appSettings.useKeybinds
+        shortcut: "Shift+Alt+Left"
+        onTriggered: {
+            var savedBrightness = appSettings.brightness
+            var savedContrast = appSettings.contrast
+            var savedOpacity = appSettings.windowOpacity
+            var current = appSettings.currentProfileIndex - 1
+            current = current < 0 ? appSettings.profilesList.count - 1 : current
+            appSettings.currentProfileIndex = current
+            appSettings.loadProfile(current)
+            appSettings.brightness = savedBrightness
+            appSettings.contrast = savedContrast
+            appSettings.windowOpacity = savedOpacity
+        }
+    }
+    Action {
+        id: nextProfile
+        text: qsTr("Next profile.")
+        enabled: appSettings.useKeybinds
+        shortcut: "Shift+Alt+Right"
+        onTriggered: {
+            var savedBrightness = appSettings.brightness
+            var savedContrast = appSettings.contrast
+            var savedOpacity = appSettings.windowOpacity
+            var current = appSettings.currentProfileIndex + 1
+            current = current >= appSettings.profilesList.count ? 0 : current
+            appSettings.currentProfileIndex = current
+            appSettings.loadProfile(current)
+            appSettings.brightness = savedBrightness
+            appSettings.contrast = savedContrast
+            appSettings.windowOpacity = savedOpacity
+        }
+    }
 
     Action {
         id: showAboutAction
