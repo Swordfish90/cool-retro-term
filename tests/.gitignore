@@ -1,0 +1,13 @@
+# Build artifacts
+*.o
+*.moc
+moc_*.cpp
+moc_predefs.h
+Makefile
+.qmake.stash
+target_wrapper.sh
+
+# Compiled test executables
+cpp/cpp
+smoke/smoke
+qml/tst_qml.app/
