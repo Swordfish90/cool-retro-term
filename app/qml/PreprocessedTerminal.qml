@@ -152,6 +152,11 @@ Item{
                 family: fontFamily,
                 pixelSize: pixelSize
             });
+
+            if (!updatedFont) {
+                return;
+            }
+
             kterminal.font = updatedFont;
 
             terminalContainer.fontWidth = fontWidth;
