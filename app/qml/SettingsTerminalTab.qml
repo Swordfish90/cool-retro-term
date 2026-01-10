@@ -140,6 +140,17 @@ ColumnLayout {
                 property: "checked"
                 value: appSettings.showTerminalSize
             }
+            CheckBox {
+                id: useKeybinds
+                text: qsTr("Use Keybinds")
+                checked: appSettings.useKeybinds
+                onCheckedChanged: appSettings.useKeybinds = checked
+            }
+            Binding {
+                target: useKeybinds
+                property: "checked"
+                value: appSettings.useKeybinds
+            }
         }
     }
     GroupBox {
