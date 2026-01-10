@@ -129,9 +129,9 @@ int main(int argc, char *argv[])
 
     // Manage import paths for Linux and OSX.
     QStringList importPathList = engine.importPathList();
-    importPathList.prepend(QCoreApplication::applicationDirPath() + "/qmltermwidget");
-    importPathList.prepend(QCoreApplication::applicationDirPath() + "/../PlugIns");
-    importPathList.prepend(QCoreApplication::applicationDirPath() + "/../../../qmltermwidget");
+    importPathList.append(QCoreApplication::applicationDirPath() + "/qmltermwidget");
+    importPathList.append(QCoreApplication::applicationDirPath() + "/../PlugIns");
+    importPathList.append(QCoreApplication::applicationDirPath() + "/../../../qmltermwidget");
     engine.setImportPathList(importPathList);
 
     engine.load(QUrl(QStringLiteral ("qrc:/main.qml")));

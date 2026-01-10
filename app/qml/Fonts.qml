@@ -37,6 +37,8 @@ QtObject {
 
     property int pixelSize: lowResolutionFont ? _font.pixelSize : targetPixelHeight
 
+    property real baseWidth: _font.baseWidth ?? 1.0
+
     // Line spacing expressed as a relative factor for all fonts.
     property real lineSpacingFactor: appSettings.lineSpacing
     property int lineSpacing: Math.round(targetPixelHeight * lineSpacingFactor)
@@ -54,7 +56,7 @@ QtObject {
 
     property bool isSystemFont: fontlist.get(selectedFontIndex).isSystemFont
 
-    property string family: fontlist.get(selectedFontIndex).family
+    property string family: fontlist.get(selectedFontIndex).family ?? ""
 
     // There are two kind of fonts: low resolution and high resolution.
     // Low resolution font sets the lowResolutionFont property to true.
@@ -68,6 +70,7 @@ QtObject {
             name: "TERMINUS_SCALED"
             text: "Terminus"
             source: "fonts/terminus/TerminusTTF-4.49.3.ttf"
+            baseWidth: 1.0
             pixelSize: 12
             lowResolutionFont: true
             isSystemFont: false
@@ -76,6 +79,7 @@ QtObject {
             name: "EXCELSIOR_SCALED"
             text: "Fixedsys Excelsior"
             source: "fonts/fixedsys-excelsior/FSEX301-L2.ttf"
+            baseWidth: 1.0
             pixelSize: 16
             lowResolutionFont: true
             isSystemFont: false
@@ -85,6 +89,7 @@ QtObject {
             name: "GREYBEARD_SCALED"
             text: "Greybeard"
             source: "fonts/greybeard/Greybeard-16px.ttf"
+            baseWidth: 1.0
             pixelSize: 16
             lowResolutionFont: true
             isSystemFont: false
@@ -94,6 +99,7 @@ QtObject {
             name: "COMMODORE_PET_SCALED"
             text: "Commodore PET"
             source: "fonts/pet-me/PetMe.ttf"
+            baseWidth: 0.5
             pixelSize: 8
             lowResolutionFont: true
             isSystemFont: false
@@ -103,6 +109,7 @@ QtObject {
             name: "COZETTE_SCALED"
             text: "Cozette"
             source: "fonts/cozette/CozetteVector.ttf"
+            baseWidth: 1.0
             pixelSize: 13
             lowResolutionFont: true
             isSystemFont: false
@@ -111,6 +118,7 @@ QtObject {
             name: "UNSCII_8_SCALED"
             text: "Unscii 8"
             source: "fonts/unscii/unscii-8.ttf"
+            baseWidth: 0.5
             pixelSize: 8
             lowResolutionFont: true
             isSystemFont: false
@@ -120,6 +128,7 @@ QtObject {
             name: "UNSCII_8_THIN_SCALED"
             text: "Unscii 8 Thin"
             source: "fonts/unscii/unscii-8-thin.ttf"
+            baseWidth: 0.5
             pixelSize: 8
             lowResolutionFont: true
             isSystemFont: false
@@ -129,6 +138,7 @@ QtObject {
             name: "UNSCII_16_SCALED"
             text: "Unscii 16"
             source: "fonts/unscii/unscii-16-full.ttf"
+            baseWidth: 1.0
             pixelSize: 16
             lowResolutionFont: true
             isSystemFont: false
@@ -138,6 +148,7 @@ QtObject {
             name: "APPLE_II_SCALED"
             text: "Apple ]["
             source: "fonts/apple2/PrintChar21.ttf"
+            baseWidth: 0.5
             pixelSize: 8
             lowResolutionFont: true
             isSystemFont: false
@@ -147,6 +158,7 @@ QtObject {
             name: "ATARI_400_SCALED"
             text: "Atari 400-800"
             source: "fonts/atari-400-800/AtariClassic-Regular.ttf"
+            baseWidth: 0.5
             pixelSize: 8
             lowResolutionFont: true
             isSystemFont: false
@@ -156,6 +168,7 @@ QtObject {
             name: "COMMODORE_64_SCALED"
             text: "Commodore 64"
             source: "fonts/pet-me/PetMe64.ttf"
+            baseWidth: 0.5
             pixelSize: 8
             lowResolutionFont: true
             isSystemFont: false
@@ -165,6 +178,7 @@ QtObject {
             name: "IBM_EGA_8x8"
             text: "IBM EGA 8x8"
             source: "fonts/oldschool-pc-fonts/PxPlus_IBM_EGA_8x8.ttf"
+            baseWidth: 0.5
             pixelSize: 8
             lowResolutionFont: true
             isSystemFont: false
@@ -174,6 +188,7 @@ QtObject {
             name: "IBM_VGA_8x16"
             text: "IBM VGA 8x16"
             source: "fonts/oldschool-pc-fonts/PxPlus_IBM_VGA_8x16.ttf"
+            baseWidth: 1.0
             pixelSize: 16
             lowResolutionFont: true
             isSystemFont: false
@@ -183,7 +198,8 @@ QtObject {
             name: "TERMINUS"
             text: "Terminus"
             source: "fonts/terminus/TerminusTTF-4.49.3.ttf"
-            pixelSize: 35
+            baseWidth: 1.0
+            pixelSize: 32
             lowResolutionFont: false
             isSystemFont: false
         }
@@ -191,7 +207,8 @@ QtObject {
             name: "HACK"
             text: "Hack"
             source: "fonts/hack/Hack-Regular.ttf"
-            pixelSize: 35
+            baseWidth: 1.0
+            pixelSize: 32
             lowResolutionFont: false
             isSystemFont: false
         }
@@ -199,7 +216,8 @@ QtObject {
             name: "FIRA_CODE"
             text: "Fira Code"
             source: "fonts/fira-code/FiraCode-Medium.ttf"
-            pixelSize: 35
+            baseWidth: 1.0
+            pixelSize: 32
             lowResolutionFont: false
             isSystemFont: false
         }
@@ -207,7 +225,8 @@ QtObject {
             name: "IOSEVKA"
             text: "Iosevka"
             source: "fonts/iosevka/IosevkaTerm-ExtendedMedium.ttf"
-            pixelSize: 35
+            baseWidth: 1.0
+            pixelSize: 32
             lowResolutionFont: false
             isSystemFont: false
         }
@@ -215,7 +234,8 @@ QtObject {
             name: "JETBRAINS_MONO"
             text: "JetBrains Mono"
             source: "fonts/jetbrains-mono/JetBrainsMono-Medium.ttf"
-            pixelSize: 35
+            baseWidth: 1.0
+            pixelSize: 32
             lowResolutionFont: false
             isSystemFont: false
         }
@@ -223,6 +243,7 @@ QtObject {
             name: "IBM_3278"
             text: "IBM 3278"
             source: "fonts/ibm-3278/3270-Regular.ttf"
+            baseWidth: 1.0
             pixelSize: 32
             lowResolutionFont: false
             isSystemFont: false
