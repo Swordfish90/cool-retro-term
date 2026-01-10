@@ -31,6 +31,15 @@ MenuBar {
         }
     }
     Menu {
+        title: qsTr("Terminal")
+        MenuItem {
+            action: newWindowAction
+        }
+        MenuItem {
+            action: closeWindowAction
+        }
+    }
+    Menu {
         title: qsTr("Edit")
         MenuItem {
             action: copyAction

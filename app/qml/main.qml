@@ -100,6 +100,18 @@ ApplicationWindow {
         onTriggered: Qt.quit()
     }
     Action {
+        id: newWindowAction
+        text: qsTr("New Window")
+        shortcut: appSettings.isMacOS ? StandardKey.New : "Ctrl+Shift+N"
+        onTriggered: root.newWindow()
+    }
+    Action {
+        id: closeWindowAction
+        text: qsTr("Close Window")
+        shortcut: appSettings.isMacOS ? StandardKey.Close : "Ctrl+Shift+W"
+        onTriggered: terminalWindow.close()
+    }
+    Action {
         id: showsettingsAction
         text: qsTr("Settings")
         onTriggered: {
@@ -261,9 +273,6 @@ ApplicationWindow {
         }
     }
     onClosing: {
-        // OSX Since we are currently supporting only one window
-        // quit the application when it is closed.
-        if (appSettings.isMacOS)
-            Qt.quit()
+        root.closeWindow(terminalWindow)
     }
 }

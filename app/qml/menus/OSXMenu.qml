@@ -32,6 +32,19 @@ MenuBar {
         }
     }
     Menu {
+        title: qsTr("Terminal")
+        MenuItem {
+            text: newWindowAction.text
+            shortcut: "Meta+N"
+            onTriggered: newWindowAction.trigger()
+        }
+        MenuItem {
+            text: closeWindowAction.text
+            shortcut: "Meta+W"
+            onTriggered: closeWindowAction.trigger()
+        }
+    }
+    Menu {
         title: qsTr("Edit")
         MenuItem {
             text: copyAction.text
