@@ -49,16 +49,16 @@ int main(int argc, char *argv[])
 
     if (argc>1 && (!strcmp(argv[1],"-h") || !strcmp(argv[1],"--help"))) {
         QTextStream cout(stdout, QIODevice::WriteOnly);
-        cout << "Usage: " << argv[0] << " [--default-settings] [--workdir <dir>] [--program <prog>] [-p|--profile <prof>] [--fullscreen] [-h|--help]" << endl;
-        cout << "  --default-settings  Run cool-retro-term with the default settings" << endl;
-        cout << "  --workdir <dir>     Change working directory to 'dir'" << endl;
-        cout << "  -e <cmd>            Command to execute. This option will catch all following arguments, so use it as the last option." << endl;
-        cout << "  -T <title>          Set window title to 'title'." << endl;
-        cout << "  --fullscreen        Run cool-retro-term in fullscreen." << endl;
-        cout << "  -p|--profile <prof> Run cool-retro-term with the given profile." << endl;
-        cout << "  -h|--help           Print this help." << endl;
-        cout << "  --verbose           Print additional information such as profiles and settings." << endl;
-        cout << "  -v|--version        Print the program name and version." << endl;
+        cout << "Usage: " << argv[0] << " [--default-settings] [--workdir <dir>] [--program <prog>] [-p|--profile <prof>] [--fullscreen] [-h|--help]" << '\n';
+        cout << "  --default-settings  Run cool-retro-term with the default settings" << '\n';
+        cout << "  --workdir <dir>     Change working directory to 'dir'" << '\n';
+        cout << "  -e <cmd>            Command to execute. This option will catch all following arguments, so use it as the last option." << '\n';
+        cout << "  -T <title>          Set window title to 'title'." << '\n';
+        cout << "  --fullscreen        Run cool-retro-term in fullscreen." << '\n';
+        cout << "  -p|--profile <prof> Run cool-retro-term with the given profile." << '\n';
+        cout << "  -h|--help           Print this help." << '\n';
+        cout << "  --verbose           Print additional information such as profiles and settings." << '\n';
+        cout << "  -v|--version        Print the program name and version." << '\n';
         return 0;
     }
 
@@ -66,7 +66,7 @@ int main(int argc, char *argv[])
 
     if (argc>1 && (!strcmp(argv[1],"-v") || !strcmp(argv[1],"--version"))) {
         QTextStream cout(stdout, QIODevice::WriteOnly);
-        cout << "cool-retro-term " << appVersion << endl;
+        cout << "cool-retro-term " << appVersion << '\n';
         return 0;
     }
 
