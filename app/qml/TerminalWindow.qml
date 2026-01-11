@@ -72,7 +72,7 @@ ApplicationWindow {
 
     color: "#00000000"
 
-    title: terminalTabs.title || qsTr(appSettings.wintitle)
+    title: terminalTabs.currentTitle
 
     Action {
         id: showMenubarAction

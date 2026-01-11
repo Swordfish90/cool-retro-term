@@ -24,14 +24,15 @@ import QtQuick.Layouts
 Item {
     id: tabsRoot
 
-    readonly property string title: stack.currentItem ? stack.currentItem.title : ""
+    readonly property int innerPadding: 6
+    readonly property string currentTitle: tabsModel.get(currentIndex).title ?? "cool-retro-term"
     readonly property size terminalSize: stack.currentItem ? stack.currentItem.terminalSize : Qt.size(0, 0)
     property alias currentIndex: tabBar.currentIndex
     readonly property int count: tabsModel.count
     property var hostWindow
 
     function addTab() {
-        tabsModel.append({ title: qsTr("Tab %1").arg(tabsModel.count + 1) })
+        tabsModel.append({ title: "" })
         tabBar.currentIndex = tabsModel.count - 1
     }
 
@@ -42,9 +43,7 @@ Item {
         }
 
         tabsModel.remove(index)
-        if (tabBar.currentIndex >= tabsModel.count) {
-            tabBar.currentIndex = tabsModel.count - 1
-        }
+        tabBar.currentIndex = Math.min(tabBar.currentIndex, tabsModel.count - 1)
     }
 
     ListModel {
@@ -57,41 +56,60 @@ Item {
         anchors.fill: parent
         spacing: 0
 
-        TabBar {
-            id: tabBar
+        Rectangle {
+            id: tabRow
             Layout.fillWidth: true
-            focusPolicy: Qt.NoFocus
+            height: rowLayout.implicitHeight
+            color: palette.window
             visible: tabsModel.count > 1
 
-            background: Rectangle {
-                color: palette.window
-            }
+            RowLayout {
+                id: rowLayout
+                anchors.fill: parent
+                spacing: 0
 
-            Repeater {
-                model: tabsModel
-                TabButton {
-                    id: tabButton
-                    contentItem: RowLayout {
-                        anchors.fill: parent
-                        anchors { leftMargin: 6; rightMargin: 6 }
-                        spacing: 6
+                TabBar {
+                    id: tabBar
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+                    focusPolicy: Qt.NoFocus
 
-                        Label {
-                            text: model.title
-                            elide: Text.ElideRight
-                            Layout.fillWidth: true
-                            Layout.alignment: Qt.AlignVCenter
-                        }
+                    Repeater {
+                        model: tabsModel
+                        TabButton {
+                            id: tabButton
+                            contentItem: RowLayout {
+                                anchors.fill: parent
+                                anchors { leftMargin: innerPadding; rightMargin: innerPadding }
+                                spacing: innerPadding
 
-                        ToolButton {
-                            text: "\u00d7"
-                            focusPolicy: Qt.NoFocus
-                            visible: tabsModel.count > 1
-                            enabled: visible
-                            Layout.alignment: Qt.AlignVCenter
-                            onClicked: tabsRoot.closeTab(index)
+                                Label {
+                                    text: model.title
+                                    elide: Text.ElideRight
+                                    Layout.fillWidth: true
+                                    Layout.alignment: Qt.AlignVCenter
+                                }
+
+                                ToolButton {
+                                    text: "\u00d7"
+                                    focusPolicy: Qt.NoFocus
+                                    padding: innerPadding
+                                    Layout.alignment: Qt.AlignVCenter
+                                    onClicked: tabsRoot.closeTab(index)
+                                }
+                            }
                         }
                     }
+                }
+
+                ToolButton {
+                    id: addTabButton
+                    text: "+"
+                    focusPolicy: Qt.NoFocus
+                    Layout.fillHeight: true
+                    padding: innerPadding
+                    Layout.alignment: Qt.AlignVCenter
+                    onClicked: tabsRoot.addTab()
                 }
             }
         }
@@ -111,10 +129,9 @@ Item {
                             activate()
                         }
                     }
-
+                    onTitleChanged: tabsModel.setProperty(index, "title", title)
                     Layout.fillWidth: true
                     Layout.fillHeight: true
-                    onTitleChanged: tabsModel.setProperty(index, "title", title)
                     onSessionFinished: tabsRoot.closeTab(index)
                 }
             }
