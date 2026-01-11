@@ -148,6 +148,11 @@ QtObject {
         fontScaling = Math.max(fontScaling - 0.05, minimumFontScaling)
     }
 
+    function close() {
+        storeSettings()
+        storeCustomProfiles()
+    }
+
     property Storage storage: Storage {}
 
     function stringify(obj) {
@@ -890,11 +895,6 @@ QtObject {
         }
 
         initializedSettings()
-    }
-    Component.onDestruction: {
-        storeSettings()
-        storeCustomProfiles()
-        //        storage.dropSettings(); //DROPS THE SETTINGS!.. REMEMBER TO DISABLE ONCE ENABLED!!
     }
 
     // VARS ///////////////////////////////////////////////////////////////////

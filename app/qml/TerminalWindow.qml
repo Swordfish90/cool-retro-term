@@ -102,7 +102,7 @@ ApplicationWindow {
         id: quitAction
         text: qsTr("Quit")
         shortcut: "Ctrl+Shift+Q"
-        onTriggered: Qt.quit()
+        onTriggered: appSettings.close()
     }
     Action {
         id: showsettingsAction
