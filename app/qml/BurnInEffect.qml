@@ -82,13 +82,17 @@ Loader {
             }
             // Restart blurred source settings change.
             Connections {
+                target: appSettings.fontManager
+
+                onTerminalFontChanged: {
+                    burnInEffect.restartBlurSource()
+                }
+            }
+
+            Connections {
                 target: appSettings
 
                 onBurnInChanged: {
-                    burnInEffect.restartBlurSource()
-                }
-
-                onTerminalFontChanged: {
                     burnInEffect.restartBlurSource()
                 }
 

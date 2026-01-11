@@ -104,7 +104,7 @@ ColumnLayout {
                     currentIndex = 0
                 }
                 Connections {
-                    target: appSettings
+                    target: appSettings.fontManager
 
                     onTerminalFontChanged: {
                         fontChanger.updateIndex()

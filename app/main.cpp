@@ -7,17 +7,18 @@
 #include <QtWidgets/QApplication>
 #include <QIcon>
 #include <QQuickStyle>
+#include <QtQml/qqml.h>
 
 #include <kdsingleapplication.h>
 
 #include <QDebug>
 #include <stdlib.h>
 
-#include <QFontDatabase>
 #include <QLoggingCategory>
 
 #include <fileio.h>
-#include <monospacefontmanager.h>
+#include <fontlistmodel.h>
+#include <fontmanager.h>
 
 #if defined(Q_OS_MAC)
 #include <CoreFoundation/CoreFoundation.h>
@@ -97,7 +98,9 @@ int main(int argc, char *argv[])
 
     QQmlApplicationEngine engine;
     FileIO fileIO;
-    MonospaceFontManager monospaceFontManager;
+
+    qmlRegisterType<FontManager>("CoolRetroTerm", 1, 0, "FontManager");
+    qmlRegisterUncreatableType<FontListModel>("CoolRetroTerm", 1, 0, "FontListModel", "FontListModel is created by FontManager");
 
 #if !defined(Q_OS_MAC)
     app.setWindowIcon(QIcon::fromTheme("cool-retro-term", QIcon(":../icons/32x32/cool-retro-term.png")));
@@ -124,8 +127,6 @@ int main(int argc, char *argv[])
 
     engine.rootContext()->setContextProperty("workdir", getNamedArgument(args, "--workdir", "$HOME"));
     engine.rootContext()->setContextProperty("fileIO", &fileIO);
-    engine.rootContext()->setContextProperty("monospaceFontManager", &monospaceFontManager);
-    engine.rootContext()->setContextProperty("monospaceSystemFonts", monospaceFontManager.retrieveMonospaceFonts());
 
     // Manage import paths for Linux and OSX.
     QStringList importPathList = engine.importPathList();

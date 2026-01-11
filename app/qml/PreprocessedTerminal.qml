@@ -148,29 +148,24 @@ Item{
         }
 
         function handleFontChanged(fontFamily, pixelSize, lineSpacing, screenScaling, fontWidth, fallbackFontFamily, lowResolutionFont) {
-            var updatedFont = Qt.font({
+            kterminal.font = Qt.font({
                 family: fontFamily,
                 pixelSize: pixelSize
             });
-
-            if (!updatedFont) {
-                return;
-            }
-
-            kterminal.font = updatedFont;
 
             terminalContainer.fontWidth = fontWidth;
             terminalContainer.screenScaling = screenScaling;
             scaleTexture = Math.max(1.0, Math.floor(screenScaling * appSettings.windowScaling));
 
             kterminal.lineSpacing = lineSpacing;
+        }
 
-            var fallbackChain = [];
-            if (fallbackFontFamily && fallbackFontFamily.length > 0) {
-                fallbackChain.push(fallbackFontFamily);
+        Connections {
+            target: appSettings
+
+            onWindowScalingChanged: {
+                scaleTexture = Math.max(1.0, Math.floor(terminalContainer.screenScaling * appSettings.windowScaling));
             }
-            fallbackChain.push(appSettings.isMacOS ? "Menlo" : "Monospace");
-            monospaceFontManager.setFontSubstitutions(fontFamily, fallbackChain);
         }
 
         function startSession() {
@@ -194,8 +189,8 @@ Item{
             forceActiveFocus();
         }
         Component.onCompleted: {
-            appSettings.terminalFontChanged.connect(handleFontChanged);
-            appSettings.updateFont()
+            appSettings.fontManager.terminalFontChanged.connect(handleFontChanged);
+            appSettings.fontManager.refresh()
             startSession();
         }
     }

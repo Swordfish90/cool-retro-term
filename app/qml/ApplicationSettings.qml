@@ -19,6 +19,7 @@
 *******************************************************************************/
 import QtQuick 2.2
 import QtQuick.Controls 2.0
+import CoolRetroTerm 1.0
 
 import "utils.js" as Utils
 
@@ -60,7 +61,6 @@ QtObject {
 
     property bool blinkingCursor: false
 
-    onWindowScalingChanged: updateFont()
 
     // PROFILE SETTINGS ///////////////////////////////////////////////////////
     property real windowOpacity: 1.0
@@ -113,132 +113,32 @@ QtObject {
     readonly property int subpixel_rasterization: 3
     readonly property int modern_rasterization: 4
 
-    property int rasterization: no_rasterization
+    property alias rasterization: fontManager.rasterization
 
     readonly property int bundled_fonts: 0
     readonly property int system_fonts: 1
 
-    property int fontSource: bundled_fonts
+    property alias fontSource: fontManager.fontSource
 
     // FONTS //////////////////////////////////////////////////////////////////
     readonly property real baseFontScaling: 0.75
-    property real fontScaling: 1.0
+    property alias fontScaling: fontManager.fontScaling
     property real totalFontScaling: baseFontScaling * fontScaling
 
-    property real fontWidth: 1.0
-    property real lineSpacing: 0.1
+    property alias fontWidth: fontManager.fontWidth
+    property alias lineSpacing: fontManager.lineSpacing
 
-    property bool lowResolutionFont: false
+    property alias lowResolutionFont: fontManager.lowResolutionFont
 
-    property string fontName: "TERMINUS_SCALED"
-    property var fontlist: fontManager.item ? fontManager.item.fontlist : null
+    property alias fontName: fontManager.fontName
+    property alias filteredFontList: fontManager.filteredFontList
 
-    property var filteredFontList: ListModel {}
-
-    function updateFont() {
-        if (!fontManager.item || !fontlist) return
-
-        filteredFontList.clear()
-        var currentFontInList = false
-
-        for (var i = 0; i < fontlist.count; i++) {
-            var font = fontlist.get(i)
-            var isBundled = !font.isSystemFont
-            var isSystem = font.isSystemFont
-
-            var matchesSource = (fontSource === bundled_fonts && isBundled) || (fontSource === system_fonts && isSystem)
-
-            if (!matchesSource) continue
-
-            var modernMode = rasterization === modern_rasterization
-            var matchesRasterization = font.isSystemFont || (modernMode == !font.lowResolutionFont)
-
-            if (matchesRasterization) {
-                filteredFontList.append(font)
-                if (font.name === fontName) {
-                    currentFontInList = true
-                }
-            }
-        }
-
-        if (!currentFontInList && filteredFontList.count > 0) {
-            fontName = filteredFontList.get(0).name
-        }
-
-        var index = getIndexByName(fontName)
-        if (index === undefined) return
-
-        fontManager.item.selectedFontIndex = index
-        fontManager.item.scaling = totalFontScaling
-
-        var fontSourcePath = fontManager.item.source
-        var pixelSize = fontManager.item.pixelSize
-        var lineSpacing = fontManager.item.lineSpacing
-        var screenScaling = fontManager.item.screenScaling
-        var fontWidth = (fontManager.item.baseWidth ?? 1.0) * appSettings.fontWidth
-        var fontFamily = fontManager.item.family
-        var isSystemFont = fontManager.item.isSystemFont
-        var lowResolutionFont = fontManager.item.lowResolutionFont;
-        var fallbackFontFamily = ""
-
-        appSettings.lowResolutionFont = fontManager.item.lowResolutionFont
-
-        if (!isSystemFont) {
-            fontLoader.source = fontSourcePath
-            fontFamily = fontLoader.name
-        }
-
-        fallbackFontLoader.source = ""
-        var fallbackName = fontManager.item.fallbackName
-        if (fallbackName && fallbackName !== fontName) {
-            var fallbackFont = getFontByName(fallbackName)
-            if (fallbackFont) {
-                fallbackFontLoader.source = fallbackFont.source
-                fallbackFontFamily = fallbackFontLoader.name
-            }
-        }
-
-        terminalFontChanged(fontFamily, pixelSize, lineSpacing, screenScaling, fontWidth, fallbackFontFamily, lowResolutionFont)
+    property FontManager fontManager: FontManager {
+        id: fontManager
+        baseFontScaling: baseFontScaling
     }
-
-    onFontSourceChanged: updateFont()
-    onRasterizationChanged: updateFont()
-    onFontNameChanged: updateFont()
-
-    signal terminalFontChanged(string fontFamily, int pixelSize, int lineSpacing, real screenScaling, real fontWidth, string fallbackFontFamily, bool lowResolutionFont)
 
     signal initializedSettings
-
-    property Loader fontManager: Loader {
-        source: "Fonts.qml"
-        onLoaded: updateFont()
-    }
-
-    property FontLoader fontLoader: FontLoader {}
-    property FontLoader fallbackFontLoader: FontLoader {}
-
-    onTotalFontScalingChanged: updateFont()
-    onFontWidthChanged: updateFont()
-    onLineSpacingChanged: updateFont()
-
-    function getIndexByName(name) {
-        for (var i = 0; i < fontlist.count; i++) {
-            var requestedName = fontlist.get(i).name
-            if (name === requestedName)
-                return i
-        }
-        return 0 // If the font is not available default to 0.
-    }
-
-    function getFontByName(name) {
-        for (var i = 0; i < fontlist.count; i++) {
-            var font = fontlist.get(i)
-            if (name === font.name) {
-                return font
-            }
-        }
-        return null
-    }
 
     function incrementScaling() {
         fontScaling = Math.min(fontScaling + 0.05, maximumFontScaling)

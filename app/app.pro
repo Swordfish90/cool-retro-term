@@ -16,11 +16,13 @@ DESTDIR = $$OUT_PWD/../
 
 HEADERS += \
     fileio.h \
-    monospacefontmanager.h
+    fontmanager.h \
+    fontlistmodel.h
 
 SOURCES += main.cpp \
     fileio.cpp \
-    monospacefontmanager.cpp
+    fontmanager.cpp \
+    fontlistmodel.cpp
 
 macx:ICON = icons/crt.icns
 
