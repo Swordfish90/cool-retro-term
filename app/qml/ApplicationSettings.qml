@@ -48,8 +48,6 @@ QtObject {
     property bool fullscreen: false
     property bool showMenubar: false
 
-    property string wintitle: "cool-retro-term"
-
     property bool showTerminalSize: true
     property real windowScaling: 1.0
 
@@ -888,10 +886,6 @@ QtObject {
         if (args.indexOf("--fullscreen") !== -1) {
             fullscreen = true
             showMenubar = false
-        }
-
-        if (args.indexOf("-T") !== -1) {
-            wintitle = args[args.indexOf("-T") + 1]
         }
 
         initializedSettings()
