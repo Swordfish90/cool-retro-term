@@ -30,6 +30,7 @@
         <file>fonts/greybeard/Greybeard-16px.ttf</file>
         <file>fonts/hack/Hack-Regular.ttf</file>
         <file>fonts/fira-code/FiraCode-Medium.ttf</file>
+        <file>fonts/bigblue-terminal/BigBlueTerm437NerdFontMono-Regular.ttf</file>
         <file>fonts/iosevka/IosevkaTerm-ExtendedMedium.ttf</file>
         <file>fonts/jetbrains-mono/JetBrainsMono-Medium.ttf</file>
         <file>../icons/32x32/cool-retro-term.png</file>
@@ -38,7 +39,7 @@
         <file>fonts/pet-me/PetMe64.ttf</file>
         <file>fonts/pet-me/PetMe.ttf</file>
         <file>BurnInEffect.qml</file>
-        <file>fonts/terminus/TerminusTTF-4.49.3.ttf</file>
+        <file>fonts/terminus/TerminessNerdFontMono-Regular.ttf</file>
         <file>TerminalFrame.qml</file>
         <file>menus/WindowMenu.qml</file>
         <file>menus/FullContextMenu.qml</file>

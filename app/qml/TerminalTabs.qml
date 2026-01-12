@@ -31,6 +31,13 @@ Item {
     readonly property int count: tabsModel.count
     property var hostWindow
 
+    function normalizeTitle(rawTitle) {
+        if (rawTitle === undefined || rawTitle === null) {
+            return ""
+        }
+        return String(rawTitle).trim()
+    }
+
     function addTab() {
         tabsModel.append({ title: "" })
         tabBar.currentIndex = tabsModel.count - 1
@@ -129,7 +136,7 @@ Item {
                             activate()
                         }
                     }
-                    onTitleChanged: tabsModel.setProperty(index, "title", title)
+                    onTitleChanged: tabsModel.setProperty(index, "title", normalizeTitle(title))
                     Layout.fillWidth: true
                     Layout.fillHeight: true
                     onSessionFinished: tabsRoot.closeTab(index)

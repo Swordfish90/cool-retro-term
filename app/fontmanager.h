@@ -96,7 +96,7 @@ private:
 
     int m_fontSource = 0;
     int m_rasterization = 0;
-    QString m_fontName = QStringLiteral("TERMINUS_SCALED");
+    QString m_fontName = QStringLiteral("TERMINESS_SCALED");
     qreal m_fontScaling = 1.0;
     qreal m_fontWidth = 1.0;
     qreal m_lineSpacing = 0.1;

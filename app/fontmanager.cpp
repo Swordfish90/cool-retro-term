@@ -7,7 +7,7 @@
 namespace {
 constexpr int kModernRasterization = 4;
 constexpr int kBaseFontPixelHeight = 32;
-constexpr int kSystemFontPixelSize = 30;
+constexpr int kSystemFontPixelSize = 32;
 }
 
 FontManager::FontManager(QObject *parent)
@@ -197,9 +197,16 @@ void FontManager::populateBundledFonts()
     m_allFonts.clear();
 
     addBundledFont(
-        "TERMINUS_SCALED",
-        "Terminus",
-        ":/fonts/terminus/TerminusTTF-4.49.3.ttf",
+        "TERMINESS_SCALED",
+        "Terminess",
+        ":/fonts/terminus/TerminessNerdFontMono-Regular.ttf",
+        1.0,
+        12,
+        true);
+    addBundledFont(
+        "BIGBLUE_TERMINAL_SCALED",
+        "BigBlue Terminal",
+        ":/fonts/bigblue-terminal/BigBlueTerm437NerdFontMono-Regular.ttf",
         1.0,
         12,
         true);
@@ -300,9 +307,9 @@ void FontManager::populateBundledFonts()
         "UNSCII_16_SCALED");
 
     addBundledFont(
-        "TERMINUS",
-        "Terminus",
-        ":/fonts/terminus/TerminusTTF-4.49.3.ttf",
+        "TERMINESS",
+        "Terminess",
+        ":/fonts/terminus/TerminessNerdFontMono-Regular.ttf",
         1.0,
         32,
         false);

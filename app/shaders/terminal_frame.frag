@@ -64,7 +64,7 @@ void main() {
 
     float distPixels = roundedRectSdfPixels(coords, vec2(0.0), vec2(1.0), screenRadiusPixels);
     float frameShadow = (e * 0.66 + w * 0.66 + n * 0.33 + s) * depth;
-    frameShadow *= smoothstep(0.0, edgeSoftPixels * 10.0, distPixels);
+    frameShadow *= smoothstep(0.0, edgeSoftPixels * 5.0, distPixels);
 
     float frameAlpha = 1.0 - frameShininess * 0.4;
 

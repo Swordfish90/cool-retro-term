@@ -40,11 +40,6 @@ QtObject {
     property bool isMacOS: Qt.platform.os === "osx"
 
     // GENERAL SETTINGS ///////////////////////////////////////////////////////
-    property int x: 100
-    property int y: 100
-    property int width: 1024
-    property int height: 768
-
     property bool fullscreen: false
     property bool showMenubar: false
 
@@ -163,10 +158,6 @@ QtObject {
     function composeSettingsString() {
         var settings = {
             "effectsFrameSkip": effectsFrameSkip,
-            "x": x,
-            "y": y,
-            "width": width,
-            "height": height,
             "windowScaling": windowScaling,
             "showTerminalSize": showTerminalSize,
             "fontScaling": fontScaling,
@@ -254,11 +245,6 @@ QtObject {
         effectsFrameSkip = settings.effectsFrameSkip !== undefined ? settings.effectsFrameSkip : effectsFrameSkip
         windowScaling = settings.windowScaling
                 !== undefined ? settings.windowScaling : windowScaling
-
-        x = settings.x !== undefined ? settings.x : x
-        y = settings.y !== undefined ? settings.y : y
-        width = settings.width !== undefined ? settings.width : width
-        height = settings.height !== undefined ? settings.height : height
 
         fontScaling = settings.fontScaling !== undefined ? settings.fontScaling : fontScaling
 
@@ -387,7 +373,7 @@ QtObject {
                 "contrast": 0.8,
                 "flickering": 0.1,
                 "fontColor": "#ff8100",
-                "fontName": "TERMINUS_SCALED",
+                "fontName": "TERMINESS_SCALED",
                 "fontSource": 0,
                 "fontWidth": 1,
                 "lineSpacing": 0.1,

@@ -116,13 +116,10 @@ Item{
             return Math.round(size / factor) * factor;
         }
 
-        colorScheme: "cool-retro-term"
-
-        antialiasText: !appSettings.lowResolutionFont
-        smooth: !appSettings.lowResolutionFont
-        enableBold: !appSettings.lowResolutionFont
         fullCursorHeight: true
         blinkingCursor: appSettings.blinkingCursor
+
+        colorScheme: "cool-retro-term"
 
         session: QMLTermSession {
             id: ksession
@@ -142,12 +139,16 @@ Item{
                 anchors.topMargin: 1
                 anchors.bottomMargin: 1
                 color: "white"
-                radius: width * 0.25
                 opacity: 0.7
             }
         }
 
         function handleFontChanged(fontFamily, pixelSize, lineSpacing, screenScaling, fontWidth, fallbackFontFamily, lowResolutionFont) {
+            kterminal.lineSpacing = lineSpacing;
+            kterminal.antialiasText = !lowResolutionFont;
+            kterminal.smooth = !lowResolutionFont;
+            kterminal.enableBold = !lowResolutionFont;
+
             kterminal.font = Qt.font({
                 family: fontFamily,
                 pixelSize: pixelSize
@@ -156,8 +157,6 @@ Item{
             terminalContainer.fontWidth = fontWidth;
             terminalContainer.screenScaling = screenScaling;
             scaleTexture = Math.max(1.0, Math.floor(screenScaling * appSettings.windowScaling));
-
-            kterminal.lineSpacing = lineSpacing;
         }
 
         Connections {

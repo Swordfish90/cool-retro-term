@@ -29,19 +29,8 @@ ApplicationWindow {
     width: 1024
     height: 768
 
-    // Save window properties automatically
-    onXChanged: appSettings.x = x
-    onYChanged: appSettings.y = y
-    onWidthChanged: appSettings.width = width
-    onHeightChanged: appSettings.height = height
-
-    // Load saved window geometry and show the window
+    // Show the window once it is ready.
     Component.onCompleted: {
-        x = appSettings.x
-        y = appSettings.y
-        width = appSettings.width
-        height = appSettings.height
-
         visible = true
     }
 
