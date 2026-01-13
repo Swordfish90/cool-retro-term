@@ -32,6 +32,7 @@ layout(binding = 2) uniform sampler2D bloomSource;
 
 float min2(vec2 v) { return min(v.x, v.y); }
 float max2(vec2 v) { return max(v.x, v.y); }
+float rand2(vec2 v) { return fract(sin(dot(v, vec2(12.9898, 78.233))) * 43758.5453); }
 vec2 distortCoordinates(vec2 coords){
     vec2 paddedCoords = coords * (vec2(1.0) + frameSize * 2.0) - frameSize;
     vec2 cc = (paddedCoords - vec2(0.5));
@@ -89,5 +90,9 @@ void main() {
 #endif
 
     finalColor *= screen_brightness;
+
+    float noise = rand2(qt_TexCoord0) - 0.5;
+    finalColor = clamp(finalColor + vec3(noise * 0.025), 0.0, 1.0);
+
     fragColor = vec4(finalColor, qt_Opacity);
 }

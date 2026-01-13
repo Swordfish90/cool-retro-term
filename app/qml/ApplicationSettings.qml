@@ -28,7 +28,7 @@ QtObject {
     readonly property int profileVersion: 2
 
     // STATIC CONSTANTS ////////////////////////////////////////////////////////
-    readonly property real screenCurvatureSize: 0.4
+    readonly property real screenCurvatureSize: 0.6
     readonly property real minimumFontScaling: 0.25
     readonly property real maximumFontScaling: 2.50
 
@@ -46,7 +46,7 @@ QtObject {
     property bool showTerminalSize: true
     property real windowScaling: 1.0
 
-    property int effectsFrameSkip: 2
+    property int effectsFrameSkip: 3
     property bool verbose: false
 
     property real bloomQuality: 0.5
@@ -95,10 +95,12 @@ QtObject {
     property real frameSize: _frameSize * 0.05
 
     property real _screenRadius: 0.2
-    property real screenRadius: Utils.lint(4.0, 40.0, _screenRadius)
+    property real screenRadius: Utils.lint(4.0, 120.0, _screenRadius)
 
     property real _margin: 0.5
-    property real margin: Utils.lint(1.0, 40.0, _margin) + 0.25 * screenRadius
+    property real margin: Utils.lint(1.0, 40.0, _margin) + (1.0 - Math.SQRT1_2) * screenRadius
+
+    readonly property bool frameEnabled: ambientLight > 0 || _frameSize > 0 || screenCurvature > 0
 
     readonly property int no_rasterization: 0
     readonly property int scanline_rasterization: 1
@@ -144,6 +146,7 @@ QtObject {
     function close() {
         storeSettings()
         storeCustomProfiles()
+        Qt.quit()
     }
 
     property Storage storage: Storage {}
@@ -384,13 +387,13 @@ QtObject {
                 "rbgShift": 0,
                 "saturationColor": 0.2,
                 "screenCurvature": 0.4,
-                "screenRadius": 0.3,
+                "screenRadius": 0.1,
                 "staticNoise": 0.1,
                 "windowOpacity": 1,
                 "margin": 0.3,
                 "blinkingCursor": false,
                 "frameSize": 0.1,
-                "frameColor": "#f2d4a7",
+                "frameColor": "#cfcfcf",
                 "frameShininess": 0.3
             }'
             builtin: true
@@ -418,13 +421,13 @@ QtObject {
                 "rbgShift": 0,
                 "saturationColor": 0.0,
                 "screenCurvature": 0.7,
-                "screenRadius": 0.6,
+                "screenRadius": 0.2,
                 "staticNoise": 0.1,
                 "windowOpacity": 1,
                 "margin": 0.3,
                 "blinkingCursor": false,
                 "frameSize": 0.1,
-                "frameColor": "#bdeed2",
+                "frameColor": "#d4d4d4",
                 "frameShininess": 0.1
             }'
             builtin: true
@@ -452,7 +455,7 @@ QtObject {
                 "rbgShift": 0,
                 "saturationColor": 0.2,
                 "screenCurvature": 1.0,
-                "screenRadius": 0.3,
+                "screenRadius": 0.1,
                 "staticNoise": 0.1,
                 "windowOpacity": 1,
                 "margin": 0.3,
@@ -486,7 +489,7 @@ QtObject {
                 "rbgShift": 0,
                 "saturationColor": 0,
                 "screenCurvature": 0.5,
-                "screenRadius": 0.4,
+                "screenRadius": 0.1,
                 "staticNoise": 0.1,
                 "windowOpacity": 1,
                 "margin": 0.3,
@@ -520,7 +523,7 @@ QtObject {
                 "rbgShift": 0.1,
                 "saturationColor": 0,
                 "screenCurvature": 1.0,
-                "screenRadius": 1.0,
+                "screenRadius": 0.3,
                 "staticNoise": 0.2,
                 "windowOpacity": 1,
                 "margin": 0.2,
@@ -554,7 +557,7 @@ QtObject {
                 "rbgShift": 0.1,
                 "saturationColor": 0,
                 "screenCurvature": 1.0,
-                "screenRadius": 1.0,
+                "screenRadius": 0.3,
                 "staticNoise": 0.2,
                 "windowOpacity": 1,
                 "margin": 0.0,
@@ -588,13 +591,13 @@ QtObject {
                 "rbgShift": 0.0,
                 "saturationColor": 0,
                 "screenCurvature": 0.3,
-                "screenRadius": 0.5,
+                "screenRadius": 0.2,
                 "staticNoise": 0.1,
                 "windowOpacity": 1,
                 "margin": 0.2,
                 "blinkingCursor": false,
                 "frameSize": 0.4,
-                "frameColor": "#8ed6ff",
+                "frameColor": "#cccccc",
                 "frameShininess": 0.3
             }'
             builtin: true
@@ -622,7 +625,7 @@ QtObject {
                 "rbgShift": 0.15,
                 "saturationColor": 0,
                 "screenCurvature": 0.3,
-                "screenRadius": 0.2,
+                "screenRadius": 0.1,
                 "staticNoise": 0.0,
                 "windowOpacity": 1,
                 "margin": 0.2,
@@ -696,7 +699,7 @@ QtObject {
                 "margin": 0.1,
                 "blinkingCursor": false,
                 "frameSize": 0,
-                "frameColor": "#52f7ff",
+                "frameColor": "#c3c3c3",
                 "frameShininess": 0.2
             }'
             builtin: true
@@ -730,7 +733,7 @@ QtObject {
                 "margin": 0.1,
                 "blinkingCursor": false,
                 "frameSize": 0,
-                "frameColor": "#9aa7b3",
+                "frameColor": "#a7a7a7",
                 "frameShininess": 0.2
             }'
             builtin: true
@@ -764,7 +767,7 @@ QtObject {
                 "margin": 0.1,
                 "blinkingCursor": false,
                 "frameSize": 0,
-                "frameColor": "#ff9bd6",
+                "frameColor": "#d0d0d0",
                 "frameShininess": 0.2
             }'
             builtin: true
@@ -832,7 +835,7 @@ QtObject {
                 "margin": 0.1,
                 "blinkingCursor": false,
                 "frameSize": 0,
-                "frameColor": "#d0d0c8",
+                "frameColor": "#cdcdcd",
                 "frameShininess": 0.2
             }'
             builtin: true

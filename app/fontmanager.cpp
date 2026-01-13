@@ -2,6 +2,8 @@
 
 #include <QFont>
 #include <QFontDatabase>
+#include <QFontMetricsF>
+#include <QtGlobal>
 #include <QtMath>
 
 namespace {
@@ -235,6 +237,13 @@ void FontManager::populateBundledFonts()
         true,
         "UNSCII_8_SCALED");
     addBundledFont(
+        "GOHU_11_SCALED",
+        "Gohu 11",
+        ":/fonts/gohu/GohuFont11NerdFontMono-Regular.ttf",
+        1.0,
+        11,
+        true);
+    addBundledFont(
         "COZETTE_SCALED",
         "Cozette",
         ":/fonts/cozette/CozetteVector.ttf",
@@ -316,35 +325,56 @@ void FontManager::populateBundledFonts()
     addBundledFont(
         "HACK",
         "Hack",
-        ":/fonts/hack/Hack-Regular.ttf",
+        ":/fonts/hack/HackNerdFontMono-Regular.ttf",
         1.0,
         32,
         false);
     addBundledFont(
         "FIRA_CODE",
         "Fira Code",
-        ":/fonts/fira-code/FiraCode-Medium.ttf",
+        ":/fonts/fira-code/FiraCodeNerdFontMono-Regular.ttf",
         1.0,
         32,
         false);
     addBundledFont(
         "IOSEVKA",
         "Iosevka",
-        ":/fonts/iosevka/IosevkaTerm-ExtendedMedium.ttf",
+        ":/fonts/iosevka/IosevkaTermNerdFontMono-Regular.ttf",
         1.0,
         32,
         false);
     addBundledFont(
         "JETBRAINS_MONO",
         "JetBrains Mono",
-        ":/fonts/jetbrains-mono/JetBrainsMono-Medium.ttf",
+        ":/fonts/jetbrains-mono/JetBrainsMonoNerdFontMono-Regular.ttf",
         1.0,
         32,
         false);
     addBundledFont(
         "IBM_3278",
         "IBM 3278",
-        ":/fonts/ibm-3278/3270-Regular.ttf",
+        ":/fonts/ibm-3278/3270NerdFontMono-Regular.ttf",
+        1.0,
+        32,
+        false);
+    addBundledFont(
+        "SOURCE_CODE_PRO",
+        "Source Code Pro",
+        ":/fonts/source-code-pro/SauceCodeProNerdFontMono-Regular.ttf",
+        1.0,
+        32,
+        false);
+    addBundledFont(
+        "DEPARTURE_MONO_SCALED",
+        "Departure Mono",
+        ":/fonts/departure-mono/DepartureMonoNerdFontMono-Regular.otf",
+        1.0,
+        11,
+        true);
+    addBundledFont(
+        "OPENDYSLEXIC",
+        "OpenDyslexic",
+        ":/fonts/opendyslexic/OpenDyslexicMNerdFontMono-Regular.otf",
         1.0,
         32,
         false);
@@ -362,12 +392,14 @@ void FontManager::addBundledFont(const QString &name,
     entry.name = name;
     entry.text = text;
     entry.source = source;
-    entry.baseWidth = baseWidth;
     entry.pixelSize = pixelSize;
     entry.lowResolutionFont = lowResolutionFont;
     entry.isSystemFont = false;
     entry.fallbackName = fallbackName;
     entry.family = resolveFontFamily(source);
+    entry.baseWidth = lowResolutionFont
+        ? computeBaseWidth(entry.family, pixelSize, baseWidth)
+        : baseWidth;
     m_allFonts.append(entry);
 }
 
@@ -528,4 +560,25 @@ QString FontManager::resolveFontFamily(const QString &sourcePath)
 
     m_loadedFamilies.insert(sourcePath, family);
     return family;
+}
+
+qreal FontManager::computeBaseWidth(const QString &family, int pixelSize, qreal fallbackWidth) const
+{
+    if (family.isEmpty()) {
+        return fallbackWidth;
+    }
+
+    QFont font(family);
+    font.setPixelSize(pixelSize);
+    QFontMetricsF metrics(font);
+
+    const qreal glyphWidth = metrics.horizontalAdvance(QLatin1String("M"));
+    const qreal glyphHeight = metrics.height();
+    if (glyphWidth <= 0.0 || glyphHeight <= 0.0) {
+        return fallbackWidth;
+    }
+
+    const qreal targetRatio = 0.5;
+    qreal computedWidth = (targetRatio * glyphHeight) / glyphWidth;
+    return qBound(0.25, computedWidth, 2.0);
 }

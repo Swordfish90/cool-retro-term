@@ -23,7 +23,6 @@ layout(std140, binding = 0) uniform ubuf {
     float horizontalSync;
     float horizontalSyncStrength;
     float flickering;
-    float displayTerminalFrame;
     vec2 scaleNoiseSize;
     float frameShininess;
     float frameSize;

@@ -26,7 +26,7 @@ Item {
     function dynamicFragmentPath() {
         var rasterMode = appSettings.rasterization;
         var burnInOn = appSettings.burnIn > 0 ? 1 : 0;
-        var frameOn = (appSettings._frameSize > 0 || appSettings.screenCurvature > 0) ? 1 : 0;
+        var frameOn = appSettings.frameEnabled ? 1 : 0;
         var chromaOn = appSettings.chromaColor > 0 ? 1 : 0;
         return "qrc:/shaders/terminal_dynamic_raster" + rasterMode +
                "_burn" + burnInOn +
@@ -104,8 +104,6 @@ Item {
         // We progressively disable rasterization from 4x up to 2x resolution.
         property real rasterizationIntensity: Utils.smoothstep(2.0, 4.0, _screenDensity)
 
-        property real displayTerminalFrame: appSettings._frameSize > 0 || appSettings.screenCurvature > 0
-
         property real time: timeManager ? timeManager.time : 0
         property ShaderEffectSource noiseSource: noiseShaderSource
 
@@ -141,7 +139,7 @@ Item {
     Loader {
         id: terminalFrameLoader
 
-        active: dynamicShader.displayTerminalFrame
+        active: appSettings.frameEnabled
 
         width: staticShader.width
         height: staticShader.height

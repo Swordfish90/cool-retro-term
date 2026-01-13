@@ -65,6 +65,8 @@ QtObject {
         window.destroy()
 
         if (windowsModel.count === 0) {
+            settingsWindow.close()
+            aboutWindow.close()
             appSettings.close()
         }
     }

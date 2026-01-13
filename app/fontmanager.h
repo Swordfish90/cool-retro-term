@@ -89,6 +89,7 @@ private:
     void updateComputedFont();
     const FontEntry *findFontByName(const QString &name) const;
     QString resolveFontFamily(const QString &sourcePath);
+    qreal computeBaseWidth(const QString &family, int pixelSize, qreal fallbackWidth) const;
 
     FontListModel m_fontListModel;
     FontListModel m_filteredFontListModel;

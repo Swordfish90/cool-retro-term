@@ -17,6 +17,7 @@ layout(std140, binding = 0) uniform ubuf {
 
 float min2(vec2 v) { return min(v.x, v.y); }
 float prod2(vec2 v) { return v.x * v.y; }
+float rand2(vec2 v) { return fract(sin(dot(v, vec2(12.9898, 78.233))) * 43758.5453); }
 
 vec2 distortCoordinates(vec2 coords){
     vec2 paddedCoords = coords * (vec2(1.0) + frameSize * 2.0) - frameSize;
@@ -37,8 +38,6 @@ float roundedRectSdfPixels(vec2 p, vec2 topLeft, vec2 bottomRight, float radiusP
 void main() {
     vec2 staticCoords = qt_TexCoord0;
     vec2 coords = distortCoordinates(staticCoords);
-
-    float depth = 1.0 - 5.0 * min(min2(staticCoords), min2(vec2(1.0) - staticCoords));
 
     float screenRadiusPixels = screenRadius;
     float edgeSoftPixels = 1.0;
@@ -63,15 +62,18 @@ void main() {
     );
 
     float distPixels = roundedRectSdfPixels(coords, vec2(0.0), vec2(1.0), screenRadiusPixels);
-    float frameShadow = (e * 0.66 + w * 0.66 + n * 0.33 + s) * depth;
+    float frameShadow = (e * 0.66 + w * 0.66 + n * 0.33 + s);
     frameShadow *= smoothstep(0.0, edgeSoftPixels * 5.0, distPixels);
 
     float frameAlpha = 1.0 - frameShininess * 0.4;
 
     float inScreen = smoothstep(0.0, edgeSoftPixels, -distPixels);
-    float alpha = mix(frameAlpha, mix(0.0, 0.2, ambientLight), inScreen);
-    float glass = clamp(ambientLight * pow(prod2(coords * (1.0 - coords.yx)) * 50.0, 0.25) * inScreen, 0.0, 1.0);
-    vec3 color = mix(frameColor.rgb * frameShadow, vec3(glass), inScreen);
+    float alpha = mix(frameAlpha, mix(0.0, 0.3, ambientLight), inScreen);
+    float glass = clamp(ambientLight * pow(prod2(coords * (1.0 - coords.yx)) * 25.0, 0.5) * inScreen, 0.0, 1.0);
+    vec3 frameTint = frameColor.rgb * frameShadow;
+    float noise = rand2(staticCoords * viewportSize) - 0.5;
+    frameTint = clamp(frameTint + vec3(noise * 0.04), 0.0, 1.0);
+    vec3 color = mix(frameTint, vec3(glass), inScreen);
 
     fragColor = vec4(color, alpha) * qt_Opacity;
 }
