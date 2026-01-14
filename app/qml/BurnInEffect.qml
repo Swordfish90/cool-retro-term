@@ -24,7 +24,7 @@ import "utils.js" as Utils
 Loader {
     id: burnInEffect
 
-    property ShaderEffectSource source: item ? item.source : null
+    property ShaderEffectSource effectSource: item ? item.source : null
 
     property real lastUpdate: 0
     property real prevLastUpdate: 0

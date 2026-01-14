@@ -73,7 +73,7 @@ Item {
         id: dynamicShader
 
         property ShaderEffectSource screenBuffer: frameBuffer
-        property ShaderEffectSource burnInSource: burnInEffect.source
+        property ShaderEffectSource burnInSource: burnInEffect.effectSource
         property ShaderEffectSource frameSource: terminalFrameLoader.item
 
         property color fontColor: parent.fontColor

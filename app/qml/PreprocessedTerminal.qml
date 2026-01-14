@@ -83,13 +83,6 @@ Item{
             terminalContainer.updateSources()
         }
     }
-    Connections {
-        target: terminalWindow
-
-        onActiveChanged: {
-            kterminal.forceActiveFocus()
-        }
-    }
 
     function updateSources() {
         kterminal.update()

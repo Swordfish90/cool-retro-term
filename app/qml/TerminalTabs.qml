@@ -130,9 +130,9 @@ Item {
             Repeater {
                 model: tabsModel
                 TerminalContainer {
-                    property bool isCurrentItem: StackLayout.isCurrentItem
-                    onIsCurrentItemChanged: {
-                        if (isCurrentItem) {
+                    property bool shouldHaveFocus: terminalWindow.active && StackLayout.isCurrentItem
+                    onShouldHaveFocusChanged: {
+                        if (shouldHaveFocus) {
                             activate()
                         }
                     }
