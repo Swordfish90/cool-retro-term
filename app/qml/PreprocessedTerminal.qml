@@ -141,6 +141,7 @@ Item{
             kterminal.antialiasText = !lowResolutionFont;
             kterminal.smooth = !lowResolutionFont;
             kterminal.enableBold = !lowResolutionFont;
+            kterminal.enableItalic = !lowResolutionFont;
 
             kterminal.font = Qt.font({
                 family: fontFamily,
