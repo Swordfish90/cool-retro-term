@@ -38,14 +38,15 @@ QtObject {
         visible: false
     }
 
-    property Component windowComponent: Component {
-        TerminalWindow { }
-    }
-
     property ListModel windowsModel: ListModel { }
 
     function createWindow() {
-        var window = windowComponent.createObject(null)
+        var component = Qt.createComponent("TerminalWindow.qml")
+        if (component.status === Component.Error) {
+            console.error(component.errorString())
+            return
+        }
+        var window = component.createObject(null)
         if (!window)
             return
 

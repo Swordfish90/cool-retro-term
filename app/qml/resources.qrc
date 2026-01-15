@@ -22,6 +22,7 @@
         <file>SettingsAdvancedTab.qml</file>
         <file>TerminalContainer.qml</file>
         <file>TerminalTabs.qml</file>
+        <file>TerminalTabsBar.qml</file>
         <file>images/crt256.png</file>
         <file>utils.js</file>
         <file>images/allNoise512.png</file>

@@ -20,6 +20,7 @@
 import QtQuick 2.2
 import QtQuick.Window 2.1
 import QtQuick.Controls 2.3
+import QtQuick.Layouts
 
 import "menus"
 
@@ -38,6 +39,8 @@ ApplicationWindow {
     minimumHeight: 240
 
     visible: false
+
+    flags: Qt.Window | Qt.FramelessWindowHint
 
     property bool fullscreen: appSettings.fullscreen
     onFullscreenChanged: visibility = (fullscreen ? Window.FullScreen : Window.Windowed)
@@ -137,11 +140,27 @@ ApplicationWindow {
         text: qsTr("New Tab")
         onTriggered: terminalTabs.addTab()
     }
-    TerminalTabs {
-        id: terminalTabs
-        width: parent.width
-        height: (parent.height + Math.abs(y))
-        hostWindow: terminalWindow
+    ColumnLayout {
+        anchors.fill: parent
+        spacing: 0
+
+        TerminalTabsBar {
+            Layout.fillWidth: true
+            tabsController: terminalTabs
+            hostWindow: terminalWindow
+            isMacOS: appSettings.isMacOS
+            showWindowControls: true
+            windowControlsOnLeft: appSettings.isMacOS
+            enableSystemMove: true
+            enableDoubleClickMaximize: true
+        }
+
+        TerminalTabs {
+            id: terminalTabs
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            hostWindow: terminalWindow
+        }
     }
     Loader {
         anchors.centerIn: parent
@@ -151,6 +170,77 @@ ApplicationWindow {
             terminalSize: terminalTabs.terminalSize
         }
     }
+
+    Item {
+        id: resizeHandles
+        anchors.fill: parent
+        visible: true
+        property int resizeMargin: 6
+
+        MouseArea {
+            anchors.left: parent.left
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            width: resizeHandles.resizeMargin
+            cursorShape: Qt.SizeHorCursor
+            onPressed: terminalWindow.startSystemResize(Qt.LeftEdge)
+        }
+
+        MouseArea {
+            anchors.right: parent.right
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            width: resizeHandles.resizeMargin
+            cursorShape: Qt.SizeHorCursor
+            onPressed: terminalWindow.startSystemResize(Qt.RightEdge)
+        }
+
+        MouseArea {
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.bottom: parent.bottom
+            height: resizeHandles.resizeMargin
+            cursorShape: Qt.SizeVerCursor
+            onPressed: terminalWindow.startSystemResize(Qt.BottomEdge)
+        }
+
+        MouseArea {
+            anchors.left: parent.left
+            anchors.top: parent.top
+            width: resizeHandles.resizeMargin
+            height: resizeHandles.resizeMargin
+            cursorShape: Qt.SizeFDiagCursor
+            onPressed: terminalWindow.startSystemResize(Qt.TopEdge | Qt.LeftEdge)
+        }
+
+        MouseArea {
+            anchors.right: parent.right
+            anchors.top: parent.top
+            width: resizeHandles.resizeMargin
+            height: resizeHandles.resizeMargin
+            cursorShape: Qt.SizeBDiagCursor
+            onPressed: terminalWindow.startSystemResize(Qt.TopEdge | Qt.RightEdge)
+        }
+
+        MouseArea {
+            anchors.left: parent.left
+            anchors.bottom: parent.bottom
+            width: resizeHandles.resizeMargin
+            height: resizeHandles.resizeMargin
+            cursorShape: Qt.SizeBDiagCursor
+            onPressed: terminalWindow.startSystemResize(Qt.BottomEdge | Qt.LeftEdge)
+        }
+
+        MouseArea {
+            anchors.right: parent.right
+            anchors.bottom: parent.bottom
+            width: resizeHandles.resizeMargin
+            height: resizeHandles.resizeMargin
+            cursorShape: Qt.SizeFDiagCursor
+            onPressed: terminalWindow.startSystemResize(Qt.BottomEdge | Qt.RightEdge)
+        }
+    }
+
     onClosing: {
         appRoot.closeWindow(terminalWindow)
     }

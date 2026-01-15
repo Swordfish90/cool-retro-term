@@ -18,18 +18,19 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *******************************************************************************/
 import QtQuick
-import QtQuick.Controls
 import QtQuick.Layouts
 
 Item {
     id: tabsRoot
 
-    readonly property int innerPadding: 6
-    readonly property string currentTitle: tabsModel.get(currentIndex).title ?? "cool-retro-term"
+    readonly property string currentTitle: tabsModel.count > 0
+        ? (tabsModel.get(currentIndex).title ?? "cool-retro-term")
+        : "cool-retro-term"
     readonly property size terminalSize: stack.currentItem ? stack.currentItem.terminalSize : Qt.size(0, 0)
-    property alias currentIndex: tabBar.currentIndex
+    property int currentIndex: 0
     readonly property int count: tabsModel.count
     property var hostWindow
+    property alias tabsModel: tabsModel
 
     function normalizeTitle(rawTitle) {
         if (rawTitle === undefined || rawTitle === null) {
@@ -40,7 +41,7 @@ Item {
 
     function addTab() {
         tabsModel.append({ title: "" })
-        tabBar.currentIndex = tabsModel.count - 1
+        currentIndex = tabsModel.count - 1
     }
 
     function closeTab(index) {
@@ -50,7 +51,7 @@ Item {
         }
 
         tabsModel.remove(index)
-        tabBar.currentIndex = Math.min(tabBar.currentIndex, tabsModel.count - 1)
+        currentIndex = Math.min(currentIndex, tabsModel.count - 1)
     }
 
     ListModel {
@@ -63,69 +64,11 @@ Item {
         anchors.fill: parent
         spacing: 0
 
-        Rectangle {
-            id: tabRow
-            Layout.fillWidth: true
-            height: rowLayout.implicitHeight
-            color: palette.window
-            visible: tabsModel.count > 1
-
-            RowLayout {
-                id: rowLayout
-                anchors.fill: parent
-                spacing: 0
-
-                TabBar {
-                    id: tabBar
-                    Layout.fillWidth: true
-                    Layout.fillHeight: true
-                    focusPolicy: Qt.NoFocus
-
-                    Repeater {
-                        model: tabsModel
-                        TabButton {
-                            id: tabButton
-                            contentItem: RowLayout {
-                                anchors.fill: parent
-                                anchors { leftMargin: innerPadding; rightMargin: innerPadding }
-                                spacing: innerPadding
-
-                                Label {
-                                    text: model.title
-                                    elide: Text.ElideRight
-                                    Layout.fillWidth: true
-                                    Layout.alignment: Qt.AlignVCenter
-                                }
-
-                                ToolButton {
-                                    text: "\u00d7"
-                                    focusPolicy: Qt.NoFocus
-                                    padding: innerPadding
-                                    Layout.alignment: Qt.AlignVCenter
-                                    onClicked: tabsRoot.closeTab(index)
-                                }
-                            }
-                        }
-                    }
-                }
-
-                ToolButton {
-                    id: addTabButton
-                    text: "+"
-                    focusPolicy: Qt.NoFocus
-                    Layout.fillHeight: true
-                    padding: innerPadding
-                    Layout.alignment: Qt.AlignVCenter
-                    onClicked: tabsRoot.addTab()
-                }
-            }
-        }
-
         StackLayout {
             id: stack
             Layout.fillWidth: true
             Layout.fillHeight: true
-            currentIndex: tabBar.currentIndex
+            currentIndex: tabsRoot.currentIndex
 
             Repeater {
                 model: tabsModel
