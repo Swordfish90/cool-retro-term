@@ -73,7 +73,7 @@ int main(int argc, char *argv[])
         return 0;
     }
 
-    QString appVersion("1.2.0");
+    QString appVersion(QStringLiteral(APP_VERSION));
 
     if (argc>1 && (!strcmp(argv[1],"-v") || !strcmp(argv[1],"--version"))) {
         QTextStream cout(stdout, QIODevice::WriteOnly);
@@ -86,6 +86,7 @@ int main(int argc, char *argv[])
     app.setApplicationName(QStringLiteral("cool-retro-term"));
     app.setOrganizationName(QStringLiteral("cool-retro-term"));
     app.setOrganizationDomain(QStringLiteral("cool-retro-term"));
+    app.setApplicationVersion(appVersion);
 
     KDSingleApplication singleApp(QStringLiteral("cool-retro-term"));
 

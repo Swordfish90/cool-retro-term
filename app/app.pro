@@ -1,5 +1,8 @@
 QT += qml quick widgets sql quickcontrols2
 TARGET = cool-retro-term
+APP_VERSION = $$system(git -C $$PWD/.. describe --tags --always --dirty=-dirty)
+isEmpty(APP_VERSION): APP_VERSION = "unknown"
+DEFINES += APP_VERSION=\\\"$$APP_VERSION\\\"
 
 # TODO: When migrating to CMake, use KDSingleApplication's CMakeLists.txt instead of these manual sources.
 INCLUDEPATH += $$PWD/../KDSingleApplication/src
