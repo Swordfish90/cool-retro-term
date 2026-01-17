@@ -65,10 +65,6 @@ Menu {
             visible: fullscreenAction.enabled
         }
         MenuItem {
-            action: showMenubarAction
-            visible: showMenubarAction.enabled
-        }
-        MenuItem {
             action: zoomInAction
         }
         MenuItem {

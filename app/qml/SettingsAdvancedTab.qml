@@ -28,7 +28,7 @@ ColumnLayout {
     GroupBox {
         Layout.fillWidth: true
         Layout.fillHeight: true
-        title: qsTr("Command")
+        title: qsTr("Miscellaneous")
         padding: appSettings.defaultMargin
 
         ColumnLayout {
@@ -38,12 +38,6 @@ ColumnLayout {
                 text: qsTr("Use custom command instead of shell at startup")
                 checked: appSettings.useCustomCommand
                 onCheckedChanged: appSettings.useCustomCommand = checked
-            }
-            // Workaround for QTBUG-31627 for pre 5.3.0
-            Binding {
-                target: useCustomCommand
-                property: "checked"
-                value: appSettings.useCustomCommand
             }
             TextField {
                 id: customCommand
@@ -59,26 +53,18 @@ ColumnLayout {
                 Component.onCompleted: settings_window.closing.connect(
                                            saveSetting)
             }
-        }
-    }
-
-    GroupBox {
-        title: qsTr("Cursor")
-        Layout.fillWidth: true
-        Layout.fillHeight: true
-        padding: appSettings.defaultMargin
-        ColumnLayout {
-            anchors.fill: parent
             CheckBox {
                 id: blinkingCursor
                 text: qsTr("Blinking Cursor")
                 checked: appSettings.blinkingCursor
                 onCheckedChanged: appSettings.blinkingCursor = checked
             }
-            Binding {
-                target: blinkingCursor
-                property: "checked"
-                value: appSettings.blinkingCursor
+            CheckBox {
+                id: showMenubar
+                text: qsTr("Show Menubar")
+                enabled: !appSettings.isMacOS
+                checked: appSettings.showMenubar
+                onCheckedChanged: appSettings.showMenubar = checked
             }
         }
     }

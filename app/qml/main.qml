@@ -52,15 +52,6 @@ QtObject {
         sourceComponent: OSXMenu { }
     }
 
-    property Action showMenubarAction: Action {
-        text: qsTr("Show Menubar")
-        enabled: !appSettings.isMacOS
-        shortcut: "Ctrl+Shift+M"
-        checkable: true
-        checked: appSettings.showMenubar
-        onTriggered: appSettings.showMenubar = !appSettings.showMenubar
-    }
-
     property Action fullscreenAction: Action {
         text: qsTr("Fullscreen")
         enabled: !appSettings.isMacOS
