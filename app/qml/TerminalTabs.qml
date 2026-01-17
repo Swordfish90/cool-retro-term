@@ -130,12 +130,8 @@ Item {
             Repeater {
                 model: tabsModel
                 TerminalContainer {
-                    property bool shouldHaveFocus: terminalWindow.active && StackLayout.isCurrentItem
-                    onShouldHaveFocusChanged: {
-                        if (shouldHaveFocus) {
-                            activate()
-                        }
-                    }
+                    id: terminalContainer
+                    hasFocus: terminalWindow.active && StackLayout.isCurrentItem
                     onTitleChanged: tabsModel.setProperty(index, "title", normalizeTitle(title))
                     Layout.fillWidth: true
                     Layout.fillHeight: true

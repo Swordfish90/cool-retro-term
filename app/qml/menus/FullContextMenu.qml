@@ -69,10 +69,10 @@ Menu {
             visible: showMenubarAction.enabled
         }
         MenuItem {
-            action: zoomIn
+            action: zoomInAction
         }
         MenuItem {
-            action: zoomOut
+            action: zoomOutAction
         }
     }
     Menu {

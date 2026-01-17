@@ -28,6 +28,13 @@ ShaderTerminal {
     signal sessionFinished()
 
     property bool loadBloomEffect: appSettings.bloom > 0 || appSettings._frameShininess > 0
+    property bool hasFocus
+
+    onHasFocusChanged: {
+        if (hasFocus) {
+            activate()
+        }
+    }
 
     id: mainShader
     opacity: appSettings.windowOpacity * 0.3 + 0.7

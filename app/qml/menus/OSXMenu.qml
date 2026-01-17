@@ -64,14 +64,14 @@ MenuBar {
     Menu {
         title: qsTr("View")
         MenuItem {
-            text: zoomIn.text
+            text: zoomInAction.text
             shortcut: "Meta++"
-            onTriggered: zoomIn.trigger()
+            onTriggered: zoomInAction.trigger()
         }
         MenuItem {
-            text: zoomOut.text
+            text: zoomOutAction.text
             shortcut: "Meta+-"
-            onTriggered: zoomOut.trigger()
+            onTriggered: zoomOutAction.trigger()
         }
     }
     Menu {

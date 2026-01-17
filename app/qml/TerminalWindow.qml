@@ -20,6 +20,7 @@
 import QtQuick 2.2
 import QtQuick.Window 2.1
 import QtQuick.Controls 2.3
+import QtQml
 
 import "menus"
 
@@ -50,87 +51,18 @@ ApplicationWindow {
         sourceComponent: WindowMenu { }
     }
 
+    Connections {
+        target: newTabAction
+        enabled: terminalWindow.active
+        onTriggered: terminalTabs.addTab()
+    }
+
     property real normalizedWindowScale: 1024 / ((0.5 * width + 0.5 * height))
 
     color: "#00000000"
 
     title: terminalTabs.currentTitle
 
-    Action {
-        id: showMenubarAction
-        text: qsTr("Show Menubar")
-        enabled: !appSettings.isMacOS
-        shortcut: "Ctrl+Shift+M"
-        checkable: true
-        checked: appSettings.showMenubar
-        onTriggered: appSettings.showMenubar = !appSettings.showMenubar
-    }
-    Action {
-        id: fullscreenAction
-        text: qsTr("Fullscreen")
-        enabled: !appSettings.isMacOS
-        shortcut: "Alt+F11"
-        onTriggered: appSettings.fullscreen = !appSettings.fullscreen
-        checkable: true
-        checked: appSettings.fullscreen
-    }
-    Action {
-        id: newWindowAction
-        text: qsTr("New Window")
-        shortcut: "Ctrl+Shift+N"
-        onTriggered: appRoot.createWindow()
-    }
-    Action {
-        id: quitAction
-        text: qsTr("Quit")
-        shortcut: "Ctrl+Shift+Q"
-        onTriggered: appSettings.close()
-    }
-    Action {
-        id: showsettingsAction
-        text: qsTr("Settings")
-        onTriggered: {
-            settingsWindow.show()
-            settingsWindow.requestActivate()
-            settingsWindow.raise()
-        }
-    }
-    Action {
-        id: copyAction
-        text: qsTr("Copy")
-        shortcut: "Ctrl+Shift+C"
-    }
-    Action {
-        id: pasteAction
-        text: qsTr("Paste")
-        shortcut: "Ctrl+Shift+V"
-    }
-    Action {
-        id: zoomIn
-        text: qsTr("Zoom In")
-        shortcut: "Ctrl++"
-        onTriggered: appSettings.incrementScaling()
-    }
-    Action {
-        id: zoomOut
-        text: qsTr("Zoom Out")
-        shortcut: "Ctrl+-"
-        onTriggered: appSettings.decrementScaling()
-    }
-    Action {
-        id: showAboutAction
-        text: qsTr("About")
-        onTriggered: {
-            aboutDialog.show()
-            aboutDialog.requestActivate()
-            aboutDialog.raise()
-        }
-    }
-    Action {
-        id: newTabAction
-        text: qsTr("New Tab")
-        onTriggered: terminalTabs.addTab()
-    }
     TerminalTabs {
         id: terminalTabs
         width: parent.width
