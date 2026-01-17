@@ -29,7 +29,7 @@ layout(std140, binding = 0) uniform ubuf {
     vec2 scaleNoiseSize;
     float screen_brightness;
     float bloom;
-    float rbgShift;
+    float rgbShift;
     float frameShadowCoeff;
     float frameShininess;
     vec4 frameColor;

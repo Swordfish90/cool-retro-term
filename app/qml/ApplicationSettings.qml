@@ -86,7 +86,7 @@ QtObject {
     property real horizontalSync: 0.08
     property real flickering: 0.1
 
-    property real rbgShift: 0.0
+    property real rgbShift: 0.0
 
     property real _frameShininess: 0.2
     property real frameShininess: _frameShininess * 0.5
@@ -188,7 +188,7 @@ QtObject {
             "bloom": bloom,
             "rasterization": rasterization,
             "jitter": jitter,
-            "rbgShift": rbgShift,
+            "rgbShift": rgbShift,
             "brightness": brightness,
             "contrast": contrast,
             "ambientLight": ambientLight,
@@ -289,7 +289,7 @@ QtObject {
 
         jitter = settings.jitter !== undefined ? settings.jitter : jitter
 
-        rbgShift = settings.rbgShift !== undefined ? settings.rbgShift : rbgShift
+        rgbShift = settings.rgbShift !== undefined ? settings.rgbShift : rgbShift
 
         ambientLight = settings.ambientLight !== undefined ? settings.ambientLight : ambientLight
         contrast = settings.contrast !== undefined ? settings.contrast : contrast
@@ -384,9 +384,9 @@ QtObject {
                 "horizontalSync": 0.1,
                 "jitter": 0.2,
                 "rasterization": 0,
-                "rbgShift": 0,
+                "rgbShift": 0,
                 "saturationColor": 0.2,
-                "screenCurvature": 0.4,
+                "screenCurvature": 0.2,
                 "screenRadius": 0.1,
                 "staticNoise": 0.1,
                 "windowOpacity": 1,
@@ -410,7 +410,7 @@ QtObject {
                 "contrast": 0.8,
                 "flickering": 0.1,
                 "fontColor": "#0ccc68",
-                "fontName": "EXCELSIOR_SCALED",
+                "fontName": "DEPARTURE_MONO_SCALED",
                 "fontSource": 0,
                 "fontWidth": 1,
                 "lineSpacing": 0.1,
@@ -418,9 +418,9 @@ QtObject {
                 "horizontalSync": 0.1,
                 "jitter": 0.2,
                 "rasterization": 0,
-                "rbgShift": 0,
+                "rgbShift": 0,
                 "saturationColor": 0.0,
-                "screenCurvature": 0.7,
+                "screenCurvature": 0.3,
                 "screenRadius": 0.2,
                 "staticNoise": 0.1,
                 "windowOpacity": 1,
@@ -444,7 +444,7 @@ QtObject {
                 "contrast": 0.8,
                 "flickering": 0.1,
                 "fontColor": "#7fb4ff",
-                "fontName": "COZETTE_SCALED",
+                "fontName": "BIGBLUE_TERMINAL_SCALED",
                 "fontSource": 0,
                 "fontWidth": 1,
                 "lineSpacing": 0.1,
@@ -452,9 +452,9 @@ QtObject {
                 "horizontalSync": 0.1,
                 "jitter": 0.2,
                 "rasterization": 0,
-                "rbgShift": 0,
+                "rgbShift": 0,
                 "saturationColor": 0.2,
-                "screenCurvature": 1.0,
+                "screenCurvature": 0.4,
                 "screenRadius": 0.1,
                 "staticNoise": 0.1,
                 "windowOpacity": 1,
@@ -486,7 +486,7 @@ QtObject {
                 "horizontalSync": 0.0,
                 "jitter": 0.0,
                 "rasterization": 1,
-                "rbgShift": 0,
+                "rgbShift": 0,
                 "saturationColor": 0,
                 "screenCurvature": 0.5,
                 "screenRadius": 0.1,
@@ -495,7 +495,7 @@ QtObject {
                 "margin": 0.3,
                 "blinkingCursor": false,
                 "frameSize": 0.5,
-                "frameColor": "#444444",
+                "frameColor": "#999999",
                 "frameShininess": 0.0
             }'
             builtin: true
@@ -520,15 +520,15 @@ QtObject {
                 "horizontalSync": 0.2,
                 "jitter": 0.15,
                 "rasterization": 1,
-                "rbgShift": 0.1,
+                "rgbShift": 0.0,
                 "saturationColor": 0,
-                "screenCurvature": 1.0,
+                "screenCurvature": 0.7,
                 "screenRadius": 0.3,
                 "staticNoise": 0.2,
                 "windowOpacity": 1,
                 "margin": 0.2,
                 "blinkingCursor": false,
-                "frameSize": 0.8,
+                "frameSize": 0.5,
                 "frameColor": "#000000",
                 "frameShininess": 0.6
             }'
@@ -554,15 +554,15 @@ QtObject {
                 "horizontalSync": 0.2,
                 "jitter": 0.2,
                 "rasterization": 1,
-                "rbgShift": 0.1,
+                "rgbShift": 0.0,
                 "saturationColor": 0,
-                "screenCurvature": 1.0,
+                "screenCurvature": 0.5,
                 "screenRadius": 0.3,
                 "staticNoise": 0.2,
                 "windowOpacity": 1,
                 "margin": 0.0,
                 "blinkingCursor": false,
-                "frameSize": 0.5,
+                "frameSize": 0.2,
                 "frameColor": "#ffffff",
                 "frameShininess": 0.8
             }'
@@ -588,9 +588,9 @@ QtObject {
                 "horizontalSync": 0.0,
                 "jitter": 0.0,
                 "rasterization": 1,
-                "rbgShift": 0.0,
+                "rgbShift": 0.0,
                 "saturationColor": 0,
-                "screenCurvature": 0.3,
+                "screenCurvature": 0.4,
                 "screenRadius": 0.2,
                 "staticNoise": 0.1,
                 "windowOpacity": 1,
@@ -622,7 +622,7 @@ QtObject {
                 "horizontalSync": 0.0,
                 "jitter": 0.0,
                 "rasterization": 1,
-                "rbgShift": 0.15,
+                "rgbShift": 0.1,
                 "saturationColor": 0,
                 "screenCurvature": 0.3,
                 "screenRadius": 0.1,
@@ -637,13 +637,13 @@ QtObject {
             builtin: true
         }
         ListElement {
-            text: "IBM 3278"
+            text: "IBM 3278 Reborn"
             obj_string: '{
                 "ambientLight": 0.2,
                 "backgroundColor": "#000000",
                 "bloom": 0.2,
                 "brightness": 0.5,
-                "burnIn": 0.7,
+                "burnIn": 0.5,
                 "chromaColor": 0,
                 "contrast": 0.8,
                 "flickering": 0,
@@ -656,7 +656,7 @@ QtObject {
                 "horizontalSync": 0,
                 "jitter": 0,
                 "rasterization": 4,
-                "rbgShift": 0,
+                "rgbShift": 0,
                 "saturationColor": 0,
                 "screenCurvature": 0,
                 "screenRadius": 0.0,
@@ -690,7 +690,7 @@ QtObject {
                 "horizontalSync": 0.0,
                 "jitter": 0.1,
                 "rasterization": 4,
-                "rbgShift": 0.0,
+                "rgbShift": 0.0,
                 "saturationColor": 0.6,
                 "screenCurvature": 0,
                 "screenRadius": 0.0,
@@ -724,7 +724,7 @@ QtObject {
                 "horizontalSync": 0.0,
                 "jitter": 0.0,
                 "rasterization": 4,
-                "rbgShift": 0.1,
+                "rgbShift": 0.0,
                 "saturationColor": 0.0,
                 "screenCurvature": 0,
                 "screenRadius": 0.0,
@@ -758,7 +758,7 @@ QtObject {
                 "horizontalSync": 0.0,
                 "jitter": 0.1,
                 "rasterization": 4,
-                "rbgShift": 0.1,
+                "rgbShift": 0.1,
                 "saturationColor": 0.8,
                 "screenCurvature": 0,
                 "screenRadius": 0.0,
@@ -792,7 +792,7 @@ QtObject {
                 "horizontalSync": 0,
                 "jitter": 0.0,
                 "rasterization": 4,
-                "rbgShift": 0,
+                "rgbShift": 0,
                 "saturationColor": 0.0,
                 "screenCurvature": 0,
                 "screenRadius": 0.0,
@@ -826,7 +826,7 @@ QtObject {
                 "horizontalSync": 0.0,
                 "jitter": 0.0,
                 "rasterization": 4,
-                "rbgShift": 0,
+                "rgbShift": 0,
                 "saturationColor": 0,
                 "screenCurvature": 0,
                 "screenRadius": 0.0,

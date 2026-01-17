@@ -7,7 +7,7 @@ layout(std140, binding = 0) uniform ubuf {
     mat4 qt_Matrix;
     float qt_Opacity;
     float screenCurvature;
-    float rbgShift;
+    float rgbShift;
     float frameShininess;
     float frameSize;
     float screen_brightness;

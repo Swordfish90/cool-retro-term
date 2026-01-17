@@ -20,7 +20,7 @@ layout(std140, binding = 0) uniform ubuf {
     mat4 qt_Matrix;
     float qt_Opacity;
     float screenCurvature;
-    float rbgShift;
+    float rgbShift;
     float frameShininess;
     float frameSize;
     float screen_brightness;
@@ -59,7 +59,7 @@ void main() {
     vec3 txt_color = texture(source, txt_coords).rgb;
 
 #if CRT_RGB_SHIFT == 1
-    vec2 displacement = vec2(12.0, 0.0) * rbgShift;
+    vec2 displacement = vec2(rgbShift, 0.0);
     vec3 rightColor = texture(source, txt_coords + displacement).rgb;
     vec3 leftColor = texture(source, txt_coords - displacement).rgb;
     txt_color.r = leftColor.r * 0.10 + rightColor.r * 0.30 + txt_color.r * 0.60;

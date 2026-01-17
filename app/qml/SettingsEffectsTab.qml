@@ -83,8 +83,8 @@ ColumnLayout {
             }
             CheckableSlider {
                 name: qsTr("RGB Shift")
-                onNewValue: function(newValue) { appSettings.rbgShift = newValue }
-                value: appSettings.rbgShift
+                onNewValue: function(newValue) { appSettings.rgbShift = newValue }
+                value: appSettings.rgbShift
             }
             CheckableSlider {
                 name: qsTr("Frame Shininess")

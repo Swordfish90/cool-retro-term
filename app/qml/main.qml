@@ -19,6 +19,8 @@
 *******************************************************************************/
 import QtQuick 2.2
 
+import "menus"
+
 QtObject {
     id: appRoot
 
@@ -34,7 +36,7 @@ QtObject {
         visible: false
     }
 
-    property AboutDialog aboutWindow: AboutDialog {
+    property AboutDialog aboutDialog: AboutDialog {
         visible: false
     }
 
@@ -43,6 +45,11 @@ QtObject {
     }
 
     property ListModel windowsModel: ListModel { }
+
+    property Loader globalMenuLoader: Loader {
+        active: appSettings.isMacOS
+        sourceComponent: OSXMenu { }
+    }
 
     function createWindow() {
         var window = windowComponent.createObject(null)
@@ -65,8 +72,6 @@ QtObject {
         window.destroy()
 
         if (windowsModel.count === 0) {
-            settingsWindow.close()
-            aboutWindow.close()
             appSettings.close()
         }
     }

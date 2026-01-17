@@ -50,12 +50,6 @@ ApplicationWindow {
         sourceComponent: WindowMenu { }
     }
 
-    Loader {
-        id: globalMenuLoader
-        active: appSettings.isMacOS
-        sourceComponent: OSXMenu { }
-    }
-
     property real normalizedWindowScale: 1024 / ((0.5 * width + 0.5 * height))
 
     color: "#00000000"

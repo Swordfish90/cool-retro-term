@@ -36,7 +36,7 @@ Item {
     }
 
     function staticFragmentPath() {
-        var rgbShiftOn = appSettings.rbgShift > 0 ? 1 : 0;
+        var rgbShiftOn = appSettings.rgbShift > 0 ? 1 : 0;
         var bloomOn = appSettings.bloom > 0 ? 1 : 0;
         var curvatureOn = (appSettings.screenCurvature > 0 || appSettings.frameSize > 0) ? 1 : 0;
         var shineOn = appSettings.frameShininess > 0 ? 1 : 0;
@@ -176,7 +176,7 @@ Item {
 
         property real chromaColor: appSettings.chromaColor;
 
-        property real rbgShift: (appSettings.rbgShift / width) * appSettings.totalFontScaling
+        property real rgbShift: appSettings.rgbShift * (4.0 / width) * appSettings.totalFontScaling
 
         property real screen_brightness: Utils.lint(0.5, 1.5, appSettings.brightness)
         property real frameShininess: appSettings.frameShininess
