@@ -65,10 +65,9 @@ QtObject {
         text: qsTr("Fullscreen")
         enabled: !appSettings.isMacOS
         shortcut: "Alt+F11"
-        onTriggered: appSettings.fullscreen = !appSettings.fullscreen
-        checkable: true
-        checked: appSettings.fullscreen
     }
+
+    property bool initialFullscreenRequested: Qt.application.arguments.indexOf("--fullscreen") !== -1
 
     property Action newWindowAction: Action {
         text: qsTr("New Window")
@@ -127,11 +126,13 @@ QtObject {
     }
 
     function createWindow() {
-        var window = windowComponent.createObject(null)
+        var useFullscreen = initialFullscreenRequested
+        var window = windowComponent.createObject(null, { fullscreen: useFullscreen })
         if (!window)
             return
 
         windowsModel.append({ window: window })
+        initialFullscreenRequested = false
         window.show()
         window.requestActivate()
     }

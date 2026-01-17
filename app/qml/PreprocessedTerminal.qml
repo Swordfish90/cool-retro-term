@@ -201,7 +201,7 @@ Item{
 
     Loader {
         id: menuLoader
-        sourceComponent: (appSettings.isMacOS || appSettings.showMenubar ? shortContextMenu : fullContextMenu)
+        sourceComponent: (appSettings.isMacOS || (appSettings.showMenubar && !terminalWindow.fullscreen) ? shortContextMenu : fullContextMenu)
     }
     property alias contextmenu: menuLoader.item
 

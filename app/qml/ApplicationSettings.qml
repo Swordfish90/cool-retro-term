@@ -40,7 +40,6 @@ QtObject {
     property bool isMacOS: Qt.platform.os === "osx"
 
     // GENERAL SETTINGS ///////////////////////////////////////////////////////
-    property bool fullscreen: false
     property bool showMenubar: false
 
     property bool showTerminalSize: true
@@ -864,17 +863,12 @@ QtObject {
 
         var profileArgPosition = args.indexOf("--profile")
         if (profileArgPosition !== -1) {
-            var profileIndex = getProfileIndexByName(
-                        args[profileArgPosition + 1])
-            if (profileIndex !== -1)
+            var profileIndex = getProfileIndexByName(args[profileArgPosition + 1])
+            if (profileIndex !== -1) {
                 loadProfile(profileIndex)
-            else
+            } else {
                 console.log("Warning: selected profile is not valid; ignoring it")
-        }
-
-        if (args.indexOf("--fullscreen") !== -1) {
-            fullscreen = true
-            showMenubar = false
+            }
         }
 
         initializedSettings()

@@ -40,14 +40,14 @@ ApplicationWindow {
 
     visible: false
 
-    property bool fullscreen: appSettings.fullscreen
+    property bool fullscreen: false
     onFullscreenChanged: visibility = (fullscreen ? Window.FullScreen : Window.Windowed)
 
     menuBar: qtquickMenuLoader.item
 
     Loader {
         id: qtquickMenuLoader
-        active: !appSettings.isMacOS && appSettings.showMenubar
+        active: !appSettings.isMacOS && (appSettings.showMenubar && !fullscreen)
         sourceComponent: WindowMenu { }
     }
 
@@ -55,6 +55,12 @@ ApplicationWindow {
         target: newTabAction
         enabled: terminalWindow.active
         onTriggered: terminalTabs.addTab()
+    }
+
+    Connections {
+        target: fullscreenAction
+        enabled: terminalWindow.active
+        onTriggered: terminalWindow.fullscreen = !terminalWindow.fullscreen
     }
 
     property real normalizedWindowScale: 1024 / ((0.5 * width + 0.5 * height))
