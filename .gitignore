@@ -41,9 +41,14 @@ Makefile*
 *.json
 
 # Excludes compiled files
+
 imports
 cool-retro-term
 build
+
+# Linux
+
+*.AppImage
 
 # Mac OSX
 
