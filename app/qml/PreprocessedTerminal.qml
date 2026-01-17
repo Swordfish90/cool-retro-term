@@ -22,7 +22,7 @@ import QtQuick 2.2
 import QtQuick.Controls 2.0
 import QtQml
 
-import QMLTermWidget 1.0
+import QMLTermWidget 2.0
 
 import "menus"
 import "utils.js" as Utils
