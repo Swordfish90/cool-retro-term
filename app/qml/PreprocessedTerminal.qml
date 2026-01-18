@@ -27,7 +27,7 @@ import QMLTermWidget 2.0
 import "menus"
 import "utils.js" as Utils
 
-Item{
+Item {
     id: preprocessedTerminal
     signal sessionFinished()
 

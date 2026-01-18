@@ -73,7 +73,6 @@ ApplicationWindow {
         id: terminalTabs
         width: parent.width
         height: (parent.height + Math.abs(y))
-        hostWindow: terminalWindow
     }
     Loader {
         anchors.centerIn: parent

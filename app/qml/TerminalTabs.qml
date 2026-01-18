@@ -20,16 +20,16 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
+import QtQml.Models
 
 Item {
     id: tabsRoot
 
     readonly property int innerPadding: 6
     readonly property string currentTitle: tabsModel.get(currentIndex).title ?? "cool-retro-term"
-    readonly property size terminalSize: stack.currentItem ? stack.currentItem.terminalSize : Qt.size(0, 0)
     property alias currentIndex: tabBar.currentIndex
     readonly property int count: tabsModel.count
-    property var hostWindow
+    property size terminalSize: Qt.size(0, 0)
 
     function normalizeTitle(rawTitle) {
         if (rawTitle === undefined || rawTitle === null) {
@@ -45,7 +45,7 @@ Item {
 
     function closeTab(index) {
         if (tabsModel.count <= 1) {
-            hostWindow.close()
+            terminalWindow.close()
             return
         }
 
@@ -132,10 +132,20 @@ Item {
                 TerminalContainer {
                     id: terminalContainer
                     hasFocus: terminalWindow.active && StackLayout.isCurrentItem
+
+                    onTerminalSizeChanged: updateTerminalSize()
+
                     onTitleChanged: tabsModel.setProperty(index, "title", normalizeTitle(title))
                     Layout.fillWidth: true
                     Layout.fillHeight: true
                     onSessionFinished: tabsRoot.closeTab(index)
+
+                    function updateTerminalSize() {
+                        // Every tab will have the same size so we can simply take the first one.
+                        if (index == 0) {
+                            tabsRoot.terminalSize = terminalSize
+                        }
+                    }
                 }
             }
         }
