@@ -11,15 +11,21 @@ jobs:
   build-dmg:
     name: Build (macOS, DMG)
     runs-on: macos-14
+    permissions:
+      contents: read
+      id-token: write
     steps:
       - uses: actions/checkout@v4
+        with:
+          submodules: recursive
 
       - name: Install Qt
         uses: jurplel/install-qt-action@v4
         with:
           version: 6.10.*
           modules: qtshadertools
-          setup-python: false
+          setup-python: true
+          python-version: '3.11'
           cache: true
 
       - name: Build DMG

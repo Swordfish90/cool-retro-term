@@ -11,8 +11,13 @@ jobs:
   build-appimage:
     name: Build (Linux, AppImage)
     runs-on: ubuntu-22.04
+    permissions:
+      contents: read
+      id-token: write
     steps:
       - uses: actions/checkout@v4
+        with:
+          submodules: recursive
 
       - name: Install build deps
         run: |
@@ -24,7 +29,7 @@ jobs:
         with:
           version: 6.10.0
           dir: ..
-          modules: qtwayland qtshadertools
+          modules: qtshadertools
           setup-python: false
           cache: true
 
