@@ -8,6 +8,10 @@ BUILD_DIR="$REPO_ROOT/build/dmg"
 APP="cool-retro-term.app"
 QML_DIR="$REPO_ROOT/app/qml"
 JOBS="${JOBS:-$(sysctl -n hw.ncpu 2>/dev/null || echo 4)}"
+VERSION="$(git -C "$REPO_ROOT" describe --tags --always --dirty=-dirty 2>/dev/null || true)"
+if [ -z "$VERSION" ]; then
+    VERSION="unknown"
+fi
 
 if ! command -v qmake >/dev/null; then
     echo "qmake not found in PATH." >&2
@@ -32,5 +36,6 @@ export QML_IMPORT_PATH="$PWD/$APP/Contents/PlugIns"
 "$QT_BIN/macdeployqt" "$APP" -qmldir="$QML_DIR" -dmg
 
 rm -f "$APP/Contents/PlugIns/sqldrivers/"libqsql{odbc,psql,mimer}.dylib 2>/dev/null || true
-mv "$BUILD_DIR/${APP%.app}.dmg" "$OLD_CWD/"
+DMG_OUT="${APP%.app}-${VERSION}.dmg"
+mv "$BUILD_DIR/${APP%.app}.dmg" "$OLD_CWD/$DMG_OUT"
 popd

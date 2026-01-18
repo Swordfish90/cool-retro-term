@@ -6,6 +6,10 @@ REPO_ROOT="$(readlink -f "$(dirname "$(dirname "$0")")")"
 OLD_CWD="$(readlink -f .)"
 BUILD_DIR="$REPO_ROOT/build/appimage"
 TOOLS_DIR="$BUILD_DIR/tools"
+VERSION="$(git -C "$REPO_ROOT" describe --tags --always --dirty=-dirty 2>/dev/null || true)"
+if [ -z "$VERSION" ]; then
+    VERSION="unknown"
+fi
 
 if ! command -v qmake >/dev/null; then
     echo "qmake not found in PATH." >&2
@@ -73,5 +77,7 @@ export LINUXDEPLOY_EXCLUDED_LIBRARIES="libmysqlclient.so;libqsqlmimer.so;libqsql
     --plugin qt \
     --output appimage
 
-mv ./*.AppImage "$OLD_CWD"
+APPIMAGE_PATH="$(ls -1 ./*.AppImage | head -n 1)"
+APPIMAGE_OUT="cool-retro-term-${VERSION}.AppImage"
+mv "$APPIMAGE_PATH" "$OLD_CWD/$APPIMAGE_OUT"
 popd
