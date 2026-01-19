@@ -33,9 +33,15 @@ mkdir -p "$APP/Contents/PlugIns"
 cp -R qmltermwidget/QMLTermWidget "$PLUGIN_DST"
 
 export QML_IMPORT_PATH="$PWD/$APP/Contents/PlugIns"
-"$QT_BIN/macdeployqt" "$APP" -qmldir="$QML_DIR" -dmg
+"$QT_BIN/macdeployqt" "$APP" -qmldir="$QML_DIR"
 
 rm -f "$APP/Contents/PlugIns/sqldrivers/"libqsql{odbc,psql,mimer}.dylib 2>/dev/null || true
+
+# Remove stale signatures and ad-hoc sign so Gatekeeper doesn't report corruption.
+codesign --remove-signature "$APP" 2>/dev/null || true
+rm -rf "$APP/Contents/_CodeSignature"
+codesign --force --deep --sign - "$APP"
 DMG_OUT="${APP%.app}-${VERSION}.dmg"
-mv "$BUILD_DIR/${APP%.app}.dmg" "$OLD_CWD/$DMG_OUT"
+hdiutil create -volname "${APP%.app}" -srcfolder "$APP" -ov -format UDZO "$DMG_OUT"
+mv "$BUILD_DIR/$DMG_OUT" "$OLD_CWD/$DMG_OUT"
 popd

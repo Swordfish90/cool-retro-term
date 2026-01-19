@@ -14,6 +14,7 @@ jobs:
     permissions:
       contents: read
       id-token: write
+      attestations: write
     steps:
       - uses: actions/checkout@v4
         with:
@@ -23,7 +24,7 @@ jobs:
         uses: jurplel/install-qt-action@v4
         with:
           version: 6.10.*
-          modules: qtshadertools
+          modules: qt5compat qtshadertools
           setup-python: true
           python-version: '3.11'
           cache: true
