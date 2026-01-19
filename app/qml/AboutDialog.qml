@@ -22,13 +22,11 @@ import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.1
 import QtQuick.Window 2.0
 
-Window {
+ApplicationWindow {
     id: dialogwindow
     title: qsTr("About")
     width: 600
     height: 400
-
-    modality: Qt.ApplicationModal
 
     ColumnLayout {
         anchors.fill: parent
@@ -37,6 +35,7 @@ Window {
         Text {
             Layout.alignment: Qt.AlignHCenter
             text: "cool-retro-term"
+            color: palette.text
             font {
                 bold: true
                 pointSize: 18
@@ -100,6 +99,7 @@ Window {
             Text {
                 Layout.alignment: Qt.AlignCenter
                 horizontalAlignment: Text.AlignHCenter
+                color: palette.text
                 text: appSettings.version + "\n" + qsTr(
                           "Author: ") + "Filippo Scognamiglio\n" + qsTr(
                           "Email: ") + "flscogna@gmail.com\n" + qsTr(
@@ -115,7 +115,8 @@ Window {
             TextArea {
                 readOnly: true
                 wrapMode: TextEdit.Wrap
-                text: "Copyright (c) 2013-2021 Filippo Scognamiglio <flscogna@gmail.com>\n\n"
+                color: palette.text
+                text: "Copyright (c) 2013-2025 Filippo Scognamiglio <flscogna@gmail.com>\n\n"
                       + "https://github.com/Swordfish90/cool-retro-term\n\n" +
                       "cool-retro-term is free software: you can redistribute it and/or modify "
                       + "it under the terms of the GNU General Public License as published by "

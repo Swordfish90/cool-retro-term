@@ -20,12 +20,14 @@
 import QtQuick 2.2
 import QtQuick.Controls 2.4
 import QtQuick.Layouts 1.1
-import QtQuick.Dialogs 1.1
+import QtQuick.Dialogs
 
 ColumnLayout {
     GroupBox {
         Layout.fillWidth: true
+        Layout.fillHeight: true
         title: qsTr("Profile")
+        padding: appSettings.defaultMargin
         RowLayout {
             anchors.fill: parent
             ListView {
@@ -183,6 +185,8 @@ ColumnLayout {
     GroupBox {
         title: qsTr("Screen")
         Layout.fillWidth: true
+        Layout.fillHeight: true
+        padding: appSettings.defaultMargin
         GridLayout {
             anchors.fill: parent
             columns: 2
@@ -208,11 +212,18 @@ ColumnLayout {
                 value: appSettings._margin
             }
             Label {
+                text: qsTr("Radius")
+            }
+            SimpleSlider {
+                onValueChanged: appSettings._screenRadius = value
+                value: appSettings._screenRadius
+            }
+            Label {
                 text: qsTr("Frame size")
             }
             SimpleSlider {
-                onValueChanged: appSettings._frameMargin = value
-                value: appSettings._frameMargin
+                onValueChanged: appSettings._frameSize = value
+                value: appSettings._frameSize
             }
             Label {
                 text: qsTr("Opacity")
@@ -237,6 +248,7 @@ ColumnLayout {
     MessageDialog {
         id: messageDialog
         title: qsTr("File Error")
+        buttons: MessageDialog.Ok
         onAccepted: {
             messageDialog.close()
         }
@@ -248,10 +260,8 @@ ColumnLayout {
 
         sourceComponent: FileDialog {
             nameFilters: ["Json files (*.json)"]
-            selectMultiple: false
-            selectFolder: false
-            selectExisting: fileDialog.selectExisting
-            onAccepted: callBack(fileUrl)
+            fileMode: fileDialog.selectExisting ? FileDialog.OpenFile : FileDialog.SaveFile
+            onAccepted: callBack(selectedFile)
         }
 
         onSelectExistingChanged: reload()

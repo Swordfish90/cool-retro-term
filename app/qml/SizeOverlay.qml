@@ -21,15 +21,13 @@ import QtQuick 2.2
 
 Rectangle {
     property size terminalSize
-    property real topOpacity: 0.6
+    property real topOpacity: 0.5
 
     width: textSize.width * 2
     height: textSize.height * 2
     radius: 5
-    border.width: 2
-    border.color: "white"
     color: "black"
-    opacity: sizetimer.running ? 0.6 : 0.0
+    opacity: sizetimer.running ? 0.5 : 0.0
 
     Behavior on opacity {
         NumberAnimation {

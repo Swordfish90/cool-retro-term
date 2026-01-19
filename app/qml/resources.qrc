@@ -5,8 +5,7 @@
         <file>CheckableSlider.qml</file>
         <file>ApplicationSettings.qml</file>
         <file>SettingsWindow.qml</file>
-        <file>Fonts.qml</file>
-        <file>FontPixels.qml</file>
+        <file>TerminalWindow.qml</file>
         <file>SettingsGeneralTab.qml</file>
         <file>PreprocessedTerminal.qml</file>
         <file>TimeManager.qml</file>
@@ -17,34 +16,106 @@
         <file>SettingsEffectsTab.qml</file>
         <file>main.qml</file>
         <file>SettingsTerminalTab.qml</file>
-        <file>FontScanlines.qml</file>
-        <file>fonts/1977-apple2/PrintChar21.ttf</file>
-        <file>fonts/1971-ibm-3278/3270-Regular.ttf</file>
+        <file>fonts/apple2/PrintChar21.ttf</file>
+        <file>fonts/ibm-3278/3270NerdFontMono-Regular.ttf</file>
         <file>Storage.qml</file>
         <file>SettingsAdvancedTab.qml</file>
         <file>TerminalContainer.qml</file>
+        <file>TerminalTabs.qml</file>
         <file>images/crt256.png</file>
         <file>utils.js</file>
         <file>images/allNoise512.png</file>
-        <file>fonts/modern-proggy-tiny/ProggyTiny.ttf</file>
-        <file>fonts/modern-pro-font-win-tweaked/ProFontWindows.ttf</file>
-        <file>fonts/modern-hermit/Hermit-medium.otf</file>
-        <file>fonts/modern-inconsolata/Inconsolata.otf</file>
-        <file>fonts/modern-fixedsys-excelsior/FSEX301-L2.ttf</file>
+        <file>fonts/fixedsys-excelsior/FSEX301-L2.ttf</file>
+        <file>fonts/cozette/CozetteVector.ttf</file>
+        <file>fonts/greybeard/Greybeard-16px.ttf</file>
+        <file>fonts/gohu/GohuFont11NerdFontMono-Regular.ttf</file>
+        <file>fonts/hack/HackNerdFontMono-Regular.ttf</file>
+        <file>fonts/fira-code/FiraCodeNerdFontMono-Regular.ttf</file>
+        <file>fonts/bigblue-terminal/BigBlueTerm437NerdFontMono-Regular.ttf</file>
+        <file>fonts/iosevka/IosevkaTermNerdFontMono-Regular.ttf</file>
+        <file>fonts/jetbrains-mono/JetBrainsMonoNerdFontMono-Regular.ttf</file>
         <file>../icons/32x32/cool-retro-term.png</file>
         <file>Components/SizedLabel.qml</file>
-        <file>fonts/1979-atari-400-800/AtariClassic-Regular.ttf</file>
-        <file>fonts/1982-commodore64/C64_Pro_Mono-STYLE.ttf</file>
-        <file>fonts/1981-ibm-pc/PxPlus_IBM_BIOS.ttf</file>
-        <file>fonts/1985-ibm-pc-vga/PxPlus_IBM_VGA8.ttf</file>
-        <file>fonts/1977-commodore-pet/PetMe.ttf</file>
+        <file>fonts/atari-400-800/AtariClassic-Regular.ttf</file>
+        <file>fonts/pet-me/PetMe64.ttf</file>
+        <file>fonts/pet-me/PetMe.ttf</file>
         <file>BurnInEffect.qml</file>
-        <file>fonts/modern-terminus/TerminusTTF-4.46.0.ttf</file>
+        <file>fonts/terminus/TerminessNerdFontMono-Regular.ttf</file>
+        <file>fonts/departure-mono/DepartureMonoNerdFontMono-Regular.otf</file>
+        <file>fonts/opendyslexic/OpenDyslexicMNerdFontMono-Regular.otf</file>
+        <file>fonts/source-code-pro/SauceCodeProNerdFontMono-Regular.ttf</file>
         <file>TerminalFrame.qml</file>
         <file>menus/WindowMenu.qml</file>
         <file>menus/FullContextMenu.qml</file>
         <file>menus/ShortContextMenu.qml</file>
-        <file>ShaderLibrary.qml</file>
         <file>menus/OSXMenu.qml</file>
+        <file>../shaders/terminal_dynamic.vert.qsb</file>
+        <file>../shaders/terminal_static.vert.qsb</file>
+        <file>../shaders/terminal_frame.vert.qsb</file>
+        <file>../shaders/burn_in.vert.qsb</file>
+        <file>../shaders/terminal_dynamic_raster0_burn0_frame0_chroma0.frag.qsb</file>
+        <file>../shaders/terminal_dynamic_raster0_burn0_frame0_chroma1.frag.qsb</file>
+        <file>../shaders/terminal_dynamic_raster0_burn0_frame1_chroma0.frag.qsb</file>
+        <file>../shaders/terminal_dynamic_raster0_burn0_frame1_chroma1.frag.qsb</file>
+        <file>../shaders/terminal_dynamic_raster0_burn1_frame0_chroma0.frag.qsb</file>
+        <file>../shaders/terminal_dynamic_raster0_burn1_frame0_chroma1.frag.qsb</file>
+        <file>../shaders/terminal_dynamic_raster0_burn1_frame1_chroma0.frag.qsb</file>
+        <file>../shaders/terminal_dynamic_raster0_burn1_frame1_chroma1.frag.qsb</file>
+        <file>../shaders/terminal_dynamic_raster1_burn0_frame0_chroma0.frag.qsb</file>
+        <file>../shaders/terminal_dynamic_raster1_burn0_frame0_chroma1.frag.qsb</file>
+        <file>../shaders/terminal_dynamic_raster1_burn0_frame1_chroma0.frag.qsb</file>
+        <file>../shaders/terminal_dynamic_raster1_burn0_frame1_chroma1.frag.qsb</file>
+        <file>../shaders/terminal_dynamic_raster1_burn1_frame0_chroma0.frag.qsb</file>
+        <file>../shaders/terminal_dynamic_raster1_burn1_frame0_chroma1.frag.qsb</file>
+        <file>../shaders/terminal_dynamic_raster1_burn1_frame1_chroma0.frag.qsb</file>
+        <file>../shaders/terminal_dynamic_raster1_burn1_frame1_chroma1.frag.qsb</file>
+        <file>../shaders/terminal_dynamic_raster2_burn0_frame0_chroma0.frag.qsb</file>
+        <file>../shaders/terminal_dynamic_raster2_burn0_frame0_chroma1.frag.qsb</file>
+        <file>../shaders/terminal_dynamic_raster2_burn0_frame1_chroma0.frag.qsb</file>
+        <file>../shaders/terminal_dynamic_raster2_burn0_frame1_chroma1.frag.qsb</file>
+        <file>../shaders/terminal_dynamic_raster2_burn1_frame0_chroma0.frag.qsb</file>
+        <file>../shaders/terminal_dynamic_raster2_burn1_frame0_chroma1.frag.qsb</file>
+        <file>../shaders/terminal_dynamic_raster2_burn1_frame1_chroma0.frag.qsb</file>
+        <file>../shaders/terminal_dynamic_raster2_burn1_frame1_chroma1.frag.qsb</file>
+        <file>../shaders/terminal_dynamic_raster3_burn0_frame0_chroma0.frag.qsb</file>
+        <file>../shaders/terminal_dynamic_raster3_burn0_frame0_chroma1.frag.qsb</file>
+        <file>../shaders/terminal_dynamic_raster3_burn0_frame1_chroma0.frag.qsb</file>
+        <file>../shaders/terminal_dynamic_raster3_burn0_frame1_chroma1.frag.qsb</file>
+        <file>../shaders/terminal_dynamic_raster3_burn1_frame0_chroma0.frag.qsb</file>
+        <file>../shaders/terminal_dynamic_raster3_burn1_frame0_chroma1.frag.qsb</file>
+        <file>../shaders/terminal_dynamic_raster3_burn1_frame1_chroma0.frag.qsb</file>
+        <file>../shaders/terminal_dynamic_raster3_burn1_frame1_chroma1.frag.qsb</file>
+        <file>../shaders/terminal_dynamic_raster4_burn0_frame0_chroma0.frag.qsb</file>
+        <file>../shaders/terminal_dynamic_raster4_burn0_frame0_chroma1.frag.qsb</file>
+        <file>../shaders/terminal_dynamic_raster4_burn0_frame1_chroma0.frag.qsb</file>
+        <file>../shaders/terminal_dynamic_raster4_burn0_frame1_chroma1.frag.qsb</file>
+        <file>../shaders/terminal_dynamic_raster4_burn1_frame0_chroma0.frag.qsb</file>
+        <file>../shaders/terminal_dynamic_raster4_burn1_frame0_chroma1.frag.qsb</file>
+        <file>../shaders/terminal_dynamic_raster4_burn1_frame1_chroma0.frag.qsb</file>
+        <file>../shaders/terminal_dynamic_raster4_burn1_frame1_chroma1.frag.qsb</file>
+        <file>../shaders/terminal_static_rgb0_bloom0_curve0_shine0.frag.qsb</file>
+        <file>../shaders/terminal_static_rgb0_bloom0_curve0_shine1.frag.qsb</file>
+        <file>../shaders/terminal_static_rgb0_bloom0_curve1_shine0.frag.qsb</file>
+        <file>../shaders/terminal_static_rgb0_bloom0_curve1_shine1.frag.qsb</file>
+        <file>../shaders/terminal_static_rgb0_bloom1_curve0_shine0.frag.qsb</file>
+        <file>../shaders/terminal_static_rgb0_bloom1_curve0_shine1.frag.qsb</file>
+        <file>../shaders/terminal_static_rgb0_bloom1_curve1_shine0.frag.qsb</file>
+        <file>../shaders/terminal_static_rgb0_bloom1_curve1_shine1.frag.qsb</file>
+        <file>../shaders/terminal_static_rgb1_bloom0_curve0_shine0.frag.qsb</file>
+        <file>../shaders/terminal_static_rgb1_bloom0_curve0_shine1.frag.qsb</file>
+        <file>../shaders/terminal_static_rgb1_bloom0_curve1_shine0.frag.qsb</file>
+        <file>../shaders/terminal_static_rgb1_bloom0_curve1_shine1.frag.qsb</file>
+        <file>../shaders/terminal_static_rgb1_bloom1_curve0_shine0.frag.qsb</file>
+        <file>../shaders/terminal_static_rgb1_bloom1_curve0_shine1.frag.qsb</file>
+        <file>../shaders/terminal_static_rgb1_bloom1_curve1_shine0.frag.qsb</file>
+        <file>../shaders/terminal_static_rgb1_bloom1_curve1_shine1.frag.qsb</file>
+        <file>../shaders/terminal_frame.frag.qsb</file>
+        <file>../shaders/burn_in.frag.qsb</file>
+        <file>fonts/unscii/unscii-8-thin.ttf</file>
+        <file>fonts/unscii/unscii-16-full.ttf</file>
+        <file>fonts/unscii/unscii-8.ttf</file>
+        <file>fonts/oldschool-pc-fonts/PxPlus_IBM_EGA_8x8.ttf</file>
+        <file>fonts/oldschool-pc-fonts/PxPlus_IBM_VGA8.ttf</file>
+        <file>fonts/oldschool-pc-fonts/PxPlus_IBM_VGA_8x16.ttf</file>
     </qresource>
 </RCC>

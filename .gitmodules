@@ -2,3 +2,6 @@
 	path = qmltermwidget
 	url = https://github.com/Swordfish90/qmltermwidget
 	branch = unstable
+[submodule "KDSingleApplication"]
+	path = KDSingleApplication
+	url = https://github.com/KDAB/KDSingleApplication.git

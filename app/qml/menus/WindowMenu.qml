@@ -27,6 +27,13 @@ MenuBar {
     Menu {
         title: qsTr("File")
         MenuItem {
+            action: newWindowAction
+        }
+        MenuItem {
+            action: newTabAction
+        }
+        MenuSeparator {}
+        MenuItem {
             action: quitAction
         }
     }
@@ -50,14 +57,10 @@ MenuBar {
             visible: fullscreenAction.enabled
         }
         MenuItem {
-            action: showMenubarAction
-            visible: showMenubarAction.enabled
+            action: zoomInAction
         }
         MenuItem {
-            action: zoomIn
-        }
-        MenuItem {
-            action: zoomOut
+            action: zoomOutAction
         }
     }
     Menu {
@@ -69,11 +72,10 @@ MenuBar {
                 text: model.text
                 onTriggered: {
                     appSettings.loadProfileString(obj_string)
-                    appSettings.handleFontChanged()
                 }
             }
-            onObjectAdded: profilesMenu.insertItem(index, object)
-            onObjectRemoved: profilesMenu.removeItem(object)
+            onObjectAdded: function(index, object) { profilesMenu.insertItem(index, object) }
+            onObjectRemoved: function(object) { profilesMenu.removeItem(object) }
         }
     }
     Menu {

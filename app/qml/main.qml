@@ -18,118 +18,92 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *******************************************************************************/
 import QtQuick 2.2
-import QtQuick.Window 2.1
 import QtQuick.Controls 2.3
 
 import "menus"
 
-ApplicationWindow {
-    id: terminalWindow
+QtObject {
+    id: appRoot
 
-    width: 1024
-    height: 768
-
-    // Save window properties automatically
-    onXChanged: appSettings.x = x
-    onYChanged: appSettings.y = y
-    onWidthChanged: appSettings.width = width
-    onHeightChanged: appSettings.height = height
-
-    // Load saved window geometry and show the window
-    Component.onCompleted: {
-        x = appSettings.x
-        y = appSettings.y
-        width = appSettings.width
-        height = appSettings.height
-
-        visible = true
+    property ApplicationSettings appSettings: ApplicationSettings {
+        onInitializedSettings: appRoot.createWindow()
     }
 
-    minimumWidth: 320
-    minimumHeight: 240
-
-    visible: false
-
-    property bool fullscreen: appSettings.fullscreen
-    onFullscreenChanged: visibility = (fullscreen ? Window.FullScreen : Window.Windowed)
-
-    menuBar: qtquickMenuLoader.item
-
-    Loader {
-        id: qtquickMenuLoader
-        active: !appSettings.isMacOS && appSettings.showMenubar
-        sourceComponent: WindowMenu { }
+    property TimeManager timeManager: TimeManager {
+        enableTimer: windowsModel.count > 0
     }
 
-    Loader {
-        id: globalMenuLoader
+    property SettingsWindow settingsWindow: SettingsWindow {
+        visible: false
+    }
+
+    property AboutDialog aboutDialog: AboutDialog {
+        visible: false
+    }
+
+    property Component windowComponent: Component {
+        TerminalWindow { }
+    }
+
+    property ListModel windowsModel: ListModel { }
+
+    property Loader globalMenuLoader: Loader {
         active: appSettings.isMacOS
         sourceComponent: OSXMenu { }
     }
 
-    property string wintitle: appSettings.wintitle
-
-    color: "#00000000"
-
-    title: terminalContainer.title || qsTr(appSettings.wintitle)
-
-    Action {
-        id: showMenubarAction
-        text: qsTr("Show Menubar")
-        enabled: !appSettings.isMacOS
-        shortcut: "Ctrl+Shift+M"
-        checkable: true
-        checked: appSettings.showMenubar
-        onTriggered: appSettings.showMenubar = !appSettings.showMenubar
-    }
-    Action {
-        id: fullscreenAction
+    property Action fullscreenAction: Action {
         text: qsTr("Fullscreen")
         enabled: !appSettings.isMacOS
         shortcut: "Alt+F11"
-        onTriggered: appSettings.fullscreen = !appSettings.fullscreen
-        checkable: true
-        checked: appSettings.fullscreen
     }
-    Action {
-        id: quitAction
+
+    property bool initialFullscreenRequested: Qt.application.arguments.indexOf("--fullscreen") !== -1
+
+    property Action newWindowAction: Action {
+        text: qsTr("New Window")
+        shortcut: "Ctrl+Shift+N"
+        onTriggered: appRoot.createWindow()
+    }
+
+    property Action quitAction: Action {
         text: qsTr("Quit")
         shortcut: "Ctrl+Shift+Q"
-        onTriggered: Qt.quit()
+        onTriggered: appSettings.close()
     }
-    Action {
-        id: showsettingsAction
+
+    property Action showsettingsAction: Action {
         text: qsTr("Settings")
         onTriggered: {
-            settingswindow.show()
-            settingswindow.requestActivate()
-            settingswindow.raise()
+            settingsWindow.show()
+            settingsWindow.requestActivate()
+            settingsWindow.raise()
         }
     }
-    Action {
-        id: copyAction
+
+    property Action copyAction: Action {
         text: qsTr("Copy")
         shortcut: "Ctrl+Shift+C"
     }
-    Action {
-        id: pasteAction
+
+    property Action pasteAction: Action {
         text: qsTr("Paste")
         shortcut: "Ctrl+Shift+V"
     }
-    Action {
-        id: zoomIn
+
+    property Action zoomInAction: Action {
         text: qsTr("Zoom In")
         shortcut: "Ctrl++"
         onTriggered: appSettings.incrementScaling()
     }
-    Action {
-        id: zoomOut
+
+    property Action zoomOutAction: Action {
         text: qsTr("Zoom Out")
         shortcut: "Ctrl+-"
         onTriggered: appSettings.decrementScaling()
     }
-    Action {
-        id: showAboutAction
+
+    property Action showAboutAction: Action {
         text: qsTr("About")
         onTriggered: {
             aboutDialog.show()
@@ -137,34 +111,35 @@ ApplicationWindow {
             aboutDialog.raise()
         }
     }
-    ApplicationSettings {
-        id: appSettings
+
+    property Action newTabAction: Action {
+        text: qsTr("New Tab")
     }
-    TerminalContainer {
-        id: terminalContainer
-        width: parent.width
-        height: (parent.height + Math.abs(y))
+
+    function createWindow() {
+        var useFullscreen = initialFullscreenRequested
+        var window = windowComponent.createObject(null, { fullscreen: useFullscreen })
+        if (!window)
+            return
+
+        windowsModel.append({ window: window })
+        initialFullscreenRequested = false
+        window.show()
+        window.requestActivate()
     }
-    SettingsWindow {
-        id: settingswindow
-        visible: false
-    }
-    AboutDialog {
-        id: aboutDialog
-        visible: false
-    }
-    Loader {
-        anchors.centerIn: parent
-        active: appSettings.showTerminalSize
-        sourceComponent: SizeOverlay {
-            z: 3
-            terminalSize: terminalContainer.terminalSize
+
+    function closeWindow(window) {
+        for (var i = 0; i < windowsModel.count; i++) {
+            if (windowsModel.get(i).window === window) {
+                windowsModel.remove(i)
+                break
+            }
         }
-    }
-    onClosing: {
-        // OSX Since we are currently supporting only one window
-        // quit the application when it is closed.
-        if (appSettings.isMacOS)
-            Qt.quit()
+
+        window.destroy()
+
+        if (windowsModel.count === 0) {
+            appSettings.close()
+        }
     }
 }

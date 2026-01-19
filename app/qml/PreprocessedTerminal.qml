@@ -20,14 +20,16 @@
 
 import QtQuick 2.2
 import QtQuick.Controls 2.0
+import QtQml
 
-import QMLTermWidget 1.0
+import QMLTermWidget 2.0
 
 import "menus"
 import "utils.js" as Utils
 
-Item{
-    id: terminalContainer
+Item {
+    id: preprocessedTerminal
+    signal sessionFinished()
 
     property size virtualResolution: Qt.size(kterminal.totalWidth, kterminal.totalHeight)
     property alias mainTerminal: kterminal
@@ -46,14 +48,14 @@ Item{
     // Manage copy and paste
     Connections {
         target: copyAction
-
+        enabled: terminalContainer.hasFocus
         onTriggered: {
             kterminal.copyClipboard()
         }
     }
     Connections {
         target: pasteAction
-
+        enabled: terminalContainer.hasFocus
         onTriggered: {
             kterminal.pasteClipboard()
         }
@@ -64,29 +66,22 @@ Item{
         target: appSettings
 
         onFontScalingChanged: {
-            terminalContainer.updateSources()
+            preprocessedTerminal.updateSources()
         }
 
         onFontWidthChanged: {
-            terminalContainer.updateSources()
+            preprocessedTerminal.updateSources()
         }
     }
     Connections {
-        target: terminalContainer
+        target: preprocessedTerminal
 
         onWidthChanged: {
-            terminalContainer.updateSources()
+            preprocessedTerminal.updateSources()
         }
 
         onHeightChanged: {
-            terminalContainer.updateSources()
-        }
-    }
-    Connections {
-        target: terminalWindow
-
-        onActiveChanged: {
-            kterminal.forceActiveFocus()
+            preprocessedTerminal.updateSources()
         }
     }
 
@@ -97,8 +92,8 @@ Item{
     QMLTermWidget {
         id: kterminal
 
-        property int textureResolutionScale: appSettings.lowResolutionFont ? devicePixelRatio : 1
-        property int margin: appSettings.totalMargin / screenScaling
+        property int textureResolutionScale: appSettings.lowResolutionFont ? Screen.devicePixelRatio : 1
+        property int margin: appSettings.margin / screenScaling
         property int totalWidth: Math.floor(parent.width / (screenScaling * fontWidth))
         property int totalHeight: Math.floor(parent.height / screenScaling)
 
@@ -107,26 +102,24 @@ Item{
 
         textureSize: Qt.size(width / textureResolutionScale, height / textureResolutionScale)
 
-        width: ensureMultiple(rawWidth, devicePixelRatio)
-        height: ensureMultiple(rawHeight, devicePixelRatio)
+        width: ensureMultiple(rawWidth, Screen.devicePixelRatio)
+        height: ensureMultiple(rawHeight, Screen.devicePixelRatio)
 
         /** Ensure size is a multiple of factor. This is needed for pixel perfect scaling on highdpi screens. */
         function ensureMultiple(size, factor) {
             return Math.round(size / factor) * factor;
         }
 
-        colorScheme: "cool-retro-term"
-
-        smooth: !appSettings.lowResolutionFont
-        enableBold: false
         fullCursorHeight: true
         blinkingCursor: appSettings.blinkingCursor
+
+        colorScheme: "cool-retro-term"
 
         session: QMLTermSession {
             id: ksession
 
             onFinished: {
-                Qt.quit()
+                preprocessedTerminal.sessionFinished()
             }
         }
 
@@ -140,26 +133,36 @@ Item{
                 anchors.topMargin: 1
                 anchors.bottomMargin: 1
                 color: "white"
-                radius: width * 0.25
                 opacity: 0.7
             }
         }
 
-        function handleFontChanged(fontFamily, pixelSize, lineSpacing, screenScaling, fontWidth) {
-            kterminal.antialiasText = !appSettings.lowResolutionFont;
-            font.pixelSize = pixelSize;
-            font.family = fontFamily;
-
-            terminalContainer.fontWidth = fontWidth;
-            terminalContainer.screenScaling = screenScaling;
-            scaleTexture = Math.max(1.0, Math.floor(screenScaling * appSettings.windowScaling));
-
+        function handleFontChanged(fontFamily, pixelSize, lineSpacing, screenScaling, fontWidth, fallbackFontFamily, lowResolutionFont) {
             kterminal.lineSpacing = lineSpacing;
+            kterminal.antialiasText = !lowResolutionFont;
+            kterminal.smooth = !lowResolutionFont;
+            kterminal.enableBold = !lowResolutionFont;
+            kterminal.enableItalic = !lowResolutionFont;
+
+            kterminal.font = Qt.font({
+                family: fontFamily,
+                pixelSize: pixelSize
+            });
+
+            preprocessedTerminal.fontWidth = fontWidth;
+            preprocessedTerminal.screenScaling = screenScaling;
+            scaleTexture = Math.max(1.0, Math.floor(screenScaling * appSettings.windowScaling));
+        }
+
+        Connections {
+            target: appSettings
+
+            onWindowScalingChanged: {
+                scaleTexture = Math.max(1.0, Math.floor(preprocessedTerminal.screenScaling * appSettings.windowScaling));
+            }
         }
 
         function startSession() {
-            appSettings.initializedSettings.disconnect(startSession);
-
             // Retrieve the variable set in main.cpp if arguments are passed.
             if (defaultCmd) {
                 ksession.setShellProgram(defaultCmd);
@@ -180,9 +183,9 @@ Item{
             forceActiveFocus();
         }
         Component.onCompleted: {
-            appSettings.terminalFontChanged.connect(handleFontChanged);
-            appSettings.initializedSettings.connect(startSession);
-            appSettings.handleFontChanged()
+            appSettings.fontManager.terminalFontChanged.connect(handleFontChanged);
+            appSettings.fontManager.refresh()
+            startSession();
         }
     }
 
@@ -198,51 +201,58 @@ Item{
 
     Loader {
         id: menuLoader
-        sourceComponent: (appSettings.isMacOS || appSettings.showMenubar ? shortContextMenu : fullContextMenu)
+        sourceComponent: (appSettings.isMacOS || (appSettings.showMenubar && !terminalWindow.fullscreen) ? shortContextMenu : fullContextMenu)
     }
     property alias contextmenu: menuLoader.item
 
     MouseArea {
-        property real margin: appSettings.totalMargin
+        property real margin: appSettings.margin
+        property real frameSize: appSettings.frameSize * terminalWindow.normalizedWindowScale
 
         acceptedButtons: Qt.LeftButton | Qt.MiddleButton | Qt.RightButton
         anchors.fill: parent
         cursorShape: kterminal.terminalUsesMouse ? Qt.ArrowCursor : Qt.IBeamCursor
-        onWheel:{
-            if(wheel.modifiers & Qt.ControlModifier){
-               wheel.angleDelta.y > 0 ? zoomIn.trigger() : zoomOut.trigger();
+        onWheel: function(wheel) {
+            if (wheel.modifiers & Qt.ControlModifier) {
+               wheel.angleDelta.y > 0 ? zoomInAction.trigger() : zoomOutAction.trigger();
             } else {
                 var coord = correctDistortion(wheel.x, wheel.y);
                 kterminal.simulateWheel(coord.x, coord.y, wheel.buttons, wheel.modifiers, wheel.angleDelta);
             }
         }
-        onDoubleClicked: {
+        onDoubleClicked: function(mouse) {
             var coord = correctDistortion(mouse.x, mouse.y);
             kterminal.simulateMouseDoubleClick(coord.x, coord.y, mouse.button, mouse.buttons, mouse.modifiers);
         }
-        onPressed: {
-            if((!kterminal.terminalUsesMouse || mouse.modifiers & Qt.ShiftModifier) && mouse.button == Qt.RightButton) {
+        onPressed: function(mouse) {
+            kterminal.forceActiveFocus()
+            if ((!kterminal.terminalUsesMouse || mouse.modifiers & Qt.ShiftModifier) && mouse.button == Qt.RightButton) {
                 contextmenu.popup();
             } else {
                 var coord = correctDistortion(mouse.x, mouse.y);
                 kterminal.simulateMousePress(coord.x, coord.y, mouse.button, mouse.buttons, mouse.modifiers)
             }
         }
-        onReleased: {
+        onReleased: function(mouse) {
             var coord = correctDistortion(mouse.x, mouse.y);
             kterminal.simulateMouseRelease(coord.x, coord.y, mouse.button, mouse.buttons, mouse.modifiers);
         }
-        onPositionChanged: {
+        onPositionChanged: function(mouse) {
             var coord = correctDistortion(mouse.x, mouse.y);
             kterminal.simulateMouseMove(coord.x, coord.y, mouse.button, mouse.buttons, mouse.modifiers);
         }
 
-        function correctDistortion(x, y){
+        function correctDistortion(x, y) {
             x = (x - margin) / width;
             y = (y - margin) / height;
 
+            x = x * (1 + frameSize * 2) - frameSize;
+            y = y * (1 + frameSize * 2) - frameSize;
+
             var cc = Qt.size(0.5 - x, 0.5 - y);
-            var distortion = (cc.height * cc.height + cc.width * cc.width) * appSettings.screenCurvature * appSettings.screenCurvatureSize;
+            var distortion = (cc.height * cc.height + cc.width * cc.width)
+                    * appSettings.screenCurvature * appSettings.screenCurvatureSize
+                    * terminalWindow.normalizedWindowScale;
 
             return Qt.point((x - cc.width  * (1+distortion) * distortion) * (kterminal.totalWidth),
                            (y - cc.height * (1+distortion) * distortion) * (kterminal.totalHeight))

@@ -27,6 +27,17 @@ MenuBar {
     Menu {
         title: qsTr("File")
         MenuItem {
+            text: newWindowAction.text
+            shortcut: newWindowAction.shortcut
+            onTriggered: newWindowAction.trigger()
+        }
+        MenuItem {
+            text: newTabAction.text
+            shortcut: newTabAction.shortcut
+            onTriggered: newTabAction.trigger()
+        }
+        MenuSeparator {}
+        MenuItem {
             text: quitAction.text
             onTriggered: quitAction.trigger()
         }
@@ -53,14 +64,14 @@ MenuBar {
     Menu {
         title: qsTr("View")
         MenuItem {
-            text: zoomIn.text
+            text: zoomInAction.text
             shortcut: "Meta++"
-            onTriggered: zoomIn.trigger()
+            onTriggered: zoomInAction.trigger()
         }
         MenuItem {
-            text: zoomOut.text
+            text: zoomOutAction.text
             shortcut: "Meta+-"
-            onTriggered: zoomOut.trigger()
+            onTriggered: zoomOutAction.trigger()
         }
     }
     Menu {
@@ -72,11 +83,10 @@ MenuBar {
                 text: model.text
                 onTriggered: {
                     appSettings.loadProfileString(obj_string)
-                    appSettings.handleFontChanged()
                 }
             }
-            onObjectAdded: profilesMenu.insertItem(index, object)
-            onObjectRemoved: profilesMenu.removeItem(object)
+            onObjectAdded: function(index, object) { profilesMenu.insertItem(index, object) }
+            onObjectRemoved: function(object) { profilesMenu.removeItem(object) }
         }
     }
     Menu {

@@ -24,7 +24,7 @@ import "utils.js" as Utils
 Loader {
     id: burnInEffect
 
-    property ShaderEffectSource source: item ? item.source : null
+    property ShaderEffectSource effectSource: item ? item.source : null
 
     property real lastUpdate: 0
     property real prevLastUpdate: 0
@@ -82,13 +82,17 @@ Loader {
             }
             // Restart blurred source settings change.
             Connections {
+                target: appSettings.fontManager
+
+                onTerminalFontChanged: {
+                    burnInEffect.restartBlurSource()
+                }
+            }
+
+            Connections {
                 target: appSettings
 
                 onBurnInChanged: {
-                    burnInEffect.restartBlurSource()
-                }
-
-                onTerminalFontChanged: {
                     burnInEffect.restartBlurSource()
                 }
 
@@ -102,58 +106,22 @@ Loader {
             }
         }
 
-        ShaderLibrary {
-            id: shaderLibrary
-        }
-
         ShaderEffect {
             id: burnInShaderEffect
+
+            property real time: timeManager.time
 
             property variant txt_source: kterminalSource
             property variant burnInSource: burnInEffectSource
             property real burnInTime: burnInFadeTime
-            property real lastUpdate: burnInEffect.lastUpdate
+            property real burnInLastUpdate: burnInEffect.lastUpdate
             property real prevLastUpdate: burnInEffect.prevLastUpdate
 
             anchors.fill: parent
             blending: false
 
-            fragmentShader:
-                "#ifdef GL_ES
-                        precision mediump float;
-                    #endif\n" +
-
-                "uniform lowp float qt_Opacity;" +
-                "uniform lowp sampler2D txt_source;" +
-
-                "varying highp vec2 qt_TexCoord0;
-
-                 uniform lowp sampler2D burnInSource;
-                 uniform highp float burnInTime;
-
-                 uniform highp float lastUpdate;
-
-                 uniform highp float prevLastUpdate;" +
-
-                shaderLibrary.rgb2grey +
-
-                "void main() {
-                    vec2 coords = qt_TexCoord0;
-
-                    vec3 txtColor = texture2D(txt_source, coords).rgb;
-                    vec4 accColor = texture2D(burnInSource, coords);
-
-                    float prevMask = accColor.a;
-                    float currMask = rgb2grey(txtColor);
-
-                    highp float blurDecay = clamp((lastUpdate - prevLastUpdate) * burnInTime, 0.0, 1.0);
-                    blurDecay = max(0.0, blurDecay - prevMask);
-                    vec3 blurColor = accColor.rgb - vec3(blurDecay);
-                    vec3 color = max(blurColor, txtColor);
-
-                    gl_FragColor = vec4(color, currMask);
-                }
-            "
+            fragmentShader: "qrc:/shaders/burn_in.frag.qsb"
+            vertexShader: "qrc:/shaders/burn_in.vert.qsb"
 
             onStatusChanged: if (log) console.log(log) //Print warning messages
         }

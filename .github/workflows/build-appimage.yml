@@ -1,0 +1,54 @@
+name: Build AppImage
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  build-appimage:
+    name: Build (Linux, AppImage)
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install build deps
+        run: |
+          sudo apt update
+          sudo apt install -y build-essential rsync wget
+
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: 6.10.0
+          dir: ..
+          modules: qtshadertools
+          setup-python: false
+          cache: true
+
+      - name: Build AppImage
+        run: |
+          ./scripts/build-appimage.sh
+
+      - name: Collect artifact
+        run: |
+          mkdir -p release
+          mv ./*.AppImage release/
+
+      - name: Attestation
+        uses: actions/attest-build-provenance@v1
+        with:
+          subject-path: ./release/*
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: cool-retro-term-appimage
+          path: ./release/*

@@ -18,15 +18,23 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *******************************************************************************/
 import QtQuick 2.2
-import QtGraphicalEffects 1.0
+import Qt5Compat.GraphicalEffects
 
 import "utils.js" as Utils
 
 ShaderTerminal {
     property alias title: terminal.title
     property alias terminalSize: terminal.terminalSize
+    signal sessionFinished()
 
-    property real devicePixelRatio: terminalWindow.screen.devicePixelRatio
+    property bool loadBloomEffect: appSettings.bloom > 0 || appSettings._frameShininess > 0
+    property bool hasFocus
+
+    onHasFocusChanged: {
+        if (hasFocus) {
+            activate()
+        }
+    }
 
     id: mainShader
     opacity: appSettings.windowOpacity * 0.3 + 0.7
@@ -35,24 +43,25 @@ ShaderTerminal {
     burnInEffect: terminal.burnInEffect
     virtualResolution: terminal.virtualResolution
     screenResolution: Qt.size(
-        terminalWindow.width * devicePixelRatio * appSettings.windowScaling,
-        terminalWindow.height * devicePixelRatio * appSettings.windowScaling
+        terminalWindow.width * Screen.devicePixelRatio * appSettings.windowScaling,
+        terminalWindow.height * Screen.devicePixelRatio * appSettings.windowScaling
     )
-
-    TimeManager {
-        id: timeManager
-        enableTimer: terminalWindow.visible
-    }
+    bloomSource: bloomSourceLoader.item
 
     PreprocessedTerminal {
         id: terminal
         anchors.fill: parent
+        onSessionFinished: mainShader.sessionFinished()
+    }
+
+    function activate() {
+        terminal.mainTerminal.forceActiveFocus()
     }
 
     //  EFFECTS  ////////////////////////////////////////////////////////////////
     Loader {
         id: bloomEffectLoader
-        active: appSettings.bloom
+        active: loadBloomEffect
         asynchronous: true
         width: parent.width * appSettings.bloomQuality
         height: parent.height * appSettings.bloomQuality
@@ -65,16 +74,15 @@ ShaderTerminal {
     }
     Loader {
         id: bloomSourceLoader
-        active: appSettings.bloom !== 0
+        active: loadBloomEffect
         asynchronous: true
         sourceComponent: ShaderEffectSource {
             id: _bloomEffectSource
             sourceItem: bloomEffectLoader.item
+            wrapMode: ShaderEffectSource.Repeat
             hideSource: true
             smooth: true
             visible: false
         }
     }
-
-    bloomSource: bloomSourceLoader.item
 }
