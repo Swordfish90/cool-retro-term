@@ -20,15 +20,14 @@
 
 import QtQuick 2.2
 import QtQuick.Controls 2.0
-import QtQml
 
 import QMLTermWidget 2.0
 
 import "menus"
 import "utils.js" as Utils
 
-Item {
-    id: preprocessedTerminal
+Item{
+    id: terminalContainer
     signal sessionFinished()
 
     property size virtualResolution: Qt.size(kterminal.totalWidth, kterminal.totalHeight)
@@ -48,14 +47,14 @@ Item {
     // Manage copy and paste
     Connections {
         target: copyAction
-        enabled: terminalContainer.hasFocus
+
         onTriggered: {
             kterminal.copyClipboard()
         }
     }
     Connections {
         target: pasteAction
-        enabled: terminalContainer.hasFocus
+
         onTriggered: {
             kterminal.pasteClipboard()
         }
@@ -66,22 +65,22 @@ Item {
         target: appSettings
 
         onFontScalingChanged: {
-            preprocessedTerminal.updateSources()
+            terminalContainer.updateSources()
         }
 
         onFontWidthChanged: {
-            preprocessedTerminal.updateSources()
+            terminalContainer.updateSources()
         }
     }
     Connections {
-        target: preprocessedTerminal
+        target: terminalContainer
 
         onWidthChanged: {
-            preprocessedTerminal.updateSources()
+            terminalContainer.updateSources()
         }
 
         onHeightChanged: {
-            preprocessedTerminal.updateSources()
+            terminalContainer.updateSources()
         }
     }
 
@@ -119,7 +118,7 @@ Item {
             id: ksession
 
             onFinished: {
-                preprocessedTerminal.sessionFinished()
+                terminalContainer.sessionFinished()
             }
         }
 
@@ -149,8 +148,8 @@ Item {
                 pixelSize: pixelSize
             });
 
-            preprocessedTerminal.fontWidth = fontWidth;
-            preprocessedTerminal.screenScaling = screenScaling;
+            terminalContainer.fontWidth = fontWidth;
+            terminalContainer.screenScaling = screenScaling;
             scaleTexture = Math.max(1.0, Math.floor(screenScaling * appSettings.windowScaling));
         }
 
@@ -158,7 +157,7 @@ Item {
             target: appSettings
 
             onWindowScalingChanged: {
-                scaleTexture = Math.max(1.0, Math.floor(preprocessedTerminal.screenScaling * appSettings.windowScaling));
+                scaleTexture = Math.max(1.0, Math.floor(terminalContainer.screenScaling * appSettings.windowScaling));
             }
         }
 
@@ -214,7 +213,7 @@ Item {
         cursorShape: kterminal.terminalUsesMouse ? Qt.ArrowCursor : Qt.IBeamCursor
         onWheel: function(wheel) {
             if (wheel.modifiers & Qt.ControlModifier) {
-               wheel.angleDelta.y > 0 ? zoomInAction.trigger() : zoomOutAction.trigger();
+               wheel.angleDelta.y > 0 ? zoomIn.trigger() : zoomOut.trigger();
             } else {
                 var coord = correctDistortion(wheel.x, wheel.y);
                 kterminal.simulateWheel(coord.x, coord.y, wheel.buttons, wheel.modifiers, wheel.angleDelta);

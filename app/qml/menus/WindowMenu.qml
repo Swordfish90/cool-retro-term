@@ -57,10 +57,14 @@ MenuBar {
             visible: fullscreenAction.enabled
         }
         MenuItem {
-            action: zoomInAction
+            action: showMenubarAction
+            visible: showMenubarAction.enabled
         }
         MenuItem {
-            action: zoomOutAction
+            action: zoomIn
+        }
+        MenuItem {
+            action: zoomOut
         }
     }
     Menu {
