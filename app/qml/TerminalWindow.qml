@@ -46,7 +46,7 @@ ApplicationWindow {
 
     Loader {
         id: qtquickMenuLoader
-        active: !appSettings.isMacOS && (appSettings.showMenubar && !fullscreen)
+        active: appSettings.isMacOS || (appSettings.showMenubar && !fullscreen)
         sourceComponent: WindowMenu { }
     }
 
@@ -57,22 +57,13 @@ ApplicationWindow {
     title: terminalTabs.currentTitle
 
     Action {
-        id: showMenubarAction
-        text: qsTr("Show Menubar")
-        enabled: !appSettings.isMacOS
-        shortcut: "Ctrl+Shift+M"
-        checkable: true
-        checked: appSettings.showMenubar
-        onTriggered: appSettings.showMenubar = !appSettings.showMenubar
-    }
-    Action {
         id: fullscreenAction
         text: qsTr("Fullscreen")
         enabled: !appSettings.isMacOS
         shortcut: "Alt+F11"
-        onTriggered: appSettings.fullscreen = !appSettings.fullscreen
+        onTriggered: fullscreen = !fullscreen
         checkable: true
-        checked: appSettings.fullscreen
+        checked: fullscreen
     }
     Action {
         id: newWindowAction

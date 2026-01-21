@@ -46,11 +46,6 @@ QtObject {
 
     property ListModel windowsModel: ListModel { }
 
-    property Loader globalMenuLoader: Loader {
-        active: appSettings.isMacOS
-        sourceComponent: OSXMenu { }
-    }
-
     function createWindow() {
         var window = windowComponent.createObject(null)
         if (!window)
