@@ -42,13 +42,7 @@ ApplicationWindow {
     property bool fullscreen: false
     onFullscreenChanged: visibility = (fullscreen ? Window.FullScreen : Window.Windowed)
 
-    menuBar: qtquickMenuLoader.item
-
-    Loader {
-        id: qtquickMenuLoader
-        active: appSettings.isMacOS || (appSettings.showMenubar && !fullscreen)
-        sourceComponent: WindowMenu { }
-    }
+    menuBar: WindowMenu { }
 
     property real normalizedWindowScale: 1024 / ((0.5 * width + 0.5 * height))
 
@@ -60,7 +54,7 @@ ApplicationWindow {
         id: fullscreenAction
         text: qsTr("Fullscreen")
         enabled: !appSettings.isMacOS
-        shortcut: "Alt+F11"
+        shortcut: StandardKey.FullScreen
         onTriggered: fullscreen = !fullscreen
         checkable: true
         checked: fullscreen
@@ -68,14 +62,14 @@ ApplicationWindow {
     Action {
         id: newWindowAction
         text: qsTr("New Window")
-        shortcut: "Ctrl+Shift+N"
+        shortcut: appSettings.isMacOS ? "Meta+N" : "Ctrl+Shift+N"
         onTriggered: appRoot.createWindow()
     }
     Action {
         id: quitAction
         text: qsTr("Quit")
-        shortcut: "Ctrl+Shift+Q"
-        onTriggered: appSettings.close()
+        shortcut: appSettings.isMacOS ? StandardKey.Close : "Ctrl+Shift+Q"
+        onTriggered: terminalWindow.close()
     }
     Action {
         id: showsettingsAction
@@ -89,23 +83,23 @@ ApplicationWindow {
     Action {
         id: copyAction
         text: qsTr("Copy")
-        shortcut: "Ctrl+Shift+C"
+        shortcut: appSettings.isMacOS ? StandardKey.Copy : "Ctrl+Shift+C"
     }
     Action {
         id: pasteAction
         text: qsTr("Paste")
-        shortcut: "Ctrl+Shift+V"
+        shortcut: appSettings.isMacOS ? StandardKey.Paste : "Ctrl+Shift+V"
     }
     Action {
         id: zoomIn
         text: qsTr("Zoom In")
-        shortcut: "Ctrl++"
+        shortcut: StandardKey.ZoomIn
         onTriggered: appSettings.incrementScaling()
     }
     Action {
         id: zoomOut
         text: qsTr("Zoom Out")
-        shortcut: "Ctrl+-"
+        shortcut: StandardKey.ZoomOut
         onTriggered: appSettings.decrementScaling()
     }
     Action {
@@ -120,6 +114,7 @@ ApplicationWindow {
     Action {
         id: newTabAction
         text: qsTr("New Tab")
+        shortcut: appSettings.isMacOS ? StandardKey.AddTab : "Ctrl+Shift+T"
         onTriggered: terminalTabs.addTab()
     }
     TerminalTabs {

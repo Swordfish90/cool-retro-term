@@ -140,6 +140,7 @@ Item {
                     Layout.fillWidth: true
                     Layout.fillHeight: true
                     onSessionFinished: tabsRoot.closeTab(index)
+                    onTerminalSizeChanged: updateTerminalSize()
 
                     function updateTerminalSize() {
                         // Every tab will have the same size so we can simply take the first one.
