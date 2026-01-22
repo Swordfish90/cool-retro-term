@@ -20,7 +20,6 @@
 import QtQuick 2.2
 import QtQuick.Window 2.1
 import QtQuick.Controls 2.3
-import QtQml
 
 import "menus"
 
@@ -43,25 +42,7 @@ ApplicationWindow {
     property bool fullscreen: false
     onFullscreenChanged: visibility = (fullscreen ? Window.FullScreen : Window.Windowed)
 
-    menuBar: qtquickMenuLoader.item
-
-    Loader {
-        id: qtquickMenuLoader
-        active: !appSettings.isMacOS && (appSettings.showMenubar && !fullscreen)
-        sourceComponent: WindowMenu { }
-    }
-
-    Connections {
-        target: newTabAction
-        enabled: terminalWindow.active
-        onTriggered: terminalTabs.addTab()
-    }
-
-    Connections {
-        target: fullscreenAction
-        enabled: terminalWindow.active
-        onTriggered: terminalWindow.fullscreen = !terminalWindow.fullscreen
-    }
+    menuBar: WindowMenu { }
 
     property real normalizedWindowScale: 1024 / ((0.5 * width + 0.5 * height))
 
@@ -69,6 +50,73 @@ ApplicationWindow {
 
     title: terminalTabs.currentTitle
 
+    Action {
+        id: fullscreenAction
+        text: qsTr("Fullscreen")
+        enabled: !appSettings.isMacOS
+        shortcut: StandardKey.FullScreen
+        onTriggered: fullscreen = !fullscreen
+        checkable: true
+        checked: fullscreen
+    }
+    Action {
+        id: newWindowAction
+        text: qsTr("New Window")
+        shortcut: appSettings.isMacOS ? "Meta+N" : "Ctrl+Shift+N"
+        onTriggered: appRoot.createWindow()
+    }
+    Action {
+        id: quitAction
+        text: qsTr("Quit")
+        shortcut: appSettings.isMacOS ? StandardKey.Close : "Ctrl+Shift+Q"
+        onTriggered: terminalWindow.close()
+    }
+    Action {
+        id: showsettingsAction
+        text: qsTr("Settings")
+        onTriggered: {
+            settingsWindow.show()
+            settingsWindow.requestActivate()
+            settingsWindow.raise()
+        }
+    }
+    Action {
+        id: copyAction
+        text: qsTr("Copy")
+        shortcut: appSettings.isMacOS ? StandardKey.Copy : "Ctrl+Shift+C"
+    }
+    Action {
+        id: pasteAction
+        text: qsTr("Paste")
+        shortcut: appSettings.isMacOS ? StandardKey.Paste : "Ctrl+Shift+V"
+    }
+    Action {
+        id: zoomIn
+        text: qsTr("Zoom In")
+        shortcut: StandardKey.ZoomIn
+        onTriggered: appSettings.incrementScaling()
+    }
+    Action {
+        id: zoomOut
+        text: qsTr("Zoom Out")
+        shortcut: StandardKey.ZoomOut
+        onTriggered: appSettings.decrementScaling()
+    }
+    Action {
+        id: showAboutAction
+        text: qsTr("About")
+        onTriggered: {
+            aboutDialog.show()
+            aboutDialog.requestActivate()
+            aboutDialog.raise()
+        }
+    }
+    Action {
+        id: newTabAction
+        text: qsTr("New Tab")
+        shortcut: appSettings.isMacOS ? StandardKey.AddTab : "Ctrl+Shift+T"
+        onTriggered: terminalTabs.addTab()
+    }
     TerminalTabs {
         id: terminalTabs
         width: parent.width

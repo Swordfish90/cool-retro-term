@@ -18,7 +18,6 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *******************************************************************************/
 import QtQuick 2.2
-import QtQuick.Controls 2.3
 
 import "menus"
 
@@ -47,83 +46,12 @@ QtObject {
 
     property ListModel windowsModel: ListModel { }
 
-    property Loader globalMenuLoader: Loader {
-        active: appSettings.isMacOS
-        sourceComponent: OSXMenu { }
-    }
-
-    property Action fullscreenAction: Action {
-        text: qsTr("Fullscreen")
-        enabled: !appSettings.isMacOS
-        shortcut: "Alt+F11"
-    }
-
-    property bool initialFullscreenRequested: Qt.application.arguments.indexOf("--fullscreen") !== -1
-
-    property Action newWindowAction: Action {
-        text: qsTr("New Window")
-        shortcut: "Ctrl+Shift+N"
-        onTriggered: appRoot.createWindow()
-    }
-
-    property Action quitAction: Action {
-        text: qsTr("Quit")
-        shortcut: "Ctrl+Shift+Q"
-        onTriggered: appSettings.close()
-    }
-
-    property Action showsettingsAction: Action {
-        text: qsTr("Settings")
-        onTriggered: {
-            settingsWindow.show()
-            settingsWindow.requestActivate()
-            settingsWindow.raise()
-        }
-    }
-
-    property Action copyAction: Action {
-        text: qsTr("Copy")
-        shortcut: "Ctrl+Shift+C"
-    }
-
-    property Action pasteAction: Action {
-        text: qsTr("Paste")
-        shortcut: "Ctrl+Shift+V"
-    }
-
-    property Action zoomInAction: Action {
-        text: qsTr("Zoom In")
-        shortcut: "Ctrl++"
-        onTriggered: appSettings.incrementScaling()
-    }
-
-    property Action zoomOutAction: Action {
-        text: qsTr("Zoom Out")
-        shortcut: "Ctrl+-"
-        onTriggered: appSettings.decrementScaling()
-    }
-
-    property Action showAboutAction: Action {
-        text: qsTr("About")
-        onTriggered: {
-            aboutDialog.show()
-            aboutDialog.requestActivate()
-            aboutDialog.raise()
-        }
-    }
-
-    property Action newTabAction: Action {
-        text: qsTr("New Tab")
-    }
-
     function createWindow() {
-        var useFullscreen = initialFullscreenRequested
-        var window = windowComponent.createObject(null, { fullscreen: useFullscreen })
+        var window = windowComponent.createObject(null)
         if (!window)
             return
 
         windowsModel.append({ window: window })
-        initialFullscreenRequested = false
         window.show()
         window.requestActivate()
     }

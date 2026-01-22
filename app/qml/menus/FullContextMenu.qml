@@ -65,10 +65,10 @@ Menu {
             visible: fullscreenAction.enabled
         }
         MenuItem {
-            action: zoomInAction
+            action: zoomIn
         }
         MenuItem {
-            action: zoomOutAction
+            action: zoomOut
         }
     }
     Menu {

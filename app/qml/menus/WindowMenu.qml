@@ -22,46 +22,33 @@ import QtQuick.Controls 2.3
 
 MenuBar {
     id: defaultMenuBar
-    visible: appSettings.showMenubar
+    visible: appSettings.isMacOS || appSettings.showMenubar
 
     Menu {
         title: qsTr("File")
-        MenuItem {
-            action: newWindowAction
-        }
-        MenuItem {
-            action: newTabAction
-        }
-        MenuSeparator {}
-        MenuItem {
-            action: quitAction
-        }
+        MenuItem { action: newWindowAction }
+        MenuItem { action: newTabAction }
+        MenuSeparator { }
+        MenuItem { action: quitAction }
     }
     Menu {
         title: qsTr("Edit")
-        MenuItem {
-            action: copyAction
-        }
-        MenuItem {
-            action: pasteAction
-        }
+        MenuItem { action: copyAction }
+        MenuItem { action: pasteAction }
         MenuSeparator {}
-        MenuItem {
-            action: showsettingsAction
-        }
+        MenuItem { action: showsettingsAction }
     }
     Menu {
+        id: viewMenu
         title: qsTr("View")
-        MenuItem {
-            action: fullscreenAction
-            visible: fullscreenAction.enabled
+        Instantiator {
+            model: !appSettings.isMacOS ? 1 : 0
+            delegate: MenuItem { action: fullscreenAction }
+            onObjectAdded: (index, object) => viewMenu.insertItem(index, object)
+            onObjectRemoved: (index, object) => viewMenu.removeItem(object)
         }
-        MenuItem {
-            action: zoomInAction
-        }
-        MenuItem {
-            action: zoomOutAction
-        }
+        MenuItem { action: zoomIn }
+        MenuItem { action: zoomOut }
     }
     Menu {
         id: profilesMenu

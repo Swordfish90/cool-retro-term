@@ -130,15 +130,17 @@ Item {
             Repeater {
                 model: tabsModel
                 TerminalContainer {
-                    id: terminalContainer
-                    hasFocus: terminalWindow.active && StackLayout.isCurrentItem
-
-                    onTerminalSizeChanged: updateTerminalSize()
-
+                    property bool shouldHaveFocus: terminalWindow.active && StackLayout.isCurrentItem
+                    onShouldHaveFocusChanged: {
+                        if (shouldHaveFocus) {
+                            activate()
+                        }
+                    }
                     onTitleChanged: tabsModel.setProperty(index, "title", normalizeTitle(title))
                     Layout.fillWidth: true
                     Layout.fillHeight: true
                     onSessionFinished: tabsRoot.closeTab(index)
+                    onTerminalSizeChanged: updateTerminalSize()
 
                     function updateTerminalSize() {
                         // Every tab will have the same size so we can simply take the first one.
