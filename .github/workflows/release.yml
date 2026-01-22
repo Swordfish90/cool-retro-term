@@ -1,0 +1,129 @@
+name: Release
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+      - master
+    tags:
+      - '*'
+
+permissions:
+  contents: write
+
+jobs:
+  build-appimage:
+    name: Build (Linux, AppImage)
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install build deps
+        run: |
+          sudo apt update
+          sudo apt install -y build-essential rsync wget
+
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: 6.10.0
+          dir: ..
+          modules: qt5compat qtshadertools
+          setup-python: false
+          cache: true
+
+      - name: Build AppImage
+        run: |
+          ./scripts/build-appimage.sh
+
+      - name: Collect artifact
+        run: |
+          mkdir -p release
+          mv ./*.AppImage release/
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: cool-retro-term-appimage
+          path: ./release/*
+
+  build-dmg:
+    name: Build (macOS, DMG)
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: 6.10.*
+          modules: qt5compat qtshadertools
+          setup-python: true
+          python-version: '3.11'
+          cache: true
+
+      - name: Build DMG
+        run: |
+          JOBS="$(sysctl -n hw.ncpu)"
+          ./scripts/build-dmg.sh
+
+      - name: Collect artifact
+        run: |
+          mkdir -p release
+          mv ./*.dmg release/
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: cool-retro-term-dmg
+          path: ./release/*
+
+  release:
+    name: Create Release
+    runs-on: ubuntu-22.04
+    needs:
+      - build-appimage
+      - build-dmg
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download AppImage
+        uses: actions/download-artifact@v4
+        with:
+          name: cool-retro-term-appimage
+          path: ./release
+
+      - name: Download DMG
+        uses: actions/download-artifact@v4
+        with:
+          name: cool-retro-term-dmg
+          path: ./release
+
+      - name: Update rolling tag
+        if: startsWith(github.ref, 'refs/heads/')
+        run: |
+          git tag -f rolling
+          git push -f origin rolling
+
+      - name: Publish rolling release
+        if: startsWith(github.ref, 'refs/heads/')
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: rolling
+          name: Rolling Release
+          prerelease: true
+          files: ./release/*
+
+      - name: Publish tagged release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          files: ./release/*
