@@ -186,6 +186,9 @@ Item{
             appSettings.fontManager.refresh()
             startSession();
         }
+        Component.onDestruction: {
+            appSettings.fontManager.terminalFontChanged.disconnect(handleFontChanged);
+        }
     }
 
     Component {
