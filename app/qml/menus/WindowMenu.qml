@@ -39,12 +39,13 @@ MenuBar {
         MenuItem { action: showsettingsAction }
     }
     Menu {
+        id: viewMenu
         title: qsTr("View")
         Instantiator {
             model: !appSettings.isMacOS ? 1 : 0
             delegate: MenuItem { action: fullscreenAction }
-            onObjectAdded: (index, object) => menu.insertItem(index, object)
-            onObjectRemoved: (index, object) => menu.removeItem(object)
+            onObjectAdded: (index, object) => viewMenu.insertItem(index, object)
+            onObjectRemoved: (index, object) => viewMenu.removeItem(object)
         }
         MenuItem { action: zoomIn }
         MenuItem { action: zoomOut }
