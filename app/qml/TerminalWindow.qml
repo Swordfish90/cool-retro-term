@@ -17,9 +17,9 @@
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *******************************************************************************/
-import QtQuick 2.2
-import QtQuick.Window 2.1
-import QtQuick.Controls 2.3
+import QtQuick
+import QtQuick.Window
+import QtQuick.Controls
 
 import "menus"
 
@@ -114,8 +114,69 @@ ApplicationWindow {
     Action {
         id: newTabAction
         text: qsTr("New Tab")
-        shortcut: appSettings.isMacOS ? StandardKey.AddTab : "Ctrl+Shift+T"
+        shortcut: "Meta+T"
         onTriggered: terminalTabs.addTab()
+    }
+    Action {
+        id: closeTabAction
+        text: qsTr("Close Tab")
+        shortcut: "Meta+W"
+        onTriggered: terminalTabs.closeTab(terminalTabs.currentIndex)
+    }
+    Shortcut {
+        sequence: "Meta+T"
+        context: Qt.WindowShortcut
+        onActivated: terminalTabs.addTab()
+    }
+    Shortcut {
+        sequence: "Meta+W"
+        context: Qt.WindowShortcut
+        onActivated: terminalTabs.closeTab(terminalTabs.currentIndex)
+    }
+    Shortcut {
+        sequence: "Meta+1"
+        context: Qt.WindowShortcut
+        onActivated: if (terminalTabs.count > 0) terminalTabs.currentIndex = 0
+    }
+    Shortcut {
+        sequence: "Meta+2"
+        context: Qt.WindowShortcut
+        onActivated: if (terminalTabs.count > 1) terminalTabs.currentIndex = 1
+    }
+    Shortcut {
+        sequence: "Meta+3"
+        context: Qt.WindowShortcut
+        onActivated: if (terminalTabs.count > 2) terminalTabs.currentIndex = 2
+    }
+    Shortcut {
+        sequence: "Meta+4"
+        context: Qt.WindowShortcut
+        onActivated: if (terminalTabs.count > 3) terminalTabs.currentIndex = 3
+    }
+    Shortcut {
+        sequence: "Meta+5"
+        context: Qt.WindowShortcut
+        onActivated: if (terminalTabs.count > 4) terminalTabs.currentIndex = 4
+    }
+    Shortcut {
+        sequence: "Meta+6"
+        context: Qt.WindowShortcut
+        onActivated: if (terminalTabs.count > 5) terminalTabs.currentIndex = 5
+    }
+    Shortcut {
+        sequence: "Meta+7"
+        context: Qt.WindowShortcut
+        onActivated: if (terminalTabs.count > 6) terminalTabs.currentIndex = 6
+    }
+    Shortcut {
+        sequence: "Meta+8"
+        context: Qt.WindowShortcut
+        onActivated: if (terminalTabs.count > 7) terminalTabs.currentIndex = 7
+    }
+    Shortcut {
+        sequence: "Meta+9"
+        context: Qt.WindowShortcut
+        onActivated: if (terminalTabs.count > 8) terminalTabs.currentIndex = 8
     }
     TerminalTabs {
         id: terminalTabs
