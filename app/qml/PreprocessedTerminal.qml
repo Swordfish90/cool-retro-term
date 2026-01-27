@@ -49,14 +49,18 @@ Item{
         target: copyAction
 
         onTriggered: {
-            kterminal.copyClipboard()
+            if (kterminal.activeFocus) {
+                kterminal.copyClipboard()
+            }
         }
     }
     Connections {
         target: pasteAction
 
         onTriggered: {
-            kterminal.pasteClipboard()
+            if (kterminal.activeFocus) {
+                kterminal.pasteClipboard()
+            }
         }
     }
 
