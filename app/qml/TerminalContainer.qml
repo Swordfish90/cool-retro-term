@@ -25,6 +25,7 @@ import "utils.js" as Utils
 ShaderTerminal {
     property alias title: terminal.title
     property alias terminalSize: terminal.terminalSize
+    property bool isActive: false
     signal sessionFinished()
 
     property bool loadBloomEffect: appSettings.bloom > 0 || appSettings._frameShininess > 0
@@ -44,6 +45,7 @@ ShaderTerminal {
     PreprocessedTerminal {
         id: terminal
         anchors.fill: parent
+        isActive: mainShader.isActive
         onSessionFinished: mainShader.sessionFinished()
     }
 

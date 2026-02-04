@@ -131,6 +131,7 @@ Item {
                 model: tabsModel
                 TerminalContainer {
                     property bool shouldHaveFocus: terminalWindow.active && StackLayout.isCurrentItem
+                    isActive: StackLayout.isCurrentItem
                     onShouldHaveFocusChanged: {
                         if (shouldHaveFocus) {
                             activate()

@@ -114,67 +114,57 @@ ApplicationWindow {
     Action {
         id: newTabAction
         text: qsTr("New Tab")
-        shortcut: "Meta+T"
+        shortcut: appSettings.isMacOS ? "Meta+T" : "Ctrl+Shift+T"
         onTriggered: terminalTabs.addTab()
     }
     Action {
         id: closeTabAction
         text: qsTr("Close Tab")
-        shortcut: "Meta+W"
+        shortcut: appSettings.isMacOS ? "Meta+W" : "Ctrl+Shift+W"
         onTriggered: terminalTabs.closeTab(terminalTabs.currentIndex)
     }
     Shortcut {
-        sequence: "Meta+T"
-        context: Qt.WindowShortcut
-        onActivated: terminalTabs.addTab()
-    }
-    Shortcut {
-        sequence: "Meta+W"
-        context: Qt.WindowShortcut
-        onActivated: terminalTabs.closeTab(terminalTabs.currentIndex)
-    }
-    Shortcut {
-        sequence: "Meta+1"
+        sequence: appSettings.isMacOS ? "Meta+1" : "Alt+1"
         context: Qt.WindowShortcut
         onActivated: if (terminalTabs.count > 0) terminalTabs.currentIndex = 0
     }
     Shortcut {
-        sequence: "Meta+2"
+        sequence: appSettings.isMacOS ? "Meta+2" : "Alt+2"
         context: Qt.WindowShortcut
         onActivated: if (terminalTabs.count > 1) terminalTabs.currentIndex = 1
     }
     Shortcut {
-        sequence: "Meta+3"
+        sequence: appSettings.isMacOS ? "Meta+3" : "Alt+3"
         context: Qt.WindowShortcut
         onActivated: if (terminalTabs.count > 2) terminalTabs.currentIndex = 2
     }
     Shortcut {
-        sequence: "Meta+4"
+        sequence: appSettings.isMacOS ? "Meta+4" : "Alt+4"
         context: Qt.WindowShortcut
         onActivated: if (terminalTabs.count > 3) terminalTabs.currentIndex = 3
     }
     Shortcut {
-        sequence: "Meta+5"
+        sequence: appSettings.isMacOS ? "Meta+5" : "Alt+5"
         context: Qt.WindowShortcut
         onActivated: if (terminalTabs.count > 4) terminalTabs.currentIndex = 4
     }
     Shortcut {
-        sequence: "Meta+6"
+        sequence: appSettings.isMacOS ? "Meta+6" : "Alt+6"
         context: Qt.WindowShortcut
         onActivated: if (terminalTabs.count > 5) terminalTabs.currentIndex = 5
     }
     Shortcut {
-        sequence: "Meta+7"
+        sequence: appSettings.isMacOS ? "Meta+7" : "Alt+7"
         context: Qt.WindowShortcut
         onActivated: if (terminalTabs.count > 6) terminalTabs.currentIndex = 6
     }
     Shortcut {
-        sequence: "Meta+8"
+        sequence: appSettings.isMacOS ? "Meta+8" : "Alt+8"
         context: Qt.WindowShortcut
         onActivated: if (terminalTabs.count > 7) terminalTabs.currentIndex = 7
     }
     Shortcut {
-        sequence: "Meta+9"
+        sequence: appSettings.isMacOS ? "Meta+9" : "Alt+9"
         context: Qt.WindowShortcut
         onActivated: if (terminalTabs.count > 8) terminalTabs.currentIndex = 8
     }
