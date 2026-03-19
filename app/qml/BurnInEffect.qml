@@ -25,6 +25,7 @@ Loader {
     id: burnInEffect
 
     property ShaderEffectSource effectSource: item ? item.source : null
+    property bool resizing: false
 
     property real lastUpdate: 0
     property real prevLastUpdate: 0
@@ -64,7 +65,7 @@ Loader {
 
             sourceItem: burnInShaderEffect
             live: false
-            recursive: true
+            recursive: !resizing
             hideSource: true
             wrapMode: ShaderEffectSource.ClampToEdge
 
@@ -125,5 +126,21 @@ Loader {
 
             onStatusChanged: if (log) console.log(log) //Print warning messages
         }
+    }
+
+    onWidthChanged: {
+        resizing = true
+        resizeTimer.restart()
+    }
+
+    onHeightChanged: {
+        resizing = true
+        resizeTimer.restart()
+    }
+
+    Timer {
+        id: resizeTimer
+        interval: 300
+        onTriggered: resizing = false
     }
 }
