@@ -46,12 +46,18 @@ QtObject {
 
     property ListModel windowsModel: ListModel { }
 
+    property bool initialFullscreenRequested: Qt.application.arguments.indexOf("--fullscreen") !== -1
+
     function createWindow() {
-        var window = windowComponent.createObject(null)
+        var useFullscreen = initialFullscreenRequested
+        var window = windowComponent.createObject(null, {
+            fullscreen: useFullscreen
+        })
         if (!window)
             return
 
         windowsModel.append({ window: window })
+        initialFullscreenRequested = false
         window.show()
         window.requestActivate()
     }
