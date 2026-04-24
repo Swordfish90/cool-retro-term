@@ -51,7 +51,7 @@ Loader {
     function restartBlurSource() {
         prevLastUpdate = timeManager.time
         lastUpdate = prevLastUpdate
-        completelyUpdate()
+        item.source.scheduleUpdate()
     }
 
     sourceComponent: Item {
