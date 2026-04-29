@@ -32,10 +32,29 @@ function lint(a, b, t) {
 }
 
 function mix(c1, c2, alpha) {
-    return Qt.rgba(c1.r * alpha + c2.r * (1-alpha),
-                   c1.g * alpha + c2.g * (1-alpha),
-                   c1.b * alpha + c2.b * (1-alpha),
-                   c1.a * alpha + c2.a * (1-alpha))
+    return Qt.rgba(c1.r * (1 - alpha) + c2.r * alpha,
+                   c1.g * (1 - alpha) + c2.g * alpha,
+                   c1.b * (1 - alpha) + c2.b * alpha,
+                   c1.a * (1 - alpha) + c2.a * alpha)
+}
+
+function sum(c1, c2) {
+    let result = Qt.rgba(
+        clamp(c1.r + c2.r, 0, 1),
+        clamp(c1.g + c2.g, 0, 1),
+        clamp(c1.b + c2.b, 0, 1),
+        clamp(c1.a + c2.a, 0, 1)
+    );
+    return result
+}
+
+function scaleColor(c1, value) {
+    return Qt.rgba(
+        clamp(c1.r * value, 0, 1),
+        clamp(c1.g * value, 0, 1),
+        clamp(c1.b * value, 0, 1),
+        clamp(c1.a, 0, 1)
+    );
 }
 
 function smoothstep(min, max, value) {

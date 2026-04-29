@@ -25,27 +25,50 @@ import QtQml 2.0
 import "Components"
 
 ColumnLayout {
-
     GroupBox {
         title: qsTr("Font")
         Layout.fillWidth: true
+        Layout.fillHeight: true
+        padding: appSettings.defaultMargin
         GridLayout {
             anchors.fill: parent
             columns: 2
             Label {
-                text: qsTr("Rasterization")
+                text: qsTr("Source")
+            }
+            RowLayout {
+                Layout.fillWidth: true
+                RadioButton {
+                    text: qsTr("Bundled")
+                    checked: appSettings.fontSource === appSettings.bundled_fonts
+                    onClicked: {
+                        appSettings.fontSource = appSettings.bundled_fonts
+                    }
+                }
+                RadioButton {
+                    text: qsTr("System")
+                    checked: appSettings.fontSource === appSettings.system_fonts
+                    onClicked: {
+                        appSettings.fontSource = appSettings.system_fonts
+                    }
+                }
+            }
+            Label {
+                text: qsTr("Rendering")
+                enabled: appSettings.fontSource === appSettings.bundled_fonts
             }
             ComboBox {
-                id: rasterizationBox
+                id: renderingBox
 
                 property string selectedElement: model[currentIndex]
 
                 Layout.fillWidth: true
-                model: [qsTr("Default"), qsTr("Scanlines"), qsTr("Pixels"), qsTr("Sub-Pixels")]
+                model: [qsTr("Default"), qsTr("Scanlines"), qsTr("Pixels"), qsTr("Sub-Pixels"), qsTr("Modern")]
                 currentIndex: appSettings.rasterization
                 onCurrentIndexChanged: {
                     appSettings.rasterization = currentIndex
                 }
+                enabled: appSettings.fontSource === appSettings.bundled_fonts
             }
             Label {
                 text: qsTr("Name")
@@ -53,23 +76,41 @@ ColumnLayout {
             ComboBox {
                 id: fontChanger
                 Layout.fillWidth: true
-                model: appSettings.fontlist
+                model: appSettings.filteredFontList
                 textRole: "text"
                 onActivated: {
-                    var name = appSettings.fontlist.get(index).name
-                    appSettings.fontNames[appSettings.rasterization] = name
-                    appSettings.handleFontChanged()
+                    var font = appSettings.filteredFontList.get(currentIndex)
+
+                    // If selecting a high-res font while not in Modern mode,
+                    // switch to Modern to render at full resolution.
+                    if (!font.lowResolutionFont && appSettings.rasterization !== appSettings.modern_rasterization) {
+                        appSettings.rasterization = appSettings.modern_rasterization
+                    }
+                    // If selecting a low-res font while in Modern mode, switch back to default.
+                    if (font.lowResolutionFont && appSettings.rasterization === appSettings.modern_rasterization) {
+                        appSettings.rasterization = appSettings.no_rasterization
+                    }
+
+                    appSettings.fontName = font.name
                 }
                 function updateIndex() {
-                    var name = appSettings.fontNames[appSettings.rasterization]
-                    var index = appSettings.getIndexByName(name)
-                    if (index !== undefined)
-                        currentIndex = index
+                    for (var i = 0; i < appSettings.filteredFontList.count; i++) {
+                        var font = appSettings.filteredFontList.get(i)
+                        if (font.name === appSettings.fontName) {
+                            currentIndex = i
+                            return
+                        }
+                    }
+                    currentIndex = 0
                 }
                 Connections {
-                    target: appSettings
+                    target: appSettings.fontManager
 
                     onTerminalFontChanged: {
+                        fontChanger.updateIndex()
+                    }
+
+                    onFilteredFontListChanged: {
                         fontChanger.updateIndex()
                     }
                 }
@@ -111,41 +152,43 @@ ColumnLayout {
                     text: Math.round(widthChanger.value * 100) + "%"
                 }
             }
-        }
-    }
-    GroupBox {
-        title: qsTr("Cursor")
-        Layout.fillWidth: true
-        ColumnLayout {
-            anchors.fill: parent
-            CheckBox {
-                id: blinkingCursor
-                text: qsTr("Blinking Cursor")
-                checked: appSettings.blinkingCursor
-                onCheckedChanged: appSettings.blinkingCursor = checked
+            Label {
+                text: qsTr("Line Spacing")
             }
-            Binding {
-                target: blinkingCursor
-                property: "checked"
-                value: appSettings.blinkingCursor
+            RowLayout {
+                Layout.fillWidth: true
+                Slider {
+                    Layout.fillWidth: true
+                    id: lineSpacingChanger
+                    onValueChanged: appSettings.lineSpacing = value
+                    value: appSettings.lineSpacing
+                    stepSize: 0.01
+                    from: 0.0
+                    to: 1.0
+                }
+                SizedLabel {
+                    text: Math.round(lineSpacingChanger.value * 100) + "%"
+                }
             }
         }
     }
     GroupBox {
         title: qsTr("Colors")
         Layout.fillWidth: true
+        Layout.fillHeight: true
+        padding: appSettings.defaultMargin
         ColumnLayout {
             anchors.fill: parent
             ColumnLayout {
                 Layout.fillWidth: true
                 CheckableSlider {
                     name: qsTr("Chroma Color")
-                    onNewValue: appSettings.chromaColor = newValue
+                    onNewValue: function(newValue) { appSettings.chromaColor = newValue }
                     value: appSettings.chromaColor
                 }
                 CheckableSlider {
                     name: qsTr("Saturation Color")
-                    onNewValue: appSettings.saturationColor = newValue
+                    onNewValue: function(newValue) { appSettings.saturationColor = newValue }
                     value: appSettings.saturationColor
                     enabled: appSettings.chromaColor !== 0
                 }
@@ -165,6 +208,13 @@ ColumnLayout {
                     Layout.fillWidth: true
                     onColorSelected: appSettings._backgroundColor = color
                     color: appSettings._backgroundColor
+                }
+                ColorButton {
+                    name: qsTr("Frame")
+                    height: 50
+                    Layout.fillWidth: true
+                    onColorSelected: appSettings._frameColor = color
+                    color: appSettings._frameColor
                 }
             }
         }

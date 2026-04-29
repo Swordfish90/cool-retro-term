@@ -22,7 +22,7 @@ import QtQuick 2.2
 import QtQuick.LocalStorage 2.0
 
 QtObject {
-    readonly property string dbMajorVersion: "1"
+    readonly property string dbMajorVersion: "2"
     readonly property string dbMinorVersion: "1.0"
     property bool initialized: false
 

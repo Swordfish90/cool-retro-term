@@ -27,7 +27,9 @@ import "Components"
 ColumnLayout {
     GroupBox {
         Layout.fillWidth: true
-        title: qsTr("Command")
+        Layout.fillHeight: true
+        title: qsTr("Miscellaneous")
+        padding: appSettings.defaultMargin
 
         ColumnLayout {
             anchors.fill: parent
@@ -36,12 +38,6 @@ ColumnLayout {
                 text: qsTr("Use custom command instead of shell at startup")
                 checked: appSettings.useCustomCommand
                 onCheckedChanged: appSettings.useCustomCommand = checked
-            }
-            // Workaround for QTBUG-31627 for pre 5.3.0
-            Binding {
-                target: useCustomCommand
-                property: "checked"
-                value: appSettings.useCustomCommand
             }
             TextField {
                 id: customCommand
@@ -57,12 +53,27 @@ ColumnLayout {
                 Component.onCompleted: settings_window.closing.connect(
                                            saveSetting)
             }
+            CheckBox {
+                id: blinkingCursor
+                text: qsTr("Blinking Cursor")
+                checked: appSettings.blinkingCursor
+                onCheckedChanged: appSettings.blinkingCursor = checked
+            }
+            CheckBox {
+                id: showMenubar
+                text: qsTr("Show Menubar")
+                enabled: !appSettings.isMacOS
+                checked: appSettings.showMenubar
+                onCheckedChanged: appSettings.showMenubar = checked
+            }
         }
     }
 
     GroupBox {
         title: qsTr("Performance")
         Layout.fillWidth: true
+        Layout.fillHeight: true
+        padding: appSettings.defaultMargin
         GridLayout {
             anchors.fill: parent
             columns: 4
@@ -73,24 +84,17 @@ ColumnLayout {
             Slider {
                 Layout.fillWidth: true
                 Layout.columnSpan: 2
-                id: fpsSlider
-                onValueChanged: {
-                    if (enabled) {
-                        appSettings.fps = value !== 60 ? value + 1 : 0
-                    }
-                }
+                id: effectsFpsSlider
+                onValueChanged: appSettings.effectsFrameSkip = Math.round(value)
                 stepSize: 1
-                enabled: false
-                Component.onCompleted: {
-                    from = 0
-                    to = 60
-                    value = appSettings.fps !== 0 ? appSettings.fps - 1 : 60
-                    enabled = true
-                }
+                enabled: true
+                from: 5
+                to: 1
+                value: appSettings.effectsFrameSkip
             }
 
             SizedLabel {
-                text: appSettings.fps !== 0 ? appSettings.fps : qsTr("Max")
+                text: Math.round(100 / Math.max(1, Math.round(effectsFpsSlider.value))) + "%"
             }
             Label {
                 text: qsTr("Texture Quality")
@@ -99,15 +103,11 @@ ColumnLayout {
                 id: txtslider
                 Layout.fillWidth: true
                 Layout.columnSpan: 2
-                onValueChanged: if (enabled)
-                                    appSettings.windowScaling = value
+                onValueChanged: appSettings.windowScaling = value
                 stepSize: 0.05
-                enabled: false
-                Component.onCompleted: {
-                    from = 0.25 //Without this value gets set to 0.5
-                    value = appSettings.windowScaling
-                    enabled = true
-                }
+                enabled: true
+                from: 0.25
+                value: appSettings.windowScaling
             }
             SizedLabel {
                 text: Math.round(txtslider.value * 100) + "%"
@@ -120,15 +120,11 @@ ColumnLayout {
                 Layout.fillWidth: true
                 Layout.columnSpan: 2
                 id: bloomSlider
-                onValueChanged: if (enabled)
-                                    appSettings.bloomQuality = value
+                onValueChanged: appSettings.bloomQuality = value
                 stepSize: 0.05
-                enabled: false
-                Component.onCompleted: {
-                    from = 0.25
-                    value = appSettings.bloomQuality
-                    enabled = true
-                }
+                enabled: true
+                from: 0.25
+                value: appSettings.bloomQuality
             }
             SizedLabel {
                 text: Math.round(bloomSlider.value * 100) + "%"
@@ -141,15 +137,11 @@ ColumnLayout {
                 Layout.fillWidth: true
                 id: burnInSlider
                 Layout.columnSpan: 2
-                onValueChanged: if (enabled)
-                                    appSettings.burnInQuality = value
+                onValueChanged: appSettings.burnInQuality = value
                 stepSize: 0.05
-                enabled: false
-                Component.onCompleted: {
-                    from = 0.25
-                    value = appSettings.burnInQuality
-                    enabled = true
-                }
+                enabled: true
+                from: 0.25
+                value: appSettings.burnInQuality
             }
             SizedLabel {
                 text: Math.round(burnInSlider.value * 100) + "%"

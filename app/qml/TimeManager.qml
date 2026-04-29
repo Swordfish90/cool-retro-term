@@ -17,22 +17,29 @@
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *******************************************************************************/
-import QtQuick 2.2
+import QtQuick
 
-Timer {
-    default property bool enableTimer: false
-    property real time
+QtObject {
+    id: timeManager
 
-    NumberAnimation on time {
-        from: 0
-        to: 100000
-        running: appSettings.fps === 0 && enableTimer
-        duration: 100000
-        loops: Animation.Infinite
+    property bool enableTimer: false
+    property real time: 0
+
+    property int framesPerUpdate: Math.max(1, appSettings.effectsFrameSkip)
+    property int _frameCounter: 0
+
+    property var frameDriver: FrameAnimation {
+        running: enableTimer
+        onTriggered: {
+            timeManager._frameCounter += 1
+
+            if (timeManager._frameCounter >= timeManager.framesPerUpdate) {
+                time = elapsedTime
+                timeManager._frameCounter = 0
+            }
+        }
     }
 
-    onTriggered: time += interval
-    running: appSettings.fps !== 0 && enableTimer
-    interval: Math.round(1000 / appSettings.fps)
-    repeat: true
+    onEnableTimerChanged: if (!enableTimer) _frameCounter = 0
+    onFramesPerUpdateChanged: _frameCounter = 0
 }

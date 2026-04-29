@@ -10,7 +10,7 @@ It has been designed to be eye-candy, customizable, and reasonably lightweight.
 
 It uses the QML port of qtermwidget (Konsole): https://github.com/Swordfish90/qmltermwidget.
 
-This terminal emulator works under Linux and macOS and requires Qt5. It's suggested that you stick to the latest LTS version.
+This terminal emulator works under Linux and macOS and requires Qt6.
 
 Settings such as colors, fonts, and effects can be accessed via context menu.
 

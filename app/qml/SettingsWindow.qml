@@ -22,54 +22,55 @@ import QtQuick 2.2
 import QtQuick.Controls 2.1
 import QtQuick.Window 2.1
 import QtQuick.Layouts 1.3
-import QtQuick.Dialogs 1.1
+import QtQuick.Dialogs
 
-Window {
+ApplicationWindow {
+    readonly property real tabButtonPadding: 10
+
     id: settings_window
     title: qsTr("Settings")
     width: 640
-    height: 640
-
-    property int tabmargins: 15
+    height: 520
 
     Item {
-        anchors { fill: parent;  margins: tabmargins }
+        anchors { fill: parent; }
 
         TabBar {
             id: bar
             anchors { left: parent.left; right: parent.right; top: parent.top; }
             TabButton {
+                padding: tabButtonPadding
                 text: qsTr("General")
             }
             TabButton {
+                padding: tabButtonPadding
                 text: qsTr("Terminal")
             }
             TabButton {
+                padding: tabButtonPadding
                 text: qsTr("Effects")
             }
             TabButton {
+                padding: tabButtonPadding
                 text: qsTr("Advanced")
             }
         }
 
-        Frame {
+        StackLayout {
             anchors {
                 top: bar.bottom
                 left: parent.left
                 right: parent.right
                 bottom: parent.bottom
+                margins: 16
             }
 
-            StackLayout {
-                anchors.fill: parent
+            currentIndex: bar.currentIndex
 
-                currentIndex: bar.currentIndex
-
-                SettingsGeneralTab { }
-                SettingsTerminalTab { }
-                SettingsEffectsTab { }
-                SettingsAdvancedTab { }
-            }
+            SettingsGeneralTab { }
+            SettingsTerminalTab { }
+            SettingsEffectsTab { }
+            SettingsAdvancedTab { }
         }
     }
 }
