@@ -18,7 +18,7 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *******************************************************************************/
 
-import QtQuick 2.2
+import QtQuick
 
 import "utils.js" as Utils
 
@@ -69,6 +69,43 @@ Item {
         screenResolution.height / virtualResolution.height
     )
 
+    property bool hasTemporalEffects: timeManager ? timeManager.enableTimer : true
+    property bool freezingFrame: false
+    property bool staticFrameReady: false
+    property int freezeFrameCountdown: 0
+
+    function refreshStaticFrame() {
+        if (!hasTemporalEffects) {
+            staticFrameReady = false
+            freezingFrame = true
+            dynamicShaderCache.scheduleUpdate()
+            freezeFrameCountdown = 2
+            freezeFrameDriver.start()
+        }
+    }
+
+    onHasTemporalEffectsChanged: {
+        if (hasTemporalEffects) {
+            freezingFrame = false
+            staticFrameReady = false
+            freezeFrameCountdown = 0
+            freezeFrameDriver.stop()
+        } else {
+            refreshStaticFrame()
+        }
+    }
+
+    onSourceChanged: refreshStaticFrame()
+    onBloomSourceChanged: refreshStaticFrame()
+    onFontColorChanged: refreshStaticFrame()
+    onBackgroundColorChanged: refreshStaticFrame()
+    onScreenCurvatureChanged: refreshStaticFrame()
+    onFrameSizeChanged: refreshStaticFrame()
+    onChromaColorChanged: refreshStaticFrame()
+    onAmbientLightChanged: refreshStaticFrame()
+    onVirtualResolutionChanged: refreshStaticFrame()
+    onScreenResolutionChanged: refreshStaticFrame()
+
     ShaderEffect {
         id: dynamicShader
 
@@ -113,6 +150,7 @@ Item {
 
         anchors.fill: parent
         blending: false
+        visible: hasTemporalEffects || freezingFrame || !staticFrameReady
 
         Image {
             id: noiseTexture
@@ -134,6 +172,51 @@ Item {
         fragmentShader: dynamicFragmentPath()
 
         onStatusChanged: if (log) console.log(log)
+    }
+
+    ShaderEffectSource {
+        id: dynamicShaderCache
+
+        visible: false
+        live: hasTemporalEffects || freezingFrame
+        sourceItem: dynamicShader
+        hideSource: false
+        format: ShaderEffectSource.RGBA
+    }
+
+    ShaderEffect {
+        id: frozenDynamicShader
+
+        anchors.fill: parent
+        visible: !hasTemporalEffects && staticFrameReady && !freezingFrame
+        blending: false
+
+        property ShaderEffectSource source: dynamicShaderCache
+
+        vertexShader: "qrc:/shaders/passthrough.vert.qsb"
+        fragmentShader: "qrc:/shaders/passthrough.frag.qsb"
+
+        onStatusChanged: if (log) console.log(log)
+    }
+
+    property var freezeFrameDriver: FrameAnimation {
+        running: false
+        onTriggered: {
+            if (hasTemporalEffects || !freezingFrame) {
+                stop()
+                return
+            }
+
+            if (freezeFrameCountdown > 0) {
+                freezeFrameCountdown -= 1
+            }
+
+            if (freezeFrameCountdown <= 0) {
+                freezingFrame = false
+                staticFrameReady = true
+                stop()
+            }
+        }
     }
 
     Loader {

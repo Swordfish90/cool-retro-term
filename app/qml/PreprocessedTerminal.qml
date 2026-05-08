@@ -29,6 +29,7 @@ import "utils.js" as Utils
 Item{
     id: terminalContainer
     signal sessionFinished()
+    signal terminalImagePainted()
 
     property size virtualResolution: Qt.size(kterminal.totalWidth, kterminal.totalHeight)
     property alias mainTerminal: kterminal
@@ -193,6 +194,12 @@ Item{
         }
         Component.onDestruction: {
             appSettings.fontManager.terminalFontChanged.disconnect(handleFontChanged);
+        }
+
+        Connections {
+            target: kterminal
+
+            onImagePainted: terminalContainer.terminalImagePainted()
         }
     }
 
