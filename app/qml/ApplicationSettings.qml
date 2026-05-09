@@ -296,8 +296,8 @@ QtObject {
         windowOpacity = settings.windowOpacity
                 !== undefined ? settings.windowOpacity : windowOpacity
 
-        fontName = settings.fontName !== undefined ? settings.fontName : fontName
         fontSource = settings.fontSource !== undefined ? settings.fontSource : fontSource
+        fontName = settings.fontName !== undefined ? settings.fontName : fontName
         fontWidth = settings.fontWidth !== undefined ? settings.fontWidth : fontWidth
         lineSpacing = settings.lineSpacing !== undefined ? settings.lineSpacing : lineSpacing
 
