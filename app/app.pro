@@ -42,7 +42,7 @@ SHADERS -= $$SHADERS_DIR/terminal_static.frag
 SHADERS -= $$SHADERS_DIR/passthrough.vert
 
 qsb.input = SHADERS
-qsb.output = ../../app/shaders/${QMAKE_FILE_NAME}.qsb
+qsb.output = $$relative_path($$SHADERS_DIR, $$OUT_PWD)/${QMAKE_FILE_BASE}${QMAKE_FILE_EXT}.qsb
 qsb.commands = $$QSB_BIN --glsl \"100 es,120,150\" --hlsl 50 --msl 12 --qt6 -o ${QMAKE_FILE_OUT} ${QMAKE_FILE_IN}
 qsb.clean = $$qsb.output
 qsb.name = qsb ${QMAKE_FILE_IN}
