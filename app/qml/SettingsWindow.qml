@@ -32,6 +32,12 @@ ApplicationWindow {
     width: 640
     height: 520
 
+    // Follow the active palette so the window background matches the rest of
+    // the desktop. Without this an ApplicationWindow inherits the Controls
+    // style default (white on the Basic style), making the settings unreadable
+    // on dark themes. See issues #847, #689.
+    color: palette.window
+
     Item {
         anchors { fill: parent; }
 
