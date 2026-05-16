@@ -28,6 +28,10 @@ ApplicationWindow {
     width: 600
     height: 400
 
+    // Follow the active palette so the dialog isn't white on dark themes.
+    // See issues #847, #689.
+    color: palette.window
+
     ColumnLayout {
         anchors.fill: parent
         anchors.margins: 15

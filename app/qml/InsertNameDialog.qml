@@ -30,6 +30,10 @@ Window {
     modality: Qt.ApplicationModal
     title: qsTr("Save new profile")
 
+    // Follow the active palette; a bare Window defaults to white otherwise,
+    // leaving this dialog unreadable on dark themes. See issues #847, #689.
+    color: palette.window
+
     property alias profileName: namefield.text
     signal nameSelected(string name)
 
