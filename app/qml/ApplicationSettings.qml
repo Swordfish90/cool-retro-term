@@ -60,6 +60,10 @@ QtObject {
     property real contrast: 0.80
     property real brightness: 0.5
 
+    property bool useBackgroundImage: true
+    property string backgroundImage: ""
+    property real backgroundTint: 0.0
+
     property bool useCustomCommand: false
     property string customCommand: ""
 
@@ -174,6 +178,9 @@ QtObject {
 
     function composeProfileObject() {
         var profile = {
+            "useBackgroundImage": useBackgroundImage,
+            "backgroundImage": backgroundImage,
+            "backgroundTint": backgroundTint,
             "backgroundColor": _backgroundColor,
             "fontColor": _fontColor,
             "flickering": flickering,
@@ -265,6 +272,13 @@ QtObject {
 
     function loadProfileString(profileString) {
         var settings = JSON.parse(profileString)
+
+        useBackgroundImage = settings.useBackgroundImage
+                !== undefined ? settings.useBackgroundImage : useBackgroundImage
+        backgroundImage = settings.backgroundImage
+                !== undefined ? settings.backgroundImage : backgroundImage
+        backgroundTint = settings.backgroundTint
+                !== undefined ? settings.backgroundTint : backgroundTint
 
         _backgroundColor = settings.backgroundColor
                 !== undefined ? settings.backgroundColor : _backgroundColor

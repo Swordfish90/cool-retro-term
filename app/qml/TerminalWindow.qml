@@ -48,6 +48,19 @@ ApplicationWindow {
 
     color: "#00000000"
 
+    background: Item {
+        Image {
+            source: appSettings.backgroundImage
+            anchors.fill: parent
+            fillMode: Image.PreserveAspectCrop
+        }
+        Rectangle {
+            color: "black"
+            opacity: appSettings.backgroundTint
+            anchors.fill: parent
+        }
+    }
+
     title: terminalTabs.currentTitle
 
     Action {
