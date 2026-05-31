@@ -52,6 +52,8 @@
         <file>../shaders/terminal_static.vert.qsb</file>
         <file>../shaders/terminal_frame.vert.qsb</file>
         <file>../shaders/burn_in.vert.qsb</file>
+        <file>../shaders/passthrough.vert.qsb</file>
+        <file>../shaders/passthrough.frag.qsb</file>
         <file>../shaders/terminal_dynamic_raster0_burn0_frame0_chroma0.frag.qsb</file>
         <file>../shaders/terminal_dynamic_raster0_burn0_frame0_chroma1.frag.qsb</file>
         <file>../shaders/terminal_dynamic_raster0_burn0_frame1_chroma0.frag.qsb</file>

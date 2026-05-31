@@ -47,6 +47,7 @@ ShaderTerminal {
         anchors.fill: parent
         isActive: mainShader.isActive
         onSessionFinished: mainShader.sessionFinished()
+        onTerminalImagePainted: mainShader.refreshStaticFrame()
     }
 
     function activate() {

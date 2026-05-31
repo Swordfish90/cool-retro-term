@@ -40,6 +40,8 @@ Loader {
     anchors.fill: parent
 
     function completelyUpdate() {
+        timeManager.requestTemporaryAnimation(burnInFadeTime)
+
         let newTime = timeManager.time
         if (newTime > lastUpdate) {
             prevLastUpdate = lastUpdate

@@ -29,7 +29,12 @@ QtObject {
     }
 
     property TimeManager timeManager: TimeManager {
-        enableTimer: windowsModel.count > 0
+        hasVisibleWindows: windowsModel.count > 0
+        hasContinuousAnimation: appSettings.staticNoise > 0
+            || appSettings.glowingLine > 0
+            || appSettings.jitter > 0
+            || appSettings.horizontalSync > 0
+            || appSettings.flickering > 0
     }
 
     property SettingsWindow settingsWindow: SettingsWindow {
