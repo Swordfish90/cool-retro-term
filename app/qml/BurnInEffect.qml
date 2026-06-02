@@ -44,15 +44,14 @@ Loader {
         if (newTime > lastUpdate) {
             prevLastUpdate = lastUpdate
             lastUpdate = newTime
+            item.source.scheduleUpdate()
         }
-
-        item.source.scheduleUpdate()
     }
 
     function restartBlurSource() {
         prevLastUpdate = timeManager.time
         lastUpdate = prevLastUpdate
-        completelyUpdate()
+        item.source.scheduleUpdate()
     }
 
     sourceComponent: Item {
