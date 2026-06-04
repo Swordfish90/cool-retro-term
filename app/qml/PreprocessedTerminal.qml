@@ -122,6 +122,9 @@ Item{
         session: QMLTermSession {
             id: ksession
 
+            baudRate: appSettings.baudRate
+            baudRateMode: appSettings.baudRateMode
+
             onFinished: {
                 terminalContainer.sessionFinished()
             }

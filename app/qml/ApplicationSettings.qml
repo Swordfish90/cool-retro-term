@@ -101,6 +101,10 @@ QtObject {
 
     readonly property bool frameEnabled: ambientLight > 0 || _frameSize > 0 || screenCurvature > 0
 
+    // BAUD RATE SETTINGS /////////////////////////////////////////////////////
+    property int baudRate: 0  // 0 = off, otherwise bits-per-second
+    property string baudRateMode: "off"  // "off", "display-aesthetic", "input-aesthetic", "both-aesthetic", etc.
+
     readonly property int no_rasterization: 0
     readonly property int scanline_rasterization: 1
     readonly property int pixel_rasterization: 2
@@ -201,7 +205,9 @@ QtObject {
             "frameSize": _frameSize,
             "screenRadius": _screenRadius,
             "frameColor": _frameColor,
-            "frameShininess": _frameShininess
+            "frameShininess": _frameShininess,
+            "baudRate": baudRate,
+            "baudRateMode": baudRateMode
         }
         return profile
     }
@@ -309,6 +315,9 @@ QtObject {
         _frameShininess = settings.frameShininess !== undefined ? settings.frameShininess : _frameShininess
 
         blinkingCursor = settings.blinkingCursor !== undefined ? settings.blinkingCursor : blinkingCursor
+
+        baudRate = settings.baudRate !== undefined ? settings.baudRate : baudRate
+        baudRateMode = settings.baudRateMode !== undefined ? settings.baudRateMode : baudRateMode
     }
 
     function storeCustomProfiles() {
