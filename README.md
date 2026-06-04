@@ -21,7 +21,7 @@ Settings such as colors, fonts, and effects can be accessed via context menu.
 
 ## Install
 
-If you want to get a hold of the latest version, just go to the Releases page and grab the latest AppImage (Linux) or dmg (macOS).
+If you want to get a hold of the latest version, just go to the Releases page and grab the latest AppImage (Linux) or dmg (macOS). `brew install --cask cool-retro-term` is also available in macOS.
 
 Alternatively, most distributions such as Ubuntu, Fedora or Arch already package cool-retro-term in their official repositories.
 
