@@ -151,6 +151,10 @@ void main() {
 
 #if CRT_DISPLAY_FRAME == 1
     vec4 frameColor = texture(frameSource, qt_TexCoord0);
+    // Unpremultiply alpha to handle nvidia driver differences
+    if (frameColor.a > 0.001) {
+        frameColor.rgb /= frameColor.a;
+    }
     color *= (1.0 - frameColor.a);
 #endif
 
