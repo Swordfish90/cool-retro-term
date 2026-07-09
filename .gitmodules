@@ -1,6 +1,6 @@
 [submodule "qmltermwidget"]
 	path = qmltermwidget
-	url = https://github.com/Swordfish90/qmltermwidget
+	url = https://github.com/GeoKM/qmltermwidget
 	branch = unstable
 [submodule "KDSingleApplication"]
 	path = KDSingleApplication
