@@ -41,6 +41,8 @@ Item{
     property alias title: ksession.title
     property alias kterminal: kterminal
     property bool isActive: false
+    property int telnetLoginState: 0
+    property string telnetPromptBuffer: ""
 
     property size terminalSize: kterminal.terminalSize
     property size fontMetrics: kterminal.fontMetrics
@@ -125,6 +127,10 @@ Item{
             onFinished: {
                 terminalContainer.sessionFinished()
             }
+
+            onReceivedData: function(text) {
+                kterminal.handleTelnetLogin(text)
+            }
         }
 
         QMLTermScrollbar {
@@ -185,6 +191,30 @@ Item{
 
             ksession.startShellProgram();
             forceActiveFocus();
+        }
+
+        function handleTelnetLogin(text) {
+            if (!telnetLogin.enabled || telnetLoginState >= 2) {
+                return;
+            }
+
+            telnetPromptBuffer = (telnetPromptBuffer + text).slice(-512).toLowerCase();
+
+            if (telnetLoginState === 0
+                    && telnetLogin.username
+                    && /(login|username|user)[^a-z0-9]*:\s*$/.test(telnetPromptBuffer)) {
+                ksession.sendText(telnetLogin.username + "\r");
+                telnetLoginState = 1;
+                telnetPromptBuffer = "";
+                return;
+            }
+
+            if (telnetLogin.password
+                    && /password[^a-z0-9]*:\s*$/.test(telnetPromptBuffer)) {
+                ksession.sendText(telnetLogin.password + "\r");
+                telnetLoginState = 2;
+                telnetPromptBuffer = "";
+            }
         }
         Component.onCompleted: {
             appSettings.fontManager.terminalFontChanged.connect(handleFontChanged);

@@ -25,6 +25,28 @@ If you want to get a hold of the latest version, just go to the Releases page an
 
 Alternatively, most distributions such as Ubuntu, Fedora or Arch already package cool-retro-term in their official repositories.
 
+## Command line
+
+cool-retro-term can run a command on startup with `-e`:
+
+```sh
+cool-retro-term -e top
+```
+
+It can also open a telnet connection on startup:
+
+```sh
+cool-retro-term --telnet-host example.com --telnet-port 23
+```
+
+For telnet servers that prompt for credentials, cool-retro-term can send a username and password when it detects login and password prompts:
+
+```sh
+cool-retro-term --telnet-host example.com --telnet-user myuser --telnet-password mypass
+```
+
+The telnet options use the system `telnet` command, so `telnet` must be installed and available in `PATH`. Passing passwords on the command line can expose them through shell history or process listings.
+
 ## Building
 
 Check out the wiki and follow the instructions on how to build it on [Linux](https://github.com/Swordfish90/cool-retro-term/wiki/Build-Instructions-(Linux)) and [macOS](https://github.com/Swordfish90/cool-retro-term/wiki/Build-Instructions-(macOS)).

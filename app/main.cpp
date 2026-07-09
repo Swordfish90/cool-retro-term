@@ -3,6 +3,7 @@
 
 #include <QQmlContext>
 #include <QStringList>
+#include <QVariantMap>
 
 #include <QDir>
 
@@ -31,7 +32,7 @@
 QString getNamedArgument(QStringList args, QString name, QString defaultName)
 {
     int index = args.indexOf(name);
-    return (index != -1) ? args[index + 1] : QString(defaultName);
+    return (index != -1 && index + 1 < args.size()) ? args[index + 1] : QString(defaultName);
 }
 
 QString getNamedArgument(QStringList args, QString name)
@@ -64,12 +65,16 @@ int main(int argc, char *argv[])
 
     if (argc>1 && (!strcmp(argv[1],"-h") || !strcmp(argv[1],"--help"))) {
         QTextStream cout(stdout, QIODevice::WriteOnly);
-        cout << "Usage: " << argv[0] << " [--default-settings] [--workdir <dir>] [--program <prog>] [-p|--profile <prof>] [--fullscreen] [-h|--help]" << Qt::endl;
+        cout << "Usage: " << argv[0] << " [--default-settings] [--workdir <dir>] [--program <prog>] [-p|--profile <prof>] [--fullscreen] [--telnet-host <host>] [--telnet-port <port>] [--telnet-user <user>] [--telnet-password <password>] [-h|--help]" << Qt::endl;
         cout << "  --default-settings  Run cool-retro-term with the default settings" << Qt::endl;
         cout << "  --workdir <dir>     Change working directory to 'dir'" << Qt::endl;
         cout << "  -e <cmd>            Command to execute. This option will catch all following arguments, so use it as the last option." << Qt::endl;
         cout << "  --fullscreen        Run cool-retro-term in fullscreen." << Qt::endl;
         cout << "  -p|--profile <prof> Run cool-retro-term with the given profile." << Qt::endl;
+        cout << "  --telnet-host <host>        Connect to a host with telnet on startup." << Qt::endl;
+        cout << "  --telnet-port <port>        Port for --telnet-host. Defaults to telnet's default port." << Qt::endl;
+        cout << "  --telnet-user <user>        Send this username when a login prompt is detected." << Qt::endl;
+        cout << "  --telnet-password <pass>    Send this password when a password prompt is detected." << Qt::endl;
         cout << "  -h|--help           Print this help." << Qt::endl;
         cout << "  --verbose           Print additional information such as profiles and settings." << Qt::endl;
         return 0;
@@ -90,12 +95,19 @@ int main(int argc, char *argv[])
     app.setOrganizationDomain(QStringLiteral("cool-retro-term"));
     app.setApplicationVersion(appVersion);
 
+    QStringList args = app.arguments();
+    const bool hasStartupCommand = args.contains(QStringLiteral("-e")) || args.contains(QStringLiteral("--telnet-host"));
+
     KDSingleApplication singleApp(QStringLiteral("cool-retro-term"));
 
     if (!singleApp.isPrimaryInstance()) {
-        if (singleApp.sendMessage("new-window"))
-            return 0;
-        qWarning() << "KDSingleApplication: primary not reachable, continuing as independent instance.";
+        if (hasStartupCommand) {
+            qInfo() << "KDSingleApplication: startup command requested, continuing as independent instance.";
+        } else {
+            if (singleApp.sendMessage("new-window"))
+                return 0;
+            qWarning() << "KDSingleApplication: primary not reachable, continuing as independent instance.";
+        }
     }
 
     QQmlApplicationEngine engine;
@@ -114,18 +126,33 @@ int main(int argc, char *argv[])
 #endif
 
     // Manage command line arguments from the cpp side
-    QStringList args = app.arguments();
-
     // Manage default command
     QStringList cmdList;
+    const QString telnetHost = getNamedArgument(args, "--telnet-host");
+    const QString telnetPort = getNamedArgument(args, "--telnet-port");
+    const QString telnetUser = getNamedArgument(args, "--telnet-user");
+    const QString telnetPassword = getNamedArgument(args, "--telnet-password");
+
     if (args.contains("-e")) {
         cmdList << args.mid(args.indexOf("-e") + 1);
+    } else if (!telnetHost.isEmpty()) {
+        cmdList << QStringLiteral("telnet") << telnetHost;
+        if (!telnetPort.isEmpty()) {
+            cmdList << telnetPort;
+        }
     }
+
+    QVariantMap telnetLogin;
+    telnetLogin.insert(QStringLiteral("enabled"), !telnetHost.isEmpty() && (!telnetUser.isEmpty() || !telnetPassword.isEmpty()));
+    telnetLogin.insert(QStringLiteral("username"), telnetUser);
+    telnetLogin.insert(QStringLiteral("password"), telnetPassword);
+
     QVariant command(cmdList.empty() ? QVariant() : cmdList[0]);
     QVariant commandArgs(cmdList.size() <= 1 ? QVariant() : QVariant(cmdList.mid(1)));
     engine.rootContext()->setContextProperty("appVersion", appVersion);
     engine.rootContext()->setContextProperty("defaultCmd", command);
     engine.rootContext()->setContextProperty("defaultCmdArgs", commandArgs);
+    engine.rootContext()->setContextProperty("telnetLogin", telnetLogin);
 
     engine.rootContext()->setContextProperty("workdir", getNamedArgument(args, "--workdir", QDir::currentPath()));
     engine.rootContext()->setContextProperty("fileIO", &fileIO);
