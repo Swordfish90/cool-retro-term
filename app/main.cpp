@@ -93,7 +93,10 @@ int main(int argc, char *argv[])
     KDSingleApplication singleApp(QStringLiteral("cool-retro-term"));
 
     if (!singleApp.isPrimaryInstance()) {
-        if (singleApp.sendMessage("new-window"))
+        QByteArray message("new-window");
+        if (app.arguments().contains(QStringLiteral("--fullscreen")))
+            message += " --fullscreen";
+        if (singleApp.sendMessage(message))
             return 0;
         qWarning() << "KDSingleApplication: primary not reachable, continuing as independent instance.";
     }
@@ -147,23 +150,24 @@ int main(int argc, char *argv[])
     // Quit the application when the engine closes.
     QObject::connect((QObject*) &engine, SIGNAL(quit()), (QObject*) &app, SLOT(quit()));
 
-    auto requestNewWindow = [&engine]() {
+    auto requestNewWindow = [&engine](bool fullscreen) {
         if (engine.rootObjects().isEmpty())
             return;
 
         QObject *rootObject = engine.rootObjects().constFirst();
-        QMetaObject::invokeMethod(rootObject, "createWindow", Qt::QueuedConnection);
+        QMetaObject::invokeMethod(rootObject, "createWindow", Qt::QueuedConnection,
+                                  Q_ARG(QVariant, fullscreen));
     };
 
     QObject::connect(&singleApp, &KDSingleApplication::messageReceived, &app,
                      [&requestNewWindow](const QByteArray &message) {
-        if (message.isEmpty() || message == QByteArray("new-window"))
-            requestNewWindow();
+        if (message.isEmpty() || message.startsWith("new-window"))
+            requestNewWindow(message.contains("--fullscreen"));
     });
 
 #if defined(Q_OS_MAC)
     QMenu *dockMenu = new QMenu(nullptr);
-    dockMenu->addAction(QObject::tr("New Window"), [&requestNewWindow]() { requestNewWindow(); });
+    dockMenu->addAction(QObject::tr("New Window"), [&requestNewWindow]() { requestNewWindow(false); });
     dockMenu->setAsDockMenu();
 #endif
 

@@ -54,7 +54,9 @@ ApplicationWindow {
         id: fullscreenAction
         text: qsTr("Fullscreen")
         enabled: !appSettings.isMacOS
-        shortcut: StandardKey.FullScreen
+        // Explicit F11: the GNOME platform theme maps StandardKey.FullScreen
+        // to Ctrl+F11, leaving plain F11 unbound.
+        shortcut: "F11"
         onTriggered: fullscreen = !fullscreen
         checkable: true
         checked: fullscreen

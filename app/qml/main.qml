@@ -25,7 +25,7 @@ QtObject {
     id: appRoot
 
     property ApplicationSettings appSettings: ApplicationSettings {
-        onInitializedSettings: appRoot.createWindow()
+        onInitializedSettings: appRoot.createWindow(Qt.application.arguments.indexOf("--fullscreen") !== -1)
     }
 
     property TimeManager timeManager: TimeManager {
@@ -46,7 +46,7 @@ QtObject {
 
     property ListModel windowsModel: ListModel { }
 
-    function createWindow() {
+    function createWindow(fullscreen) {
         var window = windowComponent.createObject(null)
         if (!window)
             return
@@ -54,6 +54,10 @@ QtObject {
         windowsModel.append({ window: window })
         window.show()
         window.requestActivate()
+
+        // show() resets the window state, so this has to come after it.
+        if (fullscreen)
+            window.fullscreen = true
     }
 
     function closeWindow(window) {
