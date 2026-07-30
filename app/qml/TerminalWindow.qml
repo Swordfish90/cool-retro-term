@@ -30,16 +30,12 @@ ApplicationWindow {
     height: 768
 
     // Show the window once it is ready.
-    Component.onCompleted: {
-        visible = true
-    }
+    Component.onCompleted: visibility = (fullscreen ? Window.FullScreen : Window.Windowed)
 
     minimumWidth: 320
     minimumHeight: 240
 
-    visible: false
-
-    property bool fullscreen: false
+    property bool fullscreen: startFullscreen
     onFullscreenChanged: visibility = (fullscreen ? Window.FullScreen : Window.Windowed)
 
     menuBar: WindowMenu { }
