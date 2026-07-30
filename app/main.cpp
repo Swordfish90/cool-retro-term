@@ -128,6 +128,7 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("defaultCmdArgs", commandArgs);
 
     engine.rootContext()->setContextProperty("workdir", getNamedArgument(args, "--workdir", QDir::currentPath()));
+    engine.rootContext()->setContextProperty("startFullscreen", args.contains("--fullscreen"));
     engine.rootContext()->setContextProperty("fileIO", &fileIO);
 
     // Manage import paths for Linux and OSX.
