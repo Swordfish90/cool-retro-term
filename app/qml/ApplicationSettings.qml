@@ -53,6 +53,10 @@ QtObject {
 
     property bool blinkingCursor: false
 
+    // When enabled, tabs show a position number and can be given custom names
+    // by clicking the tab label. On by default.
+    property bool enableNamedTabs: true
+
 
     // PROFILE SETTINGS ///////////////////////////////////////////////////////
     property real windowOpacity: 1.0
@@ -167,7 +171,8 @@ QtObject {
             "bloomQuality": bloomQuality,
             "burnInQuality": burnInQuality,
             "useCustomCommand": useCustomCommand,
-            "customCommand": customCommand
+            "customCommand": customCommand,
+            "enableNamedTabs": enableNamedTabs
         }
         return stringify(settings)
     }
@@ -261,6 +266,9 @@ QtObject {
                 !== undefined ? settings.useCustomCommand : useCustomCommand
         customCommand = settings.customCommand
                 !== undefined ? settings.customCommand : customCommand
+
+        enableNamedTabs = settings.enableNamedTabs
+                !== undefined ? settings.enableNamedTabs : enableNamedTabs
     }
 
     function loadProfileString(profileString) {
