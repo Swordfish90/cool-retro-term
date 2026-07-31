@@ -66,6 +66,12 @@ ColumnLayout {
                 checked: appSettings.showMenubar
                 onCheckedChanged: appSettings.showMenubar = checked
             }
+            CheckBox {
+                id: enableNamedTabs
+                text: qsTr("Enable named tabs")
+                checked: appSettings.enableNamedTabs
+                onCheckedChanged: appSettings.enableNamedTabs = checked
+            }
         }
     }
 
