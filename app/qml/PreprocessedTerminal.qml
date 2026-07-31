@@ -116,6 +116,7 @@ Item{
 
         fullCursorHeight: true
         blinkingCursor: appSettings.blinkingCursor
+        clipboardWriteAllowed: appSettings.clipboardWriteAllowed
 
         colorScheme: "cool-retro-term"
 
