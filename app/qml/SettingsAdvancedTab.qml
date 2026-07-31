@@ -66,6 +66,12 @@ ColumnLayout {
                 checked: appSettings.showMenubar
                 onCheckedChanged: appSettings.showMenubar = checked
             }
+            CheckBox {
+                id: clipboardWriteAllowed
+                text: qsTr("Allow apps to set clipboard (OSC 52)")
+                checked: appSettings.clipboardWriteAllowed
+                onCheckedChanged: appSettings.clipboardWriteAllowed = checked
+            }
         }
     }
 

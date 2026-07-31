@@ -53,6 +53,10 @@ QtObject {
 
     property bool blinkingCursor: false
 
+    // Allow remote apps to write the local clipboard via the OSC 52 escape
+    // sequence (e.g. tmux with set-clipboard on). On by default.
+    property bool clipboardWriteAllowed: true
+
 
     // PROFILE SETTINGS ///////////////////////////////////////////////////////
     property real windowOpacity: 1.0
@@ -167,7 +171,8 @@ QtObject {
             "bloomQuality": bloomQuality,
             "burnInQuality": burnInQuality,
             "useCustomCommand": useCustomCommand,
-            "customCommand": customCommand
+            "customCommand": customCommand,
+            "clipboardWriteAllowed": clipboardWriteAllowed
         }
         return stringify(settings)
     }
@@ -261,6 +266,9 @@ QtObject {
                 !== undefined ? settings.useCustomCommand : useCustomCommand
         customCommand = settings.customCommand
                 !== undefined ? settings.customCommand : customCommand
+
+        clipboardWriteAllowed = settings.clipboardWriteAllowed
+                !== undefined ? settings.clipboardWriteAllowed : clipboardWriteAllowed
     }
 
     function loadProfileString(profileString) {
