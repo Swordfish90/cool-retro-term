@@ -29,8 +29,20 @@ ApplicationWindow {
     width: 1024
     height: 768
 
+    // The scale factor of the screen this window is on, kept in a property of our
+    // own. Screen.devicePixelRatio reads the current value but carries no working
+    // change notification, so a binding on it keeps the ratio the window was built
+    // with and every size derived from it is left behind when the scale changes.
+    // The screen's other measures do notify, and any change of scale or of screen
+    // moves at least one of them, so they are the cue to read the ratio again.
+    property real screenDevicePixelRatio: 1
+    readonly property string screenState:
+        Screen.name + " " + Screen.width + "x" + Screen.height + "@" + Screen.pixelDensity
+    onScreenStateChanged: screenDevicePixelRatio = Screen.devicePixelRatio
+
     // Show the window once it is ready.
     Component.onCompleted: {
+        screenDevicePixelRatio = Screen.devicePixelRatio
         visible = true
     }
 

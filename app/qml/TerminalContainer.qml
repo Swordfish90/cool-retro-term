@@ -37,8 +37,8 @@ ShaderTerminal {
     burnInEffect: terminal.burnInEffect
     virtualResolution: terminal.virtualResolution
     screenResolution: Qt.size(
-        terminalWindow.width * Screen.devicePixelRatio * appSettings.windowScaling,
-        terminalWindow.height * Screen.devicePixelRatio * appSettings.windowScaling
+        terminalWindow.width * terminalWindow.screenDevicePixelRatio * appSettings.windowScaling,
+        terminalWindow.height * terminalWindow.screenDevicePixelRatio * appSettings.windowScaling
     )
     bloomSource: bloomSourceLoader.item
 
