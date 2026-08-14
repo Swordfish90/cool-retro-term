@@ -25,7 +25,6 @@ Loader {
     id: burnInEffect
 
     property ShaderEffectSource effectSource: item ? item.source : null
-    property bool resizing: false
 
     property real lastUpdate: 0
     property real prevLastUpdate: 0
@@ -65,7 +64,11 @@ Loader {
 
             sourceItem: burnInShaderEffect
             live: false
-            recursive: !resizing
+            // Unconditionally: the effect samples this source's previous
+            // frame, and a non-recursive layer that samples itself reads and
+            // writes one texture in the same pass, which the RHI backends
+            // (Vulkan, Metal, D3D) reject. Recursive double-buffers instead.
+            recursive: true
             hideSource: true
             wrapMode: ShaderEffectSource.ClampToEdge
 
@@ -128,19 +131,4 @@ Loader {
         }
     }
 
-    onWidthChanged: {
-        resizing = true
-        resizeTimer.restart()
-    }
-
-    onHeightChanged: {
-        resizing = true
-        resizeTimer.restart()
-    }
-
-    Timer {
-        id: resizeTimer
-        interval: 300
-        onTriggered: resizing = false
-    }
 }
