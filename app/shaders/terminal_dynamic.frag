@@ -46,7 +46,7 @@ layout(std140, binding = 0) uniform ubuf {
     float bloom;
 };
 
-layout(binding = 0) uniform sampler2D noiseSource;
+layout(binding = 4) uniform sampler2D noiseSource;
 layout(binding = 1) uniform sampler2D screenBuffer;
 layout(binding = 2) uniform sampler2D burnInSource;
 layout(binding = 3) uniform sampler2D frameSource;

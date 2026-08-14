@@ -29,7 +29,7 @@ layout(std140, binding = 0) uniform ubuf {
     float bloom;
 };
 
-layout(binding = 0) uniform sampler2D noiseSource;
+layout(binding = 4) uniform sampler2D noiseSource;
 
 layout(location = 0) out vec2 qt_TexCoord0;
 layout(location = 1) out float vBrightness;
