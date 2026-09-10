@@ -116,6 +116,18 @@ ColumnLayout {
                 }
                 Component.onCompleted: updateIndex()
             }
+            Item {
+                width: 1
+                height: 1
+            }
+            Label {
+                Layout.columnSpan: 2
+                wrapMode: Text.WordWrap
+                Layout.fillWidth: true
+                font.italic: true
+                opacity: 0.7
+                text: qsTr("CJK glyphs fall back to Noto Sans CJK / WenQuanYi when the selected font lacks them; use a System CJK monospace font for full-width alignment.")
+            }
             Label {
                 text: qsTr("Scaling")
             }

@@ -116,5 +116,6 @@
         <file>fonts/oldschool-pc-fonts/PxPlus_IBM_EGA_8x8.ttf</file>
         <file>fonts/oldschool-pc-fonts/PxPlus_IBM_VGA8.ttf</file>
         <file>fonts/oldschool-pc-fonts/PxPlus_IBM_VGA_8x16.ttf</file>
+        <file>fonts/profont/ProFontWindows.ttf</file>
     </qresource>
 </RCC>

@@ -96,10 +96,28 @@ QString FontManager::fontName() const
 
 void FontManager::setFontName(const QString &fontName)
 {
-    if (m_fontName == fontName) {
+    QString normalizedName = fontName;
+    if (normalizedName == QLatin1String("COMMODORE_PET")) {
+        normalizedName = QStringLiteral("COMMODORE_PET_SCALED");
+    } else if (normalizedName == QLatin1String("APPLE_II")) {
+        normalizedName = QStringLiteral("APPLE_II_SCALED");
+    } else if (normalizedName == QLatin1String("ATARI_400")) {
+        normalizedName = QStringLiteral("ATARI_400_SCALED");
+    } else if (normalizedName == QLatin1String("IBM_PC")) {
+        normalizedName = QStringLiteral("IBM_EGA_8x8");
+    } else if (normalizedName == QLatin1String("COMMODORE_64")) {
+        normalizedName = QStringLiteral("COMMODORE_64_SCALED");
+    } else if (normalizedName == QLatin1String("PRO_FONT")) {
+        normalizedName = QStringLiteral("PRO_FONT_SCALED");
+    } else if (normalizedName == QLatin1String("TERMINUS")) {
+        normalizedName = QStringLiteral("TERMINESS");
+    } else if (normalizedName == QLatin1String("TERMINUS_SCALED")) {
+        normalizedName = QStringLiteral("TERMINESS_SCALED");
+    }
+    if (m_fontName == normalizedName) {
         return;
     }
-    m_fontName = fontName;
+    m_fontName = normalizedName;
     emit fontNameChanged();
     updateFilteredFonts();
     updateComputedFont();
@@ -314,6 +332,21 @@ void FontManager::populateBundledFonts()
         16,
         true,
         "UNSCII_16_SCALED");
+    addBundledFont(
+        "PRO_FONT_SCALED",
+        "Pro Font",
+        ":/fonts/profont/ProFontWindows.ttf",
+        1.0,
+        12,
+        true);
+    addBundledFont(
+        "IBM_DOS",
+        "IBM DOS",
+        ":/fonts/oldschool-pc-fonts/PxPlus_IBM_VGA8.ttf",
+        1.0,
+        16,
+        true,
+        "UNSCII_16_SCALED");
 
     addBundledFont(
         "TERMINESS",
@@ -507,6 +540,7 @@ void FontManager::updateComputedFont()
     if (!fallbackFontFamily.isEmpty()) {
         fallbackChain.append(fallbackFontFamily);
     }
+    fallbackChain.append(cjkFallbackFamilies());
 #if defined(Q_OS_MAC)
     fallbackChain.append(QStringLiteral("Menlo"));
 #else
@@ -581,4 +615,29 @@ qreal FontManager::computeBaseWidth(const QString &family, int pixelSize, qreal 
     const qreal targetRatio = 0.5;
     qreal computedWidth = (targetRatio * glyphHeight) / glyphWidth;
     return qBound(0.25, computedWidth, 2.0);
+}
+
+QStringList FontManager::cjkFallbackFamilies()
+{
+    static const QStringList kPreferredCjkFamilies = {
+        QStringLiteral("Noto Sans Mono CJK SC"),
+        QStringLiteral("Noto Sans Mono CJK TC"),
+        QStringLiteral("Noto Sans Mono CJK JP"),
+        QStringLiteral("Noto Sans Mono CJK KR"),
+        QStringLiteral("Noto Sans Mono CJK HK"),
+        QStringLiteral("Noto Sans CJK SC"),
+        QStringLiteral("Noto Sans CJK TC"),
+        QStringLiteral("WenQuanYi Zen Hei Mono"),
+        QStringLiteral("WenQuanYi Micro Hei Mono"),
+    };
+
+    QFontDatabase fontDatabase;
+    const QStringList availableFamilies = fontDatabase.families();
+    QStringList result;
+    for (const QString &family : kPreferredCjkFamilies) {
+        if (availableFamilies.contains(family)) {
+            result.append(family);
+        }
+    }
+    return result;
 }
