@@ -31,7 +31,10 @@
 QString getNamedArgument(QStringList args, QString name, QString defaultName)
 {
     int index = args.indexOf(name);
-    return (index != -1) ? args[index + 1] : QString(defaultName);
+    int valueIndex = index + 1;
+    return (index != -1 && valueIndex < args.size() && !args[valueIndex].startsWith('-'))
+            ? args[valueIndex]
+            : QString(defaultName);
 }
 
 QString getNamedArgument(QStringList args, QString name)
