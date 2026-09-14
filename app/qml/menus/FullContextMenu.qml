@@ -29,6 +29,9 @@ Menu {
         action: pasteAction
     }
     MenuItem {
+        action: saveCrtFrameAction
+    }
+    MenuItem {
         action: showsettingsAction
     }
 
@@ -39,6 +42,10 @@ Menu {
         }
         MenuItem {
             action: newTabAction
+        }
+        MenuSeparator {}
+        MenuItem {
+            action: saveCrtFrameAction
         }
         MenuSeparator {}
         MenuItem {

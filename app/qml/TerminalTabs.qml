@@ -30,6 +30,7 @@ Item {
     property alias currentIndex: tabBar.currentIndex
     readonly property int count: tabsModel.count
     property size terminalSize: Qt.size(0, 0)
+    property var currentContainer: null
 
     function normalizeTitle(rawTitle) {
         if (rawTitle === undefined || rawTitle === null) {
@@ -51,6 +52,14 @@ Item {
 
         tabsModel.remove(index)
         tabBar.currentIndex = Math.min(tabBar.currentIndex, tabsModel.count - 1)
+    }
+
+    function saveCrtFrame(destinationUrl) {
+        if (!currentContainer || typeof currentContainer.saveCrtFrame !== "function") {
+            console.warn("Save CRT Frame: no active terminal")
+            return false
+        }
+        return currentContainer.saveCrtFrame(destinationUrl)
     }
 
     ListModel {
@@ -132,6 +141,14 @@ Item {
                 TerminalContainer {
                     property bool shouldHaveFocus: terminalWindow.active && StackLayout.isCurrentItem
                     isActive: StackLayout.isCurrentItem
+                    onIsActiveChanged: {
+                        if (isActive)
+                            tabsRoot.currentContainer = this
+                    }
+                    Component.onCompleted: {
+                        if (isActive)
+                            tabsRoot.currentContainer = this
+                    }
                     onShouldHaveFocusChanged: {
                         if (shouldHaveFocus) {
                             activate()

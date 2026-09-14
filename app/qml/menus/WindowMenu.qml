@@ -30,6 +30,8 @@ MenuBar {
         MenuItem { action: newTabAction }
         MenuItem { action: closeTabAction }
         MenuSeparator { }
+        MenuItem { action: saveCrtFrameAction }
+        MenuSeparator { }
         MenuItem { action: quitAction }
     }
     Menu {

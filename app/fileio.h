@@ -3,8 +3,10 @@
 
 #include <QObject>
 #include <QFile>
+#include <QImage>
 #include <QTextStream>
 #include <QUrl>
+#include <QVariant>
 
 class FileIO : public QObject
 {
@@ -16,6 +18,8 @@ public:
 public slots:
     bool write(const QString& sourceUrl, const QString& data);
     QString read(const QString& sourceUrl);
+    QString toLocalFile(const QString& sourceUrl);
+    bool writePng(const QString& sourceUrl, const QVariant& image);
 };
 
 #endif // FILEIO_H

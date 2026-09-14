@@ -53,6 +53,10 @@ ShaderTerminal {
         terminal.mainTerminal.forceActiveFocus()
     }
 
+    function saveCrtFrame(destinationUrl) {
+        return saveCompositedFrame(destinationUrl)
+    }
+
     //  EFFECTS  ////////////////////////////////////////////////////////////////
     Loader {
         id: bloomEffectLoader
