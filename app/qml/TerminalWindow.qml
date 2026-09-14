@@ -196,6 +196,8 @@ ApplicationWindow {
         defaultSuffix: "png"
         acceptLabel: qsTr("Save")
         options: FileDialog.DontUseNativeDialog
+        currentFolder: fileIO.writableFolderUrl()
+        selectedFile: fileIO.suggestedSaveUrl("crt-frame.png")
         onAccepted: {
             var destination = selectedFile
             Qt.callLater(function () {

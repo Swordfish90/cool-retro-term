@@ -1,5 +1,8 @@
 #include "fileio.h"
 
+#include <QDir>
+#include <QStandardPaths>
+
 FileIO::FileIO()
 {
 }
@@ -41,14 +44,37 @@ QString FileIO::toLocalFile(const QString& sourceUrl) {
         return QString();
 
     const QUrl url(sourceUrl);
-    if (url.isLocalFile())
-        return url.toLocalFile();
+    QString path = url.isLocalFile() ? url.toLocalFile() : QString();
+    if (path.isEmpty() && sourceUrl.startsWith(QLatin1Char('/')))
+        path = sourceUrl;
+    if (path.isEmpty())
+        path = url.toLocalFile();
+    if (path.isEmpty())
+        path = sourceUrl;
 
-    if (sourceUrl.startsWith(QLatin1Char('/')))
-        return sourceUrl;
+    // Qt Quick FileDialog may prefix currentFolder when the typed name is
+    // already absolute, producing "/cwd//abs/path.png".
+    const int dbl = path.indexOf(QLatin1String("//"), 1);
+    if (dbl > 0) {
+        const QString embedded = path.mid(dbl + 1);
+        if (embedded.startsWith(QLatin1Char('/')))
+            path = embedded;
+    }
+    return path;
+}
 
-    const QString local = url.toLocalFile();
-    return local.isEmpty() ? sourceUrl : local;
+QString FileIO::writableFolderUrl() {
+    QString dir = QStandardPaths::writableLocation(QStandardPaths::PicturesLocation);
+    if (dir.isEmpty())
+        dir = QDir::homePath();
+    QDir().mkpath(dir);
+    return QUrl::fromLocalFile(dir).toString();
+}
+
+QString FileIO::suggestedSaveUrl(const QString& fileName) {
+    const QUrl folder(writableFolderUrl());
+    const QString name = fileName.isEmpty() ? QStringLiteral("crt-frame.png") : fileName;
+    return QUrl::fromLocalFile(QDir(folder.toLocalFile()).filePath(name)).toString();
 }
 
 bool FileIO::writePng(const QString& sourceUrl, const QVariant& image) {

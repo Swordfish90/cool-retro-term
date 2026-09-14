@@ -67,6 +67,7 @@ def main() -> int:
             "PNG images (*.png)",
             "defaultSuffix: \"png\"",
             "acceptLabel",
+            "suggestedSaveUrl",
             "terminalTabs.saveCrtFrame",
             "crtFrameFileDialog",
         ],
@@ -81,12 +82,12 @@ def main() -> int:
 
     must_contain(
         "app/fileio.h",
-        ["toLocalFile", "writePng"],
+        ["toLocalFile", "writePng", "writableFolderUrl", "suggestedSaveUrl"],
         errors,
     )
     must_contain(
         "app/fileio.cpp",
-        ['png.save(path, "PNG")', "toLocalFile"],
+        ['png.save(path, "PNG")', "toLocalFile", "QLatin1String(\"//\")", "suggestedSaveUrl"],
         errors,
     )
     must_contain(

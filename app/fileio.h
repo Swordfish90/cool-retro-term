@@ -19,6 +19,8 @@ public slots:
     bool write(const QString& sourceUrl, const QString& data);
     QString read(const QString& sourceUrl);
     QString toLocalFile(const QString& sourceUrl);
+    QString writableFolderUrl();
+    QString suggestedSaveUrl(const QString& fileName);
     bool writePng(const QString& sourceUrl, const QVariant& image);
 };
 
