@@ -194,6 +194,7 @@ ApplicationWindow {
         fileMode: FileDialog.SaveFile
         nameFilters: [qsTr("PNG images (*.png)")]
         defaultSuffix: "png"
+        acceptLabel: qsTr("Save")
         options: FileDialog.DontUseNativeDialog
         onAccepted: {
             var destination = selectedFile

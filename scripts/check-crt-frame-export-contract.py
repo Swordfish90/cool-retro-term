@@ -66,6 +66,7 @@ def main() -> int:
             "FileDialog",
             "PNG images (*.png)",
             "defaultSuffix: \"png\"",
+            "acceptLabel",
             "terminalTabs.saveCrtFrame",
             "crtFrameFileDialog",
         ],
