@@ -35,6 +35,19 @@ ColumnLayout {
         ColumnLayout {
             anchors.fill: parent
 
+            CheckBox {
+                id: comfortEffectsMode
+                text: qsTr("Comfort effects mode")
+                checked: appSettings.comfortEffectsMode
+                onCheckedChanged: appSettings.comfortEffectsMode = checked
+            }
+            Label {
+                Layout.fillWidth: true
+                wrapMode: Text.WordWrap
+                opacity: 0.8
+                text: qsTr("Clamp flicker, jitter, static, rolling sync, RGB shift, and the glowing scan for long sessions and photosensitivity. Bloom, curvature, and scanlines stay. Slider values are stored unchanged.")
+            }
+
             CheckableSlider {
                 name: qsTr("Bloom")
                 onNewValue: function(newValue) { appSettings.bloom = newValue }

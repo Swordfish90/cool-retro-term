@@ -103,6 +103,14 @@ ApplicationWindow {
         onTriggered: appSettings.decrementScaling()
     }
     Action {
+        id: comfortEffectsAction
+        text: qsTr("Comfort Effects Mode")
+        shortcut: appSettings.isMacOS ? "Meta+Shift+E" : "Ctrl+Shift+E"
+        checkable: true
+        checked: appSettings.comfortEffectsMode
+        onTriggered: appSettings.comfortEffectsMode = !appSettings.comfortEffectsMode
+    }
+    Action {
         id: showAboutAction
         text: qsTr("About")
         onTriggered: {

@@ -53,6 +53,17 @@ QtObject {
 
     property bool blinkingCursor: false
 
+    // Comfort effects mode clamps photosensitive motion (flicker, jitter,
+    // static sparkle, rolling sync, RGB shift, glowing scan) at the shader
+    // input. Stored profile slider values are left unchanged. See #657.
+    property bool comfortEffectsMode: false
+
+    readonly property real effectiveFlickering: Utils.applyComfortClamp("flickering", flickering, comfortEffectsMode)
+    readonly property real effectiveJitter: Utils.applyComfortClamp("jitter", jitter, comfortEffectsMode)
+    readonly property real effectiveStaticNoise: Utils.applyComfortClamp("staticNoise", staticNoise, comfortEffectsMode)
+    readonly property real effectiveHorizontalSync: Utils.applyComfortClamp("horizontalSync", horizontalSync, comfortEffectsMode)
+    readonly property real effectiveRgbShift: Utils.applyComfortClamp("rgbShift", rgbShift, comfortEffectsMode)
+    readonly property real effectiveGlowingLine: Utils.applyComfortClamp("glowingLine", glowingLine, comfortEffectsMode)
 
     // PROFILE SETTINGS ///////////////////////////////////////////////////////
     property real windowOpacity: 1.0
@@ -167,7 +178,8 @@ QtObject {
             "bloomQuality": bloomQuality,
             "burnInQuality": burnInQuality,
             "useCustomCommand": useCustomCommand,
-            "customCommand": customCommand
+            "customCommand": customCommand,
+            "comfortEffectsMode": comfortEffectsMode
         }
         return stringify(settings)
     }
@@ -261,6 +273,9 @@ QtObject {
                 !== undefined ? settings.useCustomCommand : useCustomCommand
         customCommand = settings.customCommand
                 !== undefined ? settings.customCommand : customCommand
+
+        comfortEffectsMode = settings.comfortEffectsMode
+                !== undefined ? settings.comfortEffectsMode : comfortEffectsMode
     }
 
     function loadProfileString(profileString) {

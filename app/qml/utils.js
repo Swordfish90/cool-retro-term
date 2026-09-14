@@ -19,12 +19,52 @@
 *******************************************************************************/
 
 .pragma library
+
+// Photosensitive / long-session caps for Comfort effects mode.
+// Keep CRT look (bloom, curvature, scanlines, burn-in) while clamping
+// motion, strobe, rolling sync, and sparkle. Slider values stay stored.
+var COMFORT_MAX_FLICKERING = 0.0;
+var COMFORT_MAX_JITTER = 0.02;
+var COMFORT_MAX_STATIC_NOISE = 0.02;
+var COMFORT_MAX_HORIZONTAL_SYNC = 0.0;
+var COMFORT_MAX_RGB_SHIFT = 0.0;
+var COMFORT_MAX_GLOWING_LINE = 0.0;
+
 function clamp(x, min, max) {
     if (x <= min)
         return min;
     if (x >= max)
         return max;
     return x;
+}
+
+function applyComfortClamp(effectName, value, comfortEnabled) {
+    if (!comfortEnabled)
+        return value;
+    var maxValue;
+    switch (effectName) {
+    case "flickering":
+        maxValue = COMFORT_MAX_FLICKERING;
+        break;
+    case "jitter":
+        maxValue = COMFORT_MAX_JITTER;
+        break;
+    case "staticNoise":
+        maxValue = COMFORT_MAX_STATIC_NOISE;
+        break;
+    case "horizontalSync":
+        maxValue = COMFORT_MAX_HORIZONTAL_SYNC;
+        break;
+    case "rgbShift":
+        maxValue = COMFORT_MAX_RGB_SHIFT;
+        break;
+    case "glowingLine":
+        maxValue = COMFORT_MAX_GLOWING_LINE;
+        break;
+    default:
+        return value;
+    }
+    return clamp(value, 0, maxValue);
 }
 
 function lint(a, b, t) {

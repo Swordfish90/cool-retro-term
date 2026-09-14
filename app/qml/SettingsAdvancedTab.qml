@@ -66,6 +66,18 @@ ColumnLayout {
                 checked: appSettings.showMenubar
                 onCheckedChanged: appSettings.showMenubar = checked
             }
+            CheckBox {
+                id: comfortEffectsMode
+                text: qsTr("Comfort effects mode")
+                checked: appSettings.comfortEffectsMode
+                onCheckedChanged: appSettings.comfortEffectsMode = checked
+            }
+            Label {
+                Layout.fillWidth: true
+                wrapMode: Text.WordWrap
+                opacity: 0.8
+                text: qsTr("Photosensitive clamp of flicker, jitter, static, and rolling sync. Does not change saved profile sliders.")
+            }
         }
     }
 

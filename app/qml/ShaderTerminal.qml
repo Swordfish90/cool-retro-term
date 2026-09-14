@@ -36,7 +36,7 @@ Item {
     }
 
     function staticFragmentPath() {
-        var rgbShiftOn = appSettings.rgbShift > 0 ? 1 : 0;
+        var rgbShiftOn = appSettings.effectiveRgbShift > 0 ? 1 : 0;
         var bloomOn = appSettings.bloom > 0 ? 1 : 0;
         var curvatureOn = (appSettings.screenCurvature > 0 || appSettings.frameSize > 0) ? 1 : 0;
         var shineOn = appSettings.frameShininess > 0 ? 1 : 0;
@@ -82,19 +82,19 @@ Item {
         property real chromaColor: parent.chromaColor
         property real ambientLight: parent.ambientLight
 
-        property real flickering: appSettings.flickering
-        property real horizontalSync: appSettings.horizontalSync
+        property real flickering: appSettings.effectiveFlickering
+        property real horizontalSync: appSettings.effectiveHorizontalSync
         property real horizontalSyncStrength: Utils.lint(0.05, 0.35, horizontalSync)
-        property real glowingLine: appSettings.glowingLine * 0.2
+        property real glowingLine: appSettings.effectiveGlowingLine * 0.2
 
         // Fast burnin properties
         property real burnIn: appSettings.burnIn
         property real burnInLastUpdate: burnInEffect.lastUpdate
         property real burnInTime: burnInEffect.burnInFadeTime
 
-        property real jitter: appSettings.jitter
+        property real jitter: appSettings.effectiveJitter
         property size jitterDisplacement: Qt.size(0.007 * jitter, 0.002 * jitter)
-        property real staticNoise: appSettings.staticNoise
+        property real staticNoise: appSettings.effectiveStaticNoise
         property size scaleNoiseSize: Qt.size((width * 0.75) / (noiseTexture.width * appSettings.windowScaling * appSettings.totalFontScaling),
                                               (height * 0.75) / (noiseTexture.height * appSettings.windowScaling * appSettings.totalFontScaling))
 
@@ -176,7 +176,7 @@ Item {
 
         property real chromaColor: appSettings.chromaColor;
 
-        property real rgbShift: appSettings.rgbShift * (4.0 / width) * appSettings.totalFontScaling
+        property real rgbShift: appSettings.effectiveRgbShift * (4.0 / width) * appSettings.totalFontScaling
 
         property real screen_brightness: Utils.lint(0.5, 1.5, appSettings.brightness)
         property real frameShininess: appSettings.frameShininess
