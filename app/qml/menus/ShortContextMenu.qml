@@ -28,4 +28,7 @@ Menu {
     MenuItem {
         action: pasteAction
     }
+    MenuItem {
+        action: saveCrtFrameAction
+    }
 }

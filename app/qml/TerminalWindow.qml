@@ -20,6 +20,7 @@
 import QtQuick
 import QtQuick.Window
 import QtQuick.Controls
+import QtQuick.Dialogs
 
 import "menus"
 
@@ -79,6 +80,12 @@ ApplicationWindow {
             settingsWindow.requestActivate()
             settingsWindow.raise()
         }
+    }
+    Action {
+        id: saveCrtFrameAction
+        text: qsTr("Save CRT Frame")
+        shortcut: appSettings.isMacOS ? "Meta+Shift+S" : "Ctrl+Shift+S"
+        onTriggered: crtFrameFileDialog.open()
     }
     Action {
         id: copyAction
@@ -179,6 +186,23 @@ ApplicationWindow {
         sourceComponent: SizeOverlay {
             z: 3
             terminalSize: terminalTabs.terminalSize
+        }
+    }
+    FileDialog {
+        id: crtFrameFileDialog
+        title: qsTr("Save CRT Frame")
+        fileMode: FileDialog.SaveFile
+        nameFilters: [qsTr("PNG images (*.png)")]
+        defaultSuffix: "png"
+        acceptLabel: qsTr("Save")
+        options: FileDialog.DontUseNativeDialog
+        currentFolder: fileIO.writableFolderUrl()
+        selectedFile: fileIO.suggestedSaveUrl("crt-frame.png")
+        onAccepted: {
+            var destination = selectedFile
+            Qt.callLater(function () {
+                terminalTabs.saveCrtFrame(destination)
+            })
         }
     }
     onClosing: {

@@ -19,10 +19,13 @@
 *******************************************************************************/
 
 import QtQuick 2.2
+import QtQuick.Window 2.2
 
 import "utils.js" as Utils
 
 Item {
+    id: shaderTerminal
+
     function dynamicFragmentPath() {
         var rasterMode = appSettings.rasterization;
         var burnInOn = appSettings.burnIn > 0 ? 1 : 0;
@@ -196,5 +199,47 @@ Item {
         visible: false
         sourceItem: staticShader
         hideSource: true
+    }
+
+    // Capture the post-shader framebuffer (bloom, burn-in, curvature,
+    // scanlines, frame) via grabToImage of the visible composite pass.
+    function saveCompositedFrame(destinationUrl) {
+        var urlString = destinationUrl === undefined || destinationUrl === null
+                ? ""
+                : destinationUrl.toString()
+        var path = fileIO.toLocalFile(urlString)
+        if (!path)
+            return false
+
+        if (path.length < 4 || path.toLowerCase().substring(path.length - 4) !== ".png")
+            path += ".png"
+
+        var target = dynamicShader
+        if (!target || target.width < 1 || target.height < 1)
+            target = shaderTerminal
+
+        var pixelRatio = Screen.devicePixelRatio > 0 ? Screen.devicePixelRatio : 1.0
+        var grabSize = Qt.size(Math.max(1, Math.round(target.width * pixelRatio)),
+                              Math.max(1, Math.round(target.height * pixelRatio)))
+
+        var grab = target.grabToImage(function (result) {
+            if (!result) {
+                console.warn("Save CRT Frame: grab produced no image")
+                return
+            }
+            var saved = result.saveToFile(path)
+            if (!saved)
+                saved = fileIO.writePng(path, result.image)
+            if (!saved)
+                console.warn("Save CRT Frame: failed to write PNG:", path)
+            else if (appSettings.verbose)
+                console.log("Save CRT Frame: wrote", path)
+        }, grabSize)
+
+        if (!grab) {
+            console.warn("Save CRT Frame: grabToImage could not start")
+            return false
+        }
+        return true
     }
 }
