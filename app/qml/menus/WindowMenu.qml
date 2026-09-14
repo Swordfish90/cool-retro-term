@@ -50,6 +50,8 @@ MenuBar {
         }
         MenuItem { action: zoomIn }
         MenuItem { action: zoomOut }
+        MenuSeparator { }
+        MenuItem { action: comfortEffectsAction }
     }
     Menu {
         id: profilesMenu

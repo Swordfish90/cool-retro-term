@@ -70,6 +70,10 @@ Menu {
         MenuItem {
             action: zoomOut
         }
+        MenuSeparator { }
+        MenuItem {
+            action: comfortEffectsAction
+        }
     }
     Menu {
         id: profilesMenu
