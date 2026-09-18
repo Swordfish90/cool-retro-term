@@ -80,4 +80,11 @@ ShaderTerminal {
             visible: false
         }
     }
+
+    // The terminal item is rendered into a texture, so receive drops here.
+    TerminalDropArea {
+        anchors.fill: parent
+        z: 1
+        targetTerminal: terminal.mainTerminal
+    }
 }

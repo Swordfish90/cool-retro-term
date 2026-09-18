@@ -21,6 +21,7 @@
         <file>Storage.qml</file>
         <file>SettingsAdvancedTab.qml</file>
         <file>TerminalContainer.qml</file>
+        <file>TerminalDropArea.qml</file>
         <file>TerminalTabs.qml</file>
         <file>images/crt256.png</file>
         <file>utils.js</file>
