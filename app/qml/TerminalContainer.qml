@@ -53,6 +53,11 @@ ShaderTerminal {
         terminal.mainTerminal.forceActiveFocus()
     }
 
+    /** Inject raw text into this terminal (IBM PA keys, PF macros). */
+    function sendText(text) {
+        return terminal.sendText(text)
+    }
+
     //  EFFECTS  ////////////////////////////////////////////////////////////////
     Loader {
         id: bloomEffectLoader

@@ -31,7 +31,7 @@ jobs:
         with:
           version: 6.10.0
           dir: ..
-          modules: qt5compat qtshadertools
+          modules: qt5compat qtshadertools qtmultimedia
           setup-python: false
           cache: true
 
@@ -50,6 +50,51 @@ jobs:
           name: cool-retro-term-appimage
           path: ./release/*
 
+  test:
+    name: Tests (Node + Qt Quick)
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install build deps
+        run: |
+          sudo apt update
+          sudo apt install -y build-essential
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      # Pure logic suite: platform key map, PF/PA model, window cycling,
+      # chrome visibility, sound gating, settings round trip.
+      - name: Logic tests (Node)
+        run: node --test
+
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: 6.10.0
+          dir: ..
+          modules: qt5compat qtshadertools qtmultimedia
+          setup-python: false
+          cache: true
+
+      # Qt Quick suite driving the very QML the application ships: PF legend
+      # (unreachable by cursor), active line band, sound manager and the
+      # observe-without-swallowing key hook.
+      - name: Build Qt Quick tests
+        run: |
+          mkdir -p build-tests
+          cd build-tests
+          qmake ../tests/tests.pro
+          make -j"$(nproc)"
+
+      - name: Run Qt Quick tests
+        run: QT_QPA_PLATFORM=offscreen ./build-tests/tst_retroterm
+
   build-dmg:
     name: Build (macOS, DMG)
     runs-on: macos-14
@@ -62,7 +107,7 @@ jobs:
         uses: jurplel/install-qt-action@v4
         with:
           version: 6.10.*
-          modules: qt5compat qtshadertools
+          modules: qt5compat qtshadertools qtmultimedia
           setup-python: true
           python-version: '3.11'
           cache: true
@@ -87,6 +132,7 @@ jobs:
     name: Create Release
     runs-on: ubuntu-22.04
     needs:
+      - test
       - build-appimage
       - build-dmg
     steps:

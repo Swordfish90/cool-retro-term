@@ -1,4 +1,4 @@
-QT += qml quick widgets sql quickcontrols2
+QT += qml quick widgets sql quickcontrols2 multimedia
 TARGET = cool-retro-term
 APP_VERSION = $$system(git -C $$PWD/.. describe --tags --always --dirty=-dirty)
 isEmpty(APP_VERSION): APP_VERSION = "unknown"
@@ -20,12 +20,14 @@ DESTDIR = $$OUT_PWD/../
 HEADERS += \
     fileio.h \
     fontmanager.h \
-    fontlistmodel.h
+    fontlistmodel.h \
+    termquery.h
 
 SOURCES += main.cpp \
     fileio.cpp \
     fontmanager.cpp \
-    fontlistmodel.cpp
+    fontlistmodel.cpp \
+    termquery.cpp
 
 macx:ICON = icons/crt.icns
 

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RCC>
+    <!-- The samples the application bundles, exposed to the test binary under
+         the very same URLs SoundBackend uses (qrc:/sounds/*.wav), so the test
+         suite can prove they ship and decode instead of silently degrading to
+         no sound at all. -->
+    <qresource prefix="/sounds">
+        <file alias="keyclick.wav">../app/qml/sounds/keyclick.wav</file>
+        <file alias="bell.wav">../app/qml/sounds/bell.wav</file>
+    </qresource>
+</RCC>

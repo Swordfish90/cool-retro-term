@@ -62,7 +62,9 @@ ColumnLayout {
             CheckBox {
                 id: showMenubar
                 text: qsTr("Show Menubar")
-                enabled: !appSettings.isMacOS
+                // Nostalgic mode is the stronger switch: while it is on there
+                // must be no trace of a menu bar on any platform.
+                enabled: !appSettings.isMacOS && !appSettings.nostalgicMode
                 checked: appSettings.showMenubar
                 onCheckedChanged: appSettings.showMenubar = checked
             }

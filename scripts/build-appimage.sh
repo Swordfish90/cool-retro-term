@@ -65,7 +65,7 @@ export QML_SOURCES_PATHS="$REPO_ROOT/app"
 pushd "$BUILD_DIR"
 
 export EXTRA_PLATFORM_PLUGINS="libqwayland.so;"
-export EXTRA_QT_MODULES="sql;waylandcompositor;waylandclient"
+export EXTRA_QT_MODULES="sql;waylandcompositor;waylandclient;multimedia"
 export DEPLOY_PLATFORM_THEMES=true
 export LINUXDEPLOY_EXCLUDED_LIBRARIES="libmysqlclient.so;libqsqlmimer.so;libqsqlmysql.so;libqsqlodbc.so;libqsqlpsql.so;libqsqloci.so;libqsqlibase.so"
 

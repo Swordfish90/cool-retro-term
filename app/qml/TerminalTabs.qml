@@ -22,6 +22,8 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import QtQml.Models
 
+import "logic/chrome.js" as Chrome
+
 Item {
     id: tabsRoot
 
@@ -30,6 +32,29 @@ Item {
     property alias currentIndex: tabBar.currentIndex
     readonly property int count: tabsModel.count
     property size terminalSize: Qt.size(0, 0)
+
+    // The tab strip is chrome: nostalgic mode never shows it, however many
+    // tabs are open.
+    readonly property var chrome: Chrome.visibility({
+        nostalgicMode: appSettings.nostalgicMode,
+        tabCount: tabsModel.count
+    })
+
+    /**
+     * Hand `text` to whichever terminal is showing.  Returns true when it was
+     * delivered; used by the IBM PA keys and by PF macros.
+     */
+    function sendTextToCurrent(text) {
+        if (!text)
+            return false
+
+        for (var i = 0; i < stack.children.length; i++) {
+            var child = stack.children[i]
+            if (child && child.isActive && typeof child.sendText === "function")
+                return child.sendText(text)
+        }
+        return false
+    }
 
     function normalizeTitle(rawTitle) {
         if (rawTitle === undefined || rawTitle === null) {
@@ -68,7 +93,7 @@ Item {
             Layout.fillWidth: true
             height: rowLayout.implicitHeight
             color: palette.window
-            visible: tabsModel.count > 1
+            visible: chrome.tabBar
 
             RowLayout {
                 id: rowLayout

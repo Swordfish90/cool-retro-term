@@ -22,6 +22,9 @@ import QtQuick.Controls 2.0
 import CoolRetroTerm 1.0
 
 import "utils.js" as Utils
+import "logic/defaults.js" as RetroDefaults
+import "logic/pfkeys.js" as PfKeys
+import "logic/chrome.js" as Chrome
 
 QtObject {
     readonly property string version: appVersion
@@ -41,6 +44,82 @@ QtObject {
 
     // GENERAL SETTINGS ///////////////////////////////////////////////////////
     property bool showMenubar: false
+
+    // RETRO / IBM EXTRAS /////////////////////////////////////////////////////
+    // Nostalgic mode is the zero chrome experience: no menu bar, no tab strip,
+    // no context menu, no size overlay.  Everything stays reachable from the
+    // keyboard, so nothing on screen ever hints that there is a GUI behind the
+    // phosphor.
+    property bool nostalgicMode: true
+
+    // On screen IBM 3270 style PF/PA key legend.
+    property bool showPfKeys: false
+    // JSON produced by logic/pfkeys.js.  pfAssignments is derived from it so
+    // that rewriting the string rebuilds every bound Shortcut delegate.
+    property string pfKeys: ""
+    readonly property var pfAssignments: PfKeys.parse(pfKeys)
+
+    function setPfAssignments(assignments) {
+        pfKeys = PfKeys.serialize(assignments)
+    }
+
+    // Audible feedback (optional, and silent unless explicitly enabled).
+    property bool audioEnabled: false
+    property bool keyClick: true
+    property real keyClickVolume: 0.5
+    property bool bell: true
+    property real bellVolume: 0.5
+
+    // iTerm2 style highlight of the row the cursor sits on.
+    property bool highlightActiveLine: false
+    property real activeLineOpacity: 0.18
+
+    // Block / half block cursor, as on 3270 and PC BIOS screens.
+    property string cursorStyle: "block"   // "block" | "half"
+
+    /**
+     * Replace one PF/PA slot.  `patch` is merged over the existing entry and
+     * the whole assignment list is re-serialized, which rebuilds every bound
+     * Shortcut delegate in every window.
+     */
+    function patchPfAssignment(index, patch) {
+        var assignments = PfKeys.parse(pfKeys)
+        if (index < 0 || index >= assignments.length)
+            return
+
+        var entry = {}
+        var existing = assignments[index]
+        for (var key in existing) {
+            if (Object.prototype.hasOwnProperty.call(existing, key))
+                entry[key] = existing[key]
+        }
+        if (patch) {
+            for (var name in patch) {
+                if (Object.prototype.hasOwnProperty.call(patch, name))
+                    entry[name] = patch[name]
+            }
+        }
+        assignments[index] = entry
+        pfKeys = PfKeys.serialize(assignments)
+    }
+
+    /** Give every slot back its factory assignment. */
+    function resetPfAssignments() {
+        pfKeys = PfKeys.serialize(PfKeys.defaultAssignments())
+    }
+
+    /**
+     * Visibility of the chrome that belongs to the application rather than to
+     * a single window (menu bar, context menu, size overlay).  Derived from
+     * logic/chrome.js so the "nostalgic mode shows nothing" contract is a
+     * single tested function.
+     */
+    readonly property var chrome: Chrome.visibility({
+        nostalgicMode: nostalgicMode,
+        showMenubar: showMenubar,
+        showTerminalSize: showTerminalSize,
+        isMacOS: isMacOS
+    })
 
     property bool showTerminalSize: true
     property real windowScaling: 1.0
@@ -167,7 +246,21 @@ QtObject {
             "bloomQuality": bloomQuality,
             "burnInQuality": burnInQuality,
             "useCustomCommand": useCustomCommand,
-            "customCommand": customCommand
+            "customCommand": customCommand,
+
+            // Retro / IBM extras.  RetroDefaults.merge() is the single place
+            // that validates them, and it is covered by tests/logic.
+            "nostalgicMode": nostalgicMode,
+            "showPfKeys": showPfKeys,
+            "pfKeys": pfKeys,
+            "audioEnabled": audioEnabled,
+            "keyClick": keyClick,
+            "keyClickVolume": keyClickVolume,
+            "bell": bell,
+            "bellVolume": bellVolume,
+            "highlightActiveLine": highlightActiveLine,
+            "activeLineOpacity": activeLineOpacity,
+            "cursorStyle": cursorStyle
         }
         return stringify(settings)
     }
@@ -261,6 +354,21 @@ QtObject {
                 !== undefined ? settings.useCustomCommand : useCustomCommand
         customCommand = settings.customCommand
                 !== undefined ? settings.customCommand : customCommand
+
+        // Retro / IBM extras: merge repairs types, falls back to the defaults
+        // for anything missing and ignores keys it does not know about.
+        var retro = RetroDefaults.merge(settings)
+        nostalgicMode = retro.nostalgicMode
+        showPfKeys = retro.showPfKeys
+        pfKeys = retro.pfKeys
+        audioEnabled = retro.audioEnabled
+        keyClick = retro.keyClick
+        keyClickVolume = retro.keyClickVolume
+        bell = retro.bell
+        bellVolume = retro.bellVolume
+        highlightActiveLine = retro.highlightActiveLine
+        activeLineOpacity = retro.activeLineOpacity
+        cursorStyle = retro.cursorStyle
     }
 
     function loadProfileString(profileString) {

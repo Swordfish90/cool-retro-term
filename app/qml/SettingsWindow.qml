@@ -52,6 +52,10 @@ ApplicationWindow {
             }
             TabButton {
                 padding: tabButtonPadding
+                text: qsTr("Retro")
+            }
+            TabButton {
+                padding: tabButtonPadding
                 text: qsTr("Advanced")
             }
         }
@@ -70,6 +74,7 @@ ApplicationWindow {
             SettingsGeneralTab { }
             SettingsTerminalTab { }
             SettingsEffectsTab { }
+            SettingsRetroTab { }
             SettingsAdvancedTab { }
         }
     }

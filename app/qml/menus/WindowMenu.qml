@@ -22,13 +22,16 @@ import QtQuick.Controls 2.3
 
 MenuBar {
     id: defaultMenuBar
-    visible: appSettings.isMacOS || appSettings.showMenubar
+    // Nostalgic mode must not advertise that a menu bar exists, on any
+    // platform, so it is dropped before the platform defaults are applied.
+    visible: appSettings.chrome.menubar
 
     Menu {
         title: qsTr("File")
         MenuItem { action: newWindowAction }
         MenuItem { action: newTabAction }
         MenuItem { action: closeTabAction }
+        MenuItem { action: closeWindowAction }
         MenuSeparator { }
         MenuItem { action: quitAction }
     }
@@ -38,6 +41,12 @@ MenuBar {
         MenuItem { action: pasteAction }
         MenuSeparator {}
         MenuItem { action: showsettingsAction }
+    }
+    Menu {
+        id: windowMenu
+        title: qsTr("Window")
+        MenuItem { action: nextWindowAction }
+        MenuItem { action: previousWindowAction }
     }
     Menu {
         id: viewMenu

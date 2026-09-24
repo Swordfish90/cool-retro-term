@@ -20,8 +20,22 @@
         <file>fonts/ibm-3278/3270NerdFontMono-Regular.ttf</file>
         <file>Storage.qml</file>
         <file>SettingsAdvancedTab.qml</file>
+        <file>SettingsRetroTab.qml</file>
         <file>TerminalContainer.qml</file>
         <file>TerminalTabs.qml</file>
+        <file>PfKeyBar.qml</file>
+        <file>LineHighlight.qml</file>
+        <file>SoundManager.qml</file>
+        <file>SoundBackend.qml</file>
+        <file>logic/platform.js</file>
+        <file>logic/pfkeys.js</file>
+        <file>logic/windows.js</file>
+        <file>logic/chrome.js</file>
+        <file>logic/defaults.js</file>
+        <file>logic/linehighlight.js</file>
+        <file>logic/sound.js</file>
+        <file>sounds/keyclick.wav</file>
+        <file>sounds/bell.wav</file>
         <file>images/crt256.png</file>
         <file>utils.js</file>
         <file>images/allNoise512.png</file>

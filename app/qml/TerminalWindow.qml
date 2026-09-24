@@ -22,6 +22,8 @@ import QtQuick.Window
 import QtQuick.Controls
 
 import "menus"
+import "logic/platform.js" as Platform
+import "logic/pfkeys.js" as PfKeys
 
 ApplicationWindow {
     id: terminalWindow
@@ -44,17 +46,63 @@ ApplicationWindow {
 
     menuBar: WindowMenu { }
 
+    /**
+     * Optional IBM style audio for the whole window.  Kept here rather than
+     * per terminal so that one window has exactly one sound, whichever tab is
+     * showing and whether the press came from the terminal or a PF key.
+     */
+    property SoundManager soundManager: SoundManager {
+        active: appSettings.audioEnabled
+        clickEnabled: appSettings.keyClick
+        bellEnabled: appSettings.bell
+        clickVolume: appSettings.keyClickVolume
+        bellVolume: appSettings.bellVolume
+    }
+
     property real normalizedWindowScale: 1024 / ((0.5 * width + 0.5 * height))
 
     color: "#00000000"
 
     title: terminalTabs.currentTitle
 
+    // Let the window manager aware of which window we are on, so that
+    // "next window" starts from the right place.
+    onActiveChanged: {
+        if (active)
+            appRoot.activeWindow = terminalWindow
+    }
+
+    /**
+     * Resolve one entry of the platform key map.
+     *
+     * Everything is a plain sequence string ("Ctrl+Shift+N") except the few
+     * functions where Qt already knows the platform's own convention: those
+     * are spelled "StandardKey.X" here and handed to Qt as the real enum, so
+     * the shortcut lands exactly where the OS puts it.
+     */
+    function keySequence(name) {
+        switch (name) {
+        case "StandardKey.FullScreen": return StandardKey.FullScreen
+        case "StandardKey.Quit":       return StandardKey.Quit
+        case "StandardKey.Copy":       return StandardKey.Copy
+        case "StandardKey.Paste":      return StandardKey.Paste
+        case "StandardKey.ZoomIn":     return StandardKey.ZoomIn
+        case "StandardKey.ZoomOut":    return StandardKey.ZoomOut
+        default:                       return name
+        }
+    }
+
+    /** The sequence for a named function on the current platform. */
+    function seq(name) {
+        return keySequence(Platform.sequence(Qt.platform.os, name))
+    }
+
     Action {
         id: fullscreenAction
         text: qsTr("Fullscreen")
-        enabled: !appSettings.isMacOS
-        shortcut: StandardKey.FullScreen
+        // F11 (Windows/Linux) or Cmd+Ctrl+F (macOS): the native binding on
+        // every platform, so it works whether or not a menu bar is showing.
+        shortcut: seq("fullscreen")
         onTriggered: fullscreen = !fullscreen
         checkable: true
         checked: fullscreen
@@ -62,18 +110,37 @@ ApplicationWindow {
     Action {
         id: newWindowAction
         text: qsTr("New Window")
-        shortcut: appSettings.isMacOS ? "Meta+N" : "Ctrl+Shift+N"
+        shortcut: seq("newWindow")
         onTriggered: appRoot.createWindow()
+    }
+    Action {
+        id: nextWindowAction
+        text: qsTr("Next Window")
+        shortcut: seq("nextWindow")
+        onTriggered: appRoot.nextWindow()
+    }
+    Action {
+        id: previousWindowAction
+        text: qsTr("Previous Window")
+        shortcut: seq("prevWindow")
+        onTriggered: appRoot.previousWindow()
+    }
+    Action {
+        id: closeWindowAction
+        text: qsTr("Close Window")
+        shortcut: seq("closeWindow")
+        onTriggered: terminalWindow.close()
     }
     Action {
         id: quitAction
         text: qsTr("Quit")
-        shortcut: appSettings.isMacOS ? StandardKey.Close : "Ctrl+Shift+Q"
-        onTriggered: terminalWindow.close()
+        shortcut: seq("quit")
+        onTriggered: appSettings.close()
     }
     Action {
         id: showsettingsAction
         text: qsTr("Settings")
+        shortcut: seq("settings")
         onTriggered: {
             settingsWindow.show()
             settingsWindow.requestActivate()
@@ -83,23 +150,23 @@ ApplicationWindow {
     Action {
         id: copyAction
         text: qsTr("Copy")
-        shortcut: appSettings.isMacOS ? StandardKey.Copy : "Ctrl+Shift+C"
+        shortcut: seq("copy")
     }
     Action {
         id: pasteAction
         text: qsTr("Paste")
-        shortcut: appSettings.isMacOS ? StandardKey.Paste : "Ctrl+Shift+V"
+        shortcut: seq("paste")
     }
     Action {
         id: zoomIn
         text: qsTr("Zoom In")
-        shortcut: StandardKey.ZoomIn
+        shortcut: seq("zoomIn")
         onTriggered: appSettings.incrementScaling()
     }
     Action {
         id: zoomOut
         text: qsTr("Zoom Out")
-        shortcut: StandardKey.ZoomOut
+        shortcut: seq("zoomOut")
         onTriggered: appSettings.decrementScaling()
     }
     Action {
@@ -114,13 +181,13 @@ ApplicationWindow {
     Action {
         id: newTabAction
         text: qsTr("New Tab")
-        shortcut: appSettings.isMacOS ? "Meta+T" : "Ctrl+Shift+T"
+        shortcut: seq("newTab")
         onTriggered: terminalTabs.addTab()
     }
     Action {
         id: closeTabAction
         text: qsTr("Close Tab")
-        shortcut: appSettings.isMacOS ? "Meta+W" : "Ctrl+Shift+W"
+        shortcut: seq("closeTab")
         onTriggered: terminalTabs.closeTab(terminalTabs.currentIndex)
     }
     Shortcut {
@@ -168,6 +235,75 @@ ApplicationWindow {
         context: Qt.WindowShortcut
         onActivated: if (terminalTabs.count > 8) terminalTabs.currentIndex = 8
     }
+
+    /***************************************************************************
+    * IBM 3270 style PF / PA keys.
+    *
+    * One Shortcut per slot, scoped to this window.  A slot whose function is
+    * "Off" keeps its Shortcut *disabled*, which is precisely what lets the raw
+    * F-key fall through to the shell untouched; anything else is claimed here
+    * before the terminal widget ever sees it.
+    *
+    * The legend these keys belong to is drawn by PfKeyBar inside the CRT
+    * shader input, and it deliberately has no mouse handling at all.
+    ***************************************************************************/
+    Instantiator {
+        model: appSettings.pfAssignments.length
+        delegate: Shortcut {
+            sequence: index < appSettings.pfAssignments.length
+                      ? appSettings.pfAssignments[index].key : ""
+            context: Qt.WindowShortcut
+            enabled: index < appSettings.pfAssignments.length
+                     && PfKeys.intercepts(appSettings.pfAssignments[index])
+            onActivated: terminalWindow.dispatchPfAction(index)
+        }
+    }
+
+    /** Execute the function bound to PF/PA slot `index`. */
+    function dispatchPfAction(index) {
+        // The Shortcut consumed the keystroke, so the terminal never saw it:
+        // click here to keep the tactile feedback consistent.
+        if (soundManager)
+            soundManager.keyClick()
+
+        var assignments = appSettings.pfAssignments
+        if (index < 0 || index >= assignments.length)
+            return
+
+        var assignment = assignments[index]
+        var action = PfKeys.actionById(assignment.action)
+        if (!action)
+            return
+
+        if (action.kind === "term") {
+            // Attention (Ctrl+C), Erase Input (Ctrl+U) and user macros all
+            // travel the same way: straight into the active terminal.
+            var text = action.id === "sendText"
+                    ? PfKeys.macroText(assignment.payload) : action.payload
+            terminalTabs.sendTextToCurrent(text)
+            return
+        }
+
+        dispatchAppAction(action.id)
+    }
+
+    /** Map an action id onto the QAction that implements it. */
+    function dispatchAppAction(id) {
+        switch (id) {
+        case "newWindow":   newWindowAction.trigger(); break
+        case "nextWindow":  appRoot.nextWindow(); break
+        case "prevWindow":  appRoot.previousWindow(); break
+        case "closeWindow": closeWindowAction.trigger(); break
+        case "newTab":      newTabAction.trigger(); break
+        case "closeTab":    closeTabAction.trigger(); break
+        case "fullscreen":  fullscreenAction.trigger(); break
+        case "settings":    showsettingsAction.trigger(); break
+        case "copy":        copyAction.trigger(); break
+        case "paste":       pasteAction.trigger(); break
+        default: break
+        }
+    }
+
     TerminalTabs {
         id: terminalTabs
         width: parent.width
@@ -175,7 +311,7 @@ ApplicationWindow {
     }
     Loader {
         anchors.centerIn: parent
-        active: appSettings.showTerminalSize
+        active: appSettings.chrome.sizeOverlay
         sourceComponent: SizeOverlay {
             z: 3
             terminalSize: terminalTabs.terminalSize
