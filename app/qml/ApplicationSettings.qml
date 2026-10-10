@@ -86,6 +86,9 @@ QtObject {
     property real flickering: 0.1
 
     property real rgbShift: 0.0
+    property real vhsBleed: 0.0
+    property real vhsJitter: 0.0
+    property real vhsHeadSwitch: 0.0
 
     property real _frameShininess: 0.2
     property real frameShininess: _frameShininess * 0.5
@@ -201,7 +204,10 @@ QtObject {
             "frameSize": _frameSize,
             "screenRadius": _screenRadius,
             "frameColor": _frameColor,
-            "frameShininess": _frameShininess
+            "frameShininess": _frameShininess,
+            "vhsBleed": vhsBleed,
+            "vhsJitter": vhsJitter,
+            "vhsHeadSwitch": vhsHeadSwitch
         }
         return profile
     }
@@ -307,6 +313,9 @@ QtObject {
         _screenRadius = settings.screenRadius !== undefined ? settings.screenRadius : _screenRadius
         _frameColor = settings.frameColor !== undefined ? settings.frameColor : _frameColor
         _frameShininess = settings.frameShininess !== undefined ? settings.frameShininess : _frameShininess
+        vhsBleed = settings.vhsBleed !== undefined ? settings.vhsBleed : (settings.vhs !== undefined ? settings.vhs : 0.0)
+        vhsJitter = settings.vhsJitter !== undefined ? settings.vhsJitter : 0.0
+        vhsHeadSwitch = settings.vhsHeadSwitch !== undefined ? settings.vhsHeadSwitch : 0.0
 
         blinkingCursor = settings.blinkingCursor !== undefined ? settings.blinkingCursor : blinkingCursor
     }
@@ -837,6 +846,43 @@ QtObject {
                 "frameSize": 0,
                 "frameColor": "#cdcdcd",
                 "frameShininess": 0.2
+            }'
+            builtin: true
+        }
+        ListElement {
+            text: "Vintage VHS"
+            obj_string: '{
+                "ambientLight": 0.2,
+                "backgroundColor": "#06060c",
+                "bloom": 0.45,
+                "brightness": 0.55,
+                "burnIn": 0.15,
+                "chromaColor": 1.0,
+                "contrast": 0.85,
+                "flickering": 0.12,
+                "fontColor": "#ffffff",
+                "fontName": "TERMINESS_SCALED",
+                "fontSource": 0,
+                "fontWidth": 1,
+                "lineSpacing": 0.1,
+                "glowingLine": 0.2,
+                "horizontalSync": 0.12,
+                "jitter": 0.15,
+                "rasterization": 1,
+                "rgbShift": 0,
+                "saturationColor": 0.5,
+                "screenCurvature": 0.2,
+                "screenRadius": 0.1,
+                "staticNoise": 0.15,
+                "windowOpacity": 1,
+                "margin": 0.3,
+                "blinkingCursor": true,
+                "frameSize": 0.1,
+                "frameColor": "#222222",
+                "frameShininess": 0.2,
+                "vhsBleed": 0.35,
+                "vhsJitter": 0.15,
+                "vhsHeadSwitch": 0.20
             }'
             builtin: true
         }

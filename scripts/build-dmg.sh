@@ -4,6 +4,10 @@ set -x
 
 REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd -P)"
 OLD_CWD="$(pwd -P)"
+
+if [ -d "/Library/Developer/CommandLineTools" ] && [ -z "${DEVELOPER_DIR:-}" ]; then
+    export DEVELOPER_DIR="/Library/Developer/CommandLineTools"
+fi
 BUILD_DIR="$REPO_ROOT/build/dmg"
 APP="cool-retro-term.app"
 QML_DIR="$REPO_ROOT/app/qml"
@@ -24,7 +28,7 @@ mkdir -p "$BUILD_DIR"
 rm -f "$BUILD_DIR/${APP%.app}.dmg"
 pushd "$BUILD_DIR"
 
-"$QT_BIN/qmake" CONFIG+=release "$REPO_ROOT/cool-retro-term.pro"
+"$QT_BIN/qmake" -r CONFIG+=release "$REPO_ROOT/cool-retro-term.pro"
 make -j"$JOBS"
 
 PLUGIN_DST="$APP/Contents/PlugIns/qmltermwidget"

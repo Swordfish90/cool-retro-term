@@ -18,78 +18,110 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *******************************************************************************/
 import QtQuick 2.2
-import QtQuick.Controls 2.0
+import QtQuick.Controls 2.1
 import QtQuick.Layouts 1.1
 
-ColumnLayout {
+ScrollView {
     Layout.fillWidth: true
     Layout.fillHeight: true
-    spacing: 2
+    clip: true
+    ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
+    ScrollBar.vertical.policy: ScrollBar.AsNeeded
 
-    GroupBox {
-        title: qsTr("Effects")
-        Layout.fillWidth: true
-        Layout.fillHeight: true
-        padding: appSettings.defaultMargin
+    ColumnLayout {
+        width: parent.width
+        spacing: 10
 
-        ColumnLayout {
-            anchors.fill: parent
+        GroupBox {
+            title: qsTr("CRT Effects")
+            Layout.fillWidth: true
+            padding: appSettings.defaultMargin
 
-            CheckableSlider {
-                name: qsTr("Bloom")
-                onNewValue: function(newValue) { appSettings.bloom = newValue }
-                value: appSettings.bloom
+            ColumnLayout {
+                anchors.fill: parent
+
+                CheckableSlider {
+                    name: qsTr("Bloom")
+                    onNewValue: function(newValue) { appSettings.bloom = newValue }
+                    value: appSettings.bloom
+                }
+                CheckableSlider {
+                    name: qsTr("BurnIn")
+                    onNewValue: function(newValue) { appSettings.burnIn = newValue }
+                    value: appSettings.burnIn
+                }
+                CheckableSlider {
+                    name: qsTr("Static Noise")
+                    onNewValue: function(newValue) { appSettings.staticNoise = newValue }
+                    value: appSettings.staticNoise
+                }
+                CheckableSlider {
+                    name: qsTr("Jitter")
+                    onNewValue: function(newValue) { appSettings.jitter = newValue }
+                    value: appSettings.jitter
+                }
+                CheckableSlider {
+                    name: qsTr("Glow Line")
+                    onNewValue: function(newValue) { appSettings.glowingLine = newValue }
+                    value: appSettings.glowingLine
+                }
+                CheckableSlider {
+                    name: qsTr("Screen Curvature")
+                    onNewValue: function(newValue) { appSettings.screenCurvature = newValue }
+                    value: appSettings.screenCurvature
+                }
+                CheckableSlider {
+                    name: qsTr("Ambient Light")
+                    onNewValue: function(newValue) { appSettings.ambientLight = newValue }
+                    value: appSettings.ambientLight
+                    enabled: appSettings.framesIndex !== 0
+                }
+                CheckableSlider {
+                    name: qsTr("Flickering")
+                    onNewValue: function(newValue) { appSettings.flickering = newValue }
+                    value: appSettings.flickering
+                }
+                CheckableSlider {
+                    name: qsTr("Horizontal Sync")
+                    onNewValue: function(newValue) { appSettings.horizontalSync = newValue }
+                    value: appSettings.horizontalSync
+                }
+                CheckableSlider {
+                    name: qsTr("RGB Shift")
+                    onNewValue: function(newValue) { appSettings.rgbShift = newValue }
+                    value: appSettings.rgbShift
+                }
+                CheckableSlider {
+                    name: qsTr("Frame Shininess")
+                    onNewValue: function(newValue) { appSettings._frameShininess = newValue }
+                    value: appSettings._frameShininess
+                }
             }
-            CheckableSlider {
-                name: qsTr("BurnIn")
-                onNewValue: function(newValue) { appSettings.burnIn = newValue }
-                value: appSettings.burnIn
-            }
-            CheckableSlider {
-                name: qsTr("Static Noise")
-                onNewValue: function(newValue) { appSettings.staticNoise = newValue }
-                value: appSettings.staticNoise
-            }
-            CheckableSlider {
-                name: qsTr("Jitter")
-                onNewValue: function(newValue) { appSettings.jitter = newValue }
-                value: appSettings.jitter
-            }
-            CheckableSlider {
-                name: qsTr("Glow Line")
-                onNewValue: function(newValue) { appSettings.glowingLine = newValue }
-                value: appSettings.glowingLine
-            }
-            CheckableSlider {
-                name: qsTr("Screen Curvature")
-                onNewValue: function(newValue) { appSettings.screenCurvature = newValue }
-                value: appSettings.screenCurvature
-            }
-            CheckableSlider {
-                name: qsTr("Ambient Light")
-                onNewValue: function(newValue) { appSettings.ambientLight = newValue }
-                value: appSettings.ambientLight
-                enabled: appSettings.framesIndex !== 0
-            }
-            CheckableSlider {
-                name: qsTr("Flickering")
-                onNewValue: function(newValue) { appSettings.flickering = newValue }
-                value: appSettings.flickering
-            }
-            CheckableSlider {
-                name: qsTr("Horizontal Sync")
-                onNewValue: function(newValue) { appSettings.horizontalSync = newValue }
-                value: appSettings.horizontalSync
-            }
-            CheckableSlider {
-                name: qsTr("RGB Shift")
-                onNewValue: function(newValue) { appSettings.rgbShift = newValue }
-                value: appSettings.rgbShift
-            }
-            CheckableSlider {
-                name: qsTr("Frame Shininess")
-                onNewValue: function(newValue) { appSettings._frameShininess = newValue }
-                value: appSettings._frameShininess
+        }
+
+        GroupBox {
+            title: qsTr("VHS Tape Effects")
+            Layout.fillWidth: true
+            padding: appSettings.defaultMargin
+
+            ColumnLayout {
+                anchors.fill: parent
+
+                CheckableSlider {
+                    name: qsTr("Color Bleed")
+                    onNewValue: function(newValue) { appSettings.vhsBleed = newValue }
+                    value: appSettings.vhsBleed
+                }
+                CheckableSlider {
+                    name: qsTr("Tape Jitter")
+                    onNewValue: function(newValue) { appSettings.vhsJitter = newValue }
+                    value: appSettings.vhsJitter
+                }
+                CheckableSlider {
+                    name: qsTr("Head Switch")
+                    onNewValue: function(newValue) { appSettings.vhsHeadSwitch = newValue }
+                    value: appSettings.vhsHeadSwitch
+                }
             }
         }
     }

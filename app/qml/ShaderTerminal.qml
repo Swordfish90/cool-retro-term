@@ -69,10 +69,26 @@ Item {
         screenResolution.height / virtualResolution.height
     )
 
+    Image {
+        id: noiseTexture
+        source: "images/allNoise512.png"
+        width: 512
+        height: 512
+        fillMode: Image.Tile
+        visible: false
+    }
+    ShaderEffectSource {
+        id: noiseShaderSource
+        sourceItem: noiseTexture
+        wrapMode: ShaderEffectSource.Repeat
+        visible: false
+        smooth: true
+    }
+
     ShaderEffect {
         id: dynamicShader
 
-        property ShaderEffectSource screenBuffer: frameBuffer
+        property ShaderEffectSource screenBuffer: (vhsLoader.item && (appSettings.vhsBleed > 0 || appSettings.vhsJitter > 0 || appSettings.vhsHeadSwitch > 0)) ? vhsLoader.item : frameBuffer
         property ShaderEffectSource burnInSource: burnInEffect.effectSource
         property ShaderEffectSource frameSource: terminalFrameLoader.item
 
@@ -113,22 +129,6 @@ Item {
 
         anchors.fill: parent
         blending: false
-
-        Image {
-            id: noiseTexture
-            source: "images/allNoise512.png"
-            width: 512
-            height: 512
-            fillMode: Image.Tile
-            visible: false
-        }
-        ShaderEffectSource {
-            id: noiseShaderSource
-            sourceItem: noiseTexture
-            wrapMode: ShaderEffectSource.Repeat
-            visible: false
-            smooth: true
-        }
 
         vertexShader: "qrc:/shaders/terminal_dynamic.vert.qsb"
         fragmentShader: dynamicFragmentPath()
@@ -196,5 +196,40 @@ Item {
         visible: false
         sourceItem: staticShader
         hideSource: true
+    }
+
+    Loader {
+        id: vhsLoader
+        active: (appSettings.vhsBleed > 0 || appSettings.vhsJitter > 0 || appSettings.vhsHeadSwitch > 0)
+
+        width: staticShader.width
+        height: staticShader.height
+
+        sourceComponent: ShaderEffectSource {
+            id: vhsBuffer
+            width: vhsLoader.width
+            height: vhsLoader.height
+            sourceItem: vhsShader
+            hideSource: true
+            visible: false
+            smooth: true
+
+            ShaderEffect {
+                id: vhsShader
+                anchors.fill: parent
+
+                property ShaderEffectSource source: frameBuffer
+                property ShaderEffectSource noiseSource: noiseShaderSource
+                property real time: timeManager ? timeManager.time : 0
+                property real vhsBleed: appSettings.vhsBleed
+                property real vhsJitter: appSettings.vhsJitter
+                property real vhsHeadSwitch: appSettings.vhsHeadSwitch
+
+                vertexShader: "qrc:/shaders/vhs.vert.qsb"
+                fragmentShader: "qrc:/shaders/vhs.frag.qsb"
+
+                onStatusChanged: if (log) console.log("VHS shader: " + log)
+            }
+        }
     }
 }
