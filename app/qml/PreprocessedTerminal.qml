@@ -215,6 +215,7 @@ Item{
     MouseArea {
         property real margin: appSettings.margin
         property real frameSize: appSettings.frameSize * terminalWindow.normalizedWindowScale
+        property real wheelRemainder: 0
 
         acceptedButtons: Qt.LeftButton | Qt.MiddleButton | Qt.RightButton
         anchors.fill: parent
@@ -224,7 +225,15 @@ Item{
                wheel.angleDelta.y > 0 ? zoomIn.trigger() : zoomOut.trigger();
             } else {
                 var coord = correctDistortion(wheel.x, wheel.y);
-                kterminal.simulateWheel(coord.x, coord.y, wheel.buttons, wheel.modifiers, wheel.angleDelta);
+                var isMouseWheel = wheel.phase === Qt.NoScrollPhase;
+                var stepValue = kterminal.terminalUsesMouse || isMouseWheel ? 120 : 40;
+                if (wheel.angleDelta.y * wheelRemainder < 0)
+                    wheelRemainder = 0;
+                wheelRemainder += wheel.angleDelta.y * appSettings.scrollSpeed;
+                var steps = Math.trunc(wheelRemainder / stepValue);
+                wheelRemainder -= steps * stepValue;
+                for (var i = 0; i < Math.abs(steps); i++)
+                    kterminal.simulateWheel(coord.x, coord.y, wheel.buttons, wheel.modifiers, Qt.point(0, Math.sign(steps) * stepValue));
             }
         }
         onDoubleClicked: function(mouse) {

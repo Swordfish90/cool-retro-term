@@ -53,6 +53,7 @@ QtObject {
 
     property bool blinkingCursor: false
 
+    property real scrollSpeed: 1.0
 
     // PROFILE SETTINGS ///////////////////////////////////////////////////////
     property real windowOpacity: 1.0
@@ -167,7 +168,8 @@ QtObject {
             "bloomQuality": bloomQuality,
             "burnInQuality": burnInQuality,
             "useCustomCommand": useCustomCommand,
-            "customCommand": customCommand
+            "customCommand": customCommand,
+            "scrollSpeed": scrollSpeed
         }
         return stringify(settings)
     }
@@ -252,6 +254,8 @@ QtObject {
         fontScaling = settings.fontScaling !== undefined ? settings.fontScaling : fontScaling
 
         showMenubar = settings.showMenubar !== undefined ? settings.showMenubar : showMenubar
+
+        scrollSpeed = settings.scrollSpeed !== undefined ? settings.scrollSpeed : scrollSpeed
 
         bloomQuality = settings.bloomQuality !== undefined ? settings.bloomQuality : bloomQuality
         burnInQuality = settings.burnInQuality

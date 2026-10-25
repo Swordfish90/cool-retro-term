@@ -66,6 +66,23 @@ ColumnLayout {
                 checked: appSettings.showMenubar
                 onCheckedChanged: appSettings.showMenubar = checked
             }
+            RowLayout {
+                Label {
+                    text: qsTr("Scroll Speed")
+                }
+                Slider {
+                    id: scrollSpeedSlider
+                    Layout.fillWidth: true
+                    onValueChanged: appSettings.scrollSpeed = value
+                    stepSize: 0.05
+                    from: 0.1
+                    to: 2.0
+                    value: appSettings.scrollSpeed
+                }
+                SizedLabel {
+                    text: Math.round(scrollSpeedSlider.value * 100) + "%"
+                }
+            }
         }
     }
 
