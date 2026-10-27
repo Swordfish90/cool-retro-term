@@ -22,9 +22,11 @@ import QtQuick 2.0
 import "utils.js" as Utils
 
 ShaderEffect {
-    property color _staticFrameColor: Utils.sum(appSettings.frameColor, Qt.rgba(0.1, 0.1, 0.1, 1.0))
-    property color _backgroundColor: appSettings.backgroundColor
-    property color _fontColor: appSettings.fontColor
+    property TerminalProfile profile
+
+    property color _staticFrameColor: Utils.sum(profile.frameColor, Qt.rgba(0.1, 0.1, 0.1, 1.0))
+    property color _backgroundColor: profile.backgroundColor
+    property color _fontColor: profile.fontColor
     property color _lightColor: Utils.mix(_fontColor, _backgroundColor, 0.2)
 
     property color frameColor: Utils.mix(
@@ -33,17 +35,19 @@ ShaderEffect {
         0.125 + 0.750 * ambientLight
     )
 
-    property real screenCurvature: appSettings.screenCurvature * appSettings.screenCurvatureSize * terminalWindow.normalizedWindowScale
+    property real normalizedScale: terminalWindow.normalizedWindowScale
 
-    property real frameShininess: appSettings.frameShininess
+    property real screenCurvature: profile.screenCurvature * appSettings.screenCurvatureSize * normalizedScale
 
-    property real frameSize: appSettings.frameSize * terminalWindow.normalizedWindowScale
+    property real frameShininess: profile.frameShininess
 
-    property real screenRadius: appSettings.screenRadius
+    property real frameSize: profile.frameSize * normalizedScale
+
+    property real screenRadius: profile.screenRadius
 
     property size viewportSize: Qt.size(width / appSettings.windowScaling, height / appSettings.windowScaling)
 
-    property real ambientLight: appSettings.ambientLight
+    property real ambientLight: profile.ambientLight
 
     vertexShader: "qrc:/shaders/terminal_frame.vert.qsb"
     fragmentShader: "qrc:/shaders/terminal_frame.frag.qsb"

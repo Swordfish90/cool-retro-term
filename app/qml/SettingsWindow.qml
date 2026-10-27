@@ -28,7 +28,8 @@ ApplicationWindow {
     readonly property real tabButtonPadding: 10
 
     id: settings_window
-    title: qsTr("Settings")
+    // Settings edit the focused terminal, named in the title.
+    title: qsTr("Settings") + (appRoot.activeWindow ? " \u2014 " + appRoot.activeWindow.title : "")
     width: 640
     height: 520
 

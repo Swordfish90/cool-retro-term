@@ -23,6 +23,9 @@ import QtQuick.Layouts 1.1
 import QtQuick.Dialogs
 
 ColumnLayout {
+    // The profile of the focused terminal: settings apply to it only.
+    readonly property TerminalProfile profile: appRoot.activeProfile
+
     GroupBox {
         Layout.fillWidth: true
         Layout.fillHeight: true
@@ -46,7 +49,7 @@ ColumnLayout {
                         MouseArea {
                             anchors.fill: parent
                             onClicked: profilesView.currentIndex = index
-                            onDoubleClicked: appSettings.loadProfile(index)
+                            onDoubleClicked: profile.loadProfile(index)
                         }
                     }
                 }
@@ -70,7 +73,7 @@ ColumnLayout {
                     onClicked: {
                         var index = currentIndex
                         if (index >= 0)
-                            appSettings.loadProfile(index)
+                            profile.loadProfile(index)
                     }
                 }
                 Button {
@@ -194,44 +197,44 @@ ColumnLayout {
                 text: qsTr("Brightness")
             }
             SimpleSlider {
-                onValueChanged: appSettings.brightness = value
-                value: appSettings.brightness
+                onValueChanged: profile.brightness = value
+                value: profile.brightness
             }
             Label {
                 text: qsTr("Contrast")
             }
             SimpleSlider {
-                onValueChanged: appSettings.contrast = value
-                value: appSettings.contrast
+                onValueChanged: profile.contrast = value
+                value: profile.contrast
             }
             Label {
                 text: qsTr("Margin")
             }
             SimpleSlider {
-                onValueChanged: appSettings._margin = value
-                value: appSettings._margin
+                onValueChanged: profile._margin = value
+                value: profile._margin
             }
             Label {
                 text: qsTr("Radius")
             }
             SimpleSlider {
-                onValueChanged: appSettings._screenRadius = value
-                value: appSettings._screenRadius
+                onValueChanged: profile._screenRadius = value
+                value: profile._screenRadius
             }
             Label {
                 text: qsTr("Frame size")
             }
             SimpleSlider {
-                onValueChanged: appSettings._frameSize = value
-                value: appSettings._frameSize
+                onValueChanged: profile._frameSize = value
+                value: profile._frameSize
             }
             Label {
                 text: qsTr("Opacity")
                 visible: !appSettings.isMacOS
             }
             SimpleSlider {
-                onValueChanged: appSettings.windowOpacity = value
-                value: appSettings.windowOpacity
+                onValueChanged: profile.windowOpacity = value
+                value: profile.windowOpacity
                 visible: !appSettings.isMacOS
             }
         }
@@ -242,7 +245,7 @@ ColumnLayout {
         id: insertname
         onNameSelected: {
             appSettings.appendCustomProfile(name,
-                                            appSettings.composeProfileString())
+                                            profile.composeProfileString())
         }
     }
     MessageDialog {

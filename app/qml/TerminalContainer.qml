@@ -26,19 +26,31 @@ ShaderTerminal {
     property alias title: terminal.title
     property alias terminalSize: terminal.terminalSize
     property bool isActive: false
+    property string initialWorkingDirectory: ""
+    // Profile JSON this terminal starts with; afterwards its profile changes independently.
+    property string initialProfile: ""
+    readonly property bool terminalHasFocus: terminal.mainTerminal.activeFocus
     signal sessionFinished()
 
-    property bool loadBloomEffect: appSettings.bloom > 0 || appSettings._frameShininess > 0
+    profile: TerminalProfile {
+        Component.onCompleted: {
+            if (mainShader.initialProfile) {
+                loadProfileString(mainShader.initialProfile)
+            }
+        }
+    }
+
+    property bool loadBloomEffect: profile.bloom > 0 || profile._frameShininess > 0
 
     id: mainShader
-    opacity: appSettings.windowOpacity * 0.3 + 0.7
+    opacity: profile.windowOpacity * 0.3 + 0.7
 
     source: terminal.mainSource
     burnInEffect: terminal.burnInEffect
     virtualResolution: terminal.virtualResolution
     screenResolution: Qt.size(
-        terminalWindow.width * Screen.devicePixelRatio * appSettings.windowScaling,
-        terminalWindow.height * Screen.devicePixelRatio * appSettings.windowScaling
+        width * Screen.devicePixelRatio * appSettings.windowScaling,
+        height * Screen.devicePixelRatio * appSettings.windowScaling
     )
     bloomSource: bloomSourceLoader.item
 
@@ -46,11 +58,18 @@ ShaderTerminal {
         id: terminal
         anchors.fill: parent
         isActive: mainShader.isActive
+        profile: mainShader.profile
+        normalizedScale: mainShader.normalizedScale
+        initialWorkingDirectory: mainShader.initialWorkingDirectory
         onSessionFinished: mainShader.sessionFinished()
     }
 
     function activate() {
         terminal.mainTerminal.forceActiveFocus()
+    }
+
+    function currentDir() {
+        return terminal.currentDir()
     }
 
     //  EFFECTS  ////////////////////////////////////////////////////////////////

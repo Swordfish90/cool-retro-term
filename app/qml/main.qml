@@ -46,8 +46,25 @@ QtObject {
 
     property ListModel windowsModel: ListModel { }
 
+    // The terminal window that was active last, and the profile of its focused terminal.
+    property var activeWindow: null
+    readonly property TerminalProfile activeProfile: activeWindow && activeWindow.activeProfile
+                                                     ? activeWindow.activeProfile : appSettings.defaultProfile
+
+    // Also invoked from C++ (KDSingleApplication), so it must keep taking no arguments.
     function createWindow() {
-        var window = windowComponent.createObject(null)
+        createWindowWithProfile("")
+    }
+
+    // New windows start with the given profile JSON, by default the stored one.
+    function createWindowWithProfile(profileString) {
+        if (!profileString) {
+            profileString = appSettings.defaultProfile.composeProfileString()
+        }
+
+        // Parent the window to appRoot so the JS garbage collector never deletes it:
+        // windowsModel only holds a weak reference (Qt 6.4).
+        var window = windowComponent.createObject(appRoot, { initialProfile: profileString })
         if (!window)
             return
 
@@ -57,6 +74,10 @@ QtObject {
     }
 
     function closeWindow(window) {
+        if (activeWindow === window) {
+            activeWindow = null
+        }
+
         for (var i = 0; i < windowsModel.count; i++) {
             if (windowsModel.get(i).window === window) {
                 windowsModel.remove(i)

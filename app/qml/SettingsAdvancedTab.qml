@@ -25,6 +25,9 @@ import QtQml 2.0
 import "Components"
 
 ColumnLayout {
+    // The profile of the focused terminal: settings apply to it only.
+    readonly property TerminalProfile profile: appRoot.activeProfile
+
     GroupBox {
         Layout.fillWidth: true
         Layout.fillHeight: true
@@ -56,8 +59,8 @@ ColumnLayout {
             CheckBox {
                 id: blinkingCursor
                 text: qsTr("Blinking Cursor")
-                checked: appSettings.blinkingCursor
-                onCheckedChanged: appSettings.blinkingCursor = checked
+                checked: profile.blinkingCursor
+                onCheckedChanged: profile.blinkingCursor = checked
             }
             CheckBox {
                 id: showMenubar

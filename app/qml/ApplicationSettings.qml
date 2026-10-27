@@ -51,55 +51,9 @@ QtObject {
     property real bloomQuality: 0.5
     property real burnInQuality: 0.5
 
-    property bool blinkingCursor: false
-
-
-    // PROFILE SETTINGS ///////////////////////////////////////////////////////
-    property real windowOpacity: 1.0
-    property real ambientLight: 0.2
-    property real contrast: 0.80
-    property real brightness: 0.5
-
     property bool useCustomCommand: false
     property string customCommand: ""
 
-    property string _backgroundColor: "#000000"
-    property string _fontColor: "#ff8100"
-    property string _frameColor: "#ffffff"
-    property string saturatedColor: Utils.mix(Utils.strToColor(_fontColor), Utils.strToColor("#FFFFFF"), (saturationColor * 0.5))
-    property color fontColor: Utils.mix(Utils.strToColor(_backgroundColor), Utils.strToColor(saturatedColor), (0.7 + (contrast * 0.3)))
-    property color backgroundColor: Utils.mix(Utils.strToColor(saturatedColor), Utils.strToColor(_backgroundColor), (0.7 + (contrast * 0.3)))
-    property color frameColor: Utils.strToColor(_frameColor)
-
-    property real staticNoise: 0.12
-    property real screenCurvature: 0.3
-    property real glowingLine: 0.2
-    property real burnIn: 0.25
-    property real bloom: 0.55
-
-    property real chromaColor: 0.25
-    property real saturationColor: 0.25
-
-    property real jitter: 0.2
-
-    property real horizontalSync: 0.08
-    property real flickering: 0.1
-
-    property real rgbShift: 0.0
-
-    property real _frameShininess: 0.2
-    property real frameShininess: _frameShininess * 0.5
-
-    property real _frameSize: 0.2
-    property real frameSize: _frameSize * 0.05
-
-    property real _screenRadius: 0.2
-    property real screenRadius: Utils.lint(4.0, 120.0, _screenRadius)
-
-    property real _margin: 0.5
-    property real margin: Utils.lint(1.0, 40.0, _margin) + (1.0 - Math.SQRT1_2) * screenRadius
-
-    readonly property bool frameEnabled: ambientLight > 0 || _frameSize > 0 || screenCurvature > 0
 
     readonly property int no_rasterization: 0
     readonly property int scanline_rasterization: 1
@@ -107,30 +61,18 @@ QtObject {
     readonly property int subpixel_rasterization: 3
     readonly property int modern_rasterization: 4
 
-    property alias rasterization: fontManager.rasterization
-
     readonly property int bundled_fonts: 0
     readonly property int system_fonts: 1
 
-    property alias fontSource: fontManager.fontSource
-
     // FONTS //////////////////////////////////////////////////////////////////
     readonly property real baseFontScaling: 0.75
-    property alias fontScaling: fontManager.fontScaling
+    property real fontScaling: 1.0
     property real totalFontScaling: baseFontScaling * fontScaling
 
-    property alias fontWidth: fontManager.fontWidth
-    property alias lineSpacing: fontManager.lineSpacing
-
-    property alias lowResolutionFont: fontManager.lowResolutionFont
-
-    property alias fontName: fontManager.fontName
-    property alias filteredFontList: fontManager.filteredFontList
-
-    property FontManager fontManager: FontManager {
-        id: fontManager
-        baseFontScaling: baseFontScaling
-    }
+    // PROFILE ////////////////////////////////////////////////////////////////
+    // Each terminal has its own TerminalProfile. This one is what gets stored on exit
+    // and what the first window starts with.
+    property TerminalProfile defaultProfile: TerminalProfile { }
 
     signal initializedSettings
 
@@ -172,44 +114,6 @@ QtObject {
         return stringify(settings)
     }
 
-    function composeProfileObject() {
-        var profile = {
-            "backgroundColor": _backgroundColor,
-            "fontColor": _fontColor,
-            "flickering": flickering,
-            "horizontalSync": horizontalSync,
-            "staticNoise": staticNoise,
-            "chromaColor": chromaColor,
-            "saturationColor": saturationColor,
-            "screenCurvature": screenCurvature,
-            "glowingLine": glowingLine,
-            "burnIn": burnIn,
-            "bloom": bloom,
-            "rasterization": rasterization,
-            "jitter": jitter,
-            "rgbShift": rgbShift,
-            "brightness": brightness,
-            "contrast": contrast,
-            "ambientLight": ambientLight,
-            "windowOpacity": windowOpacity,
-            "fontName": fontName,
-            "fontSource": fontSource,
-            "fontWidth": fontWidth,
-            "lineSpacing": lineSpacing,
-            "margin": _margin,
-            "blinkingCursor": blinkingCursor,
-            "frameSize": _frameSize,
-            "screenRadius": _screenRadius,
-            "frameColor": _frameColor,
-            "frameShininess": _frameShininess
-        }
-        return profile
-    }
-
-    function composeProfileString() {
-        return stringify(composeProfileObject())
-    }
-
     function loadSettings() {
         var settingsString = storage.getSetting("_CURRENT_SETTINGS")
         var profileString = storage.getSetting("_CURRENT_PROFILE")
@@ -220,7 +124,7 @@ QtObject {
             return
 
         loadSettingsString(settingsString)
-        loadProfileString(profileString)
+        defaultProfile.loadProfileString(profileString)
 
         if (verbose)
             console.log("Loading settings: " + settingsString + profileString)
@@ -228,7 +132,7 @@ QtObject {
 
     function storeSettings() {
         var settingsString = composeSettingsString()
-        var profileString = composeProfileString()
+        var profileString = defaultProfile.composeProfileString()
 
         storage.setSetting("_CURRENT_SETTINGS", settingsString)
         storage.setSetting("_CURRENT_PROFILE", profileString)
@@ -261,54 +165,6 @@ QtObject {
                 !== undefined ? settings.useCustomCommand : useCustomCommand
         customCommand = settings.customCommand
                 !== undefined ? settings.customCommand : customCommand
-    }
-
-    function loadProfileString(profileString) {
-        var settings = JSON.parse(profileString)
-
-        _backgroundColor = settings.backgroundColor
-                !== undefined ? settings.backgroundColor : _backgroundColor
-        _fontColor = settings.fontColor !== undefined ? settings.fontColor : _fontColor
-
-        horizontalSync = settings.horizontalSync
-                !== undefined ? settings.horizontalSync : horizontalSync
-        flickering = settings.flickering !== undefined ? settings.flickering : flickering
-        staticNoise = settings.staticNoise !== undefined ? settings.staticNoise : staticNoise
-        chromaColor = settings.chromaColor !== undefined ? settings.chromaColor : chromaColor
-        saturationColor = settings.saturationColor
-                !== undefined ? settings.saturationColor : saturationColor
-        screenCurvature = settings.screenCurvature
-                !== undefined ? settings.screenCurvature : screenCurvature
-        glowingLine = settings.glowingLine !== undefined ? settings.glowingLine : glowingLine
-
-        burnIn = settings.burnIn !== undefined ? settings.burnIn : burnIn
-        bloom = settings.bloom !== undefined ? settings.bloom : bloom
-
-        rasterization = settings.rasterization
-                !== undefined ? settings.rasterization : rasterization
-
-        jitter = settings.jitter !== undefined ? settings.jitter : jitter
-
-        rgbShift = settings.rgbShift !== undefined ? settings.rgbShift : rgbShift
-
-        ambientLight = settings.ambientLight !== undefined ? settings.ambientLight : ambientLight
-        contrast = settings.contrast !== undefined ? settings.contrast : contrast
-        brightness = settings.brightness !== undefined ? settings.brightness : brightness
-        windowOpacity = settings.windowOpacity
-                !== undefined ? settings.windowOpacity : windowOpacity
-
-        fontSource = settings.fontSource !== undefined ? settings.fontSource : fontSource
-        fontName = settings.fontName !== undefined ? settings.fontName : fontName
-        fontWidth = settings.fontWidth !== undefined ? settings.fontWidth : fontWidth
-        lineSpacing = settings.lineSpacing !== undefined ? settings.lineSpacing : lineSpacing
-
-        _margin = settings.margin !== undefined ? settings.margin : _margin
-        _frameSize = settings.frameSize !== undefined ? settings.frameSize : _frameSize
-        _screenRadius = settings.screenRadius !== undefined ? settings.screenRadius : _screenRadius
-        _frameColor = settings.frameColor !== undefined ? settings.frameColor : _frameColor
-        _frameShininess = settings.frameShininess !== undefined ? settings.frameShininess : _frameShininess
-
-        blinkingCursor = settings.blinkingCursor !== undefined ? settings.blinkingCursor : blinkingCursor
     }
 
     function storeCustomProfiles() {
@@ -347,11 +203,6 @@ QtObject {
                                 })
         }
         return stringify(customProfiles)
-    }
-
-    function loadProfile(index) {
-        var profile = profilesList.get(index)
-        loadProfileString(profile.obj_string)
     }
 
     function appendCustomProfile(name, profileString) {
@@ -866,7 +717,7 @@ QtObject {
         if (profileArgPosition !== -1) {
             var profileIndex = getProfileIndexByName(args[profileArgPosition + 1])
             if (profileIndex !== -1) {
-                loadProfile(profileIndex)
+                defaultProfile.loadProfile(profileIndex)
             } else {
                 console.log("Warning: selected profile is not valid; ignoring it")
             }

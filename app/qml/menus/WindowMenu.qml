@@ -28,6 +28,10 @@ MenuBar {
         title: qsTr("File")
         MenuItem { action: newWindowAction }
         MenuItem { action: newTabAction }
+        MenuSeparator { }
+        IconMenuItem { action: splitVerticallyAction }
+        IconMenuItem { action: splitHorizontallyAction }
+        MenuItem { action: closeTerminalAction }
         MenuItem { action: closeTabAction }
         MenuSeparator { }
         MenuItem { action: quitAction }
@@ -59,7 +63,9 @@ MenuBar {
             delegate: MenuItem {
                 text: model.text
                 onTriggered: {
-                    appSettings.loadProfileString(obj_string)
+                    if (terminalWindow.activeProfile) {
+                        terminalWindow.activeProfile.loadProfileString(obj_string)
+                    }
                 }
             }
             onObjectAdded: function(index, object) { profilesMenu.insertItem(index, object) }

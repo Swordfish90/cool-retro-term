@@ -40,6 +40,17 @@ ApplicationWindow {
     visible: false
 
     property bool fullscreen: false
+
+    // Profile JSON the first terminal starts with.
+    property string initialProfile: ""
+    // Profile of the focused terminal; the settings window and the Profiles menu edit it.
+    readonly property TerminalProfile activeProfile: terminalTabs.activeProfile
+
+    onActiveChanged: {
+        if (active) {
+            appRoot.activeWindow = terminalWindow
+        }
+    }
     onFullscreenChanged: visibility = (fullscreen ? Window.FullScreen : Window.Windowed)
 
     menuBar: WindowMenu { }
@@ -63,7 +74,7 @@ ApplicationWindow {
         id: newWindowAction
         text: qsTr("New Window")
         shortcut: appSettings.isMacOS ? "Meta+N" : "Ctrl+Shift+N"
-        onTriggered: appRoot.createWindow()
+        onTriggered: appRoot.createWindowWithProfile(activeProfile ? activeProfile.composeProfileString() : initialProfile)
     }
     Action {
         id: quitAction
@@ -120,8 +131,43 @@ ApplicationWindow {
     Action {
         id: closeTabAction
         text: qsTr("Close Tab")
-        shortcut: appSettings.isMacOS ? "Meta+W" : "Ctrl+Shift+W"
         onTriggered: terminalTabs.closeTab(terminalTabs.currentIndex)
+    }
+    Action {
+        id: splitVerticallyAction
+        text: qsTr("Split Vertically")
+        icon.source: "images/split-vertical.png"
+        shortcut: appSettings.isMacOS ? "Meta+Shift+E" : "Ctrl+Shift+E"
+        onTriggered: terminalTabs.splitCurrent(Qt.Horizontal)
+    }
+    Action {
+        id: splitHorizontallyAction
+        text: qsTr("Split Horizontally")
+        icon.source: "images/split-horizontal.png"
+        shortcut: appSettings.isMacOS ? "Meta+Shift+O" : "Ctrl+Shift+O"
+        onTriggered: terminalTabs.splitCurrent(Qt.Vertical)
+    }
+    Action {
+        id: closeTerminalAction
+        text: qsTr("Close Terminal")
+        shortcut: appSettings.isMacOS ? "Meta+W" : "Ctrl+Shift+W"
+        onTriggered: terminalTabs.closeCurrentTerminal()
+    }
+    Shortcut {
+        sequence: appSettings.isMacOS ? "Meta+Left" : "Alt+Left"
+        onActivated: terminalTabs.focusNeighbor(Qt.LeftArrow)
+    }
+    Shortcut {
+        sequence: appSettings.isMacOS ? "Meta+Right" : "Alt+Right"
+        onActivated: terminalTabs.focusNeighbor(Qt.RightArrow)
+    }
+    Shortcut {
+        sequence: appSettings.isMacOS ? "Meta+Up" : "Alt+Up"
+        onActivated: terminalTabs.focusNeighbor(Qt.UpArrow)
+    }
+    Shortcut {
+        sequence: appSettings.isMacOS ? "Meta+Down" : "Alt+Down"
+        onActivated: terminalTabs.focusNeighbor(Qt.DownArrow)
     }
     Shortcut {
         sequence: appSettings.isMacOS ? "Meta+1" : "Alt+1"
@@ -182,6 +228,11 @@ ApplicationWindow {
         }
     }
     onClosing: {
+        // Remember the look of the last closed window for the next start.
+        if (activeProfile) {
+            appSettings.defaultProfile.loadProfileString(activeProfile.composeProfileString())
+        }
+        terminalTabs.releaseTabs()
         appRoot.closeWindow(terminalWindow)
     }
 }

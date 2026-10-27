@@ -23,11 +23,13 @@ import QtQuick 2.2
 import "utils.js" as Utils
 
 Item {
+    id: shaderTerminal
+
     function dynamicFragmentPath() {
-        var rasterMode = appSettings.rasterization;
-        var burnInOn = appSettings.burnIn > 0 ? 1 : 0;
-        var frameOn = appSettings.frameEnabled ? 1 : 0;
-        var chromaOn = appSettings.chromaColor > 0 ? 1 : 0;
+        var rasterMode = profile.rasterization;
+        var burnInOn = profile.burnIn > 0 ? 1 : 0;
+        var frameOn = profile.frameEnabled ? 1 : 0;
+        var chromaOn = profile.chromaColor > 0 ? 1 : 0;
         return "qrc:/shaders/terminal_dynamic_raster" + rasterMode +
                "_burn" + burnInOn +
                "_frame" + frameOn +
@@ -36,10 +38,10 @@ Item {
     }
 
     function staticFragmentPath() {
-        var rgbShiftOn = appSettings.rgbShift > 0 ? 1 : 0;
-        var bloomOn = appSettings.bloom > 0 ? 1 : 0;
-        var curvatureOn = (appSettings.screenCurvature > 0 || appSettings.frameSize > 0) ? 1 : 0;
-        var shineOn = appSettings.frameShininess > 0 ? 1 : 0;
+        var rgbShiftOn = profile.rgbShift > 0 ? 1 : 0;
+        var bloomOn = profile.bloom > 0 ? 1 : 0;
+        var curvatureOn = (profile.screenCurvature > 0 || profile.frameSize > 0) ? 1 : 0;
+        var shineOn = profile.frameShininess > 0 ? 1 : 0;
         return "qrc:/shaders/terminal_static_rgb" + rgbShiftOn +
                "_bloom" + bloomOn +
                "_curve" + curvatureOn +
@@ -47,19 +49,23 @@ Item {
                ".frag.qsb";
     }
 
+    property TerminalProfile profile
     property ShaderEffectSource source
     property BurnInEffect burnInEffect
     property ShaderEffectSource bloomSource
 
-    property color fontColor: appSettings.fontColor
-    property color backgroundColor: appSettings.backgroundColor
+    property color fontColor: profile.fontColor
+    property color backgroundColor: profile.backgroundColor
 
-    property real screenCurvature: appSettings.screenCurvature * appSettings.screenCurvatureSize * terminalWindow.normalizedWindowScale
-    property real frameSize: appSettings.frameSize * terminalWindow.normalizedWindowScale
+    // Effects are sized relative to this terminal, which can be a pane smaller than the window.
+    property real normalizedScale: 1024 / Math.max(1, 0.5 * width + 0.5 * height)
 
-    property real chromaColor: appSettings.chromaColor
+    property real screenCurvature: profile.screenCurvature * appSettings.screenCurvatureSize * normalizedScale
+    property real frameSize: profile.frameSize * normalizedScale
 
-    property real ambientLight: appSettings.ambientLight * 0.2
+    property real chromaColor: profile.chromaColor
+
+    property real ambientLight: profile.ambientLight * 0.2
 
     property size virtualResolution
     property size screenResolution
@@ -82,19 +88,19 @@ Item {
         property real chromaColor: parent.chromaColor
         property real ambientLight: parent.ambientLight
 
-        property real flickering: appSettings.flickering
-        property real horizontalSync: appSettings.horizontalSync
+        property real flickering: profile.flickering
+        property real horizontalSync: profile.horizontalSync
         property real horizontalSyncStrength: Utils.lint(0.05, 0.35, horizontalSync)
-        property real glowingLine: appSettings.glowingLine * 0.2
+        property real glowingLine: profile.glowingLine * 0.2
 
         // Fast burnin properties
-        property real burnIn: appSettings.burnIn
+        property real burnIn: profile.burnIn
         property real burnInLastUpdate: burnInEffect.lastUpdate
         property real burnInTime: burnInEffect.burnInFadeTime
 
-        property real jitter: appSettings.jitter
+        property real jitter: profile.jitter
         property size jitterDisplacement: Qt.size(0.007 * jitter, 0.002 * jitter)
-        property real staticNoise: appSettings.staticNoise
+        property real staticNoise: profile.staticNoise
         property size scaleNoiseSize: Qt.size((width * 0.75) / (noiseTexture.width * appSettings.windowScaling * appSettings.totalFontScaling),
                                               (height * 0.75) / (noiseTexture.height * appSettings.windowScaling * appSettings.totalFontScaling))
 
@@ -108,8 +114,8 @@ Item {
         property ShaderEffectSource noiseSource: noiseShaderSource
 
         property real frameSize: parent.frameSize
-        property real frameShininess: appSettings.frameShininess
-        property real bloom: parent.bloomSource ? appSettings.bloom * 2.5 : 0
+        property real frameShininess: profile.frameShininess
+        property real bloom: parent.bloomSource ? profile.bloom * 2.5 : 0
 
         anchors.fill: parent
         blending: false
@@ -139,7 +145,7 @@ Item {
     Loader {
         id: terminalFrameLoader
 
-        active: appSettings.frameEnabled
+        active: profile.frameEnabled
 
         width: staticShader.width
         height: staticShader.height
@@ -155,6 +161,8 @@ Item {
                 id: terminalFrame
                 blending: false
                 anchors.fill: parent
+                normalizedScale: shaderTerminal.normalizedScale
+                profile: shaderTerminal.profile
             }
         }
     }
@@ -170,16 +178,16 @@ Item {
 
         property color fontColor: parent.fontColor
         property color backgroundColor: parent.backgroundColor
-        property real bloom: bloomSource ? appSettings.bloom * 2.5 : 0
+        property real bloom: bloomSource ? profile.bloom * 2.5 : 0
 
         property real screenCurvature: parent.screenCurvature
 
-        property real chromaColor: appSettings.chromaColor;
+        property real chromaColor: profile.chromaColor;
 
-        property real rgbShift: appSettings.rgbShift * (4.0 / width) * appSettings.totalFontScaling
+        property real rgbShift: profile.rgbShift * (4.0 / width) * appSettings.totalFontScaling
 
-        property real screen_brightness: Utils.lint(0.5, 1.5, appSettings.brightness)
-        property real frameShininess: appSettings.frameShininess
+        property real screen_brightness: Utils.lint(0.5, 1.5, profile.brightness)
+        property real frameShininess: profile.frameShininess
         property real frameSize: parent.frameSize
 
         blending: false

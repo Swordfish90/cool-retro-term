@@ -26,10 +26,23 @@ Item {
     id: tabsRoot
 
     readonly property int innerPadding: 6
-    readonly property string currentTitle: tabsModel.get(currentIndex).title ?? "cool-retro-term"
+    readonly property string currentTitle: tabsModel.get(currentIndex)?.title ?? "cool-retro-term"
     property alias currentIndex: tabBar.currentIndex
     readonly property int count: tabsModel.count
     property size terminalSize: Qt.size(0, 0)
+
+    // Tilix-like strip with a live preview of every tab.
+    property bool quickViewOpen: false
+    onCountChanged: {
+        if (count <= 1) {
+            closeQuickView()
+        }
+    }
+
+    readonly property Item currentTabItem: tabsRepeater.count > 0 && currentIndex >= 0 ? tabsRepeater.itemAt(currentIndex) : null
+    // Profile of the focused terminal of the current tab.
+    readonly property TerminalProfile activeProfile: currentTabItem && currentTabItem.focusedTerminal
+                                                     ? currentTabItem.focusedTerminal.profile : null
 
     function normalizeTitle(rawTitle) {
         if (rawTitle === undefined || rawTitle === null) {
@@ -38,8 +51,12 @@ Item {
         return String(rawTitle).trim()
     }
 
-    function addTab() {
-        tabsModel.append({ title: "" })
+    // New tabs start with the given profile JSON, by default a copy of the focused terminal's.
+    function addTab(profileString) {
+        if (profileString === undefined) {
+            profileString = activeProfile ? activeProfile.composeProfileString() : terminalWindow.initialProfile
+        }
+        tabsModel.append({ title: "", profile: profileString })
         tabBar.currentIndex = tabsModel.count - 1
     }
 
@@ -53,11 +70,57 @@ Item {
         tabBar.currentIndex = Math.min(tabBar.currentIndex, tabsModel.count - 1)
     }
 
+    function openQuickView() {
+        quickViewOpen = true
+    }
+
+    function closeQuickView() {
+        if (!quickViewOpen)
+            return
+
+        quickViewOpen = false
+        if (currentTabItem) {
+            currentTabItem.activateFocusedTerminal()
+        }
+    }
+
+    function currentTab() {
+        return currentTabItem
+    }
+
+    // Qt.Horizontal puts the new terminal to the right, Qt.Vertical below.
+    function splitCurrent(orientation) {
+        var tab = currentTab()
+        if (tab) {
+            tab.split(orientation)
+        }
+    }
+
+    function closeCurrentTerminal() {
+        var tab = currentTab()
+        if (tab) {
+            tab.closeFocusedTerminal()
+        }
+    }
+
+    function focusNeighbor(direction) {
+        var tab = currentTab()
+        if (tab) {
+            tab.focusNeighbor(direction)
+        }
+    }
+
+    // Destroy all terminals while the window is still alive. If they are left to be
+    // deleted as children of the window, Qt 6.4 crashes in clearFocusInScope.
+    function releaseTabs() {
+        tabsModel.clear()
+    }
+
     ListModel {
         id: tabsModel
     }
 
-    Component.onCompleted: addTab()
+    Component.onCompleted: addTab(terminalWindow.initialProfile)
 
     ColumnLayout {
         anchors.fill: parent
@@ -74,6 +137,27 @@ Item {
                 id: rowLayout
                 anchors.fill: parent
                 spacing: 0
+
+                ToolButton {
+                    id: quickViewButton
+                    // "(current/total) arrow": toggles the tab quick view.
+                    text: "(" + (tabsRoot.currentIndex + 1) + "/" + tabsModel.count + ") "
+                          + (tabsRoot.quickViewOpen ? "\u2191" : "\u2193")
+                    checked: tabsRoot.quickViewOpen
+                    focusPolicy: Qt.NoFocus
+                    Layout.fillHeight: true
+                    padding: innerPadding
+                    onClicked: tabsRoot.quickViewOpen ? tabsRoot.closeQuickView() : tabsRoot.openQuickView()
+                }
+
+                ToolButton {
+                    id: addTabButton
+                    text: "+"
+                    focusPolicy: Qt.NoFocus
+                    Layout.fillHeight: true
+                    padding: innerPadding
+                    onClicked: tabsRoot.addTab()
+                }
 
                 TabBar {
                     id: tabBar
@@ -108,47 +192,52 @@ Item {
                         }
                     }
                 }
-
-                ToolButton {
-                    id: addTabButton
-                    text: "+"
-                    focusPolicy: Qt.NoFocus
-                    Layout.fillHeight: true
-                    padding: innerPadding
-                    Layout.alignment: Qt.AlignVCenter
-                    onClicked: tabsRoot.addTab()
-                }
             }
         }
 
-        StackLayout {
+        // Only the current tab is shown. While the quick view is open the other tabs are made
+        // visible too, so it can render their previews; it hides them from the scene itself.
+        Item {
             id: stack
             Layout.fillWidth: true
             Layout.fillHeight: true
-            currentIndex: tabBar.currentIndex
 
             Repeater {
+                id: tabsRepeater
                 model: tabsModel
-                TerminalContainer {
-                    property bool shouldHaveFocus: terminalWindow.active && StackLayout.isCurrentItem
-                    isActive: StackLayout.isCurrentItem
-                    onShouldHaveFocusChanged: {
-                        if (shouldHaveFocus) {
-                            activate()
-                        }
-                    }
+                TerminalTab {
+                    isCurrent: index === tabsRoot.currentIndex
+                    initialProfile: model.profile
                     onTitleChanged: tabsModel.setProperty(index, "title", normalizeTitle(title))
-                    Layout.fillWidth: true
-                    Layout.fillHeight: true
-                    onSessionFinished: tabsRoot.closeTab(index)
+                    anchors.fill: parent
+                    visible: isCurrent || tabsRoot.quickViewOpen
+                    enabled: isCurrent
+                    z: isCurrent ? 1 : 0
+                    onFinished: tabsRoot.closeTab(index)
                     onTerminalSizeChanged: updateTerminalSize()
+                    onIsCurrentChanged: updateTerminalSize()
 
                     function updateTerminalSize() {
-                        // Every tab will have the same size so we can simply take the first one.
-                        if (index == 0) {
+                        if (isCurrent) {
                             tabsRoot.terminalSize = terminalSize
                         }
                     }
+                }
+            }
+
+            Loader {
+                anchors.fill: parent
+                z: 2
+                active: tabsRoot.quickViewOpen
+                sourceComponent: TabQuickView {
+                    model: tabsModel
+                    tabs: tabsRepeater
+                    currentIndex: tabsRoot.currentIndex
+                    onTabSelected: function(index) {
+                        tabsRoot.currentIndex = index
+                        tabsRoot.closeQuickView()
+                    }
+                    onCloseRequested: tabsRoot.closeQuickView()
                 }
             }
         }

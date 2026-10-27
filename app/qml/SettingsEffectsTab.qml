@@ -22,6 +22,9 @@ import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.1
 
 ColumnLayout {
+    // The profile of the focused terminal: settings apply to it only.
+    readonly property TerminalProfile profile: appRoot.activeProfile
+
     Layout.fillWidth: true
     Layout.fillHeight: true
     spacing: 2
@@ -37,59 +40,59 @@ ColumnLayout {
 
             CheckableSlider {
                 name: qsTr("Bloom")
-                onNewValue: function(newValue) { appSettings.bloom = newValue }
-                value: appSettings.bloom
+                onNewValue: function(newValue) { profile.bloom = newValue }
+                value: profile.bloom
             }
             CheckableSlider {
                 name: qsTr("BurnIn")
-                onNewValue: function(newValue) { appSettings.burnIn = newValue }
-                value: appSettings.burnIn
+                onNewValue: function(newValue) { profile.burnIn = newValue }
+                value: profile.burnIn
             }
             CheckableSlider {
                 name: qsTr("Static Noise")
-                onNewValue: function(newValue) { appSettings.staticNoise = newValue }
-                value: appSettings.staticNoise
+                onNewValue: function(newValue) { profile.staticNoise = newValue }
+                value: profile.staticNoise
             }
             CheckableSlider {
                 name: qsTr("Jitter")
-                onNewValue: function(newValue) { appSettings.jitter = newValue }
-                value: appSettings.jitter
+                onNewValue: function(newValue) { profile.jitter = newValue }
+                value: profile.jitter
             }
             CheckableSlider {
                 name: qsTr("Glow Line")
-                onNewValue: function(newValue) { appSettings.glowingLine = newValue }
-                value: appSettings.glowingLine
+                onNewValue: function(newValue) { profile.glowingLine = newValue }
+                value: profile.glowingLine
             }
             CheckableSlider {
                 name: qsTr("Screen Curvature")
-                onNewValue: function(newValue) { appSettings.screenCurvature = newValue }
-                value: appSettings.screenCurvature
+                onNewValue: function(newValue) { profile.screenCurvature = newValue }
+                value: profile.screenCurvature
             }
             CheckableSlider {
                 name: qsTr("Ambient Light")
-                onNewValue: function(newValue) { appSettings.ambientLight = newValue }
-                value: appSettings.ambientLight
+                onNewValue: function(newValue) { profile.ambientLight = newValue }
+                value: profile.ambientLight
                 enabled: appSettings.framesIndex !== 0
             }
             CheckableSlider {
                 name: qsTr("Flickering")
-                onNewValue: function(newValue) { appSettings.flickering = newValue }
-                value: appSettings.flickering
+                onNewValue: function(newValue) { profile.flickering = newValue }
+                value: profile.flickering
             }
             CheckableSlider {
                 name: qsTr("Horizontal Sync")
-                onNewValue: function(newValue) { appSettings.horizontalSync = newValue }
-                value: appSettings.horizontalSync
+                onNewValue: function(newValue) { profile.horizontalSync = newValue }
+                value: profile.horizontalSync
             }
             CheckableSlider {
                 name: qsTr("RGB Shift")
-                onNewValue: function(newValue) { appSettings.rgbShift = newValue }
-                value: appSettings.rgbShift
+                onNewValue: function(newValue) { profile.rgbShift = newValue }
+                value: profile.rgbShift
             }
             CheckableSlider {
                 name: qsTr("Frame Shininess")
-                onNewValue: function(newValue) { appSettings._frameShininess = newValue }
-                value: appSettings._frameShininess
+                onNewValue: function(newValue) { profile._frameShininess = newValue }
+                value: profile._frameShininess
             }
         }
     }

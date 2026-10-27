@@ -25,6 +25,9 @@ import QtQml 2.0
 import "Components"
 
 ColumnLayout {
+    // The profile of the focused terminal: settings apply to it only.
+    readonly property TerminalProfile profile: appRoot.activeProfile
+
     GroupBox {
         title: qsTr("Font")
         Layout.fillWidth: true
@@ -40,22 +43,22 @@ ColumnLayout {
                 Layout.fillWidth: true
                 RadioButton {
                     text: qsTr("Bundled")
-                    checked: appSettings.fontSource === appSettings.bundled_fonts
+                    checked: profile.fontSource === appSettings.bundled_fonts
                     onClicked: {
-                        appSettings.fontSource = appSettings.bundled_fonts
+                        profile.fontSource = appSettings.bundled_fonts
                     }
                 }
                 RadioButton {
                     text: qsTr("System")
-                    checked: appSettings.fontSource === appSettings.system_fonts
+                    checked: profile.fontSource === appSettings.system_fonts
                     onClicked: {
-                        appSettings.fontSource = appSettings.system_fonts
+                        profile.fontSource = appSettings.system_fonts
                     }
                 }
             }
             Label {
                 text: qsTr("Rendering")
-                enabled: appSettings.fontSource === appSettings.bundled_fonts
+                enabled: profile.fontSource === appSettings.bundled_fonts
             }
             ComboBox {
                 id: renderingBox
@@ -64,11 +67,11 @@ ColumnLayout {
 
                 Layout.fillWidth: true
                 model: [qsTr("Default"), qsTr("Scanlines"), qsTr("Pixels"), qsTr("Sub-Pixels"), qsTr("Modern")]
-                currentIndex: appSettings.rasterization
+                currentIndex: profile.rasterization
                 onCurrentIndexChanged: {
-                    appSettings.rasterization = currentIndex
+                    profile.rasterization = currentIndex
                 }
-                enabled: appSettings.fontSource === appSettings.bundled_fonts
+                enabled: profile.fontSource === appSettings.bundled_fonts
             }
             Label {
                 text: qsTr("Name")
@@ -76,27 +79,27 @@ ColumnLayout {
             ComboBox {
                 id: fontChanger
                 Layout.fillWidth: true
-                model: appSettings.filteredFontList
+                model: profile.filteredFontList
                 textRole: "text"
                 onActivated: {
-                    var font = appSettings.filteredFontList.get(currentIndex)
+                    var font = profile.filteredFontList.get(currentIndex)
 
                     // If selecting a high-res font while not in Modern mode,
                     // switch to Modern to render at full resolution.
-                    if (!font.lowResolutionFont && appSettings.rasterization !== appSettings.modern_rasterization) {
-                        appSettings.rasterization = appSettings.modern_rasterization
+                    if (!font.lowResolutionFont && profile.rasterization !== appSettings.modern_rasterization) {
+                        profile.rasterization = appSettings.modern_rasterization
                     }
                     // If selecting a low-res font while in Modern mode, switch back to default.
-                    if (font.lowResolutionFont && appSettings.rasterization === appSettings.modern_rasterization) {
-                        appSettings.rasterization = appSettings.no_rasterization
+                    if (font.lowResolutionFont && profile.rasterization === appSettings.modern_rasterization) {
+                        profile.rasterization = appSettings.no_rasterization
                     }
 
-                    appSettings.fontName = font.name
+                    profile.fontName = font.name
                 }
                 function updateIndex() {
-                    for (var i = 0; i < appSettings.filteredFontList.count; i++) {
-                        var font = appSettings.filteredFontList.get(i)
-                        if (font.name === appSettings.fontName) {
+                    for (var i = 0; i < profile.filteredFontList.count; i++) {
+                        var font = profile.filteredFontList.get(i)
+                        if (font.name === profile.fontName) {
                             currentIndex = i
                             return
                         }
@@ -104,7 +107,7 @@ ColumnLayout {
                     currentIndex = 0
                 }
                 Connections {
-                    target: appSettings.fontManager
+                    target: profile.fontManager
 
                     onTerminalFontChanged: {
                         fontChanger.updateIndex()
@@ -115,6 +118,8 @@ ColumnLayout {
                     }
                 }
                 Component.onCompleted: updateIndex()
+                // A different terminal's profile has a different font list.
+                onModelChanged: updateIndex()
             }
             Label {
                 text: qsTr("Scaling")
@@ -142,8 +147,8 @@ ColumnLayout {
                 Slider {
                     Layout.fillWidth: true
                     id: widthChanger
-                    onValueChanged: appSettings.fontWidth = value
-                    value: appSettings.fontWidth
+                    onValueChanged: profile.fontWidth = value
+                    value: profile.fontWidth
                     stepSize: 0.05
                     from: 0.5
                     to: 1.5
@@ -160,8 +165,8 @@ ColumnLayout {
                 Slider {
                     Layout.fillWidth: true
                     id: lineSpacingChanger
-                    onValueChanged: appSettings.lineSpacing = value
-                    value: appSettings.lineSpacing
+                    onValueChanged: profile.lineSpacing = value
+                    value: profile.lineSpacing
                     stepSize: 0.01
                     from: 0.0
                     to: 1.0
@@ -183,14 +188,14 @@ ColumnLayout {
                 Layout.fillWidth: true
                 CheckableSlider {
                     name: qsTr("Chroma Color")
-                    onNewValue: function(newValue) { appSettings.chromaColor = newValue }
-                    value: appSettings.chromaColor
+                    onNewValue: function(newValue) { profile.chromaColor = newValue }
+                    value: profile.chromaColor
                 }
                 CheckableSlider {
                     name: qsTr("Saturation Color")
-                    onNewValue: function(newValue) { appSettings.saturationColor = newValue }
-                    value: appSettings.saturationColor
-                    enabled: appSettings.chromaColor !== 0
+                    onNewValue: function(newValue) { profile.saturationColor = newValue }
+                    value: profile.saturationColor
+                    enabled: profile.chromaColor !== 0
                 }
             }
             RowLayout {
@@ -199,22 +204,22 @@ ColumnLayout {
                     name: qsTr("Font")
                     height: 50
                     Layout.fillWidth: true
-                    onColorSelected: appSettings._fontColor = color
-                    color: appSettings._fontColor
+                    onColorSelected: profile._fontColor = color
+                    color: profile._fontColor
                 }
                 ColorButton {
                     name: qsTr("Background")
                     height: 50
                     Layout.fillWidth: true
-                    onColorSelected: appSettings._backgroundColor = color
-                    color: appSettings._backgroundColor
+                    onColorSelected: profile._backgroundColor = color
+                    color: profile._backgroundColor
                 }
                 ColorButton {
                     name: qsTr("Frame")
                     height: 50
                     Layout.fillWidth: true
-                    onColorSelected: appSettings._frameColor = color
-                    color: appSettings._frameColor
+                    onColorSelected: profile._frameColor = color
+                    color: profile._frameColor
                 }
             }
         }

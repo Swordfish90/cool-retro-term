@@ -24,18 +24,20 @@ import "utils.js" as Utils
 Loader {
     id: burnInEffect
 
+    property TerminalProfile profile
+
     property ShaderEffectSource effectSource: item ? item.source : null
     property bool resizing: false
 
     property real lastUpdate: 0
     property real prevLastUpdate: 0
 
-    property real burnIn: appSettings.burnIn
+    property real burnIn: profile.burnIn
     property real burnInFadeTime: 1 / Utils.lint(_minBurnInFadeTime, _maxBurnInFadeTime, burnIn)
     property real _minBurnInFadeTime: appSettings.minBurnInFadeTime
     property real _maxBurnInFadeTime: appSettings.maxBurnInFadeTime
 
-    active: appSettings.burnIn !== 0
+    active: profile.burnIn !== 0
 
     anchors.fill: parent
 
@@ -83,7 +85,7 @@ Loader {
             }
             // Restart blurred source settings change.
             Connections {
-                target: appSettings.fontManager
+                target: profile.fontManager
 
                 onTerminalFontChanged: {
                     burnInEffect.restartBlurSource()
@@ -91,7 +93,7 @@ Loader {
             }
 
             Connections {
-                target: appSettings
+                target: profile
 
                 onBurnInChanged: {
                     burnInEffect.restartBlurSource()
@@ -100,6 +102,10 @@ Loader {
                 onRasterizationChanged: {
                     burnInEffect.restartBlurSource()
                 }
+            }
+
+            Connections {
+                target: appSettings
 
                 onBurnInQualityChanged: {
                     burnInEffect.restartBlurSource()
