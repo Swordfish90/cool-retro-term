@@ -182,6 +182,7 @@ ApplicationWindow {
         }
     }
     onClosing: {
+        terminalTabs.releaseTabs()
         appRoot.closeWindow(terminalWindow)
     }
 }

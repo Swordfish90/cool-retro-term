@@ -35,6 +35,11 @@ RESOURCES += qml/resources.qrc
 QSB_BIN = $$[QT_HOST_BINS]/qsb
 isEmpty(QSB_BIN): QSB_BIN = $$[QT_INSTALL_BINS]/qsb
 
+# --qt6 (Qt 6.0-compatible output) only exists in newer qsb versions; older ones emit that format by default.
+QSB_COMPAT_FLAG =
+QSB_HAS_QT6_OPTION = $$system($$QSB_BIN --help 2>&1 | grep -e --qt6)
+!isEmpty(QSB_HAS_QT6_OPTION): QSB_COMPAT_FLAG = --qt6
+
 SHADERS_DIR = $${_PRO_FILE_PWD_}/shaders
 SHADERS += $$files($$SHADERS_DIR/*.frag) $$files($$SHADERS_DIR/*.vert)
 SHADERS -= $$SHADERS_DIR/terminal_dynamic.frag
@@ -42,8 +47,8 @@ SHADERS -= $$SHADERS_DIR/terminal_static.frag
 SHADERS -= $$SHADERS_DIR/passthrough.vert
 
 qsb.input = SHADERS
-qsb.output = ../../app/shaders/${QMAKE_FILE_NAME}.qsb
-qsb.commands = $$QSB_BIN --glsl \"100 es,120,150\" --hlsl 50 --msl 12 --qt6 -o ${QMAKE_FILE_OUT} ${QMAKE_FILE_IN}
+qsb.output = $$PWD/shaders/${QMAKE_FILE_BASE}${QMAKE_FILE_EXT}.qsb
+qsb.commands = $$QSB_BIN --glsl \"100 es,120,150\" --hlsl 50 --msl 12 $$QSB_COMPAT_FLAG -o ${QMAKE_FILE_OUT} ${QMAKE_FILE_IN}
 qsb.clean = $$qsb.output
 qsb.name = qsb ${QMAKE_FILE_IN}
 qsb.variable_out = QSB_FILES
@@ -68,7 +73,7 @@ for(raster_mode, RASTER_MODES) {
                 dynamic_target = shader_variant_$${dynamic_variant}
                 $${dynamic_target}.target = $${dynamic_output}
                 $${dynamic_target}.depends = $$DYNAMIC_SHADER
-                $${dynamic_target}.commands = $$QSB_BIN --glsl \"100 es,120,150\" --hlsl 50 --msl 12 --qt6 -DCRT_RASTER_MODE=$${raster_mode} -DCRT_BURN_IN=$${burn_in} -DCRT_DISPLAY_FRAME=$${display_frame} -DCRT_CHROMA=$${chroma_on} -o $${dynamic_output} $$DYNAMIC_SHADER
+                $${dynamic_target}.commands = $$QSB_BIN --glsl \"100 es,120,150\" --hlsl 50 --msl 12 $$QSB_COMPAT_FLAG -DCRT_RASTER_MODE=$${raster_mode} -DCRT_BURN_IN=$${burn_in} -DCRT_DISPLAY_FRAME=$${display_frame} -DCRT_CHROMA=$${chroma_on} -o $${dynamic_output} $$DYNAMIC_SHADER
                 QMAKE_EXTRA_TARGETS += $${dynamic_target}
                 VARIANT_OUTPUTS += $${dynamic_output}
             }
@@ -85,7 +90,7 @@ for(rgb_shift, BINARY_FLAGS) {
                 static_target = shader_variant_$${static_variant}
                 $${static_target}.target = $${static_output}
                 $${static_target}.depends = $$STATIC_SHADER
-                $${static_target}.commands = $$QSB_BIN --glsl \"100 es,120,150\" --hlsl 50 --msl 12 --qt6 -DCRT_RGB_SHIFT=$${rgb_shift} -DCRT_BLOOM=$${bloom_on} -DCRT_CURVATURE=$${curve_on} -DCRT_FRAME_SHININESS=$${shine_on} -o $${static_output} $$STATIC_SHADER
+                $${static_target}.commands = $$QSB_BIN --glsl \"100 es,120,150\" --hlsl 50 --msl 12 $$QSB_COMPAT_FLAG -DCRT_RGB_SHIFT=$${rgb_shift} -DCRT_BLOOM=$${bloom_on} -DCRT_CURVATURE=$${curve_on} -DCRT_FRAME_SHININESS=$${shine_on} -o $${static_output} $$STATIC_SHADER
                 QMAKE_EXTRA_TARGETS += $${static_target}
                 VARIANT_OUTPUTS += $${static_output}
             }

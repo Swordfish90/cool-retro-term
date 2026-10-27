@@ -26,7 +26,7 @@ Item {
     id: tabsRoot
 
     readonly property int innerPadding: 6
-    readonly property string currentTitle: tabsModel.get(currentIndex).title ?? "cool-retro-term"
+    readonly property string currentTitle: tabsModel.get(currentIndex)?.title ?? "cool-retro-term"
     property alias currentIndex: tabBar.currentIndex
     readonly property int count: tabsModel.count
     property size terminalSize: Qt.size(0, 0)
@@ -51,6 +51,12 @@ Item {
 
         tabsModel.remove(index)
         tabBar.currentIndex = Math.min(tabBar.currentIndex, tabsModel.count - 1)
+    }
+
+    // Destroy all terminals while the window is still alive. If they are left to be
+    // deleted as children of the window, Qt 6.4 crashes in clearFocusInScope.
+    function releaseTabs() {
+        tabsModel.clear()
     }
 
     ListModel {

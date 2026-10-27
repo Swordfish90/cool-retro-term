@@ -47,7 +47,9 @@ QtObject {
     property ListModel windowsModel: ListModel { }
 
     function createWindow() {
-        var window = windowComponent.createObject(null)
+        // Parent the window to appRoot so the JS garbage collector never deletes it:
+        // windowsModel only holds a weak reference (Qt 6.4).
+        var window = windowComponent.createObject(appRoot)
         if (!window)
             return
 
