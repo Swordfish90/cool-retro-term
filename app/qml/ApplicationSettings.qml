@@ -53,6 +53,9 @@ QtObject {
 
     property bool blinkingCursor: false
 
+    property bool copyOnSelect: false
+    property bool pasteOnRightClick: false
+
 
     // PROFILE SETTINGS ///////////////////////////////////////////////////////
     property real windowOpacity: 1.0
@@ -167,7 +170,9 @@ QtObject {
             "bloomQuality": bloomQuality,
             "burnInQuality": burnInQuality,
             "useCustomCommand": useCustomCommand,
-            "customCommand": customCommand
+            "customCommand": customCommand,
+            "copyOnSelect": copyOnSelect,
+            "pasteOnRightClick": pasteOnRightClick
         }
         return stringify(settings)
     }
@@ -261,6 +266,11 @@ QtObject {
                 !== undefined ? settings.useCustomCommand : useCustomCommand
         customCommand = settings.customCommand
                 !== undefined ? settings.customCommand : customCommand
+
+        copyOnSelect = settings.copyOnSelect
+                !== undefined ? settings.copyOnSelect : copyOnSelect
+        pasteOnRightClick = settings.pasteOnRightClick
+                !== undefined ? settings.pasteOnRightClick : pasteOnRightClick
     }
 
     function loadProfileString(profileString) {
