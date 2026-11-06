@@ -230,10 +230,14 @@ Item{
         onDoubleClicked: function(mouse) {
             var coord = correctDistortion(mouse.x, mouse.y);
             kterminal.simulateMouseDoubleClick(coord.x, coord.y, mouse.button, mouse.buttons, mouse.modifiers);
+            copySelectionIfEnabled(mouse);
         }
         onPressed: function(mouse) {
             kterminal.forceActiveFocus()
-            if ((!kterminal.terminalUsesMouse || mouse.modifiers & Qt.ShiftModifier) && mouse.button == Qt.RightButton) {
+            var shiftHeld = mouse.modifiers & Qt.ShiftModifier;
+            if (mouse.button == Qt.RightButton && !kterminal.terminalUsesMouse && !shiftHeld && appSettings.pasteOnRightClick) {
+                kterminal.pasteClipboard();
+            } else if ((!kterminal.terminalUsesMouse || shiftHeld) && mouse.button == Qt.RightButton) {
                 contextmenu.popup();
             } else {
                 var coord = correctDistortion(mouse.x, mouse.y);
@@ -243,6 +247,17 @@ Item{
         onReleased: function(mouse) {
             var coord = correctDistortion(mouse.x, mouse.y);
             kterminal.simulateMouseRelease(coord.x, coord.y, mouse.button, mouse.buttons, mouse.modifiers);
+            copySelectionIfEnabled(mouse);
+        }
+
+        // Copy the finished selection to the clipboard. Skipped while a program
+        // is using the mouse, unless Shift is held to select text.
+        function copySelectionIfEnabled(mouse) {
+            if (!appSettings.copyOnSelect || mouse.button != Qt.LeftButton)
+                return;
+            if (kterminal.terminalUsesMouse && !(mouse.modifiers & Qt.ShiftModifier))
+                return;
+            kterminal.copyClipboard();
         }
         onPositionChanged: function(mouse) {
             var coord = correctDistortion(mouse.x, mouse.y);
