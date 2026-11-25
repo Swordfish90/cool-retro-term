@@ -872,6 +872,13 @@ QtObject {
 
         loadCustomProfiles()
 
+        // Quitting from the macOS app menu or Dock (Cmd+Q) skips closeWindow(),
+        // so store the settings here as well.
+        Qt.application.aboutToQuit.connect(function() {
+            storeSettings()
+            storeCustomProfiles()
+        })
+
         var profileArgPosition = args.indexOf("--profile")
         if (profileArgPosition !== -1) {
             var profileIndex = getProfileIndexByName(args[profileArgPosition + 1])
