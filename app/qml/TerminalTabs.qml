@@ -31,6 +31,9 @@ Item {
     readonly property int count: tabsModel.count
     property size terminalSize: Qt.size(0, 0)
 
+    // Each tab gets a stable number, shown while the shell has not set a title.
+    property int nextTabNumber: 1
+
     function normalizeTitle(rawTitle) {
         if (rawTitle === undefined || rawTitle === null) {
             return ""
@@ -39,7 +42,7 @@ Item {
     }
 
     function addTab() {
-        tabsModel.append({ title: "" })
+        tabsModel.append({ title: "", number: nextTabNumber++ })
         tabBar.currentIndex = tabsModel.count - 1
     }
 
@@ -51,6 +54,24 @@ Item {
 
         tabsModel.remove(index)
         tabBar.currentIndex = Math.min(tabBar.currentIndex, tabsModel.count - 1)
+    }
+
+    function moveTab(from, to) {
+        if (from === to || from < 0 || to < 0 || from >= tabsModel.count || to >= tabsModel.count)
+            return
+        tabsModel.move(from, to, 1)
+        tabBar.currentIndex = to
+    }
+
+    // Index of the tab button under x (in tabBar coordinates), or -1.
+    function tabIndexAt(x) {
+        for (var i = 0; i < tabBar.count; i++) {
+            var item = tabBar.itemAt(i)
+            var left = item.mapToItem(tabBar, 0, 0).x
+            if (x >= left && x < left + item.width)
+                return i
+        }
+        return -1
     }
 
     ListModel {
@@ -85,13 +106,36 @@ Item {
                         model: tabsModel
                         TabButton {
                             id: tabButton
+
+                            // Drag a tab sideways to reorder it. The terminal moves with it.
+                            DragHandler {
+                                id: tabDrag
+                                target: null
+                                cursorShape: Qt.ClosedHandCursor
+                                yAxis.enabled: false
+                                onActiveChanged: if (active) tabBar.currentIndex = index
+                                onCentroidChanged: {
+                                    if (!active)
+                                        return
+                                    var p = tabButton.mapToItem(tabBar, centroid.position.x, centroid.position.y)
+                                    var to = tabsRoot.tabIndexAt(p.x)
+                                    if (to !== -1 && to !== index)
+                                        tabsRoot.moveTab(index, to)
+                                }
+                            }
+
+                            // Fade the tab while it is being dragged.
+                            opacity: tabDrag.active ? 0.5 : 1.0
+                            Behavior on opacity { NumberAnimation { duration: 120 } }
                             contentItem: RowLayout {
                                 anchors.fill: parent
                                 anchors { leftMargin: innerPadding; rightMargin: innerPadding }
                                 spacing: innerPadding
 
                                 Label {
-                                    text: model.title
+                                    text: model.title !== "" ? model.title : qsTr("Terminal %1").arg(model.number)
+                                    font.italic: model.title === ""
+                                    opacity: model.title === "" ? 0.7 : 1.0
                                     elide: Text.ElideRight
                                     Layout.fillWidth: true
                                     Layout.alignment: Qt.AlignVCenter
