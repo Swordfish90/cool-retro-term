@@ -60,6 +60,18 @@ ColumnLayout {
                 onCheckedChanged: appSettings.blinkingCursor = checked
             }
             CheckBox {
+                id: copyOnSelect
+                text: qsTr("Copy on Select")
+                checked: appSettings.copyOnSelect
+                onCheckedChanged: appSettings.copyOnSelect = checked
+            }
+            CheckBox {
+                id: pasteOnRightClick
+                text: qsTr("Paste on Right Click (Shift+Right Click for menu)")
+                checked: appSettings.pasteOnRightClick
+                onCheckedChanged: appSettings.pasteOnRightClick = checked
+            }
+            CheckBox {
                 id: showMenubar
                 text: qsTr("Show Menubar")
                 enabled: !appSettings.isMacOS
